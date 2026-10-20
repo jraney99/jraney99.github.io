@@ -35,7 +35,7 @@ def books_html():
         years.setdefault(b['finished'][:4], []).append(b)
 
     out = []
-    out.append(f'        <p class="reading-stats">{len(done)} books so far, updated daily from Goodreads.</p>\n')
+    out.append(f'        <p class="reading-stats">{len(done)} books so far, updated daily from Goodreads and Spotify.</p>\n')
     if current:
         out.append('        <h2>Reading now</h2>\n        <ul class="shelf">\n')
         for b in current:

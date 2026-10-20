@@ -2,10 +2,12 @@
 
 Needs SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET and SPOTIFY_REFRESH_TOKEN
 (create the token once with scripts/spotify_auth.py). Read-only access.
-Shows marked "hidden" in data/podcasts.json stay hidden.
+Shows whose name hash is in data/hidden.json are never written.
 """
 import base64
+import hashlib
 import json
+import re
 import os
 import sys
 import urllib.parse
@@ -43,6 +45,10 @@ def main():
             s = it['show']
             shows.append({'name': s['name'], 'publisher': s.get('publisher', ''), 'url': s['external_urls']['spotify'], 'added': it.get('added_at', '')[:10]})
         url = page.get('next')
+
+    hidden = set(json.load(open(os.path.join(ROOT, 'data', 'hidden.json'))).get('podcasts_sha256', []))
+    norm = lambda n: re.sub(r'[^a-z0-9]+', '', n.lower().replace('&', ' and '))
+    shows = [s for s in shows if hashlib.sha256(norm(s['name']).encode()).hexdigest() not in hidden]
 
     old = {}
     if os.path.exists(DATA):

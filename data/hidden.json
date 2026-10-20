@@ -1,5 +1,5 @@
 {
- "note": "SHA-256 of normalized titles the sync must never add. The titles themselves are kept privately.",
+ "note": "SHA-256 of normalized titles (books) and show names (podcasts) the sync must never publish. The names themselves are kept privately.",
  "sha256": [
   "0231d82ed0f142b4969d66b041449daad1e108d71519f36e0eaf2a2045a49d67",
   "344688cf8eb151cbc1c98f801656e07e72e534eb39e83f37085a0f4d2db1ebad",
@@ -9,5 +9,14 @@
   "6b88c087247aa2f07ee1c5956b8e1a9f4c7f892a70e324f1bb3d161e05ca107b",
   "b3a9395fbff1c6676ba58503419b958ff0525883f8b576a670089b18e882e053",
   "df7eaac4fdc9c5fd6009dee7bd34f2142d7a4772bc37253da758048b1bd3b22a"
+ ],
+ "podcasts_sha256": [
+  "23a38a7d7de44e4b89f47893dd525dd39cd567dd5e39645a3f05541cf55e4343",
+  "3da908d7f8a8b5889c430067ee908aeeadcac72dbc7158ec9ded3b2e088e770d",
+  "5396b5f3797dee0b1b0a574e20c28148c20d911d168c0a182b1078b6867ab87e",
+  "5e8cfa346816697eecc22c1da8a5b25e1ece0efd9552d6ab5cbc42d0203243fa",
+  "d4f129dcefac1957ee1f97322eae016402502625a61183c63fa56cbb1ebe3679",
+  "e8136b4c83eac42c29098a5b9e03ddacbac32b5af3be246e158088b6ace016cf",
+  "fb7da0a78dd580337ede9fb953d3392a83c28218c924e34e4f379d2bc67dcfcf"
  ]
 }
