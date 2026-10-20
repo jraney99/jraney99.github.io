@@ -66,12 +66,12 @@
         <div><dt>Loan</dt><dd>$322M</dd></div>
         <div><dt>Loan-to-cost</dt><dd>70%</dd></div>
         <div><dt>Stabilized debt yield</dt><dd>19.0%</dd></div>
-        <div><dt>Interest coverage</dt><dd>2.38x</dd></div>
+        <div><dt>Stabilized interest coverage</dt><dd>2.38x</dd></div>
       </dl>
       <div class="prose">
         <h2>The business plan</h2>
         <ul>
-          <li>The sponsor, a bitcoin miner, already holds the land and a 60&nbsp;MW grid connection, which removes the longest lead-time item in data center development.</li>
+          <li>The sponsor, a bitcoin miner, already holds the land and a 60&nbsp;MW grid connection, enough for 40&nbsp;MW of IT load at a PUE up to 1.5, which removes the longest lead-time item in data center development.</li>
           <li>It will build a 40&nbsp;MW (critical IT) facility over 18 months at a total cost of $460 million, or $11.5 million per MW.</li>
           <li>The tenant signs a 15-year lease at about $150,000 per MW per month, $72 million a year, starting on delivery.</li>
           <li>The guarantor covers 50% of rent, $36 million a year, for the first 10 years, effective when the lease starts.</li>
@@ -103,22 +103,22 @@
             </tbody>
           </table>
         </div>
-        <p class="exhibit__note">Fictional numbers. Stabilized NOI assumes an 85% margin on rent ($61.2M). Interest assumes 8.0% all-in ($25.8M a year).</p>
+        <p class="exhibit__note">Fictional numbers. Stabilized NOI assumes an 85% margin on rent ($61.2M). Interest assumes 8.0% all-in ($25.8M a year). Contingency is 8% of hard costs. Debt yield is NOI divided by the loan; interest coverage is NOI divided by a year of interest.</p>
       </figure>
       <div class="prose">
         <h2>Strengths</h2>
         <ul>
-          <li><strong>Power is already secured.</strong> A 60&nbsp;MW connection in hand removes the grid queue, the risk that sinks most data center timelines.</li>
+          <li><strong>Power is already secured.</strong> A 60&nbsp;MW connection in hand removes the grid queue, the risk behind most data center delays.</li>
           <li><strong>Long lease, short loan.</strong> A 15-year lease sits under a loan that matures in five years at most, so the lease outlasts the debt.</li>
-          <li><strong>The backstop covers the debt on its own.</strong> The guaranteed $36 million a year covers interest 1.4 times, before counting the rest of the rent.</li>
+          <li><strong>The backstop nearly covers the debt on its own.</strong> The guaranteed $36 million a year is 1.4 times interest on a gross basis, and about 1.0 times after the landlord’s share of operating costs.</li>
           <li><strong>Real equity first.</strong> The sponsor puts in $138 million, 30% of cost, ahead of the loan.</li>
         </ul>
         <h2>Weaknesses and mitigants</h2>
         <ul>
-          <li><strong>The empty building is worth far less than the loan.</strong> Valued as powered land and shell at about $3 million per MW, the site is worth roughly $120 million against a $322 million loan, an as-dark LTV near 270%.<br><em>Mitigant:</em> the loan is underwritten to the lease and the backstop, not to the real estate. That makes the next two items the real diligence. See <a href="empty-building.html">Underwriting the empty building</a>.</li>
-          <li><strong>The tenant is unrated.</strong> AI cloud providers are young companies with concentrated customers.<br><em>Mitigant:</em> the guarantee covers half the rent and more than the debt service. Review exactly what triggers it, how it is capped, and when it ends.</li>
-          <li><strong>The backstop is not live during construction.</strong> It starts when the lease starts, so a late building leaves the loan exposed.<br><em>Mitigant:</em> completion and carry guaranties from the sponsor until the lease starts, an 18-month interest reserve, and a review of equipment lead times (transformers, switchgear) before closing.</li>
-          <li><strong>Power cost and reliability sit with someone.</strong><br><em>Mitigant:</em> confirm who pays for power under the lease and how the sponsor hedges it. See <a href="power-hedge.html">how a power hedge settles</a>.</li>
+          <li><strong>The empty building is worth far less than the loan.</strong> Valued as powered land and shell at about $3 million per MW, the site is worth roughly $120 million against a $322 million loan, an LTV near 270% if it sells as a shell, and 49% to 193% if it re-lets, depending on how fast.<br><em>Mitigant:</em> the loan is underwritten to the lease and the backstop, not to the real estate. That makes the next two items the real diligence. See <a href="empty-building.html">Underwriting the empty building</a>.</li>
+          <li><strong>The tenant is unrated.</strong> AI cloud providers are young companies with concentrated customers.<br><em>Mitigant:</em> the guarantee covers half the rent and roughly all of the interest. Review exactly what triggers it, how it is capped, and when it ends.</li>
+          <li><strong>The backstop is not live during construction.</strong> It starts when the lease starts, so a late building leaves the loan exposed.<br><em>Mitigant:</em> completion and carry guaranties from the sponsor until the lease starts, an interest reserve sized to the 18-month build, with the carry guaranty covering any delay beyond it, and a review of equipment lead times (transformers, switchgear) before closing.</li>
+          <li><strong>Power price and reliability risk have to land somewhere.</strong><br><em>Mitigant:</em> confirm who pays for power under the lease and how the sponsor hedges it. See <a href="power-hedge.html">how a power hedge settles</a>.</li>
         </ul>
         <h2>Proposed terms</h2>
       </div>
@@ -132,7 +132,9 @@
               <tr><th scope="row">Fees</th><td>1.00% origination, 0.50% exit</td></tr>
               <tr><th scope="row">Interest reserve</th><td>$30,000,000</td></tr>
               <tr><th scope="row">Recourse</th><td>Non-recourse with standard carveouts; completion and carry guaranties until the lease starts</td></tr>
-              <tr><th scope="row">Cash management</th><td>Springing lockbox on tenant default, notice to vacate, or interest coverage below 1.50x</td></tr>
+              <tr><th scope="row">Cash management</th><td>Springing lockbox on tenant default, notice to vacate, guarantor downgrade, or interest coverage below 1.50x</td></tr>
+              <tr><th scope="row">Cash sweep</th><td>50% of excess cash after debt service, from lease start</td></tr>
+              <tr><th scope="row">Collateral</th><td>Includes the interconnection agreement and the power contract</td></tr>
               <tr><th scope="row">Extension tests</th><td>Lease started, backstop in effect, debt yield at least 15%</td></tr>
             </tbody>
           </table>
@@ -158,7 +160,7 @@
     </div>
   </article>
 </main>
-</main>
+
 
 <footer class="site-foot">
   <div class="wrap site-foot__grid">

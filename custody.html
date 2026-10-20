@@ -51,7 +51,7 @@
       <div class="doc-head__inner">
         <a class="back" href="index.html">← Home</a>
         <h1>Six ways to hold bitcoin</h1>
-        <p class="dek">Owning bitcoin really means controlling the keys that can move it. Here are the six common ways people do that, from easiest to most secure, and what each one trades away.</p>
+        <p class="dek">Owning bitcoin really means controlling the keys that can move it. Here are the six common ways people do that, roughly from simplest to most involved, and what each one trades away.</p>
         <p class="doc-date"><time datetime="2026-10">October 2026</time></p>
       </div>
     </header>
@@ -83,7 +83,7 @@
         <h2>1. An exchange account</h2>
         <p>You buy bitcoin on an exchange and leave it there. You don’t hold any bitcoin directly. You hold a claim on the company, and the balance in the app is a number in its database.</p>
         <p><strong>What it solves.</strong> It is the easiest start: a username, a password and a “forgot password” link. You can learn how bitcoin behaves before taking on any technical responsibility.</p>
-        <p><strong>The risk.</strong> You are trusting the company to stay solvent, keep hackers out and keep your account open. If it fails, there is no deposit insurance like the FDIC, and depending on its terms of service your coins may be treated as its property. When Celsius went bankrupt in 2022, a court ruled that coins in its interest-earning accounts belonged to the company, leaving those customers as unsecured creditors. Exchanges also collect your identity, address and tax details, which links your name to your holdings.</p>
+        <p><strong>The risk.</strong> You are trusting the company to stay solvent, keep hackers out and keep your account open. If it fails, there is no deposit insurance like the FDIC, and depending on its terms of service your coins may be treated as its property. Celsius filed for bankruptcy in 2022, and in 2023 a court ruled that coins in its interest-earning accounts belonged to the company, leaving those customers as unsecured creditors. Exchanges also collect your identity, address and tax details, which links your name to your holdings.</p>
         <p><strong>The common mistake.</strong> Treating an exchange as a savings account. It is a marketplace. Keeping a large share of your savings on one platform is the risk most people take without noticing.</p>
         <h2>2. A phone or desktop app (a “hot wallet”)</h2>
         <p>An app on your phone or computer holds the keys. This is the first step where you control them, so no company can freeze or block a payment.</p>
@@ -97,13 +97,13 @@
         <p><strong>The common mistake.</strong> Thinking the bitcoin is inside the device. It is on the ledger. If the device breaks, the seed phrase restores everything on a new one. If the seed phrase is lost, the device is the only copy.</p>
         <h2>4. Air-gapped cold storage</h2>
         <p>A signing device that never connects to anything by cable, Bluetooth or Wi-Fi. Transactions move in and out by scanning QR codes or swapping a microSD card, so the only path to the key is physical.</p>
-        <p><strong>What it solves.</strong> It closes the last digital door: a flaw in how a device talks to a computer can’t be used if it never talks to one. The slow, manual process also makes it hard to sell in a panic.</p>
+        <p><strong>What it solves.</strong> It closes the last digital door: a flaw in how a device talks to a computer can’t be used if it never talks to one. The slow, manual process also makes hasty mistakes less likely.</p>
         <p><strong>The risk.</strong> Because you rarely touch it, you can forget the PIN or the steps. Devices also age. The seed phrase should be stamped in metal rather than written on paper, and it is worth practicing a recovery once in a while to prove it still works.</p>
         <p><strong>The common mistake.</strong> Building a setup so complicated, or hiding it so well, that you or your family can’t use it years later.</p>
         <h2>5. Multisignature (“multisig”)</h2>
         <p>The coins need more than one key to move. In the common 2-of-3 setup there are three keys, kept in different places or by different people, and any two can sign.</p>
         <p><strong>What it solves.</strong> One stolen key can’t move the funds, and one lost key doesn’t lose them: the other two can move everything to a new setup. A robber or a con artist would need two separate keys in two separate places.</p>
-        <p><strong>The risk.</strong> It is more complex. Each wallet has a small setup file, sometimes called the descriptor, that records how the keys fit together. Without it, recovery is much harder. Keeping all three keys in one safe defeats the purpose. Most multisig setups in use today are also visible as multisig on the public ledger.</p>
+        <p><strong>The risk.</strong> It is more complex. Each wallet has a small setup file, sometimes called the descriptor, that records how the keys fit together. Without it, two of the three keys may not be enough to recover the coins, because the wallet also needs the third key’s public half to rebuild the address. Keeping all three keys in one safe defeats the purpose. Most multisig setups in use today are also visible as multisig on the public ledger.</p>
         <p><strong>The common mistake.</strong> Over-engineering it (5-of-7 for a modest amount), or not backing up the setup file alongside the keys.</p>
         <h2>6. Collaborative custody</h2>
         <p>A 2-of-3 multisig where you hold two keys and a specialist firm holds the third. You can move the coins without the firm. The firm can’t move them without you.</p>
@@ -111,7 +111,7 @@
         <p><strong>The risk.</strong> Privacy. The firm knows who you are and what you hold. You are also relying on it to still exist, and to follow its process, when your heirs need it.</p>
         <p><strong>The common mistake.</strong> Assuming the family will figure it out. Whatever the setup, write down what exists, where the pieces are and who to call, in instructions someone non-technical can follow.</p>
         <h2>How people usually combine them</h2>
-        <p>Most careful owners don’t pick one. They keep a small amount in an app for spending, savings on a hardware wallet or in cold storage, and, as the amount grows, move the core holding into multisig. Whatever the mix, the test is the same: if you were gone tomorrow, could the right person recover it, and could the wrong person not?</p>
+        <p>Many owners don’t pick just one. They keep a small amount in an app for spending, savings on a hardware wallet or in cold storage, and, as the amount grows, move the core holding into multisig. Whatever the mix, the test is the same: if you were gone tomorrow, could the right person recover it, and could the wrong person not?</p>
         <p class="memo__source">Adapted from a six-part series I wrote for the Kingdom Bitcoin newsletter in February 2026, rewritten here as a plain guide. Product names are examples, not endorsements. Nothing here is investment, legal or tax advice.</p>
       </div>
       <a class="next-link" href="bitcoin-reading.html">
@@ -122,7 +122,7 @@
     </div>
   </article>
 </main>
-</main>
+
 
 <footer class="site-foot">
   <div class="wrap site-foot__grid">

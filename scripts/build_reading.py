@@ -17,6 +17,14 @@ def esc(s):
     return html.escape(s, quote=False)
 
 
+def genre(b):
+    return f'<span class="shelf__genre">{esc(b["genre"])}</span>' if b.get('genre') else ''
+
+
+def pub(s):
+    return f' <span class="shelf__by">{esc(s["publisher"])}</span>' if s.get('publisher') else ''
+
+
 def books_html():
     data = json.load(open(os.path.join(ROOT, 'data', 'books.json'), encoding='utf-8'))
     shown = [b for b in data['books'] if not b.get('hidden')]
@@ -35,7 +43,7 @@ def books_html():
         years.setdefault(b['finished'][:4], []).append(b)
 
     out = []
-    out.append(f'        <p class="reading-stats">{len(done)} books so far, updated daily from Goodreads and Spotify.</p>\n')
+    out.append(f'        <p class="reading-stats">{len(done)} books since 2021. Books update daily from Goodreads, podcasts from Spotify.</p>\n')
     if current:
         out.append('        <h2>Reading now</h2>\n        <ul class="shelf">\n')
         for b in current:
@@ -46,12 +54,12 @@ def books_html():
         out.append(f'        <h2>{y} <span class="shelf__count">{n} book{"s" if n != 1 else ""}</span></h2>\n        <ul class="shelf">\n')
         for b in items:
             again = ' <span class="shelf__tag">read again</span>' if b['_again'] else ''
-            out.append(f'          <li><span class="shelf__title">{esc(b["title"])}</span> <span class="shelf__by">{esc(b["author"])}</span>{again}<span class="shelf__genre">{esc(b["genre"])}</span></li>\n')
+            out.append(f'          <li><span class="shelf__title">{esc(b["title"])}</span> <span class="shelf__by">{esc(b["author"])}</span>{again}{genre(b)}</li>\n')
         out.append('        </ul>\n')
     if undated:
         out.append('        <h2>Also read</h2>\n        <ul class="shelf">\n')
         for b in sorted(undated, key=lambda b: b['title']):
-            out.append(f'          <li><span class="shelf__title">{esc(b["title"])}</span> <span class="shelf__by">{esc(b["author"])}</span><span class="shelf__genre">{esc(b["genre"])}</span></li>\n')
+            out.append(f'          <li><span class="shelf__title">{esc(b["title"])}</span> <span class="shelf__by">{esc(b["author"])}</span>{genre(b)}</li>\n')
         out.append('        </ul>\n')
     return ''.join(out)
 
@@ -65,7 +73,7 @@ def podcasts_html():
         return ''
     out = ['        <h2 id="podcasts">Podcasts I follow</h2>\n        <ul class="shelf">\n']
     for s in shows:
-        out.append(f'          <li><a class="shelf__title" href="{html.escape(s["url"])}">{esc(s["name"])}</a> <span class="shelf__by">{esc(s.get("publisher", ""))}</span></li>\n')
+        out.append(f'          <li><a class="shelf__title" href="{html.escape(s["url"])}">{esc(s["name"].title() if s["name"].isupper() else s["name"])}</a>{pub(s)}</li>\n')
     out.append('        </ul>\n')
     return ''.join(out)
 

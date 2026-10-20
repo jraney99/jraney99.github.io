@@ -58,9 +58,10 @@
     <div class="wrap memo">
       <div class="prose">
         <p>Most arguments about bitcoin are really arguments about its rules: who wrote them, who can change them and what they guarantee. You can check most of the answers yourself, because the rules are public. Here is what they say.</p>
+        <p>I came to this from the operating side. At MARA I was the finance analyst for 18 bitcoin mining sites and their power costs, and these pages are the plain version of what that job made me learn.</p>
         <h2>A fixed supply, released on a schedule</h2>
         <p>There will never be more than 21&nbsp;million bitcoin. New coins enter only one way: as a reward to whoever adds the next block of transactions to the ledger. That reward started at 50 bitcoin per block in 2009 and is cut in half every 210,000 blocks, roughly every four years. Since the April 2024 halving it has been 3.125 bitcoin. More than 20&nbsp;million have now been issued, and the last fraction of a coin is expected around the year 2140.</p>
-        <p>Compare the dollar. The Federal Reserve and the banking system can expand the money supply when policy calls for it. The broad measure of U.S. money, M2, grew about 40% between early 2020 and its 2022 peak. Whether that was the right call is a policy debate. The point is that it was a decision someone could make. In bitcoin, no one can make it.</p>
+        <p>Compare the dollar. The Federal Reserve and the banking system can expand the money supply when policy calls for it. The broad measure of U.S. money, M2, grew about 40% between early 2020 and mid-2022. Whether that was the right call is a policy debate. The point is that it was a decision someone could make. In bitcoin, no one can make it.</p>
       </div>
       <figure class="exhibit exhibit--narrow">
         <figcaption class="exhibit__head">
@@ -84,14 +85,14 @@
       </figure>
       <div class="prose">
         <h2>Proof of work: why the ledger is hard to fake</h2>
-        <p>To add a block, a miner has to find a number that, combined with the block’s contents, produces a result below a target. There is no shortcut: the only way to find it is to guess, trillions of times a second, and every guess costs electricity. Anyone can check a winning answer instantly.</p>
+        <p>To add a block, a miner has to find a number that, combined with the block’s contents, produces a result below a target. There is no shortcut: the only way to find it is to guess, quintillions of times a second across the network, and every guess costs electricity. Anyone can check a winning answer instantly.</p>
         <p>That cost is the security. To rewrite past transactions, an attacker would have to redo the work for those blocks and outpace everyone else still mining, which today would mean controlling more computing power than the rest of the network combined. Every 2,016 blocks, about two weeks, the network adjusts the target so blocks keep arriving about every ten minutes no matter how much computing power joins or leaves. I explain the business side of that race in <a href="mining-plain-english.html">Bitcoin mining in plain English</a>.</p>
         <h2>No one in charge, so changes are slow</h2>
         <p>Thousands of independent computers, called nodes, each keep a full copy of the ledger and check every block against the rules. A block that breaks a rule, say by paying a miner too much, is rejected by every node that sees it, regardless of who mined it.</p>
-        <p>That is why the rules are hard to change. The software can be upgraded, but an upgrade only takes hold if the people running nodes choose to install it. It has happened: SegWit in 2017 and Taproot in 2021 both changed how transactions work. Proposals to raise the supply cap have never come close, because almost no one running a node would accept them.</p>
+        <p>That is why the rules are hard to change. The software can be upgraded, but an upgrade only takes hold with broad support from the people running nodes and the miners producing blocks. It has happened: SegWit in 2017 and Taproot in 2021 both changed how transactions work. Proposals to raise the supply cap have never come close, because almost no one running a node would accept them.</p>
         <h2>What the rules don’t promise</h2>
         <ul>
-          <li><strong>A stable price.</strong> The supply is fixed, so changes in demand show up entirely in the price. Bitcoin has fallen more than 70% from a peak several times.</li>
+          <li><strong>A stable price.</strong> New supply can’t respond to demand, so shifts in demand show up in the price. Bitcoin has fallen more than 70% from a peak several times.</li>
           <li><strong>Privacy.</strong> Every transaction is public and permanent. Addresses aren’t names, but once an address is linked to you, through an exchange account for example, anyone can follow the money.</li>
           <li><strong>Safety at a company that holds it for you.</strong> The rules protect coins on the ledger, not promises made by a business. Customers of Mt. Gox in 2014 and FTX in 2022 learned the difference. How to hold bitcoin yourself is the subject of <a href="custody.html">Six ways to hold bitcoin</a>.</li>
           <li><strong>Forgiveness for mistakes.</strong> There is no reversal button. Send to the wrong address or lose your keys and the coins are gone.</li>
@@ -108,7 +109,7 @@
     </div>
   </article>
 </main>
-</main>
+
 
 <footer class="site-foot">
   <div class="wrap site-foot__grid">

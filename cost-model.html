@@ -107,7 +107,7 @@
 
     <div class="prose">
       <p>At MARA, each site’s power costs lived in its own reports. A fleet-wide question, like what we paid per megawatt-hour last month or which site ran over budget, meant stitching those reports together before anyone could answer it.</p>
-      <p>I built one model in Excel that became the single source for power costs across all 18 sites. It tracked each site’s usage, capacity and costs, and the gap between what we expected to pay and what we were billed. It connected to DOMO for reporting and to Zip for approvals, so leadership could see the whole fleet in one place, kept current.</p>
+      <p>I built one model in Excel that became the single source for power costs across all 18 sites. It tracked each site’s usage, capacity and costs, and the gap between what we expected to pay and what we were billed. It connected to DOMO for reporting and to Zip for approvals, so leadership saw live, fleet-wide numbers in place of stale reports.</p>
     </div>
 
     <section class="doc-section" aria-labelledby="m-sample">
@@ -118,10 +118,10 @@
           <ul>
             <li>Inputs are in blue, formulas in black, and numbers pulled from another tab in green.</li>
             <li>Inputs live on their own tabs: sites and contracts, market prices, meter data and invoices.</li>
-            <li>The Calc tab builds each site’s expected bill from its contract and compares it with the invoice, month by month.</li>
+            <li>The Calc tab builds each site’s expected bill from its contract and its meters, then compares it with the invoice, month by month.</li>
             <li>Summary is the one-page view, and Checks confirms that everything ties out.</li>
           </ul>
-          <p>Site D is there to show what a billing problem looks like. Starting in May, its invoices bill 5.6% to 6.8% more power than its meters recorded, and the model flags all eight of those months. Over the year, that comes to about $1.5&nbsp;million billed above what Site D’s contract says it should have paid.</p>
+          <p>Site D is there to show what a billing problem looks like. Starting in May, its invoices bill 5.6% to 6.8% more power than its meters recorded, and the model flags all eight of those months. Over the year, that comes to about $1.5&nbsp;million billed above what Site D’s contract says it should have paid. The model tests every month two ways, on volume and on price, because a bill can be wrong on either and one test can miss what the other catches. It is the same idea as the three-way match behind <a href="power-bill.html">the $1.8M power bill</a>: check the bill against the meters, not against last month’s bill.</p>
         </div>
         <p class="download"><a class="button" href="downloads/power-cost-model-sample.xlsx" download>Download the sample model <small>Excel, 38 KB</small></a></p>
 
