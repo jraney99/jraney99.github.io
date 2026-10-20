@@ -1,0 +1,9 @@
+{
+ "note": "Single source for numbers shown across the site. Edit a value here, run python3 scripts/build_facts.py (the publish workflow also runs it), and every marked spot updates, including the résumé PDF.",
+ "archibald.runs": "100,000+",
+ "archibald.success": "99%",
+ "archibald.skills": "46",
+ "archibald.live_jobs": "140",
+ "otian.paying_clients": "two",
+ "site.updated": "October 2026"
+}
