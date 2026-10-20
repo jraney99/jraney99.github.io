@@ -1,0 +1,62 @@
+name: Sync reading and publish
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 11 * * *'   # daily, about 6 a.m. Central
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Sync Goodreads and Spotify
+        if: github.event_name != 'push'
+        env:
+          GOODREADS_USER_ID: '205236304'
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+          SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
+        run: |
+          python scripts/sync_goodreads.py
+          python scripts/sync_spotify.py
+
+      - name: Rebuild reading page
+        run: python scripts/build_reading.py
+
+      - name: Commit changes
+        if: github.event_name != 'push'
+        run: |
+          if [ -n "$(git status --porcelain data reading.html)" ]; then
+            git config user.name "reading-sync"
+            git config user.email "reading-sync@users.noreply.github.com"
+            git add data reading.html
+            git commit -m "Update reading list"
+            git push
+          fi
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deploy
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>How a power hedge settles · Jack Raney</title>
+  <meta name="description" content="A fixed-price power hedge never delivers electricity. Each month it settles the gap between the locked-in price and the market price. A short explainer with a worked example, by Jack Raney.">
+  <link rel="canonical" href="https://jackraney.com/power-hedge">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Jack Raney">
+  <meta property="og:title" content="How a power hedge settles">
+  <meta property="og:description" content="Slide the market price and see who pays whom under a fixed-price power hedge.">
+  <meta property="og:url" content="https://jackraney.com/power-hedge">
+  <meta property="og:image" content="https://jackraney.com/assets/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-10-16">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f4f1e8">
+  <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="assets/img/favicon-64.png" sizes="64x64" type="image/png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Besley:wght@400..700&family=Overpass:ital,wght@0,300..900;1,300..900&family=Overpass+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap site-head__row">
+    <a class="wordmark" href="index.html">Jack Raney</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html#work">Work</a>
+      <a href="calculator.html">Calculator</a>
+      <a href="about.html">About</a>
+      <a href="resume.html">Résumé</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch theme">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <article>
+    <header class="wrap doc-head">
+      <div class="doc-head__inner">
+        <a class="back" href="index.html">← Home</a>
+        <h1>How a power hedge settles</h1>
+        <p class="dek">A fixed-price power hedge never delivers a single megawatt-hour. Each month it settles the gap between the price you locked in and the price the market charged.</p>
+        <p class="doc-date"><time datetime="2026-10">October 2026</time></p>
+      </div>
+    </header>
+    <div class="wrap memo">
+      <div class="prose">
+        <p>A large load in Texas usually buys its power at the market price, which can swing from below zero to thousands of dollars a megawatt-hour. To make the bill predictable, it can sign a financial hedge with a trading firm. The hedge fixes a price for a set volume of power and settles each month against a published market index, such as an ERCOT hub’s average real-time price.</p>
+        <p>The site keeps buying its actual power from the grid at market prices. The hedge runs alongside as a side payment:</p>
+        <p class="memo__formula"><strong>Monthly settlement = (fixed price − market price) × hedged volume</strong></p>
+        <p>If the market comes in below the fixed price, the site pays the trading firm the difference. If the market comes in above it, the trading firm pays the site. Either way, the power bill plus the settlement lands on the fixed price for the hedged volume.</p>
+        <h2>Try it</h2>
+        <p>Made-up numbers: a site hedges 100,000&nbsp;MWh for the month, about 137&nbsp;MW running around the clock, at a fixed $50/MWh.</p>
+      </div>
+
+      <form class="calc__controls hedge" id="hedge" aria-label="Hedge settlement example">
+        <div class="control">
+          <label class="control__label" for="mkt">Market price for the month</label>
+          <div class="control__row">
+            <input type="range" id="mkt" min="10" max="150" step="1" value="35">
+            <output class="control__value" id="mkt-out" for="mkt">$35/MWh</output>
+          </div>
+        </div>
+      </form>
+      <p class="calc__summary hedge__summary" id="hedge-summary" aria-live="polite"></p>
+      <dl class="figures figures--3 memo__figures">
+        <div><dt>Power bill at market</dt><dd id="h-bill">$3,500,000</dd></div>
+        <div><dt id="h-settle-label">Site pays the trader</dt><dd id="h-settle">$1,500,000</dd></div>
+        <div><dt>Net cost</dt><dd class="is-signal" id="h-net">$5,000,000</dd></div>
+      </dl>
+
+      <figure class="exhibit exhibit--narrow">
+        <figcaption class="exhibit__head">
+          <span class="label">Exhibit 1</span>
+          <span class="exhibit__title">Three months, same hedge: 100,000 MWh at a fixed $50/MWh</span>
+        </figcaption>
+        <div class="table-wrap">
+          <table class="data">
+            <thead>
+              <tr><th scope="col">Market price</th><th scope="col">Power bill</th><th scope="col">Settlement</th><th scope="col">Net cost</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">$35/MWh</th><td>$3.5M</td><td>Site pays $1.5M</td><td>$5.0M</td></tr>
+              <tr><th scope="row">$50/MWh</th><td>$5.0M</td><td>Nothing</td><td>$5.0M</td></tr>
+              <tr><th scope="row">$80/MWh</th><td>$8.0M</td><td>Site receives $3.0M</td><td>$5.0M</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="exhibit__note">Made-up numbers. The net cost only holds this neatly when the site uses exactly the hedged volume and pays exactly the index price.</p>
+      </figure>
+
+      <div class="prose">
+        <h2>Where it stops being neat</h2>
+        <ul>
+          <li><strong>Volume.</strong> The hedge settles on the agreed volume, not on what the site used. A site that runs less than it hedged is left holding a price bet on the difference.</li>
+          <li><strong>Location.</strong> The hedge settles at a hub, but the site pays the price at its own point on the grid. The gap between the two, called basis, is not hedged.</li>
+          <li><strong>Shape.</strong> An around-the-clock hedge covers every hour equally. A load that runs more in some hours than others is only partly covered.</li>
+          <li><strong>Shutting off.</strong> A flexible site that switches off in a price spike still collects the hedge payment on its full volume for those hours. Flexibility and a hedge can work together, which is part of why the <a href="what-miners-know.html">miners’ playbook</a> matters to AI data centers.</li>
+        </ul>
+        <h2>What I’d check on a hedged power cost</h2>
+        <ul>
+          <li>How much of the expected load is hedged, and for how long?</li>
+          <li>Which index does it settle against, and how far is the site from that hub?</li>
+          <li>Is the hedge shaped to how the site actually runs?</li>
+          <li>What collateral does the trading firm require if prices move against the site?</li>
+        </ul>
+        <p class="memo__source">All numbers on this page are made up to show the mechanics. The <a href="calculator.html">calculator</a> shows what real 2025 ERCOT hub prices did, hour by hour.</p>
+      </div>
+      <a class="next-link" href="credit-memo.html">
+        <span class="next-link__label">Next</span>
+        <span class="title">Sample credit memo: a data center loan →</span>
+      </a>
+      <p class="ask">Questions, or a hedge you’re trying to read? Email me at <a class="inline-link" href="mailto:jlraney99@gmail.com">jlraney99@gmail.com</a>.</p>
+    </div>
+  </article>
+</main>
+<script>
+(function () {
+  var FIXED = 50, VOL = 100000;
+  var r = document.getElementById('mkt'), out = document.getElementById('mkt-out');
+  var money = function (n) { return '$' + Math.round(n).toLocaleString('en-US'); };
+  function update() {
+    var p = +r.value, bill = p * VOL, settle = (FIXED - p) * VOL;
+    out.textContent = '$' + p + '/MWh';
+    document.getElementById('h-bill').textContent = money(bill);
+    document.getElementById('h-settle').textContent = money(Math.abs(settle));
+    document.getElementById('h-settle-label').textContent = settle > 0 ? 'Site pays the trader' : settle < 0 ? 'Trader pays the site' : 'Settlement';
+    document.getElementById('h-net').textContent = money(bill + settle);
+    document.getElementById('hedge-summary').textContent = settle > 0
+      ? 'The market came in $' + (FIXED - p) + ' below the fixed price, so the site pays the trading firm the difference. Its total still comes to $50/MWh.'
+      : settle < 0
+      ? 'The market came in $' + (p - FIXED) + ' above the fixed price, so the trading firm pays the site the difference. Its total still comes to $50/MWh.'
+      : 'The market matched the fixed price, so nobody owes anything.';
+  }
+  r.addEventListener('input', update);
+  update();
+})();
+</script>
+
+<footer class="site-foot">
+  <div class="wrap site-foot__grid">
+    <div>
+      <p class="site-foot__name">Jack Raney</p>
+      <p>Finance and operations · Dallas, Texas</p>
+    </div>
+    <ul>
+      <li><a href="mailto:jlraney99@gmail.com">jlraney99@gmail.com</a></li>
+      <li><a href="https://www.linkedin.com/in/jack-raney">LinkedIn</a></li>
+      <li><a href="https://github.com/jraney99">GitHub</a></li>
+      <li><a href="https://otianai.com">Otian AI</a></li>
+      <li><a href="reading.html">Reading</a></li>
+      <li><a href="resume.html">Résumé</a></li>
+    </ul>
+    <p class="site-foot__note">Updated October 2026.</p>
+  </div>
+</footer>
+
+<script src="assets/js/site.js"></script>
+</body>
+</html>

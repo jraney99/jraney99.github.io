@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Underwriting the empty building · Jack Raney</title>
+  <meta name="description" content="What a single-tenant data center is worth if the tenant leaves, and how a lender should size and structure a loan around that number. A worked example with made-up numbers.">
+  <link rel="canonical" href="https://jackraney.com/empty-building">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Jack Raney">
+  <meta property="og:title" content="Underwriting the empty building">
+  <meta property="og:description" content="What a single-tenant data center is worth if the tenant leaves. A worked example with made-up numbers.">
+  <meta property="og:url" content="https://jackraney.com/empty-building">
+  <meta property="og:image" content="https://jackraney.com/assets/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-10-16">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f4f1e8">
+  <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="assets/img/favicon-64.png" sizes="64x64" type="image/png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Besley:wght@400..700&family=Overpass:ital,wght@0,300..900;1,300..900&family=Overpass+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap site-head__row">
+    <a class="wordmark" href="index.html">Jack Raney</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html#work">Work</a>
+      <a href="calculator.html">Calculator</a>
+      <a href="about.html">About</a>
+      <a href="resume.html">Résumé</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch theme">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <article>
+    <header class="wrap doc-head">
+      <div class="doc-head__inner">
+        <a class="back" href="index.html">← Home</a>
+        <h1>Underwriting the empty building</h1>
+        <p class="dek">A data center with one tenant is worth a fortune while the rent comes in. The lender’s real question is what it is worth the day the rent stops.</p>
+        <p class="doc-date"><time datetime="2026-10">October 2026</time></p>
+      </div>
+    </header>
+    <div class="wrap memo">
+      <div class="prose">
+        <p>When I underwrote loans at Thorofare Capital, I looked at every single-tenant property two ways: <strong>as-stable</strong>, with the tenant paying rent, and <strong>as-dark</strong>, with the tenant gone. The first number tells you what the deal is worth. The second tells you what you can lose.</p>
+        <p>Data centers stretch the gap between those two numbers further than almost any other property. This memo works through why, using the fictional 40&nbsp;MW deal from my <a href="credit-memo.html">sample credit memo</a>.</p>
+        <h2>Why the gap is so wide</h2>
+        <p>An office building without a tenant is still an office building. A data center without a tenant is three things with very different shelf lives:</p>
+        <ul>
+          <li><strong>The power connection.</strong> Scarce and slow to get. A new one can take years in many markets, so a site with power already energized keeps real value on its own.</li>
+          <li><strong>The building shell.</strong> Concrete, steel and a roof. Useful, but not worth much more than a large warehouse on its own.</li>
+          <li><strong>The power and cooling equipment inside it.</strong> Usually most of the cost, and built to one tenant’s specification for one generation of chips. The next tenant may want different rack densities or liquid cooling, so much of it may have to be refit.</li>
+        </ul>
+        <p>Rent is paid on all three together. Take away the tenant and the market values them separately, starting with the power.</p>
+        <h2>Five ways to value the same building</h2>
+        <p>The fictional deal: $460&nbsp;million to build, a $322&nbsp;million loan, and $61.2&nbsp;million of stabilized net operating income from a 15-year lease. Here is what it is worth under each assumption.</p>
+      </div>
+      <figure class="exhibit">
+        <figcaption class="exhibit__head">
+          <span class="label">Exhibit 1</span>
+          <span class="exhibit__title">Value of the fictional 40 MW building, and the loan against it</span>
+        </figcaption>
+        <div class="table-wrap">
+          <table class="data">
+            <thead>
+              <tr><th scope="col">Case</th><th scope="col">Dark for</th><th scope="col">New rent per MW-month</th><th scope="col">Cap rate</th><th scope="col">Refit per MW</th><th scope="col">Value today</th><th scope="col">Loan-to-value</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Stabilized, tenant paying</th><td>None</td><td>$150K</td><td>6.5%</td><td>None</td><td>$942M</td><td>34%</td></tr>
+              <tr><th scope="row">Quick re-let</th><td>12 mo</td><td>$135K</td><td>7.0%</td><td>$1.0M</td><td>$651M</td><td>49%</td></tr>
+              <tr><th scope="row">Slow re-let</th><td>24 mo</td><td>$110K</td><td>8.0%</td><td>$2.0M</td><td>$355M</td><td>91%</td></tr>
+              <tr><th scope="row">Hard re-let</th><td>36 mo</td><td>$90K</td><td>9.0%</td><td>$3.0M</td><td>$167M</td><td class="is-signal">193%</td></tr>
+              <tr><th scope="row">Sold as powered land and shell</th><td></td><td></td><td></td><td></td><td>$120M</td><td class="is-signal">268%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="exhibit__note">Fictional numbers. Each re-let case values the building once a new tenant is paying (85% margin on rent, divided by the cap rate), subtracts the refit and $1.5M a month of carrying costs while it sits dark, and discounts the result back at 12% a year. Powered land and shell is $3M per MW.</p>
+      </figure>
+      <div class="prose">
+        <p>Same building, same loan, and the loan-to-value runs from 34% to 268%. Nothing about the concrete changed. What changed is how badly the next tenant wants the power, and how much of the equipment they can use.</p>
+        <h2>What that means for the loan</h2>
+        <p>The as-stable number is the one in the marketing deck. The lender should care about the slow re-let case, because that is roughly where it breaks even. Above that line the loan is a bet on the tenant. Below it, it is a bet that demand for powered sites holds up. Both can be fine bets. They should be priced and structured as different bets.</p>
+        <p>In practice that means:</p>
+        <ul>
+          <li><strong>Pay the loan down to the dark value while the rent is coming in.</strong> Amortization or a cash sweep that brings the balance toward the slow re-let value by the time the lease could end or the tenant could fail.</li>
+          <li><strong>Make sure the power stays with the collateral.</strong> If the interconnection agreement or the power contract sits with the tenant or with a sponsor entity outside the loan, the lender’s best asset can walk away with them.</li>
+          <li><strong>Reserve for a refit.</strong> A re-tenanting reserve that builds from rent over the lease, sized to the refit per MW the next tenant is likely to need.</li>
+          <li><strong>Lean on whoever stands behind the rent.</strong> A guarantee or backstop from a stronger company keeps the as-stable number in force longer. That is the whole point of <a href="what-backstops-buy.html">the Google backstops</a>.</li>
+          <li><strong>Watch the triggers.</strong> Cash management that springs on a tenant default, a notice to vacate or a credit downgrade, before the building goes dark rather than after.</li>
+        </ul>
+        <h2>Questions I’d ask on any single-tenant data center</h2>
+        <ul>
+          <li>Who holds the interconnection agreement and the power contract, and are they pledged to the lender?</li>
+          <li>How much of the power and cooling equipment would a different tenant actually reuse?</li>
+          <li>How many other buyers of power at this size are in this market today, and how many sites are competing for them?</li>
+          <li>What does it cost each month to keep the building ready while it sits dark?</li>
+          <li>When can the tenant leave, and what does it owe if it does?</li>
+          <li>If the worst case comes, what is left after paying for the refit and the downtime?</li>
+        </ul>
+        <p class="memo__source">All numbers on this page are made up for illustration and do not come from any real deal or employer.</p>
+      </div>
+      <a class="next-link" href="bitcoin-rules.html">
+        <span class="next-link__label">Next</span>
+        <span class="title">What bitcoin’s rules promise, and what they don’t →</span>
+      </a>
+      <p class="ask">Would you value it differently? Email me at <a class="inline-link" href="mailto:jlraney99@gmail.com">jlraney99@gmail.com</a>.</p>
+    </div>
+  </article>
+</main>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap site-foot__grid">
+    <div>
+      <p class="site-foot__name">Jack Raney</p>
+      <p>Finance and operations · Dallas, Texas</p>
+    </div>
+    <ul>
+      <li><a href="mailto:jlraney99@gmail.com">jlraney99@gmail.com</a></li>
+      <li><a href="https://www.linkedin.com/in/jack-raney">LinkedIn</a></li>
+      <li><a href="https://github.com/jraney99">GitHub</a></li>
+      <li><a href="https://otianai.com">Otian AI</a></li>
+      <li><a href="reading.html">Reading</a></li>
+      <li><a href="resume.html">Résumé</a></li>
+    </ul>
+    <p class="site-foot__note">Updated October 2026.</p>
+  </div>
+</footer>
+
+<script src="assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>One model for 18 sites · Jack Raney</title>
+  <meta name="description" content="How Jack Raney replaced fragmented power cost reporting at MARA with a single Excel model, with a sample model built from scratch to download.">
+  <link rel="canonical" href="https://jackraney.com/cost-model">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Jack Raney">
+  <meta property="og:title" content="One model for 18 sites">
+  <meta property="og:description" content="Replacing a pile of separate reports with a single cost model, plus a sample built from scratch that you can download.">
+  <meta property="og:url" content="https://jackraney.com/cost-model">
+  <meta property="og:image" content="https://jackraney.com/assets/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f4f1e8">
+  <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="assets/img/favicon-64.png" sizes="64x64" type="image/png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Besley:wght@400..700&family=Overpass:ital,wght@0,300..900;1,300..900&family=Overpass+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap site-head__row">
+    <a class="wordmark" href="index.html">Jack Raney</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html#work">Work</a>
+      <a href="calculator.html">Calculator</a>
+      <a href="about.html">About</a>
+      <a href="resume.html">Résumé</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch theme">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <header class="wrap doc-head">
+    <div class="doc-head__inner">
+      <a class="back" href="index.html#work">← All work</a>
+      <h1>One model for 18 sites</h1>
+      <p class="dek">Replacing a pile of separate reports with a single cost model, plus a sample built from scratch that you can download.</p>
+      <p class="doc-meta">MARA · Lead Financial Analyst, Operations &amp; Energy Transformation · 2025 to 2026</p>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="page-visual">
+      <div class="panel panel--wide panel--sheet" aria-hidden="true">
+        <div class="xl">
+          <div class="xl__bar"><span class="xl__dots"><i></i><i></i><i></i></span>power-cost-model-sample.xlsx</div>
+          <div class="xl__formula"><span class="xl__cell">K10</span><span class="xl__fx">fx</span><span class="xl__f">=J10-I10</span></div>
+          <div class="xl__grid">
+            <table>
+            <colgroup><col class="c-h"><col class="c-a"><col class="c-b"><col span="6"><col class="c-w" span="2"><col span="4"></colgroup>
+            <thead><tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th><th>J</th><th class="is-sel">K</th><th>L</th><th>M</th><th>N</th></tr></thead>
+            <tbody>
+            <tr><th>1</th><td></td><td class="b h l" colspan="13">Summary</td></tr>
+            <tr><th>2</th><td></td><td class="i l" colspan="13">Full year 2025, six sites. Made-up numbers.</td></tr>
+            <tr class="fz"><th>3</th><td></td><td class="b l">Model checks</td><td class="g l ok" colspan="3">All checks pass</td></tr>
+            <tr><th>4</th></tr>
+            <tr><th>5</th><td></td><td class="b l" colspan="13">By site, full year 2025</td></tr>
+            <tr class="r-40"><th>6</th><td></td><td class="b bb w l">Site</td><td class="b bb w">Contracted capacity (MW)</td><td class="b bb w">Metered (MWh)</td><td class="b bb w">Average load (MW)</td><td class="b bb w">Load factor (%)</td><td class="b bb w">Budgeted (MWh)</td><td class="b bb w">Metered vs budget (%)</td><td class="b bb w">Expected cost ($)</td><td class="b bb w">Invoiced cost ($)</td><td class="b bb w">Variance ($)</td><td class="b bb w">Variance (%)</td><td class="b bb w">All-in cost ($/MWh)</td><td class="b bb w">Flagged months (count)</td></tr>
+            <tr><th>7</th><td></td><td class="g l">Site A</td><td class="g p">120.0</td><td class="g p">989,816</td><td class="p">113.0</td><td class="p">94.2%</td><td class="g p">998,640</td><td>(0.9%)</td><td class="g p">$44,237,358</td><td class="g p">$44,284,111</td><td class="p">$46,753</td><td class="p">0.1%</td><td class="p">$44.74</td><td class="g p">-</td></tr>
+            <tr><th>8</th><td></td><td class="g l">Site B</td><td class="g p">75.0</td><td class="g p">596,666</td><td class="p">68.1</td><td class="p">90.8%</td><td class="g p">611,010</td><td>(2.3%)</td><td class="g p">$27,019,725</td><td class="g p">$27,020,782</td><td class="p">$1,057</td><td class="p">0.0%</td><td class="p">$45.29</td><td class="g p">-</td></tr>
+            <tr><th>9</th><td></td><td class="g l">Site C</td><td class="g p">48.0</td><td class="g p">400,406</td><td class="p">45.7</td><td class="p">95.2%</td><td class="g p">403,661</td><td>(0.8%)</td><td class="g p">$21,132,254</td><td class="g p">$21,130,981</td><td>($1,273)</td><td>(0.0%)</td><td class="p">$52.77</td><td class="g p">-</td></tr>
+            <tr><th class="is-sel">10</th><td></td><td class="g l">Site D</td><td class="g p">90.0</td><td class="g p">723,011</td><td class="p">82.5</td><td class="p">91.7%</td><td class="g p">741,096</td><td>(2.4%)</td><td class="g p">$35,885,214</td><td class="g p">$37,372,784</td><td class="p pick">$1,487,569</td><td class="bad p">4.1%</td><td class="p">$51.69</td><td class="g bad p">8</td></tr>
+            <tr><th>11</th><td></td><td class="g l">Site E</td><td class="g p">22.5</td><td class="g p">189,709</td><td class="p">21.7</td><td class="p">96.3%</td><td class="g p">191,187</td><td>(0.8%)</td><td class="g p">$10,597,708</td><td class="g p">$10,599,363</td><td class="p">$1,656</td><td class="p">0.0%</td><td class="p">$55.87</td><td class="g p">-</td></tr>
+            <tr><th>12</th><td></td><td class="g l">Site F</td><td class="g p">97.0</td><td class="g p">759,118</td><td class="p">86.7</td><td class="p">89.3%</td><td class="g p">781,742</td><td>(2.9%)</td><td class="g p">$34,449,671</td><td class="g p">$34,420,250</td><td>($29,421)</td><td>(0.1%)</td><td class="p">$45.34</td><td class="g p">-</td></tr>
+            <tr><th>13</th><td></td><td class="b bt l">Fleet</td><td class="g b bt p">452.5</td><td class="g b bt p">3,658,726</td><td class="b bt p">417.7</td><td class="b bt p">92.3%</td><td class="g b bt p">3,727,336</td><td class="b bt">(1.8%)</td><td class="g b bt p">$173,321,930</td><td class="g b bt p">$174,828,271</td><td class="b bt p">$1,506,342</td><td class="b bt p">0.9%</td><td class="b bt p">$47.78</td><td class="g b bt bad p">8</td></tr>
+            <tr><th>14</th></tr>
+            <tr><th>15</th><td></td><td class="i l" colspan="13">Average load is metered energy over the hours in the year. Load factor is average load over contracted capacity.</td></tr>
+            <tr><th>16</th><td></td><td class="i l" colspan="13">Variance is invoiced minus expected. A positive number means the bill was higher than the contract terms and meters support.</td></tr>
+            <tr><th>17</th><td></td><td class="i l" colspan="13">A flagged month is one where the bill is further from the meters or the expected cost than the tolerance allows. Send the utility the meter data for that month and ask for a corrected bill.</td></tr>
+            <tr><th>18</th><td></td><td class="i l" colspan="13">The Fleet row comes from the Fleet column on Calc, not from adding up the rows above, so Checks can test one against the other.</td></tr>
+            <tr><th>19</th></tr>
+            <tr><th>20</th><td></td><td class="b l" colspan="13">By month, all sites</td></tr>
+            <tr class="r-27"><th>21</th><td></td><td class="b bb w l">Month</td><td class="b bb w">Metered (MWh)</td><td class="b bb w">Expected cost ($)</td><td class="b bb w">Invoiced cost ($)</td><td class="b bb w">Variance ($)</td><td class="b bb w">Variance (%)</td></tr>
+            <tr><th>22</th><td></td><td class="g l">Jan 2025</td><td class="g p">314,808</td><td class="g p">$13,888,826</td><td class="g p">$13,897,101</td><td class="p">$8,275</td><td class="p">0.1%</td></tr>
+            <tr><th>23</th><td></td><td class="g l">Feb 2025</td><td class="g p">270,690</td><td class="g p">$15,529,250</td><td class="g p">$15,532,124</td><td class="p">$2,874</td><td class="p">0.0%</td></tr>
+            <tr><th>24</th><td></td><td class="g l">Mar 2025</td><td class="g p">320,482</td><td class="g p">$13,369,762</td><td class="g p">$13,363,639</td><td>($6,123)</td><td>(0.0%)</td></tr>
+            <tr><th>25</th><td></td><td class="g l">Apr 2025</td><td class="g p">310,360</td><td class="g p">$12,561,388</td><td class="g p">$12,579,547</td><td class="p">$18,159</td><td class="p">0.1%</td></tr>
+            <tr><th>26</th><td></td><td class="g l">May 2025</td><td class="g p">319,341</td><td class="g p">$13,831,248</td><td class="g p">$13,996,280</td><td class="p">$165,032</td><td class="p">1.2%</td></tr>
+            <tr><th>27</th><td></td><td class="g l">Jun 2025</td><td class="g p">300,516</td><td class="g p">$14,336,307</td><td class="g p">$14,523,400</td><td class="p">$187,093</td><td class="p">1.3%</td></tr>
+            <tr><th>28</th><td></td><td class="g l">Jul 2025</td><td class="g p">292,886</td><td class="g p">$16,889,712</td><td class="g p">$17,110,161</td><td class="p">$220,450</td><td class="p">1.3%</td></tr>
+            </tbody>
+            </table>
+          </div>
+          <div class="xl__tabs"><span>Read me</span><span>Sites</span><span>Market prices</span><span>Meter data</span><span>Invoices</span><span>Calc</span><span class="is-on">Summary</span><span>Checks</span><span class="xl__add">+</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap doc-body">
+
+    <div class="prose">
+      <p>At MARA, each site’s power costs lived in its own reports. A fleet-wide question, like what we paid per megawatt-hour last month or which site ran over budget, meant stitching those reports together before anyone could answer it.</p>
+      <p>I built one model in Excel that became the single source for power costs across all 18 sites. It tracked each site’s usage, capacity and costs, and the gap between what we expected to pay and what we were billed. It connected to DOMO for reporting and to Zip for approvals, so leadership could see the whole fleet in one place, kept current.</p>
+    </div>
+
+    <section class="doc-section" aria-labelledby="m-sample">
+      <h2 id="m-sample">The sample model</h2>
+      <div class="stack">
+        <div class="prose">
+          <p>The real model belongs to MARA and stays there. This sample is built from scratch with made-up numbers to show how I structure a model like it: six sites totaling 452.5&nbsp;MW and a year of monthly data. It follows the conventions I’d expect from any model handed to someone else:</p>
+          <ul>
+            <li>Inputs are in blue, formulas in black, and numbers pulled from another tab in green.</li>
+            <li>Inputs live on their own tabs: sites and contracts, market prices, meter data and invoices.</li>
+            <li>The Calc tab builds each site’s expected bill from its contract and compares it with the invoice, month by month.</li>
+            <li>Summary is the one-page view, and Checks confirms that everything ties out.</li>
+          </ul>
+          <p>Site D is there to show what a billing problem looks like. Starting in May, its invoices bill 5.6% to 6.8% more power than its meters recorded, and the model flags all eight of those months. Over the year, that comes to about $1.5&nbsp;million billed above what Site D’s contract says it should have paid.</p>
+        </div>
+        <p class="download"><a class="button" href="downloads/power-cost-model-sample.xlsx" download>Download the sample model <small>Excel, 38 KB</small></a></p>
+
+        <figure class="exhibit">
+          <figcaption class="exhibit__head">
+            <span class="label">Exhibit 1</span>
+            <span class="exhibit__title">The Summary tab, from the sample: full year</span>
+          </figcaption>
+          <div class="table-wrap">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th scope="col">Site</th>
+                  <th scope="col">Metered (MWh)</th>
+                  <th scope="col">Load factor</th>
+                  <th scope="col">Expected ($000)</th>
+                  <th scope="col">Invoiced ($000)</th>
+                  <th scope="col">Variance ($000)</th>
+                  <th scope="col">All-in ($/MWh)</th>
+                  <th scope="col">Flagged months</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Site A</td><td>989,816</td><td>94.2%</td><td>44,237</td><td>44,284</td><td>47</td><td>$44.74</td><td>0</td></tr>
+                <tr><td>Site B</td><td>596,666</td><td>90.8%</td><td>27,020</td><td>27,021</td><td>1</td><td>$45.29</td><td>0</td></tr>
+                <tr><td>Site C</td><td>400,406</td><td>95.2%</td><td>21,132</td><td>21,131</td><td>(1)</td><td>$52.77</td><td>0</td></tr>
+                <tr><td>Site D</td><td>723,011</td><td>91.7%</td><td>35,885</td><td>37,373</td><td class="is-signal">1,488</td><td>$51.69</td><td class="is-signal">8</td></tr>
+                <tr><td>Site E</td><td>189,709</td><td>96.3%</td><td>10,598</td><td>10,599</td><td>2</td><td>$55.87</td><td>0</td></tr>
+                <tr><td>Site F</td><td>759,118</td><td>89.3%</td><td>34,450</td><td>34,420</td><td>(29)</td><td>$45.34</td><td>0</td></tr>
+                <tr class="total"><td>Fleet</td><td>3,658,726</td><td>92.3%</td><td>173,322</td><td>174,828</td><td>1,506</td><td>$47.78</td><td>8</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="exhibit__note">Made-up numbers. Expected cost is built from each site’s contract and its metered usage; variance is what the invoices billed above that. Negative numbers are in parentheses.</p>
+        </figure>
+
+        <figure class="exhibit">
+          <figcaption class="exhibit__head">
+            <span class="label">Exhibit 2</span>
+            <span class="exhibit__title">Site D: how much more power the invoice billed than the meter recorded, by month</span>
+          </figcaption>
+          <ul class="legend" aria-hidden="true">
+            <li><span class="key key--fill" style="background: var(--signal)"></span>Flagged month</li>
+            <li><span class="key key--dash"></span>2% tolerance</li>
+          </ul>
+          <div class="plot plot--bars" role="img" aria-label="Bar chart with made-up numbers. Site D’s invoices match its meters within half a percent from January through April. From May through December they bill 5.6 to 6.8 percent more power than the meters recorded, above the 2 percent tolerance, and every one of those months is flagged.">
+            <div class="plot__area" style="--ratio: 16 / 7">
+              <svg class="plot__svg" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
+                <line class="grid" x1="0" x2="1000" y1="444.4" y2="444.4" vector-effect="non-scaling-stroke"/>
+                <line class="grid" x1="0" x2="1000" y1="222.2" y2="222.2" vector-effect="non-scaling-stroke"/>
+                <line class="grid" x1="0" x2="1000" y1="0.0" y2="0.0" vector-effect="non-scaling-stroke"/>
+                <line class="zero" x1="0" x2="1000" y1="888.9" y2="888.9" vector-effect="non-scaling-stroke"/>
+                <rect class="bar" x="100.0" width="50.0" y="888.9" height="21.3"/>
+                <rect class="bar bar--signal" x="350.0" width="50.0" y="240.4" height="648.4"/>
+                <rect class="bar bar--signal" x="433.3" width="50.0" y="144.1" height="744.8"/>
+                <rect class="bar bar--signal" x="516.7" width="50.0" y="271.9" height="617.0"/>
+                <rect class="bar bar--signal" x="600.0" width="50.0" y="162.1" height="726.8"/>
+                <rect class="bar bar--signal" x="683.3" width="50.0" y="138.0" height="750.9"/>
+                <rect class="bar bar--signal" x="766.7" width="50.0" y="237.2" height="651.7"/>
+                <rect class="bar bar--signal" x="850.0" width="50.0" y="237.4" height="651.5"/>
+                <rect class="bar bar--signal" x="933.3" width="50.0" y="156.7" height="732.2"/>
+                <line class="cap" x1="0" x2="1000" y1="666.7" y2="666.7" vector-effect="non-scaling-stroke"/>
+              </svg>
+              <span class="plot__y" style="top: 88.89%">0%</span>
+              <span class="plot__y" style="top: 66.67%">2%</span>
+              <span class="plot__y" style="top: 44.44%">4%</span>
+              <span class="plot__y" style="top: 22.22%">6%</span>
+              <span class="plot__y" style="top: 0.00%">8%</span>
+            </div>
+            <div class="plot__x" aria-hidden="true">
+              <span style="left: 4.17%">Jan</span>
+              <span style="left: 12.50%">Feb</span>
+              <span style="left: 20.83%">Mar</span>
+              <span style="left: 29.17%">Apr</span>
+              <span style="left: 37.50%">May</span>
+              <span style="left: 45.83%">Jun</span>
+              <span style="left: 54.17%">Jul</span>
+              <span style="left: 62.50%">Aug</span>
+              <span style="left: 70.83%">Sep</span>
+              <span style="left: 79.17%">Oct</span>
+              <span style="left: 87.50%">Nov</span>
+              <span style="left: 95.83%">Dec</span>
+            </div>
+          </div>
+          <p class="exhibit__note">Made-up numbers from the sample. The model flags any month where billed MWh or billed dollars differ from what the meters and the contract say by more than the tolerance set on the Read me tab.</p>
+        </figure>
+      </div>
+    </section>
+
+    <a class="next-link" href="archibald.html">
+      <span class="next-link__label">Next</span>
+      <span class="title">Archibald, the system that runs my admin →</span>
+    </a>
+
+    <p class="ask">Questions about the model? Email me at <a class="inline-link" href="mailto:jlraney99@gmail.com">jlraney99@gmail.com</a>.</p>
+
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap site-foot__grid">
+    <div>
+      <p class="site-foot__name">Jack Raney</p>
+      <p>Finance and operations · Dallas, Texas</p>
+    </div>
+    <ul>
+      <li><a href="mailto:jlraney99@gmail.com">jlraney99@gmail.com</a></li>
+      <li><a href="https://www.linkedin.com/in/jack-raney">LinkedIn</a></li>
+      <li><a href="https://github.com/jraney99">GitHub</a></li>
+      <li><a href="https://otianai.com">Otian AI</a></li>
+      <li><a href="reading.html">Reading</a></li>
+      <li><a href="resume.html">Résumé</a></li>
+    </ul>
+    <p class="site-foot__note">Updated October 2026.</p>
+  </div>
+</footer>
+
+<script src="assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Six ways to hold bitcoin · Jack Raney</title>
+  <meta name="description" content="A plain guide to the six common ways to hold bitcoin, from exchange accounts to multisig and collaborative custody, and what each trades away.">
+  <link rel="canonical" href="https://jackraney.com/custody">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Jack Raney">
+  <meta property="og:title" content="Six ways to hold bitcoin">
+  <meta property="og:description" content="From exchange accounts to multisig: who holds the key, and what each model trades away.">
+  <meta property="og:url" content="https://jackraney.com/custody">
+  <meta property="og:image" content="https://jackraney.com/assets/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-10-16">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f4f1e8">
+  <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="assets/img/favicon-64.png" sizes="64x64" type="image/png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Besley:wght@400..700&family=Overpass:ital,wght@0,300..900;1,300..900&family=Overpass+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap site-head__row">
+    <a class="wordmark" href="index.html">Jack Raney</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html#work">Work</a>
+      <a href="calculator.html">Calculator</a>
+      <a href="about.html">About</a>
+      <a href="resume.html">Résumé</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch theme">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <article>
+    <header class="wrap doc-head">
+      <div class="doc-head__inner">
+        <a class="back" href="index.html">← Home</a>
+        <h1>Six ways to hold bitcoin</h1>
+        <p class="dek">Owning bitcoin really means controlling the keys that can move it. Here are the six common ways people do that, from easiest to most secure, and what each one trades away.</p>
+        <p class="doc-date"><time datetime="2026-10">October 2026</time></p>
+      </div>
+    </header>
+    <div class="wrap memo">
+      <div class="prose">
+        <p>Bitcoin doesn’t sit in an account. It sits on a public ledger, and whoever controls the matching <strong>private key</strong> can move it. Every way of holding bitcoin is really a decision about who holds that key, where it lives and what happens if the person holding it can’t act.</p>
+        <p>The usual backup for a key is a <strong>seed phrase</strong>: 12 or 24 ordinary words in a set order. Anyone with those words can take the coins. Keep that in mind through everything below.</p>
+      </div>
+      <figure class="exhibit">
+        <figcaption class="exhibit__head">
+          <span class="label">Exhibit 1</span>
+          <span class="exhibit__title">The six models at a glance</span>
+        </figcaption>
+        <div class="table-wrap">
+          <table class="data data--text">
+            <thead><tr><th scope="col">Model</th><th scope="col">Who holds the key</th><th scope="col">Ease of use</th><th scope="col">Main risk</th><th scope="col">Typical use</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">1. Exchange account</th><td>The company</td><td>Easiest</td><td>The company fails or freezes you</td><td>Buying, learning</td></tr>
+              <tr><th scope="row">2. Phone or desktop app</th><td>You, online</td><td>Easy</td><td>Malware, a lost phone</td><td>Spending money</td></tr>
+              <tr><th scope="row">3. Hardware wallet</th><td>You, on a device</td><td>Moderate</td><td>Losing the device and backup</td><td>Savings you may need soon</td></tr>
+              <tr><th scope="row">4. Air-gapped cold storage</th><td>You, fully offline</td><td>Hard</td><td>Forgetting how to use it</td><td>Long-term savings</td></tr>
+              <tr><th scope="row">5. Multisignature</th><td>Several keys, any 2 of 3</td><td>Hard</td><td>Losing the setup file</td><td>Large holdings</td></tr>
+              <tr><th scope="row">6. Collaborative custody</th><td>You hold 2 of 3, a firm holds 1</td><td>Moderate</td><td>Less privacy</td><td>Inheritance planning</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </figure>
+      <div class="prose">
+        <h2>1. An exchange account</h2>
+        <p>You buy bitcoin on an exchange and leave it there. You don’t hold any bitcoin directly. You hold a claim on the company, and the balance in the app is a number in its database.</p>
+        <p><strong>What it solves.</strong> It is the easiest start: a username, a password and a “forgot password” link. You can learn how bitcoin behaves before taking on any technical responsibility.</p>
+        <p><strong>The risk.</strong> You are trusting the company to stay solvent, keep hackers out and keep your account open. If it fails, there is no deposit insurance like the FDIC, and depending on its terms of service your coins may be treated as its property. When Celsius went bankrupt in 2022, a court ruled that coins in its interest-earning accounts belonged to the company, leaving those customers as unsecured creditors. Exchanges also collect your identity, address and tax details, which links your name to your holdings.</p>
+        <p><strong>The common mistake.</strong> Treating an exchange as a savings account. It is a marketplace. Keeping a large share of your savings on one platform is the risk most people take without noticing.</p>
+        <h2>2. A phone or desktop app (a “hot wallet”)</h2>
+        <p>An app on your phone or computer holds the keys. This is the first step where you control them, so no company can freeze or block a payment.</p>
+        <p><strong>What it solves.</strong> It removes the middleman. You can send bitcoin any time by scanning a QR code. Some apps now split the key between your phone and an encrypted cloud backup, so no single piece of paper can be stolen or lost.</p>
+        <p><strong>The risk.</strong> The device is always online, so malware and phishing can reach the keys. If the phone is lost and there is no backup, the coins are gone for good. Most apps also check your balance through the provider’s servers, which can reveal your IP address.</p>
+        <p><strong>The common mistake.</strong> Photographing the seed phrase, or keeping more in the app than you would carry in a wallet.</p>
+        <h2>3. A hardware wallet</h2>
+        <p>A small dedicated device creates and stores the keys and signs transactions inside itself. When you send bitcoin, your computer prepares the transaction, the device signs it, and the key never leaves the device. Many use a tamper-resistant secure chip.</p>
+        <p><strong>What it solves.</strong> Your computer can be infected and your bitcoin is still safe, because the computer never sees the key. Many hardware wallets also work with independent software such as Sparrow or Electrum, so the manufacturer doesn’t need your name or email.</p>
+        <p><strong>The risk.</strong> The risks become physical: a device tampered with before it reaches you (buy only from the maker), losing the device and the backup together, and the fact that owning one can mark you as a target.</p>
+        <p><strong>The common mistake.</strong> Thinking the bitcoin is inside the device. It is on the ledger. If the device breaks, the seed phrase restores everything on a new one. If the seed phrase is lost, the device is the only copy.</p>
+        <h2>4. Air-gapped cold storage</h2>
+        <p>A signing device that never connects to anything by cable, Bluetooth or Wi-Fi. Transactions move in and out by scanning QR codes or swapping a microSD card, so the only path to the key is physical.</p>
+        <p><strong>What it solves.</strong> It closes the last digital door: a flaw in how a device talks to a computer can’t be used if it never talks to one. The slow, manual process also makes it hard to sell in a panic.</p>
+        <p><strong>The risk.</strong> Because you rarely touch it, you can forget the PIN or the steps. Devices also age. The seed phrase should be stamped in metal rather than written on paper, and it is worth practicing a recovery once in a while to prove it still works.</p>
+        <p><strong>The common mistake.</strong> Building a setup so complicated, or hiding it so well, that you or your family can’t use it years later.</p>
+        <h2>5. Multisignature (“multisig”)</h2>
+        <p>The coins need more than one key to move. In the common 2-of-3 setup there are three keys, kept in different places or by different people, and any two can sign.</p>
+        <p><strong>What it solves.</strong> One stolen key can’t move the funds, and one lost key doesn’t lose them: the other two can move everything to a new setup. A robber or a con artist would need two separate keys in two separate places.</p>
+        <p><strong>The risk.</strong> It is more complex. Each wallet has a small setup file, sometimes called the descriptor, that records how the keys fit together. Without it, recovery is much harder. Keeping all three keys in one safe defeats the purpose. Most multisig setups in use today are also visible as multisig on the public ledger.</p>
+        <p><strong>The common mistake.</strong> Over-engineering it (5-of-7 for a modest amount), or not backing up the setup file alongside the keys.</p>
+        <h2>6. Collaborative custody</h2>
+        <p>A 2-of-3 multisig where you hold two keys and a specialist firm holds the third. You can move the coins without the firm. The firm can’t move them without you.</p>
+        <p><strong>What it solves.</strong> The biggest threat to self-custody is the owner being the only person who understands it. A firm holding one key can help heirs recover the coins through a documented process, which fits into an estate plan or a trust.</p>
+        <p><strong>The risk.</strong> Privacy. The firm knows who you are and what you hold. You are also relying on it to still exist, and to follow its process, when your heirs need it.</p>
+        <p><strong>The common mistake.</strong> Assuming the family will figure it out. Whatever the setup, write down what exists, where the pieces are and who to call, in instructions someone non-technical can follow.</p>
+        <h2>How people usually combine them</h2>
+        <p>Most careful owners don’t pick one. They keep a small amount in an app for spending, savings on a hardware wallet or in cold storage, and, as the amount grows, move the core holding into multisig. Whatever the mix, the test is the same: if you were gone tomorrow, could the right person recover it, and could the wrong person not?</p>
+        <p class="memo__source">Adapted from a six-part series I wrote for the Kingdom Bitcoin newsletter in February 2026, rewritten here as a plain guide. Product names are examples, not endorsements. Nothing here is investment, legal or tax advice.</p>
+      </div>
+      <a class="next-link" href="bitcoin-reading.html">
+        <span class="next-link__label">Next</span>
+        <span class="title">A bitcoin reading list →</span>
+      </a>
+      <p class="ask">Questions about holding bitcoin? Email me at <a class="inline-link" href="mailto:jlraney99@gmail.com">jlraney99@gmail.com</a>.</p>
+    </div>
+  </article>
+</main>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap site-foot__grid">
+    <div>
+      <p class="site-foot__name">Jack Raney</p>
+      <p>Finance and operations · Dallas, Texas</p>
+    </div>
+    <ul>
+      <li><a href="mailto:jlraney99@gmail.com">jlraney99@gmail.com</a></li>
+      <li><a href="https://www.linkedin.com/in/jack-raney">LinkedIn</a></li>
+      <li><a href="https://github.com/jraney99">GitHub</a></li>
+      <li><a href="https://otianai.com">Otian AI</a></li>
+      <li><a href="reading.html">Reading</a></li>
+      <li><a href="resume.html">Résumé</a></li>
+    </ul>
+    <p class="site-foot__note">Updated October 2026.</p>
+  </div>
+</footer>
+
+<script src="assets/js/site.js"></script>
+</body>
+</html>

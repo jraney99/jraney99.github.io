@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ERCOT power cost calculator · Jack Raney</title>
+  <meta name="description" content="Replay every hour of 2025 at an ERCOT trading hub. Pick a site size and a shut-off price and see what a year of power would have cost, and what flexibility was worth.">
+  <link rel="canonical" href="https://jackraney.com/calculator">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jack Raney">
+  <meta property="og:title" content="ERCOT power cost calculator">
+  <meta property="og:description" content="Every hour of 2025 at a Texas trading hub. What would a year of power have cost, and what was a shut-off switch worth?">
+  <meta property="og:url" content="https://jackraney.com/calculator">
+  <meta property="og:image" content="https://jackraney.com/assets/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f4f1e8">
+  <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="assets/img/favicon-64.png" sizes="64x64" type="image/png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Besley:wght@400..700&family=Overpass:ital,wght@0,300..900;1,300..900&family=Overpass+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap site-head__row">
+    <a class="wordmark" href="index.html">Jack Raney</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html#work">Work</a>
+      <a href="calculator.html" aria-current="page">Calculator</a>
+      <a href="about.html">About</a>
+      <a href="resume.html">Résumé</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch theme">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <header class="wrap doc-head">
+    <div class="doc-head__inner">
+      <a class="back" href="index.html#work">← All work</a>
+      <h1>ERCOT power cost calculator</h1>
+      <p class="dek">Every hour of 2025 at a Texas trading hub. Pick a site size and the price where you’d rather shut down than keep running, and see what the year would have cost.</p>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="calc">
+
+      <form class="calc__controls" id="calc-form" aria-label="Calculator settings">
+        <fieldset class="control">
+          <legend class="control__label">Trading hub</legend>
+          <div class="segmented">
+            <label><input type="radio" name="hub" value="HB_WEST" checked><span>West</span></label>
+            <label><input type="radio" name="hub" value="HB_NORTH"><span>North</span></label>
+            <label><input type="radio" name="hub" value="HB_HOUSTON"><span>Houston</span></label>
+            <label><input type="radio" name="hub" value="HB_SOUTH"><span>South</span></label>
+          </div>
+          <p class="control__hint">ERCOT prices power at hubs across the state. West covers West Texas, home to much of the state’s wind and bitcoin mining. North includes Dallas.</p>
+        </fieldset>
+
+        <div class="control">
+          <label class="control__label" for="mw">Site size</label>
+          <div class="control__row">
+            <input type="range" id="mw-range" min="1" max="1000" step="1" value="100" aria-label="Site size in megawatts">
+            <span class="control__value"><input type="number" id="mw" min="1" max="5000" step="1" value="100" inputmode="numeric"> MW</span>
+          </div>
+        </div>
+
+        <div class="control">
+          <label class="control__label" for="cap">Shut-off price</label>
+          <div class="control__row">
+            <input type="range" id="cap" min="0" max="9" step="1" value="2" aria-describedby="cap-hint">
+            <output class="control__value" id="cap-out" for="cap">$100/MWh</output>
+          </div>
+          <p class="control__hint" id="cap-hint">A bitcoin miner sets this near what a megawatt-hour of power earns it in bitcoin. An AI data center with customers waiting usually can’t shut off at all. Slide all the way right for “never.”</p>
+        </div>
+
+        <p class="control__hint"><a class="inline-link" href="#" id="share-link">Link to this scenario</a> <span id="share-note" role="status"></span></p>
+      </form>
+
+      <div class="calc__results">
+        <p class="calc__summary" id="summary" aria-live="polite">Loading 2025 prices…</p>
+
+        <dl class="figures figures--3" id="figures">
+          <div><dt>Power cost, always on</dt><dd id="f-always">…</dd></div>
+          <div><dt>With the shut-off</dt><dd id="f-with">…</dd></div>
+          <div><dt>Saved</dt><dd class="is-signal" id="f-saved">…</dd></div>
+          <div><dt>Hours off</dt><dd id="f-hours">…</dd></div>
+          <div><dt>Saved per MW</dt><dd id="f-permw">…</dd></div>
+          <div><dt>Average price paid</dt><dd id="f-avg">…</dd></div>
+        </dl>
+
+        <figure class="exhibit">
+          <figcaption class="exhibit__head">
+            <span class="label">Exhibit 1</span>
+            <span class="exhibit__title" id="hours-title">Every hour of 2025 at the West hub, by day and time of day</span>
+          </figcaption>
+          <div class="hours" id="hours" role="img" aria-label="Every hour of 2025 at the West hub, colored by price."></div>
+          <ul class="hours__legend" aria-hidden="true">
+            <li><span class="swatch swatch--ramp"></span>Cheaper to pricier</li>
+            <li><span class="swatch swatch--neg"></span>Below zero</li>
+            <li id="hours-key-off"><span class="swatch swatch--off"></span>Above the shut-off, switched off</li>
+          </ul>
+          <p class="exhibit__note">Each column is a day and each row is an hour of the day. Point at a square, or tap it, to see that hour’s price.</p>
+        </figure>
+
+        <figure class="exhibit">
+          <figcaption class="exhibit__head">
+            <span class="label">Exhibit 2</span>
+            <span class="exhibit__title" id="curve-title">Every hour of 2025, most expensive first</span>
+          </figcaption>
+          <ul class="legend" aria-hidden="true">
+            <li><span class="key"></span>Hourly price</li>
+            <li id="key-cap"><span class="key key--dash"></span><span id="key-cap-text">$100 shut-off</span></li>
+            <li id="key-fill"><span class="key key--fill"></span>Price above the shut-off</li>
+          </ul>
+          <div class="plot plot--clipped" id="curve" role="img" aria-label="Price duration curve">
+            <div class="plot__area" style="--ratio: 16 / 9"></div>
+            <div class="plot__x" aria-hidden="true"></div>
+          </div>
+          <p class="plot__axis-title">Hours, ranked from most to least expensive (log scale)</p>
+          <p class="exhibit__note" id="curve-note"></p>
+        </figure>
+
+        <figure class="exhibit">
+          <figcaption class="exhibit__head">
+            <span class="label">Exhibit 3</span>
+            <span class="exhibit__title">Cost avoided by shutting off, by month</span>
+          </figcaption>
+          <div class="plot plot--bars" id="months" role="img" aria-label="Cost avoided by month">
+            <div class="plot__area" style="--ratio: 16 / 6"></div>
+            <div class="plot__x" aria-hidden="true"></div>
+          </div>
+          <p class="exhibit__note" id="months-note"></p>
+        </figure>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="wrap doc-body">
+
+    <section class="doc-section" aria-labelledby="c-how">
+      <h2 id="c-how">How it works</h2>
+      <div class="prose">
+        <p>For each of the 8,760 hours in 2025, the site either runs or it doesn’t. If it runs, it pays that hour’s price for every megawatt it draws:</p>
+        <p class="formula">Cost of an hour = price ($/MWh) × site size (MW) × 1 hour</p>
+        <p>If the price is above the shut-off point, the site sits out that hour and pays nothing.</p>
+        <p>Because the year’s spikes are packed into a small number of hours, a site can skip most of them while giving up very little running time. The savings per megawatt don’t depend on the size of the site, so “saved per MW” works as a rough price for being able to shut off.</p>
+      </div>
+    </section>
+
+    <section class="doc-section" aria-labelledby="c-out">
+      <h2 id="c-out">What it leaves out</h2>
+      <div class="prose">
+        <p>It counts only the price of energy. A real bill adds delivery and transmission charges, and in ERCOT a large customer’s transmission costs for the next year depend partly on its usage during the four summer peaks (4CP). Most large loads also hedge, buying some of their power ahead of time at a fixed price, so they aren’t fully exposed to the hourly market.</p>
+        <p>A real decision to shut off also weighs revenue. Grid programs pay flexible loads to stand ready, and a site that’s running is earning money. And real sites can’t switch off instantly. ERCOT settles prices every 15 minutes, so hourly averages smooth over some spikes.</p>
+      </div>
+    </section>
+
+    <section class="doc-section" aria-labelledby="c-src">
+      <h2 id="c-src">Source</h2>
+      <div class="prose">
+        <p>ERCOT, <a href="https://www.ercot.com/mp/data-products/data-product-details?id=NP6-785-ER">Historical RTM Load Zone and Hub Prices</a> (NP6-785-ER), 2025 file, published January 1, 2026. Real-time settlement point prices at each hub, averaged from 15-minute intervals to hours, in Central Time. The processed data is in <a href="assets/data/ercot-2025.js">ercot-2025.js</a> if you want to check my math.</p>
+      </div>
+    </section>
+
+    <a class="next-link" href="what-miners-know.html">
+      <span class="next-link__label">Next</span>
+      <span class="title">What bitcoin miners know about power →</span>
+    </a>
+
+    <p class="ask">Questions or a use for this? Email me at <a class="inline-link" href="mailto:jlraney99@gmail.com">jlraney99@gmail.com</a>.</p>
+
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap site-foot__grid">
+    <div>
+      <p class="site-foot__name">Jack Raney</p>
+      <p>Finance and operations · Dallas, Texas</p>
+    </div>
+    <ul>
+      <li><a href="mailto:jlraney99@gmail.com">jlraney99@gmail.com</a></li>
+      <li><a href="https://www.linkedin.com/in/jack-raney">LinkedIn</a></li>
+      <li><a href="https://github.com/jraney99">GitHub</a></li>
+      <li><a href="https://otianai.com">Otian AI</a></li>
+      <li><a href="reading.html">Reading</a></li>
+      <li><a href="resume.html">Résumé</a></li>
+    </ul>
+    <p class="site-foot__note">Updated October 2026.</p>
+  </div>
+</footer>
+
+<script src="assets/js/site.js"></script>
+<script src="assets/data/ercot-2025.js"></script>
+<script src="assets/js/hours.js"></script>
+<script src="assets/js/calculator.js"></script>
+</body>
+</html>

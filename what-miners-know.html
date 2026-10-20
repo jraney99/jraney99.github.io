@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>What bitcoin miners know about power · Jack Raney</title>
+  <meta name="description" content="Bitcoin miners learned to run around the price of electricity. AI data centers are being pushed to learn the same thing. A memo by Jack Raney, with 2025 ERCOT price data.">
+  <link rel="canonical" href="https://jackraney.com/what-miners-know">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Jack Raney">
+  <meta property="og:title" content="What bitcoin miners know about power">
+  <meta property="og:description" content="Miners learned to run around the price of electricity. AI data centers are being pushed to learn the same thing.">
+  <meta property="og:url" content="https://jackraney.com/what-miners-know">
+  <meta property="og:image" content="https://jackraney.com/assets/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-10-16">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f4f1e8">
+  <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="assets/img/favicon-64.png" sizes="64x64" type="image/png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Besley:wght@400..700&family=Overpass:ital,wght@0,300..900;1,300..900&family=Overpass+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap site-head__row">
+    <a class="wordmark" href="index.html">Jack Raney</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html#work">Work</a>
+      <a href="calculator.html">Calculator</a>
+      <a href="about.html">About</a>
+      <a href="resume.html">Résumé</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch theme">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <article>
+    <header class="wrap doc-head">
+      <div class="doc-head__inner">
+        <a class="back" href="index.html">← Home</a>
+        <h1>What bitcoin miners know about power</h1>
+        <p class="dek">Miners learned to run around the price of electricity. AI data centers are being pushed to learn the same thing.</p>
+        <p class="doc-date"><time datetime="2026-10">October 2026</time></p>
+      </div>
+    </header>
+
+    <div class="wrap memo">
+      <div class="prose">
+        <p>At MARA I worked on the finance side of a bitcoin mining fleet that drew 1.8&nbsp;gigawatts across 18 sites, and modeled the economics of converting that capacity to AI and HPC. For a miner, power is the biggest cost by far. The bitcoin network sets what a miner earns for its computing, so the main thing a miner controls is what it pays for power, and when it uses it.</p>
+        <p>Miners built a few habits around that cost. AI data centers are starting to need them too.</p>
+
+        <h2>Hourly prices</h2>
+        <p>ERCOT, which runs most of the Texas grid, sets real-time prices every five minutes and settles them in 15-minute intervals. The swings are lopsided. At ERCOT’s West hub in 2025, the median hour cost $27.34 per megawatt-hour. The most expensive hour, 7 to 8 a.m. on January&nbsp;15, cost $1,963.41, about 70 times as much. The 88 priciest hours, 1% of the year, made up 8.5% of what it cost to run all year.</p>
+      </div>
+
+      <dl class="figures figures--4 memo__figures">
+        <div><dt>Median hour</dt><dd>$27.34</dd></div>
+        <div><dt>Priciest hour</dt><dd>$1,963</dd></div>
+        <div><dt>Hours above $100</dt><dd>269</dd></div>
+        <div><dt>Energy bill cut</dt><dd class="is-signal">16%</dd></div>
+      </dl>
+
+      <div class="prose">
+        <h2>Shutting off</h2>
+        <p>A miner compares the price of the next hour with what that hour of mining will earn, and shuts down when power costs more. Because the spikes are packed into so few hours, this costs very little running time. A site at the West hub that sat out every hour above $100 in 2025 would have run 96.9% of the year and cut its energy bill by 16%. That works out to about $46,000 a year for every megawatt that can switch off.</p>
+      </div>
+
+      <figure class="exhibit memo__hours">
+        <figcaption class="exhibit__head">
+          <span class="exhibit__title">Every hour of 2025 at the West hub. The 269 hours above $100 are in yellow.</span>
+        </figcaption>
+        <div class="hours" data-hub="HB_WEST" data-cap="100" role="img" aria-label="A grid of all 8,760 hours of 2025 at ERCOT’s West hub, with a column for each day and a row for each hour. The 269 hours priced above $100 are yellow and fall mostly between 5 and 10 p.m., spread across the year. Hours priced below zero are blue and cluster between 9 a.m. and 5 p.m., most of all in March."></div>
+        <ul class="hours__legend" aria-hidden="true">
+          <li><span class="swatch swatch--ramp"></span>Cheaper to pricier</li>
+          <li><span class="swatch swatch--neg"></span>Below zero</li>
+          <li><span class="swatch swatch--off"></span>Above $100, switched off</li>
+        </ul>
+        <p class="exhibit__note">Each column is a day and each row is an hour of the day. Point at a square, or tap it, to see that hour’s price.</p>
+      </figure>
+
+      <div class="prose">
+
+        <h2>Getting paid to stand by</h2>
+        <p>Grid operators need load that can drop on short notice, and they pay for it. ERCOT runs programs that pay large customers to stand ready to cut their usage when the grid runs short. For a miner, the ability to turn off quickly is a second source of revenue.</p>
+
+        <h2>The four summer peaks</h2>
+        <p>In ERCOT, much of a large customer’s transmission bill for the next year depends on its usage in four 15-minute intervals: the highest-demand interval in each of June, July, August and September. Miners try to be off during those intervals, which means forecasting when they will land. A load that guesses right can cut a large share of next year’s transmission charges.</p>
+
+        <h2>How AI data centers differ</h2>
+        <p>Data centers were built to run every hour of the year. Their customers expect it, and they keep backup generators on site so they never go dark. That made sense when power was easy to get. Now new large loads can wait years for a grid connection, and Texas passed Senate Bill&nbsp;6 in 2025, which sets new rules for very large loads, including when they can be cut off in a grid emergency.</p>
+        <p>In August 2025, Google agreed with two utilities, Indiana Michigan Power and the Tennessee Valley Authority, to scale back machine learning work at some of its data centers when the utilities ask.</p>
+
+        <h2>What I’d ask on an AI data center deal</h2>
+        <p>If I were underwriting one, these are the first things I’d ask.</p>
+        <ul>
+          <li>How much of the power is hedged, and what happens in the hours that aren’t?</li>
+          <li>Can any of the load move or stop? What is that worth, and who gets paid for it?</li>
+          <li>How exposed is the site to 4CP and other peak-based charges?</li>
+          <li>When does the grid connection go live, and what is the plan until then?</li>
+          <li>What will the backup generators cost to run, and what do their permits allow?</li>
+        </ul>
+
+        <p class="memo__source">Price figures are from ERCOT’s real-time settlement point prices for 2025 at the West hub (HB_WEST), averaged to hours. The <a href="calculator.html">calculator page</a> has the source and the method.</p>
+      </div>
+
+      <a class="next-link" href="what-backstops-buy.html">
+        <span class="next-link__label">Next</span>
+        <span class="title">What a Google backstop buys →</span>
+      </a>
+
+      <p class="ask">Disagree, or work on this? Email me at <a class="inline-link" href="mailto:jlraney99@gmail.com">jlraney99@gmail.com</a>.</p>
+    </div>
+  </article>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap site-foot__grid">
+    <div>
+      <p class="site-foot__name">Jack Raney</p>
+      <p>Finance and operations · Dallas, Texas</p>
+    </div>
+    <ul>
+      <li><a href="mailto:jlraney99@gmail.com">jlraney99@gmail.com</a></li>
+      <li><a href="https://www.linkedin.com/in/jack-raney">LinkedIn</a></li>
+      <li><a href="https://github.com/jraney99">GitHub</a></li>
+      <li><a href="https://otianai.com">Otian AI</a></li>
+      <li><a href="reading.html">Reading</a></li>
+      <li><a href="resume.html">Résumé</a></li>
+    </ul>
+    <p class="site-foot__note">Updated October 2026.</p>
+  </div>
+</footer>
+
+<script src="assets/js/site.js"></script>
+<script src="assets/data/ercot-2025.js"></script>
+<script src="assets/js/hours.js"></script>
+</body>
+</html>

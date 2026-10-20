@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Résumé · Jack Raney</title>
+  <meta name="description" content="Résumé of Jack Raney: finance and operations. Co-founder of Otian AI, builder of Archibald, former lead financial analyst for operations and energy transformation at MARA, and former debt originations analyst at Thorofare Capital.">
+  <link rel="canonical" href="https://jackraney.com/resume">
+  <meta property="og:type" content="profile">
+  <meta property="og:site_name" content="Jack Raney">
+  <meta property="og:title" content="Jack Raney · Résumé">
+  <meta property="og:description" content="Finance and operations: Otian AI, Archibald, MARA, Thorofare Capital, USC.">
+  <meta property="og:url" content="https://jackraney.com/resume">
+  <meta property="og:image" content="https://jackraney.com/assets/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f4f1e8">
+  <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="assets/img/favicon-64.png" sizes="64x64" type="image/png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Besley:wght@400..700&family=Overpass:ital,wght@0,300..900;1,300..900&family=Overpass+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <style>
+    /* The résumé as a sheet of paper on the page; the same markup prints to the PDF. */
+    :root { --sheet: #fffdf8; }
+    :root[data-theme="dark"] { --sheet: #151f1a; }
+
+    .resume-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem 2rem;
+      max-width: 52rem;
+      margin: 0 auto;
+      padding-block: clamp(2rem, 5vw, 3.5rem) 1.5rem;
+    }
+    .resume-bar p { margin: 0; }
+
+    .sheet {
+      max-width: 52rem;
+      margin: 0 auto clamp(3rem, 6vw, 5rem);
+      padding: clamp(1.5rem, 4.5vw, 3.25rem) clamp(1.25rem, 5vw, 3.5rem);
+      background: var(--sheet);
+      border: 1px solid var(--rule);
+      box-shadow: 0 1px 2px rgba(19, 32, 47, 0.04), 0 8px 28px rgba(19, 32, 47, 0.06);
+      font-size: 0.97rem;
+      line-height: 1.45;
+    }
+
+    .r-head { text-align: center; }
+    .r-name {
+      margin: 0;
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: clamp(2rem, 1.6rem + 1.6vw, 2.7rem);
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      color: var(--accent);
+    }
+    .r-sub {
+      margin: 0.35rem 0 0;
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .r-contact {
+      margin: 0.5rem 0 0;
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      color: var(--ink-2);
+    }
+    .r-contact a { color: inherit; text-decoration: none; }
+    .r-contact a:hover { color: var(--accent-2); text-decoration: underline; }
+    .r-summary { margin: 1.1rem 0 0; font-variant-numeric: lining-nums; }
+
+    .r-section { margin-top: 1.35rem; }
+    .r-section h2 {
+      margin: 0 0 0.6rem;
+      padding-bottom: 0.25rem;
+      border-bottom: 1.5px solid var(--accent);
+      font-family: var(--sans);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .r-entry + .r-entry { margin-top: 0.85rem; }
+    .r-line {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      column-gap: 1.25rem;
+      align-items: baseline;
+    }
+    .r-org { font-family: var(--sans); font-weight: 700; color: var(--ink); }
+    .r-org small { font-weight: 500; color: var(--muted); font-size: 0.85em; }
+    .r-place, .r-dates {
+      font-family: var(--sans);
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-variant-numeric: lining-nums tabular-nums;
+      white-space: nowrap;
+    }
+    .r-title { font-style: italic; color: var(--ink-2); }
+    .r-title small { font-style: normal; color: var(--muted); font-size: 0.85em; }
+    .r-about { margin: 0.15rem 0 0; font-style: italic; color: var(--muted); }
+    .r-entry ul { margin: 0.3rem 0 0; padding-left: 1.05rem; font-variant-numeric: lining-nums; }
+    .r-entry li { margin: 0.18rem 0; padding-left: 0.1rem; }
+    .r-entry li::marker { color: var(--muted); }
+
+    .r-skills { display: grid; grid-template-columns: 10.5rem minmax(0, 1fr); gap: 0.2rem 1rem; margin: 0; }
+    .r-skills dt { font-family: var(--sans); font-weight: 700; font-size: 0.86rem; padding-top: 0.08rem; }
+    .r-skills dd { margin: 0; }
+
+    @media (max-width: 600px) {
+      .r-skills { grid-template-columns: minmax(0, 1fr); }
+      .r-skills dd { margin-bottom: 0.4rem; }
+      .r-dates, .r-place { white-space: normal; }
+    }
+
+    @media print {
+      @page { size: Letter; margin: 0.35in 0.5in; }
+      html, body { background: #fff !important; }
+      body { display: block; min-height: 0; }
+      .site-head, .resume-bar, .site-foot, .skip { display: none !important; }
+      .wrap { padding: 0 !important; max-width: none; }
+      .sheet {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        box-shadow: none;
+        background: #fff;
+        font-size: 9pt;
+        line-height: 1.3;
+      }
+      .r-name { font-size: 22pt; }
+      .r-sub { font-size: 7.2pt; margin-top: 4pt; }
+      .r-contact { font-size: 8pt; margin-top: 3pt; }
+      .r-summary { margin-top: 7pt; }
+      .r-section { margin-top: 7pt; }
+      .r-section h2 { font-size: 8pt; margin-bottom: 3pt; padding-bottom: 2pt; }
+      .r-entry { break-inside: avoid; }
+      .r-entry + .r-entry { margin-top: 5pt; }
+      .r-about { margin-top: 1pt; }
+      .r-entry ul { margin-top: 2pt; padding-left: 11pt; }
+      .r-entry li { margin: 0.6pt 0; }
+      .r-place, .r-dates { font-size: 7.8pt; }
+      .r-skills { grid-template-columns: 1.3in minmax(0, 1fr); gap: 1pt 8pt; }
+      .r-skills dt { font-size: 8pt; }
+    }
+  </style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap site-head__row">
+    <a class="wordmark" href="index.html">Jack Raney</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html#work">Work</a>
+      <a href="calculator.html">Calculator</a>
+      <a href="about.html">About</a>
+      <a href="resume.html" aria-current="page">Résumé</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch theme">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+
+  <div class="resume-bar">
+    <p class="note">Updated October 2026. The PDF is the same page.</p>
+    <a class="button" href="resume/Jack-Raney-Resume.pdf">Download PDF <small>1 page</small></a>
+  </div>
+
+  <article class="sheet" aria-label="Résumé">
+    <header class="r-head">
+      <h1 class="r-name">Jack Raney</h1>
+      <p class="r-sub">Finance &amp; Operations</p>
+      <p class="r-contact">Dallas, TX · <a href="mailto:jlraney99@gmail.com">jlraney99@gmail.com</a> · <a href="https://www.linkedin.com/in/jack-raney">linkedin.com/in/jack-raney</a> · jackraney.com</p>
+    </header>
+
+    <p class="r-summary">First-line approval authority on $516M of annual energy spend across an 18-site, 1.8&nbsp;GW portfolio, where a reconciliation I built caught $1.8M billed to us for another customer’s power. With no engineering background, built a 49-skill agent system that has made 100,000+ unattended runs at 99% reliability on my own finances and email, and co-founded an AI company putting the same into small-operator workflows.</p>
+
+    <section class="r-section" aria-labelledby="r-exp">
+      <h2 id="r-exp">Experience</h2>
+
+      <div class="r-entry">
+        <div class="r-line"><span class="r-org">Otian AI</span><span class="r-place">Dallas, TX</span></div>
+        <div class="r-line"><span class="r-title">Co-Founder</span><span class="r-dates">Jul 2026 to Present</span></div>
+        <p class="r-about">Bootstrapped AI company I co-founded and incorporated; its desktop app runs an agent on a small-business owner’s own computer.</p>
+        <ul>
+          <li>Built the business plan and pitch deck, pitched investors, and priced Archie at $30/month individual and $99/month team</li>
+          <li>Own the sales cycle for the app and a $250/hour consulting practice, meeting owners in person and scoping every engagement; two paying clients, one saving 2 to 3 hours a day</li>
+          <li>Ran the competitive analysis and wrote the positioning and website messaging from it</li>
+          <li>Followed early demand toward implementation: custom agent builds inside operators’ workflows, alongside Archie</li>
+        </ul>
+      </div>
+
+      <div class="r-entry">
+        <div class="r-line"><span class="r-org">Archibald <small>(personal AI operating system)</small></span><span class="r-place">Dallas, TX</span></div>
+        <div class="r-line"><span class="r-title">Built and Operate</span><span class="r-dates">Apr 2026 to Present</span></div>
+        <ul>
+          <li>100,000+ scheduled runs at 99% success, unattended since June; 12 of 145 live jobs audit its own accuracy</li>
+          <li>Built in Claude Code and Codex: Python skills, guardrails on unsupervised action, automated regression tests</li>
+          <li>Automated money administration across six bank and card feeds (capture, reconciliation, statement checks, monthly close); recovered about 5 hours a week</li>
+        </ul>
+      </div>
+
+      <div class="r-entry">
+        <div class="r-line"><span class="r-org">MARA <small>(MARA Holdings, Inc.)</small></span><span class="r-place">Dallas, TX</span></div>
+        <div class="r-line"><span class="r-title">Lead Financial Analyst, Operations &amp; Energy Transformation</span><span class="r-dates">May 2025 to Apr 2026</span></div>
+        <p class="r-about">Sole analyst under the VP of Finance, covering an 18-site, 1.8&nbsp;GW bitcoin mining fleet.</p>
+        <ul>
+          <li>Substantiated $1.8M in billing errors by building a reconciliation no one had run across interval meter data, DOMO reports and utility invoices; an unaffiliated industrial customer’s charges had been attributed to MARA’s power supply</li>
+          <li>Modeled the economics of converting mining capacity to AI and HPC, and supported the strategy team on AI chip economics and Tier III data center strategy</li>
+          <li>Gathered field data for a 5-year total-cost-of-ownership comparison of air-cooled and immersion-cooled mining, interviewing site teams on failure rates, efficiency and uptime</li>
+          <li>First-line approval on all site disbursements ahead of VP and CFO sign-off, against $516M in annual energy exposure and 60.4&nbsp;EH/s; no payment missed or duplicated</li>
+          <li>Built the fleet’s cost-allocation model in Excel (dynamic kWh, MW and cost-variance tracking, integrated with DOMO and Zip), replacing stale reporting with live fleet-wide numbers</li>
+          <li>Rebuilt and documented energy-auditing SOPs for all 18 sites, standardizing invoice review and payment approval</li>
+        </ul>
+      </div>
+
+      <div class="r-entry">
+        <div class="r-line"><span class="r-org">Personal &amp; Family Investment Program</span><span class="r-place">Dallas, TX</span></div>
+        <div class="r-line"><span class="r-title">Self-Directed</span><span class="r-dates">Jul 2023 to Present</span></div>
+        <ul>
+          <li>Long-term digital-asset allocation for personal and family capital, under a written custody and allocation policy</li>
+        </ul>
+      </div>
+
+      <div class="r-entry">
+        <div class="r-line"><span class="r-org">Thorofare Capital</span><span class="r-place">Los Angeles, CA</span></div>
+        <div class="r-line"><span class="r-title">Analyst, Debt Originations <small>(Intern, May 2021 to Jan 2022)</small></span><span class="r-dates">Mar 2022 to Jul 2023</span></div>
+        <ul>
+          <li>Underwrote 50+ CRE debt transactions across bridge, mezzanine, preferred equity and construction structures, building the DCF and sensitivity analysis behind them; about $75M to $100M closed</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="r-section" aria-labelledby="r-edu">
+      <h2 id="r-edu">Education</h2>
+      <div class="r-entry">
+        <div class="r-line"><span class="r-org">University of Southern California <small>(Price School)</small></span><span class="r-dates">Dec 2021</span></div>
+        <div class="r-title">B.S., Real Estate Development; Minor in Business Entrepreneurship</div>
+      </div>
+    </section>
+
+    <section class="r-section" aria-labelledby="r-skills">
+      <h2 id="r-skills">Skills &amp; Tools</h2>
+      <dl class="r-skills">
+        <dt>Finance &amp; Modeling</dt>
+        <dd>Advanced Excel, DCF, sensitivity analysis, CRE debt underwriting, cost-variance modeling, AI/HPC conversion economics</dd>
+        <dt>AI Systems</dt>
+        <dd>Claude Code, Codex, Python, agent architecture and orchestration, policy guardrails, automated testing</dd>
+        <dt>Operations</dt>
+        <dd>AP and disbursement controls, cost allocation, SOP design, executive reporting, DOMO, Zip</dd>
+        <dt>Company Building</dt>
+        <dd>Entity formation, positioning and messaging, discovery and sales, investor relations</dd>
+      </dl>
+    </section>
+
+    <section class="r-section" aria-labelledby="r-lead">
+      <h2 id="r-lead">Leadership</h2>
+      <div class="r-entry">
+        <div class="r-line"><span><span class="r-org">Eagle Scout</span>, Boy Scouts of America · <span class="r-org">Sigma Chi</span>, <span class="r-title">New Member Educator</span>; raised $100K+ for Huntsman Cancer Institute</span><span class="r-dates"></span></div>
+      </div>
+    </section>
+  </article>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap site-foot__grid">
+    <div>
+      <p class="site-foot__name">Jack Raney</p>
+      <p>Finance and operations · Dallas, Texas</p>
+    </div>
+    <ul>
+      <li><a href="mailto:jlraney99@gmail.com">jlraney99@gmail.com</a></li>
+      <li><a href="https://www.linkedin.com/in/jack-raney">LinkedIn</a></li>
+      <li><a href="https://github.com/jraney99">GitHub</a></li>
+      <li><a href="https://otianai.com">Otian AI</a></li>
+      <li><a href="reading.html">Reading</a></li>
+      <li><a href="resume.html">Résumé</a></li>
+    </ul>
+    <p class="site-foot__note">Updated October 2026.</p>
+  </div>
+</footer>
+
+<script src="assets/js/site.js"></script>
+</body>
+</html>

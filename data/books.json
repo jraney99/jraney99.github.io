@@ -1,0 +1,432 @@
+{
+ "note": "Finished books shown on reading.html. Goodreads sync appends new finishes. To hide a book, remove it here and add its title hash to data/hidden.json.",
+ "books": [
+  {
+   "title": "Greenlights",
+   "author": "Matthew McConaughey",
+   "genre": "Biography and memoir",
+   "finished": "2021-01-15",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Fortitude",
+   "author": "Dan Crenshaw",
+   "genre": "Biography and memoir",
+   "finished": "2021-03-10",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "12 Rules for Life",
+   "author": "Jordan B. Peterson",
+   "genre": "Self-help",
+   "finished": "2021-03-24",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "The Parasitic Mind",
+   "author": "Gad Saad",
+   "genre": "Self-help",
+   "finished": "2021-05-02",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "The New Great Depression",
+   "author": "James Rickards",
+   "genre": "Economics",
+   "finished": "2021-05-21",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Start with Why",
+   "author": "Simon Sinek",
+   "genre": "Leadership",
+   "finished": "2021-05-22",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Think and Grow Rich",
+   "author": "Napoleon Hill",
+   "genre": "Finance and investing",
+   "finished": "2021-05-23",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Never Split the Difference",
+   "author": "Chris Voss",
+   "genre": "Leadership",
+   "finished": "2021-05-24",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Extreme Ownership",
+   "author": "Jocko Willink and Leif Babin",
+   "genre": "Leadership",
+   "finished": "2021-07-16",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Discipline Equals Freedom: Field Manual",
+   "author": "Jocko Willink",
+   "genre": "Self-help",
+   "finished": "2021-07-26",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Sea Stories",
+   "author": "William H. McRaven",
+   "genre": "Biography and memoir",
+   "finished": "2021-08-15",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "The 48 Laws of Power",
+   "author": "Robert Greene",
+   "genre": "Leadership",
+   "finished": "2021-08-24",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Confidence",
+   "author": "The School of Life",
+   "genre": "Self-help",
+   "finished": "2021-08-24",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Mindset",
+   "author": "Carol S. Dweck",
+   "genre": "Self-help",
+   "finished": "2021-09-05",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "How to Win Friends and Influence People",
+   "author": "Dale Carnegie",
+   "genre": "Self-help",
+   "finished": "2021-10-06",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Make Your Bed",
+   "author": "William H. McRaven",
+   "genre": "Self-help",
+   "finished": "2021-10-06",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Outwitting the Devil",
+   "author": "Napoleon Hill",
+   "genre": "Self-help",
+   "finished": "2021-10-10",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Grit",
+   "author": "Angela Duckworth",
+   "genre": "Self-help",
+   "finished": "2021-10-14",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "The Four Agreements",
+   "author": "Don Miguel Ruiz",
+   "genre": "Self-help",
+   "finished": "2021-10-16",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Atomic Habits",
+   "author": "James Clear",
+   "genre": "Self-help",
+   "finished": "2021-10-20",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "The Business Blockchain",
+   "author": "William Mougayar",
+   "genre": "Blockchain",
+   "finished": "2021-10-20",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Can’t Hurt Me",
+   "author": "David Goggins",
+   "genre": "Self-help",
+   "finished": "2021-11-14",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Man’s Search for Meaning",
+   "author": "Viktor E. Frankl",
+   "genre": "Philosophy",
+   "finished": "2021-11-20",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "The Monk Who Sold His Ferrari",
+   "author": "Robin Sharma",
+   "genre": "Self-help",
+   "finished": "2021-11-21",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Rich Dad Poor Dad",
+   "author": "Robert Kiyosaki",
+   "genre": "Finance and investing",
+   "finished": "2021-12-08",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "The Slight Edge",
+   "author": "Jeff Olson",
+   "genre": "Self-help",
+   "finished": "2021-12-10",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "The Fourth Turning",
+   "author": "William Strauss and Neil Howe",
+   "genre": "History",
+   "finished": "2021-12-23",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Empire of the Summer Moon",
+   "author": "S. C. Gwynne",
+   "genre": "History",
+   "finished": "2022-01-02",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "How to Win Friends and Influence People",
+   "author": "Dale Carnegie",
+   "genre": "Self-help",
+   "finished": "2022-01-10",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "The Parasitic Mind",
+   "author": "Gad Saad",
+   "genre": "Self-help",
+   "finished": "2022-01-18",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "The Fountainhead",
+   "author": "Ayn Rand",
+   "genre": "Fiction",
+   "finished": "2022-01-30",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "HBR’s 10 Must Reads on Mental Toughness",
+   "author": "Harvard Business Review",
+   "genre": "Leadership",
+   "finished": "2022-02-25",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Beyond Order",
+   "author": "Jordan B. Peterson",
+   "genre": "Self-help",
+   "finished": "2022-03-05",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "The Rape of Nanking",
+   "author": "Iris Chang",
+   "genre": "History",
+   "finished": "2022-03-23",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Success Through a Positive Mental Attitude",
+   "author": "Napoleon Hill and W. Clement Stone",
+   "genre": "Self-help",
+   "finished": "2022-03-26",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Beyond Band of Brothers",
+   "author": "Dick Winters",
+   "genre": "Biography and memoir",
+   "finished": "2022-03-30",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Think Your Way to Wealth",
+   "author": "Napoleon Hill",
+   "genre": "Finance and investing",
+   "finished": "2022-05-06",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "I Dare You!",
+   "author": "William H. Danforth",
+   "genre": "Self-help",
+   "finished": "2022-05-06",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "The Secret of the Ages",
+   "author": "Robert Collier",
+   "genre": "Self-help",
+   "finished": "2022-05-28",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Endure",
+   "author": "Cameron Hanes",
+   "genre": "Self-help",
+   "finished": "2022-06-02",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Trauma",
+   "author": "Paul Conti",
+   "genre": "Psychology",
+   "finished": "2022-07-06",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Ordinary Men",
+   "author": "Christopher R. Browning",
+   "genre": "History",
+   "finished": "2022-07-15",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "The Brain That Changes Itself",
+   "author": "Norman Doidge",
+   "genre": "Science",
+   "finished": "2022-07-24",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Journey of Souls",
+   "author": "Michael Newton",
+   "genre": "Spirituality",
+   "finished": "2022-08-24",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Cowboy Ethics",
+   "author": "James P. Owen",
+   "genre": "Self-help",
+   "finished": "2022-11-25",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Psycho-Cybernetics",
+   "author": "Maxwell Maltz",
+   "genre": "Self-help",
+   "finished": "2022-12-11",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Broken Money",
+   "author": "Lyn Alden",
+   "genre": "Finance and investing",
+   "finished": "2024",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "The Bitcoin Standard",
+   "author": "Saifedean Ammous",
+   "genre": "Bitcoin",
+   "finished": "2024",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Fiat Food",
+   "author": "Matthew Lysiak",
+   "genre": "Science",
+   "finished": "2024-04-06",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "The Bullish Case for Bitcoin",
+   "author": "Vijay Boyapati",
+   "genre": "Bitcoin",
+   "finished": "2024-06-24",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "21 Lessons",
+   "author": "Gigi",
+   "genre": "Bitcoin",
+   "finished": "2024-07-19",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "The Book of Satoshi",
+   "author": "Phil Champagne",
+   "genre": "Bitcoin",
+   "finished": "2024-07-25",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Hillbilly Elegy",
+   "author": "J. D. Vance",
+   "genre": "Biography and memoir",
+   "finished": "2024-07-31",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "Read Write Own",
+   "author": "Chris Dixon",
+   "genre": "Blockchain",
+   "finished": "2024-08-26",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "The Psychology of Money",
+   "author": "Morgan Housel",
+   "genre": "Finance and investing",
+   "finished": "2024-09-03",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "The Lords of Easy Money",
+   "author": "Christopher Leonard",
+   "genre": "Economics",
+   "finished": "2024",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "The Alchemist",
+   "author": "Paulo Coelho",
+   "genre": "Fiction",
+   "finished": "2024",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "The Next Conversation",
+   "author": "Jefferson Fisher",
+   "genre": "Communication",
+   "finished": "2025",
+   "source": "master-booklist-2025-03"
+  },
+  {
+   "title": "The Richest Man in Babylon",
+   "author": "George S. Clason",
+   "genre": "",
+   "finished": "",
+   "source": "goodreads"
+  },
+  {
+   "title": "Zero to One",
+   "author": "Peter Thiel",
+   "genre": "",
+   "finished": "",
+   "source": "goodreads"
+  },
+  {
+   "title": "Good to Great",
+   "author": "Jim Collins",
+   "genre": "",
+   "finished": "",
+   "source": "goodreads"
+  }
+ ]
+}

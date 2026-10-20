@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Bitcoin mining in plain English · Jack Raney</title>
+  <meta name="description" content="Why bitcoin mining is really a power business, explained for finance people by Jack Raney.">
+  <link rel="canonical" href="https://jackraney.com/mining-plain-english">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Jack Raney">
+  <meta property="og:title" content="Bitcoin mining in plain English">
+  <meta property="og:description" content="Power in, computation out. Why a bitcoin miner is really a power business.">
+  <meta property="og:url" content="https://jackraney.com/mining-plain-english">
+  <meta property="og:image" content="https://jackraney.com/assets/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-10-16">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f4f1e8">
+  <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="assets/img/favicon-64.png" sizes="64x64" type="image/png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Besley:wght@400..700&family=Overpass:ital,wght@0,300..900;1,300..900&family=Overpass+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap site-head__row">
+    <a class="wordmark" href="index.html">Jack Raney</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html#work">Work</a>
+      <a href="calculator.html">Calculator</a>
+      <a href="about.html">About</a>
+      <a href="resume.html">Résumé</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch theme">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <article>
+    <header class="wrap doc-head">
+      <div class="doc-head__inner">
+        <a class="back" href="index.html">← Home</a>
+        <h1>Bitcoin mining in plain English</h1>
+        <p class="dek">I came to bitcoin as a believer. I came to mining when I realized it is really a power business.</p>
+        <p class="doc-date"><time datetime="2026-10">October 2026</time></p>
+      </div>
+    </header>
+    <div class="wrap memo">
+      <div class="prose">
+        <p>I bought into bitcoin before I understood the machine behind it. Then I stood inside a mining site in Texas: rows of identical computers, a wall of fan noise, heat you could feel from the aisle, all of it fed by a power line from the grid. That was when the business made sense to me. A bitcoin mine turns electricity into computation, and almost everything about its economics follows from that.</p>
+        <h2>The pipe and the flow</h2>
+        <p>A mining site is sized in megawatts (MW). Think of MW as the width of a pipe: how much power can flow at once. A few megawatts runs a handful of shipping containers of miners. A hundred megawatts runs a campus.</p>
+        <p>What a site pays for is energy, measured in megawatt-hours (MWh): the pipe’s width times how long the power flows. A 50&nbsp;MW site running for one hour uses 50&nbsp;MWh. Running for a full day, it uses 1,200.</p>
+        <h2>The machines</h2>
+        <p>The computers are built for one job. A mining machine makes guesses, called hashes, trillions of times a second. Its speed is its hashrate, measured in terahashes per second (TH/s). Its efficiency is how much energy each unit of work takes, measured in joules per terahash (J/TH). Lower is better: more work from the same power.</p>
+        <p>So the three numbers that run a mine fit in one sentence. MW sets the size of the pipe, time turns MW into MWh, and efficiency decides how much hashrate comes out the other end.</p>
+        <h2>The race</h2>
+        <p>Every miner in the world is racing to solve the next block, about once every ten minutes. The winner earns a fixed reward of newly issued bitcoin plus the transaction fees in that block. Most miners join pools, which share rewards in proportion to the hashrate each member contributes. That turns a lottery into something closer to a steady income.</p>
+        <p>The industry has a name for that income: hashprice, what a unit of hashrate earns in a day. It moves with bitcoin’s price, with fees, and with how much total hashrate is competing for the same reward.</p>
+        <h2>Why it’s a power business</h2>
+        <p>Here is the part that changed how I saw it. A miner doesn’t set its own revenue. The network does. Every miner with the same machines earns the same hashprice. What separates a good miner from a bad one is cost, and the biggest cost by far is power.</p>
+        <p>And the power bill arrives whether you win blocks or not. That pushes miners toward four levers: the cheapest power they can contract, the most efficient machines they can buy, keeping those machines running, and choosing when to run at all. When power costs more than an hour of mining earns, the smart move is to switch off. My <a href="what-miners-know.html">first memo</a> is about what that habit is worth.</p>
+        <h2>Why it matters beyond bitcoin</h2>
+        <p>Strip out the bitcoin and a mining site is land, a grid connection, power contracts and a way to get the heat out. That is also most of what an AI data center needs. The machines inside are different. The business of turning power into computation, and paying for every megawatt-hour along the way, is the same.</p>
+        <p class="memo__source">General figures only. Block timing, rewards and pool payouts describe how the bitcoin network works, not any company’s operations.</p>
+      </div>
+      <a class="next-link" href="what-miners-know.html">
+        <span class="next-link__label">Next</span>
+        <span class="title">What bitcoin miners know about power →</span>
+      </a>
+      <p class="ask">New to mining and have a question? Email me at <a class="inline-link" href="mailto:jlraney99@gmail.com">jlraney99@gmail.com</a>.</p>
+    </div>
+  </article>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap site-foot__grid">
+    <div>
+      <p class="site-foot__name">Jack Raney</p>
+      <p>Finance and operations · Dallas, Texas</p>
+    </div>
+    <ul>
+      <li><a href="mailto:jlraney99@gmail.com">jlraney99@gmail.com</a></li>
+      <li><a href="https://www.linkedin.com/in/jack-raney">LinkedIn</a></li>
+      <li><a href="https://github.com/jraney99">GitHub</a></li>
+      <li><a href="https://otianai.com">Otian AI</a></li>
+      <li><a href="reading.html">Reading</a></li>
+      <li><a href="resume.html">Résumé</a></li>
+    </ul>
+    <p class="site-foot__note">Updated October 2026.</p>
+  </div>
+</footer>
+
+<script src="assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>The $1.8M power bill · Jack Raney</title>
+  <meta name="description" content="How Jack Raney found $1.8 million in power billing errors at MARA by matching meter data, internal reports and utility invoices.">
+  <link rel="canonical" href="https://jackraney.com/power-bill">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Jack Raney">
+  <meta property="og:title" content="The $1.8M power bill">
+  <meta property="og:description" content="Three sets of numbers that should have matched, and another customer’s charges on our power bill.">
+  <meta property="og:url" content="https://jackraney.com/power-bill">
+  <meta property="og:image" content="https://jackraney.com/assets/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f4f1e8">
+  <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="assets/img/favicon-64.png" sizes="64x64" type="image/png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Besley:wght@400..700&family=Overpass:ital,wght@0,300..900;1,300..900&family=Overpass+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap site-head__row">
+    <a class="wordmark" href="index.html">Jack Raney</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html#work">Work</a>
+      <a href="calculator.html">Calculator</a>
+      <a href="about.html">About</a>
+      <a href="resume.html">Résumé</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch theme">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <header class="wrap doc-head">
+    <div class="doc-head__inner">
+      <a class="back" href="index.html#work">← All work</a>
+      <h1>The $1.8M power bill</h1>
+      <p class="dek">Three sets of numbers that should have matched, and another customer’s charges on our power bill.</p>
+      <p class="doc-meta">MARA · Lead Financial Analyst, Operations &amp; Energy Transformation · 2025 to 2026</p>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="page-visual">
+      <div class="panel panel--wide panel--bill" aria-hidden="true">
+        <p class="panel__big">$1.8M</p>
+        <p class="panel__caption">in billing errors, found by lining up the meters, our reports and the invoices</p>
+        <ul class="panel__key">
+          <li class="k-meter">Metered</li>
+          <li class="k-bill">Billed</li>
+          <li class="k-note">Illustrative</li>
+        </ul>
+        <svg viewBox="0 0 1000 1000" preserveAspectRatio="none">
+          <path class="gap" d="M272.7 541.7 L363.6 233.3 L454.5 441.7 L545.5 516.7 L636.4 541.7 L727.3 375 L818.2 166.7 L909.1 266.7 L1000 133.3 L1000 366.7 L909.1 491.7 L818.2 391.7 L727.3 591.7 L636.4 766.7 L545.5 733.3 L454.5 658.3 L363.6 450 L272.7 550 Z"/>
+          <path class="metered" vector-effect="non-scaling-stroke" d="M0 400 L90.9 708.3 L181.8 416.7 L272.7 550 L363.6 450 L454.5 658.3 L545.5 733.3 L636.4 766.7 L727.3 591.7 L818.2 391.7 L909.1 491.7 L1000 366.7"/>
+          <path class="billed" vector-effect="non-scaling-stroke" d="M0 391.7 L90.9 716.7 L181.8 408.3 L272.7 541.7 L363.6 233.3 L454.5 441.7 L545.5 516.7 L636.4 541.7 L727.3 375 L818.2 166.7 L909.1 266.7 L1000 133.3"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap doc-body">
+
+    <div class="prose">
+      <p>Power is the biggest cost in bitcoin mining. At MARA I oversaw financial operations for 18 sites drawing 1.8&nbsp;GW, with $516&nbsp;million a year in energy exposure. Disbursements, power bills included, came to me for first approval before the VP and the CFO, and no payment was missed or duplicated.</p>
+      <p>A power bill is hard to argue with. The utility works out the total on its side, from meter reads, rates and charges, and what arrives is a number that looks a lot like last month’s. If one of the inputs is wrong, nothing on the page tells you.</p>
+    </div>
+
+    <section class="doc-section" aria-labelledby="s-match">
+      <h2 id="s-match">The three-way match</h2>
+      <div class="prose">
+        <p>I was asked to look into a question about our power bills. To answer it, I built a check no one had run before, putting three records side by side:</p>
+        <ol>
+          <li>Interval meter data, which records what each site actually drew</li>
+          <li>Our internal reporting in DOMO</li>
+          <li>The utility’s invoices</li>
+        </ol>
+        <p>Where they disagreed, I traced the difference back to where it started. It turned out to be charges that belonged to an unaffiliated industrial customer, attributed to MARA’s power supply. I documented it until the case held up: $1.8&nbsp;million in cumulative billing errors, with proof of where they came from. I handed the case off when I left MARA in April 2026.</p>
+        <p>I also rebuilt the energy-audit procedures for all 18 sites and wrote them down. Each site’s invoices were reviewed and approved the same way after that.</p>
+      </div>
+    </section>
+
+    <section class="doc-section" aria-labelledby="s-gap">
+      <h2 id="s-gap">What a gap looks like</h2>
+      <div class="stack">
+
+        <figure class="exhibit exhibit--narrow">
+          <figcaption class="exhibit__head">
+            <span class="label">Exhibit 1</span>
+            <span class="exhibit__title">Meter, internal report and invoice for the same site</span>
+          </figcaption>
+          <div class="table-wrap">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th scope="col">Month</th>
+                  <th scope="col">Meter (MWh)</th>
+                  <th scope="col">Internal report (MWh)</th>
+                  <th scope="col">Invoice (MWh)</th>
+                  <th scope="col">Invoice vs. meter</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>March</td><td>41,000</td><td>41,000</td><td>41,100</td><td>+0.2%</td></tr>
+                <tr><td>April</td><td>39,400</td><td>39,400</td><td>39,500</td><td>+0.3%</td></tr>
+                <tr><td>May</td><td>40,600</td><td>40,600</td><td class="is-signal">43,200</td><td class="is-signal">+6.4%</td></tr>
+                <tr><td>June</td><td>38,100</td><td>38,100</td><td class="is-signal">40,700</td><td class="is-signal">+6.8%</td></tr>
+                <tr><td>July</td><td>37,200</td><td>37,200</td><td class="is-signal">39,800</td><td class="is-signal">+7.0%</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="exhibit__note">Illustrative numbers; the real figures are MARA’s and stay confidential. A billing error rarely announces itself. It shows up as a steady gap that is easy to read as normal month-to-month noise. When the meter and the internal report agree and the invoice doesn’t, the invoice is the place to start digging.</p>
+        </figure>
+
+      </div>
+    </section>
+
+    <a class="next-link" href="cost-model.html">
+      <span class="next-link__label">Next</span>
+      <span class="title">One model for 18 sites →</span>
+    </a>
+
+    <p class="ask">Questions about this work? Email me at <a class="inline-link" href="mailto:jlraney99@gmail.com">jlraney99@gmail.com</a>.</p>
+
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap site-foot__grid">
+    <div>
+      <p class="site-foot__name">Jack Raney</p>
+      <p>Finance and operations · Dallas, Texas</p>
+    </div>
+    <ul>
+      <li><a href="mailto:jlraney99@gmail.com">jlraney99@gmail.com</a></li>
+      <li><a href="https://www.linkedin.com/in/jack-raney">LinkedIn</a></li>
+      <li><a href="https://github.com/jraney99">GitHub</a></li>
+      <li><a href="https://otianai.com">Otian AI</a></li>
+      <li><a href="reading.html">Reading</a></li>
+      <li><a href="resume.html">Résumé</a></li>
+    </ul>
+    <p class="site-foot__note">Updated October 2026.</p>
+  </div>
+</footer>
+
+<script src="assets/js/site.js"></script>
+</body>
+</html>
