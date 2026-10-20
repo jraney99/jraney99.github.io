@@ -1794,6 +1794,16 @@ table.data--text th, table.data--text td { text-align: left; white-space: normal
   .exhibit, table { break-inside: avoid; }
 }
 
+/* Ease every hover and focus change in and out instead of snapping. */
+a, button, [role="button"], .button, .memo-card, .next-link, .card > a, .theme-toggle,
+.segmented label, .contact-row a, .site-nav a, .site-foot a, .section-head a, .back,
+.wordmark, .sign__exit, .gloss__search, input[type="range"], select, summary {
+  transition-property: color, background-color, border-color, text-decoration-color, box-shadow, transform, opacity, filter;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+}
+.card .panel { transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
