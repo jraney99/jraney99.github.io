@@ -1797,12 +1797,36 @@ table.data--text th, table.data--text td { text-align: left; white-space: normal
 /* Ease every hover and focus change in and out instead of snapping. */
 a, button, [role="button"], .button, .memo-card, .next-link, .card > a, .theme-toggle,
 .segmented label, .contact-row a, .site-nav a, .site-foot a, .section-head a, .back,
-.wordmark, .sign__exit, .gloss__search, input[type="range"], select, summary {
+.wordmark, .sign__exit, .gloss__search, input[type="range"], select, summary,
+.card__title, .memo-card .re dd, .next-link .title, .segmented label span, .band__note a {
   transition-property: color, background-color, border-color, text-decoration-color, box-shadow, transform, opacity, filter;
   transition-duration: 0.25s;
   transition-timing-function: ease-in-out;
 }
 .card .panel { transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; }
+
+/* Pressed state: quick to press, eases back on release. */
+.button:active { background: var(--accent-2); border-color: var(--accent-2); transform: translateY(1px) scale(0.98); }
+.memo-card:active, .next-link:active { transform: scale(0.99); }
+.card > a:active .panel { transform: translateY(-1px) scale(0.99); box-shadow: none; }
+.theme-toggle:active { transform: scale(0.9); background: var(--paper-3); }
+.segmented label:active span { transform: scale(0.97); }
+a:active, .sign__exit:active { opacity: 0.6; }
+.button:active, .memo-card:active, .next-link:active, .card > a:active, .card > a:active .panel { opacity: 1; }
+:is(a, button, .button, .memo-card, .next-link, .theme-toggle, .segmented label):active,
+.card > a:active .panel, .segmented label:active span { transition-duration: 0.08s; }
+input[type="range"]:active { cursor: grabbing; }
+
+/* Touch screens: larger tap areas without moving anything. */
+@media (pointer: coarse) {
+  .back, .section-head a, .wordmark, .site-foot a, .site-nav a, .contact-row a { position: relative; }
+  .back::after, .section-head a::after, .wordmark::after, .site-foot a::after, .site-nav a::after, .contact-row a::after {
+    content: ""; position: absolute; inset: -12px 0;
+  }
+  .gloss__nav { gap: 0.1rem 0.2rem; }
+  .gloss__nav a { display: inline-block; min-width: 2.25rem; padding: 0.55rem 0; text-align: center; }
+  input[type="range"] { min-height: 2.25rem; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }

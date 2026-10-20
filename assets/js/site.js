@@ -31,3 +31,6 @@
 
   sync();
 })();
+
+// Lets iOS Safari show :active (pressed) styles on tap.
+document.addEventListener('touchstart', function () {}, { passive: true });
