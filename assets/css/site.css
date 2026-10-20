@@ -1125,6 +1125,8 @@ a:hover { color: var(--accent-2); }
 /* ---------- home: the closing, as a guide sign ---------- */
 
 .closing { padding-block: clamp(1rem, 3vw, 2rem) clamp(4rem, 8vw, 7rem); }
+.sign__line a { color: inherit; text-decoration: underline; text-decoration-color: rgba(244, 241, 232, 0.55); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+.sign__line a:hover { text-decoration-color: currentColor; }
 
 .sign {
   --inset: clamp(5px, 0.7vw, 9px);
