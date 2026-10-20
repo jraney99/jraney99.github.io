@@ -6,7 +6,6 @@ Only the region between the reading:start and reading:end markers is rewritten.
 import html
 import json
 import os
-from collections import OrderedDict
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGE = os.path.join(ROOT, 'reading.html')
@@ -37,30 +36,28 @@ def books_html():
         b['_again'] = key in seen
         seen.add(key)
 
-    undated = [b for b in done if not b['finished']]
-    years = OrderedDict()
-    for b in sorted((b for b in done if b['finished']), key=lambda b: b['finished'], reverse=True):
-        years.setdefault(b['finished'][:4], []).append(b)
+    ordered = sorted((b for b in done if b['finished']), key=lambda b: b['finished'], reverse=True)
+    ordered += sorted((b for b in done if not b['finished']), key=lambda b: b['title'])
+    counts, unique = {}, []
+    for b in ordered:
+        key = (b['title'].lower(), b['author'].lower())
+        counts[key] = counts.get(key, 0) + 1
+        if counts[key] == 1:
+            unique.append(b)
 
     out = []
-    out.append(f'        <p class="reading-stats">{len(done)} books since 2021. Books update daily from Goodreads, podcasts from Spotify.</p>\n')
+    out.append(f'        <p class="reading-stats">{len(unique)} books. Books update daily from Goodreads, podcasts from Spotify.</p>\n')
     if current:
         out.append('        <h2>Reading now</h2>\n        <ul class="shelf">\n')
         for b in current:
             out.append(f'          <li><span class="shelf__title">{esc(b["title"])}</span> <span class="shelf__by">{esc(b["author"])}</span></li>\n')
         out.append('        </ul>\n')
-    for y, items in years.items():
-        n = len(items)
-        out.append(f'        <h2>{y} <span class="shelf__count">{n} book{"s" if n != 1 else ""}</span></h2>\n        <ul class="shelf">\n')
-        for b in items:
-            again = ' <span class="shelf__tag">read again</span>' if b['_again'] else ''
-            out.append(f'          <li><span class="shelf__title">{esc(b["title"])}</span> <span class="shelf__by">{esc(b["author"])}</span>{again}{genre(b)}</li>\n')
-        out.append('        </ul>\n')
-    if undated:
-        out.append('        <h2>Also read</h2>\n        <ul class="shelf">\n')
-        for b in sorted(undated, key=lambda b: b['title']):
-            out.append(f'          <li><span class="shelf__title">{esc(b["title"])}</span> <span class="shelf__by">{esc(b["author"])}</span>{genre(b)}</li>\n')
-        out.append('        </ul>\n')
+    out.append('        <h2>Books</h2>\n        <ul class="shelf">\n')
+    for b in unique:
+        n = counts[(b['title'].lower(), b['author'].lower())]
+        again = ' <span class="shelf__tag">read twice</span>' if n == 2 else (f' <span class="shelf__tag">read {n} times</span>' if n > 2 else '')
+        out.append(f'          <li><span class="shelf__title">{esc(b["title"])}</span> <span class="shelf__by">{esc(b["author"])}</span>{again}{genre(b)}</li>\n')
+    out.append('        </ul>\n')
     return ''.join(out)
 
 
