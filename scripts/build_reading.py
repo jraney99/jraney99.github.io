@@ -6,6 +6,7 @@ Only the region between the reading:start and reading:end markers is rewritten.
 import html
 import json
 import os
+from collections import OrderedDict
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGE = os.path.join(ROOT, 'reading.html')
@@ -14,6 +15,17 @@ START, END = '<!-- reading:start -->', '<!-- reading:end -->'
 
 def esc(s):
     return html.escape(s, quote=False)
+
+
+GENRE_MAP = {
+    'Leadership': 'Business and leadership',
+    'Bitcoin': 'Bitcoin and blockchain',
+    'Blockchain': 'Bitcoin and blockchain',
+    'Biography and memoir': 'Biography and memoir',
+}
+GENRE_ORDER = ['Finance and investing', 'Economics', 'Bitcoin and blockchain', 'Business and leadership',
+               'History', 'Biography and memoir', 'Philosophy', 'Psychology', 'Science', 'Communication',
+               'Self-help', 'Fiction', 'Spirituality', 'Other']
 
 
 def genre(b):
@@ -52,10 +64,18 @@ def books_html():
         for b in current:
             out.append(f'          <li><span class="shelf__title">{esc(b["title"])}</span> <span class="shelf__by">{esc(b["author"])}</span></li>\n')
         out.append('        </ul>\n')
-    out.append('        <h2>Books</h2>\n        <ul class="shelf">\n')
+    groups = OrderedDict((g, []) for g in GENRE_ORDER)
     for b in unique:
-        out.append(f'          <li><span class="shelf__title">{esc(b["title"])}</span> <span class="shelf__by">{esc(b["author"])}</span>{genre(b)}</li>\n')
-    out.append('        </ul>\n')
+        g = GENRE_MAP.get(b.get('genre') or '', b.get('genre') or 'Other')
+        groups.setdefault(g, []).append(b)
+    for g, items in groups.items():
+        if not items:
+            continue
+        n = len(items)
+        out.append(f'        <h2>{esc(g)} <span class="shelf__count">{n} book{"s" if n != 1 else ""}</span></h2>\n        <ul class="shelf">\n')
+        for b in sorted(items, key=lambda b: b['title'].lower().removeprefix('the ')):
+            out.append(f'          <li><span class="shelf__title">{esc(b["title"])}</span> <span class="shelf__by">{esc(b["author"])}</span></li>\n')
+        out.append('        </ul>\n')
     return ''.join(out)
 
 
