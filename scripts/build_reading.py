@@ -54,9 +54,7 @@ def books_html():
         out.append('        </ul>\n')
     out.append('        <h2>Books</h2>\n        <ul class="shelf">\n')
     for b in unique:
-        n = counts[(b['title'].lower(), b['author'].lower())]
-        again = ' <span class="shelf__tag">read twice</span>' if n == 2 else (f' <span class="shelf__tag">read {n} times</span>' if n > 2 else '')
-        out.append(f'          <li><span class="shelf__title">{esc(b["title"])}</span> <span class="shelf__by">{esc(b["author"])}</span>{again}{genre(b)}</li>\n')
+        out.append(f'          <li><span class="shelf__title">{esc(b["title"])}</span> <span class="shelf__by">{esc(b["author"])}</span>{genre(b)}</li>\n')
     out.append('        </ul>\n')
     return ''.join(out)
 
