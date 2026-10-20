@@ -1,5 +1,5 @@
 {
- "note": "Synced from Spotify. Hidden shows are filtered by data/hidden.json and never written.",
+ "note": "Synced from Spotify. Set \"hidden\": true to keep a show off the page.",
  "shows": [
   {
    "name": "Moonshots with Peter Diamandis",
