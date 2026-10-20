@@ -1,9 +1,11 @@
-"""Fill every <span data-fact="key">…</span> on the site from data/facts.json.
+"""Fill every <span data-fact="key">…</span> on the site from data/facts.json,
+and stamp site.css / site.js links with a content hash so browsers never use a stale copy.
 
 Run from anywhere: python3 scripts/build_facts.py
 Only the text inside marked spans changes. Unknown keys are reported and left alone.
 """
 import glob
+import hashlib
 import json
 import os
 import re
@@ -13,7 +15,18 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SPAN = re.compile(r'(<span data-fact="([^"]+)">)(.*?)(</span>)', re.S)
 
 
+ASSET = re.compile(r'(assets/(?:css/site\.css|js/site\.js))(\?v=[0-9a-f]+)?')
+
+
+def asset_versions():
+    out = {}
+    for rel in ('assets/css/site.css', 'assets/js/site.js'):
+        out[rel] = hashlib.sha256(open(os.path.join(ROOT, rel), 'rb').read()).hexdigest()[:10]
+    return out
+
+
 def main():
+    versions = asset_versions()
     facts = json.load(open(os.path.join(ROOT, 'data', 'facts.json'), encoding='utf-8'))
     changed, unknown = [], set()
     for path in sorted(glob.glob(os.path.join(ROOT, '*.html'))):
@@ -27,6 +40,7 @@ def main():
             return m.group(1) + facts[key] + m.group(4)
 
         new = SPAN.sub(fill, s)
+        new = ASSET.sub(lambda m: f'{m.group(1)}?v={versions[m.group(1)]}', new)
         if new != s:
             open(path, 'w', encoding='utf-8').write(new)
             changed.append(os.path.basename(path))
