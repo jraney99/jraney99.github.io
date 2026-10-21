@@ -1796,6 +1796,23 @@ table.data--text th, table.data--text td { text-align: left; white-space: normal
   .exhibit, table { break-inside: avoid; }
 }
 
+/* DCA chart */
+.dca-chart { width: 100%; height: auto; display: block; }
+.dca-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+@media (max-width: 600px) { .dca-chart { min-width: 620px; } }
+.dca-chart .g { stroke: var(--rule); stroke-width: 1; }
+.dca-chart .yl { font: 600 11px var(--sans); fill: var(--muted); text-anchor: end; }
+.dca-chart .xl { font: 600 11px var(--sans); fill: var(--muted); text-anchor: middle; }
+.dca-chart .area { fill: var(--signal-soft); }
+.dca-chart .val { fill: none; stroke: var(--signal-fill); stroke-width: 2.5; stroke-linejoin: round; }
+.dca-chart .inv { fill: none; stroke: var(--accent); stroke-width: 2.5; }
+.dca-chart .dot { fill: var(--signal-fill); }
+.dca-chart .ml { font: 700 11.5px var(--sans); fill: var(--ink); }
+.dca-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.9rem; font-size: 0.85rem; color: var(--muted); margin-bottom: 0.5rem; }
+.dca-legend .k { display: inline-block; width: 1.1rem; height: 3px; margin-right: 0.35rem; vertical-align: middle; }
+.dca-legend .k--val { background: var(--signal-fill); }
+.dca-legend .k--inv { background: var(--accent); }
+
 /* Ease every hover and focus change in and out instead of snapping. */
 a, button, [role="button"], .button, .memo-card, .next-link, .card > a, .theme-toggle,
 .segmented label, .contact-row a, .site-nav a, .site-foot a, .section-head a, .back,
