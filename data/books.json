@@ -427,6 +427,13 @@
    "genre": "Leadership",
    "finished": "",
    "source": "goodreads"
+  },
+  {
+   "title": "Bitcoin One Million",
+   "author": "Fred Krueger and Ben Sigman",
+   "genre": "Bitcoin",
+   "finished": "",
+   "source": "jack-2026-10-20"
   }
  ]
 }
