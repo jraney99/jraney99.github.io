@@ -43,6 +43,9 @@ jobs:
       - name: Rebuild reading page
         run: python scripts/build_reading.py
 
+      - name: Rebuild writing page and weekly posts
+        run: python scripts/build_writing.py
+
       - name: Apply facts from data/facts.json
         run: python scripts/build_facts.py
 

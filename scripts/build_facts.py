@@ -29,7 +29,7 @@ def main():
     versions = asset_versions()
     facts = json.load(open(os.path.join(ROOT, 'data', 'facts.json'), encoding='utf-8'))
     changed, unknown = [], set()
-    for path in sorted(glob.glob(os.path.join(ROOT, '*.html'))):
+    for path in sorted(glob.glob(os.path.join(ROOT, '*.html')) + glob.glob(os.path.join(ROOT, 'notes', '*.html'))):
         s = open(path, encoding='utf-8').read()
 
         def fill(m):
