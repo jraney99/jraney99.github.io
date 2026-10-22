@@ -2,6 +2,13 @@
  "note": "Synced from Spotify. Set \"hidden\": true to keep a show off the page.",
  "shows": [
   {
+   "name": "No Laying Up - Golf Podcast",
+   "publisher": "",
+   "url": "https://open.spotify.com/show/3s3ihp9OHKAMuc46RitVPj",
+   "added": "2026-10-22",
+   "hidden": false
+  },
+  {
    "name": "Moonshots with Peter Diamandis",
    "publisher": "",
    "url": "https://open.spotify.com/show/5Y1NyT6srGx38f5LINbH6c",
