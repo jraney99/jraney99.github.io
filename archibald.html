@@ -90,17 +90,53 @@
       </div>
     </section>
 
+    <section class="doc-section" aria-labelledby="s-code">
+      <h2 id="s-code">Plain code first</h2>
+      <div class="stack">
+        <div class="prose">
+          <p>Most of Archibald isn’t AI at all. 144 of its 145 live jobs are plain scripts that run without a model. The AI handles conversation and judgment calls, and anything that can be a rule is a rule. That keeps it cheap and predictable: a script does the same thing every time.</p>
+          <p>Cost gets the same attention. When daily spend crept from $1.50 to $6.30, I traced it to a routine check that reloaded a growing conversation every 30 minutes. Trimming what it reloaded cut that check’s usage by about 85%, and a daily monitor now alerts me if spend climbs again.</p>
+        </div>
+        <dl class="figures figures--3">
+          <div><dt>Automated tests</dt><dd>4,244</dd></div>
+          <div><dt>Lines of Python</dt><dd><span class="nowrap">194,000</span></dd></div>
+          <div><dt>Jobs that use no AI model</dt><dd><span class="nowrap">144 of 145</span></dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="doc-section" aria-labelledby="s-guards">
+      <h2 id="s-guards">Guardrails in code, not instructions</h2>
+      <div class="prose">
+        <p>Telling an AI model a rule works most of the time. Most of the time isn’t enough for email, money or my accounts. So I follow one rule: if Archibald breaks an instruction twice, the instruction is replaced by code that checks the action before it runs. There are now ten of these guards. A few of them:</p>
+        <ul>
+          <li><strong>Email.</strong> Nothing goes out in my name until I approve that exact draft. The approval works once, for 15 minutes, and breaks if the draft changes.</li>
+          <li><strong>Trades.</strong> Every brokerage order waits for me to tap “Allow once.” No answer means no order, and no scheduled job can place one.</li>
+          <li><strong>My data.</strong> Anything that could send data off the Mac is checked first. Before that guard went live, I replayed 33,759 past commands through it to confirm it blocked only what it should.</li>
+          <li><strong>Its own rules.</strong> Archibald can’t edit its own rules or settings, or switch off a guard.</li>
+          <li><strong>Honest replies.</strong> If it tells me something is saved or booked, it has to have actually run that step. An audit of 366 of its replies found that every wrong number came from the model answering from memory.</li>
+        </ul>
+        <p>Button taps work the same way. When I tap Approve on my phone, code handles it directly instead of asking the model to interpret it.</p>
+      </div>
+    </section>
+
     <section class="doc-section" aria-labelledby="s-ok">
       <h2 id="s-ok">When “ok” wasn’t true</h2>
       <div class="prose">
         <p>In October a morning job stopped running for two days. The nightly job that keeps it on the schedule reported “ok” three nights in a row.</p>
         <p>The check confirmed that the scheduling command had worked. It never confirmed that the job would run. The job had been switched off by hand, and the command will update a switched-off job without complaint.</p>
         <p>I changed the check to confirm the job will actually run, and added an alert after the first failure. Several of its jobs now exist only to check its own work, including a weekly accuracy check and daily finance controls.</p>
+        <p>It wasn’t the only time. A few more from this fall:</p>
+        <ul>
+          <li>The lights’ cloud service reported “ok” for commands that never reached the lights. I switched to controlling them directly over the home network.</li>
+          <li>A backup had been failing quietly because the sync folder wouldn’t overwrite the old file. Now every backup is a new file that gets unlocked and checked, and old copies are deleted only after the new one passes.</li>
+          <li>Some test files were never actually running, which hid hundreds of checks, and one had been failing for days. I found three separate ways a test suite can silently stop running and closed each one. A full self-check now runs every morning.</li>
+        </ul>
         <p>It’s the same lesson as <a href="power-bill.html">the $1.8M power bill</a>. A report that says everything matches isn’t proof. Check the thing itself.</p>
       </div>
     </section>
 
-    <p class="note">The chart counts every job ever added to Archibald’s schedule, including ones later switched off, from its own job database. The run count adds up each job’s run counter. The log keeps only each job’s latest 2,000 runs, so the <span data-fact="archibald.success">99%</span> success rate is measured on those.</p>
+    <p class="note">The chart counts every job ever added to Archibald’s schedule, including ones later switched off, from its own job database. The run count adds up each job’s run counter. The log keeps only each job’s latest 2,000 runs, so the <span data-fact="archibald.success">99%</span> success rate is measured on those. The test, code and job counts were taken from Archibald’s code and job database in October 2026.</p>
 
     <a class="next-link" href="otian.html">
       <span class="next-link__label">Next</span>
