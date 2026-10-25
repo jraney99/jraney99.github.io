@@ -315,9 +315,8 @@ a:hover { color: var(--accent-2); }
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 2 / 3;
   object-fit: cover;
-  object-position: 50% 30%;
   border-radius: 2px;
   background: var(--paper-3);
 }
