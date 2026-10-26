@@ -95,7 +95,7 @@ jobs:
         with:
           path: .
       - id: deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
       # Fails the run (GitHub emails Jack) if the résumé PDF fell behind the résumé page. Runs after
       # deploy, so a PDF problem never blocks the rest of the site.
