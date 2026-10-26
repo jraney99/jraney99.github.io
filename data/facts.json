@@ -2,9 +2,12 @@
  "note": "Single source for numbers shown across the site. Edit a value here, run python3 scripts/build_facts.py (the publish workflow also runs it), and every marked spot updates, including the résumé PDF.",
  "archibald.runs": "100,000+",
  "archibald.success": "99%",
- "archibald.skills": "46",
- "archibald.live_jobs": "140",
+ "archibald.skills": "50",
+ "archibald.live_jobs": "153",
  "otian.paying_clients": "two",
  "site.updated": "October 2026",
- "golf.handicap": "4.1"
+ "golf.handicap": "4.1",
+ "archibald.skills_floor": "50",
+ "archibald.live_jobs_floor": "150",
+ "archibald.no_model_jobs": "152"
 }
