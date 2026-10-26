@@ -1,0 +1,7 @@
+# Keeps the site's build tools (GitHub Actions) current on their own. Jack approved 2026-10-26.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

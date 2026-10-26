@@ -47,11 +47,26 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "push" ]; then python scripts/build_dca.py --offline; else python scripts/build_dca.py; fi
 
+      - name: Bitcoin halving lines from the live block height
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then python scripts/build_chain.py --offline; else python scripts/build_chain.py; fi
+
       - name: Redraw Archibald jobs chart
         run: python scripts/build_archibald.py
 
       - name: Rebuild writing page and weekly posts
         run: python scripts/build_writing.py
+
+      - name: Yearly ERCOT refresh (only does work once a new full year is published)
+        if: github.event_name != 'push'
+        run: |
+          pip install --quiet openpyxl
+          python scripts/build_ercot.py
+
+      - name: Share images (home card each new ERCOT year, one per new post)
+        env:
+          CHROME: google-chrome
+        run: python scripts/build_og.py
 
       - name: Rebuild golf page
         run: python scripts/build_golf.py

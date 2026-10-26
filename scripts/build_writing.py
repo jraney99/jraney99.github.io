@@ -108,6 +108,8 @@ def render_post(p, topics, older):
     head = re.sub(r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{t}">', head)
     head = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{d}">', head)
     head = re.sub(r'article:published_time" content="[^"]*"', f'article:published_time" content="{p["date"]}"', head)
+    head = re.sub(r'<meta property="og:image" content="[^"]*">',
+                  f'<meta property="og:image" content="https://jackraney.com/assets/img/og/{p["slug"]}.png">', head)
     label = esc(p.get('series') or topics.get(p['topic'], ''))
     gh = ''
     if p.get('github'):

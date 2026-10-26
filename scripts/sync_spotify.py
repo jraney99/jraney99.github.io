@@ -13,6 +13,9 @@ import sys
 import urllib.parse
 import urllib.request
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from sync_status import record  # noqa: E402
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, 'data', 'podcasts.json')
 
@@ -35,6 +38,7 @@ def main():
         access = token(cid, secret, refresh)
     except Exception as e:
         print(f'Spotify token refresh failed: {e}', file=sys.stderr)
+        record('spotify', False, 'Spotify sign-in failed; the connection probably needs renewing (run scripts/spotify_auth.py).')
         return
     shows, url = [], 'https://api.spotify.com/v1/me/shows?limit=50'
     while url:
@@ -59,6 +63,7 @@ def main():
     json.dump({'note': 'Synced from Spotify. Set "hidden": true to keep a show off the page.', 'shows': shows},
               open(DATA, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
     print(f'Spotify: {len(shows)} shows')
+    record('spotify', True)
 
 
 if __name__ == '__main__':

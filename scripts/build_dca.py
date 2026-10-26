@@ -17,6 +17,9 @@ import re
 import sys
 import time
 import urllib.request
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from sync_status import record  # noqa: E402
 from datetime import date, datetime, timedelta, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -186,8 +189,10 @@ def main():
         try:
             btc = fetch_btc(btc)
             save(BTC, btc)
+            record('bitcoin_prices', True)
         except Exception as e:  # noqa: BLE001 - keep the cached prices
             print(f'BTC fetch failed, using cache: {e}')
+            record('bitcoin_prices', False, 'Coinbase prices could not be fetched; the page shows the last day it had.')
         try:
             fresh = fetch_spy()
             if len(fresh) > 1000:

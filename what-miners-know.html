@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>What bitcoin miners know about power · Jack Raney</title>
-  <meta name="description" content="Bitcoin miners learned to run around the price of electricity. AI data centers are being pushed to learn the same thing. A memo by Jack Raney, with 2025 ERCOT price data.">
+  <meta name="description" content="Bitcoin miners learned to run around the price of electricity. AI data centers are being pushed to learn the same thing. A memo by Jack Raney, with a full year of ERCOT price data.">
   <link rel="canonical" href="https://jackraney.com/what-miners-know">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Jack Raney">
@@ -62,27 +62,27 @@
         <p>Miners built a few habits around that cost. AI data centers are starting to need them too.</p>
 
         <h2>Hourly prices</h2>
-        <p>ERCOT, which runs most of the Texas grid, sets real-time prices every five minutes and settles them in 15-minute intervals. The swings are lopsided. At ERCOT’s West hub in 2025, the median hour cost $27.34 per megawatt-hour. The most expensive hour, 7 to 8 a.m. on January&nbsp;15, cost $1,963.41, about 70 times as much. The 88 priciest hours, 1% of the year, made up 8.5% of what it cost to run all year.</p>
+        <p>ERCOT, which runs most of the Texas grid, sets real-time prices every five minutes and settles them in 15-minute intervals. The swings are lopsided. At ERCOT’s West hub in <span data-fact="ercot.year">2025</span>, the median hour cost <span data-fact="ercot.median">$27.34</span> per megawatt-hour. The most expensive hour, <span data-fact="ercot.max_when">7 to 8 a.m. on January&nbsp;15</span>, cost <span data-fact="ercot.max">$1,963.41</span>, about <span data-fact="ercot.max_multiple">70</span> times as much. The <span data-fact="ercot.top1_hours">88</span> priciest hours, 1% of the year, made up <span data-fact="ercot.top1_share">8.5%</span> of what it cost to run all year.</p>
       </div>
 
       <dl class="figures figures--4 memo__figures">
-        <div><dt>Median hour</dt><dd>$27.34</dd></div>
-        <div><dt>Priciest hour</dt><dd>$1,963</dd></div>
-        <div><dt>Hours above $100</dt><dd>269</dd></div>
-        <div><dt>Energy bill cut</dt><dd class="is-signal">16%</dd></div>
+        <div><dt>Median hour</dt><dd><span data-fact="ercot.median">$27.34</span></dd></div>
+        <div><dt>Priciest hour</dt><dd><span data-fact="ercot.max_short">$1,963</span></dd></div>
+        <div><dt>Hours above $100</dt><dd><span data-fact="ercot.hours_above">269</span></dd></div>
+        <div><dt>Energy bill cut</dt><dd class="is-signal"><span data-fact="ercot.bill_cut">16%</span></dd></div>
       </dl>
 
       <div class="prose">
         <h2>Shutting off</h2>
-        <p>A miner compares the price of the next hour with what that hour of mining will earn, and shuts down when power costs more. Because the spikes are packed into so few hours, this costs very little running time. A site at the West hub that sat out every hour above $100 in 2025 would have run 96.9% of the year and cut its energy bill by 16%. That works out to about $46,000 a year in avoided power cost for every megawatt that can switch off, before the mining revenue given up in those hours.</p>
+        <p>A miner compares the price of the next hour with what that hour of mining will earn, and shuts down when power costs more. Because the spikes are packed into so few hours, this costs very little running time. A site at the West hub that sat out every hour above $100 in <span data-fact="ercot.year">2025</span> would have run <span data-fact="ercot.run_share">96.9%</span> of the year and cut its energy bill by <span data-fact="ercot.bill_cut">16%</span>. That works out to about <span data-fact="ercot.saved_per_mw">$46,000</span> a year in avoided power cost for every megawatt that can switch off, before the mining revenue given up in those hours.</p>
         <p>I saw this up close at MARA, especially at our site in Kearney, Nebraska, which runs on a different grid from Texas. My part was tracking what curtailment saved us and what it cost in lost mining. I was also on calls where we decided when to curtail, and those decisions often turned on what we had hedged our power at. That’s why hedging is the first question on my list below.</p>
       </div>
 
       <figure class="exhibit memo__hours">
         <figcaption class="exhibit__head">
-          <span class="exhibit__title">Every hour of 2025 at the West hub. The 269 hours above $100 are in yellow.</span>
+          <span class="exhibit__title">Every hour of <span data-fact="ercot.year">2025</span> at the West hub. The <span data-fact="ercot.hours_above">269</span> hours above $100 are in yellow.</span>
         </figcaption>
-        <div class="hours" data-hub="HB_WEST" data-cap="100" role="img" aria-label="A grid of all 8,760 hours of 2025 at ERCOT’s West hub, with a column for each day and a row for each hour. The 269 hours priced above $100 are yellow and fall mostly between 5 and 10 p.m., spread across the year. Hours priced below zero are blue and cluster between 9 a.m. and 5 p.m., most of all in March."></div>
+        <div class="hours" data-hub="HB_WEST" data-cap="100" role="img" aria-label="A grid of every hour of the year at ERCOT’s West hub, with a column for each day and a row for each hour. Hours priced above $100 are yellow and hours priced below zero are blue."></div>
         <ul class="hours__legend" aria-hidden="true">
           <li><span class="swatch swatch--ramp"></span>Cheaper to pricier</li>
           <li><span class="swatch swatch--neg"></span>Below zero</li>
@@ -113,7 +113,7 @@
           <li>What will the backup generators cost to run, and what do their permits allow?</li>
         </ul>
 
-        <p class="memo__source">Price figures are from ERCOT’s real-time settlement point prices for 2025 at the West hub (HB_WEST), averaged to hours. The <a href="calculator.html">calculator page</a> has the source and the method.</p>
+        <p class="memo__source">Price figures are from ERCOT’s real-time settlement point prices for <span data-fact="ercot.year">2025</span> at the West hub (HB_WEST), averaged to hours. The <a href="calculator.html">calculator page</a> has the source and the method.</p>
       </div>
 
       <a class="next-link" href="what-backstops-buy.html">
@@ -145,7 +145,7 @@
 </footer>
 
 <script src="assets/js/site.js?v=f38dbc4ce4"></script>
-<script src="assets/data/ercot-2025.js"></script>
+<script src="assets/data/ercot.js"></script>
 <script src="assets/js/hours.js"></script>
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a7e1ae8552384ed28cf6cd992b1cf6b8"}'></script><!-- End Cloudflare Web Analytics -->
 </body>

@@ -1,4 +1,4 @@
-// Every hour of 2025 at one ERCOT hub, as a carpet plot: a column for each
+// Every hour of one year at one ERCOT hub, as a carpet plot: a column for each
 // day and a row for each hour, colored by that hour's price. Hours priced
 // above the shut-off turn yellow and hours below zero are blue. The grid is
 // painted once at 365 by 24 pixels and scaled up without smoothing, so each
@@ -7,10 +7,21 @@
   'use strict';
 
   var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  var DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  var DATA = window.ERCOT || window.ERCOT_2025;
+  if (!DATA) return;
+  var YEAR = DATA.year;
+  var LEAP = (YEAR % 4 === 0 && YEAR % 100 !== 0) || YEAR % 400 === 0;
+  // US daylight saving: starts the second Sunday of March, ends the first Sunday of November.
+  function nthSunday(month, n) {
+    var first = new Date(Date.UTC(YEAR, month, 1)).getUTCDay();
+    return 1 + ((7 - first) % 7) + 7 * (n - 1);
+  }
+  var DST_START = nthSunday(2, 2);
+  var DST_END = nthSunday(10, 1);
+  var DAYS_IN_MONTH = [31, LEAP ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   var WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  var DAYS = 365;
-  var JAN_1_WEEKDAY = 3; // January 1, 2025 was a Wednesday.
+  var DAYS = LEAP ? 366 : 365;
+  var JAN_1_WEEKDAY = new Date(Date.UTC(YEAR, 0, 1)).getUTCDay();
 
   var monthOfDay = [];
   var dateOfDay = [];
@@ -20,22 +31,22 @@
     }
   })();
 
-  // The prices run hour by hour in Central Time. March 9 lost its 2 a.m.
-  // hour to daylight saving time, so that square is left empty, and
-  // November 2 ran 1 a.m. twice, so those two hours are averaged into one.
+  // The prices run hour by hour in Central Time. The spring daylight-saving
+  // day loses its 2 a.m. hour, so that square is left empty, and the fall day
+  // runs 1 a.m. twice, so those two hours are averaged into one.
   var grids = {};
   function grid(hub) {
     if (grids[hub]) return grids[hub];
-    var prices = window.ERCOT_2025.hubs[hub];
+    var prices = DATA.hubs[hub];
     var cells = new Float64Array(DAYS * 24);
     var i = 0;
     for (var day = 0; day < DAYS; day++) {
       var m = monthOfDay[day];
       var d = dateOfDay[day];
       for (var h = 0; h < 24; h++) {
-        if (m === 2 && d === 9 && h === 2) { cells[day * 24 + h] = NaN; continue; }
+        if (m === 2 && d === DST_START && h === 2) { cells[day * 24 + h] = NaN; continue; }
         var v = prices[i++];
-        if (m === 10 && d === 2 && h === 1) v = (v + prices[i++]) / 2;
+        if (m === 10 && d === DST_END && h === 1) v = (v + prices[i++]) / 2;
         cells[day * 24 + h] = v;
       }
     }
@@ -46,7 +57,7 @@
   // What a site would have saved at this hub by sitting out every hour priced
   // above the cap, per megawatt and as a share of running all year.
   function stats(hub, cap) {
-    var prices = window.ERCOT_2025.hubs[hub];
+    var prices = DATA.hubs[hub];
     var total = 0;
     var above = 0;
     var hours = 0;
@@ -96,7 +107,7 @@
   }
 
   function mount(root, options) {
-    if (!root || !window.ERCOT_2025 || !window.ERCOT_2025.hubs) return null;
+    if (!root || !DATA || !DATA.hubs) return null;
     var state = { hub: options.hub || 'HB_WEST', cap: options.cap == null ? 100 : options.cap };
     var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 

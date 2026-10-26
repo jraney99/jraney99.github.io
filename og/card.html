@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<title>Share card</title>
+<!-- Rendered by scripts/build_og.py with headless Chrome at 1200x630. Not linked from the site. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Besley:wght@400..700&family=Overpass:wght@300..900&display=swap">
+<link rel="stylesheet" href="../assets/css/site.css">
+<style>
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: #f4f1e8; }
+  .card { position: relative; width: 1200px; height: 630px; box-sizing: border-box; padding: 54px 72px; font-family: "Overpass", Arial, sans-serif; color: #18211c; }
+  .top { display: flex; align-items: baseline; gap: 26px; width: 760px; padding-bottom: 14px; border-bottom: 3px solid #18211c; }
+  .name { font-family: "Besley", Georgia, serif; font-size: 34px; font-weight: 500; }
+  .role { font-size: 15px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #646f68; }
+  .head { font-family: "Besley", Georgia, serif; font-weight: 400; font-size: 46px; line-height: 1.12; margin: 26px 0 0; width: 760px; }
+  .dek { max-width: none; font-size: 26px; line-height: 1.35; color: #3c4640; margin-top: 18px; width: 740px; }
+  .label { font-size: 15px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #1f5c45; margin-top: 26px; }
+  .photo { position: absolute; right: 72px; top: 54px; width: 210px; height: 315px; object-fit: cover; border-radius: 4px; }
+  .strip-cap { position: absolute; left: 72px; bottom: 140px; font-size: 16px; font-weight: 700; color: #3c4640; }
+  .strip-cap b { color: #8a5d00; font-weight: 700; }
+  .strip { position: absolute; left: 72px; right: 72px; bottom: 44px; height: 104px; }
+  .strip .hours { height: 104px; }
+  .strip .hours__x, .strip .hours__y, .strip .hours__tip { display: none !important; }
+  .strip .hours__plot { margin: 0 !important; padding: 0 !important; }
+  .strip canvas { width: 100% !important; height: 104px !important; border-radius: 4px; }
+  .post .head { width: 1000px; font-size: 58px; margin-top: 40px; }
+  .post .dek { width: 1000px; max-width: none; }
+  .post .top { width: 1056px; }
+  .url { position: absolute; left: 72px; bottom: 50px; font-size: 18px; font-weight: 700; color: #646f68; }
+</style>
+</head>
+<body>
+<div class="card" id="card"></div>
+<script src="../assets/data/ercot.js"></script>
+<script>
+(function () {
+  var q = new URLSearchParams(location.search);
+  var card = document.getElementById('card');
+  function esc(s) { var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+  if (q.get('kind') === 'home') {
+    var year = window.ERCOT ? window.ERCOT.year : '';
+    card.innerHTML =
+      '<div class="top"><span class="name">Jack Raney</span><span class="role">Finance and operations, Dallas</span></div>' +
+      '<h1 class="head">I find what’s wrong in the numbers behind big operations, and I build the systems that fix it.</h1>' +
+      '<img class="photo" src="../assets/img/jack-raney.jpg" alt="">' +
+      '<p class="strip-cap">Every hour of ' + year + ' on the West Texas grid. <b>In yellow, the ' + esc(q.get('above')) + ' hours above $100.</b></p>' +
+      '<div class="strip"><div class="hours" data-hub="HB_WEST" data-cap="100"></div></div>';
+    var s = document.createElement('script');
+    s.src = '../assets/js/hours.js';
+    document.body.appendChild(s);
+  } else {
+    card.className = 'card post';
+    card.innerHTML =
+      '<div class="top"><span class="name">Jack Raney</span><span class="role">' + esc(q.get('label') || 'Writing') + '</span></div>' +
+      '<h1 class="head">' + esc(q.get('title')) + '</h1>' +
+      '<p class="dek">' + esc(q.get('dek')) + '</p>' +
+      '<p class="url">jackraney.com</p>';
+  }
+})();
+</script>
+</body>
+</html>

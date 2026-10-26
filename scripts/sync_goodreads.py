@@ -11,6 +11,9 @@ import os
 import re
 import sys
 import urllib.request
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from sync_status import record  # noqa: E402
 import xml.etree.ElementTree as ET
 from email.utils import parsedate_to_datetime
 
@@ -51,7 +54,9 @@ def main():
         now_items = [i for i in fetch(uid, 'currently-reading') if i is not None and i != '']
     except Exception as e:
         print(f'Goodreads feed failed, nothing changed: {e}', file=sys.stderr)
+        record('goodreads', False, 'The Goodreads feed could not be read.')
         return
+    record('goodreads', True)
 
     data = json.load(open(DATA, encoding='utf-8'))
     books = data['books']

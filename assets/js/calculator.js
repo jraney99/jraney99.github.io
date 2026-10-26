@@ -1,15 +1,15 @@
 // ERCOT power cost calculator.
-// Replays every hour of 2025 at one hub for a site of a given size that sits
-// out any hour priced above its shut-off price. All of the math runs on the
-// hourly prices in assets/data/ercot-2025.js.
+// Replays every hour of the latest full year at one hub for a site of a given
+// size that sits out any hour priced above its shut-off price. All of the math
+// runs on the hourly prices in assets/data/ercot.js, refreshed each January.
 (function () {
   'use strict';
 
-  var data = window.ERCOT_2025;
+  var data = window.ERCOT || window.ERCOT_2025;
   var summary = document.getElementById('summary');
 
   if (!data || !data.hubs) {
-    summary.textContent = 'The 2025 price data didn’t load, so the calculator can’t run. Reload the page to try again.';
+    summary.textContent = 'The price data didn’t load, so the calculator can’t run. Reload the page to try again.';
     return;
   }
 
@@ -18,7 +18,16 @@
   var STOPS = [50, 75, 100, 150, 200, 300, 500, 1000, 2000, Infinity];
   var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   var MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  var DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  var YEAR = data.year;
+  var LEAP = (YEAR % 4 === 0 && YEAR % 100 !== 0) || YEAR % 400 === 0;
+  // US daylight saving: starts the second Sunday of March, ends the first Sunday of November.
+  function nthSunday(month, n) {
+    var first = new Date(Date.UTC(YEAR, month, 1)).getUTCDay();
+    return 1 + ((7 - first) % 7) + 7 * (n - 1);
+  }
+  var DST_START = nthSunday(2, 2);
+  var DST_END = nthSunday(10, 1);
+  var DAYS_IN_MONTH = [31, LEAP ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   var DEFAULTS = { hub: 'HB_WEST', mw: 100, stop: 2 };
 
   // The chart's price window. A handful of hours sit above it; the chart says so.
@@ -54,14 +63,14 @@
 
   // ---------- data prep, once per hub ----------
 
-  // 2025 in Central Time: every day has 24 hours except March 9 (23) and November 2 (25).
+  // Central Time: every day has 24 hours except the spring daylight-saving day (23) and the fall one (25).
   var dayOfHour = (function () {
     var out = [];
     for (var m = 0; m < 12; m++) {
       for (var d = 1; d <= DAYS_IN_MONTH[m]; d++) {
         var len = 24;
-        if (m === 2 && d === 9) len = 23;
-        if (m === 10 && d === 2) len = 25;
+        if (m === 2 && d === DST_START) len = 23;
+        if (m === 10 && d === DST_END) len = 25;
         for (var h = 0; h < len; h++) out.push(m * 100 + d);
       }
     }
@@ -242,7 +251,7 @@
     }).join('');
 
     var hubName = HUB_NAMES[state.hub];
-    curve.setAttribute('aria-label', 'Hourly prices at the ' + hubName + ' hub in 2025, ranked from most to least expensive on a log scale. ' +
+    curve.setAttribute('aria-label', 'Hourly prices at the ' + hubName + ' hub in ' + YEAR + ', ranked from most to least expensive on a log scale. ' +
       (isFinite(cap) ? k + ' hours were priced above the $' + int(cap) + ' shut-off.' : 'No shut-off price is set.'));
 
     var above = countAbove(s.sorted, YMAX);
@@ -305,7 +314,7 @@
       return;
     }
     if (top <= 0) {
-      monthsNote.textContent = 'No hour at this hub went above $' + int(state.cap) + ' in 2025, so this shut-off price would never have kicked in.';
+      monthsNote.textContent = 'No hour at this hub went above $' + int(state.cap) + ' in ' + YEAR + ', so this shut-off price would never have kicked in.';
       months.setAttribute('aria-label', 'No cost avoided in any month at this shut-off price.');
       return;
     }
@@ -320,9 +329,9 @@
   function renderHours(state, k, hubName) {
     if (!hoursGrid) return;
     hoursGrid.update({ hub: state.hub, cap: state.cap });
-    hoursTitle.textContent = 'Every hour of 2025 at the ' + hubName + ' hub, by day and time of day';
+    hoursTitle.textContent = 'Every hour of ' + YEAR + ' at the ' + hubName + ' hub, by day and time of day';
     hoursKeyOff.hidden = !isFinite(state.cap) || k === 0;
-    hoursBox.setAttribute('aria-label', 'A grid of every hour of 2025 at the ' + hubName + ' hub, with a column for each day and a row for each hour, colored by price. ' +
+    hoursBox.setAttribute('aria-label', 'A grid of every hour of ' + YEAR + ' at the ' + hubName + ' hub, with a column for each day and a row for each hour, colored by price. ' +
       (isFinite(state.cap) && k > 0
         ? 'The ' + int(k) + (k === 1 ? ' hour' : ' hours') + ' priced above $' + int(state.cap) + ' are marked as switched off.'
         : 'No hours are switched off.'));
@@ -348,7 +357,7 @@
     capOut.textContent = capLabel(cap);
     if (parseFloat(mwRange.value) !== Math.min(state.mw, 1000)) mwRange.value = Math.min(state.mw, 1000);
 
-    var lead = 'A ' + mwText + ' site at the ' + hubName + ' hub, running every hour of 2025, would have paid ' +
+    var lead = 'A ' + mwText + ' site at the ' + hubName + ' hub, running every hour of ' + YEAR + ', would have paid ' +
       moneyWords(always) + ' for energy, an average of ' + rate(avgAlways) + '/MWh. ';
     if (!isFinite(cap)) {
       var top1 = Math.round(s.n * 0.01);

@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>ERCOT power cost calculator · Jack Raney</title>
-  <meta name="description" content="Replay every hour of 2025 at an ERCOT trading hub. Pick a site size and a shut-off price and see what a year of power would have cost, and what flexibility was worth.">
+  <meta name="description" content="Replay every hour of the latest full year at an ERCOT trading hub. Pick a site size and a shut-off price and see what a year of power would have cost, and what flexibility was worth.">
   <link rel="canonical" href="https://jackraney.com/calculator">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Jack Raney">
   <meta property="og:title" content="ERCOT power cost calculator">
-  <meta property="og:description" content="Every hour of 2025 at a Texas trading hub. What would a year of power have cost, and what was a shut-off switch worth?">
+  <meta property="og:description" content="Every hour of a full year at a Texas trading hub. What would a year of power have cost, and what was a shut-off switch worth?">
   <meta property="og:url" content="https://jackraney.com/calculator">
   <meta property="og:image" content="https://jackraney.com/assets/img/og.png">
   <meta property="og:image:width" content="1200">
@@ -50,7 +50,7 @@
     <div class="doc-head__inner">
       <a class="back" href="index.html#work">← All work</a>
       <h1>ERCOT power cost calculator</h1>
-      <p class="dek">Every hour of 2025 at a Texas trading hub. Pick a site size and the price where you’d rather shut down than keep running, and see what the year would have cost.</p>
+      <p class="dek">Every hour of <span data-fact="ercot.year">2025</span> at a Texas trading hub. Pick a site size and the price where you’d rather shut down than keep running, and see what the year would have cost.</p>
     </div>
   </header>
 
@@ -90,7 +90,7 @@
       </form>
 
       <div class="calc__results">
-        <p class="calc__summary" id="summary" aria-live="polite">Loading 2025 prices…</p>
+        <p class="calc__summary" id="summary" aria-live="polite">Loading <span data-fact="ercot.year">2025</span> prices…</p>
 
         <dl class="figures figures--3" id="figures">
           <div><dt>Power cost, always on</dt><dd id="f-always">…</dd></div>
@@ -104,9 +104,9 @@
         <figure class="exhibit">
           <figcaption class="exhibit__head">
             <span class="label">Exhibit 1</span>
-            <span class="exhibit__title" id="hours-title">Every hour of 2025 at the West hub, by day and time of day</span>
+            <span class="exhibit__title" id="hours-title">Every hour of <span data-fact="ercot.year">2025</span> at the West hub, by day and time of day</span>
           </figcaption>
-          <div class="hours" id="hours" role="img" aria-label="Every hour of 2025 at the West hub, colored by price."></div>
+          <div class="hours" id="hours" role="img" aria-label="Every hour of the year at the West hub, colored by price."></div>
           <ul class="hours__legend" aria-hidden="true">
             <li><span class="swatch swatch--ramp"></span>Cheaper to pricier</li>
             <li><span class="swatch swatch--neg"></span>Below zero</li>
@@ -118,7 +118,7 @@
         <figure class="exhibit">
           <figcaption class="exhibit__head">
             <span class="label">Exhibit 2</span>
-            <span class="exhibit__title" id="curve-title">Every hour of 2025, most expensive first</span>
+            <span class="exhibit__title" id="curve-title">Every hour of <span data-fact="ercot.year">2025</span>, most expensive first</span>
           </figcaption>
           <ul class="legend" aria-hidden="true">
             <li><span class="key"></span>Hourly price</li>
@@ -154,7 +154,7 @@
     <section class="doc-section" aria-labelledby="c-how">
       <h2 id="c-how">How it works</h2>
       <div class="prose">
-        <p>For each of the 8,760 hours in 2025, the site either runs or it doesn’t. If it runs, it pays that hour’s price for every megawatt it draws:</p>
+        <p>For each of the <span data-fact="ercot.hours_in_year">8,760</span> hours in <span data-fact="ercot.year">2025</span>, the site either runs or it doesn’t. If it runs, it pays that hour’s price for every megawatt it draws:</p>
         <p class="formula">Cost of an hour = price ($/MWh) × site size (MW) × 1 hour</p>
         <p>If the price is above the shut-off point, the site sits out that hour and pays nothing.</p>
         <p>Because the year’s spikes are packed into a small number of hours, a site can skip most of them while giving up very little running time. The savings per megawatt don’t depend on the size of the site, so “saved per MW” works as a rough price for being able to shut off.</p>
@@ -172,7 +172,7 @@
     <section class="doc-section" aria-labelledby="c-src">
       <h2 id="c-src">Source</h2>
       <div class="prose">
-        <p>ERCOT, <a href="https://www.ercot.com/mp/data-products/data-product-details?id=NP6-785-ER">Historical RTM Load Zone and Hub Prices</a> (NP6-785-ER), 2025 file, published January 1, 2026. Real-time settlement point prices at each hub, averaged from 15-minute intervals to hours, in Central Time. The processed data is in <a href="assets/data/ercot-2025.js">ercot-2025.js</a> if you want to check my math.</p>
+        <p>ERCOT, <a href="https://www.ercot.com/mp/data-products/data-product-details?id=NP6-785-ER">Historical RTM Load Zone and Hub Prices</a> (NP6-785-ER), <span data-fact="ercot.year">2025</span> file, published <span data-fact="ercot.published">January 1, 2026</span>. Real-time settlement point prices at each hub, averaged from 15-minute intervals to hours, in Central Time. The processed data is in <a href="assets/data/ercot.js">ercot.js</a> if you want to check my math.</p>
       </div>
     </section>
 
@@ -205,7 +205,7 @@
 </footer>
 
 <script src="assets/js/site.js?v=f38dbc4ce4"></script>
-<script src="assets/data/ercot-2025.js"></script>
+<script src="assets/data/ercot.js"></script>
 <script src="assets/js/hours.js"></script>
 <script src="assets/js/calculator.js"></script>
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a7e1ae8552384ed28cf6cd992b1cf6b8"}'></script><!-- End Cloudflare Web Analytics -->

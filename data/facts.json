@@ -30,5 +30,21 @@
  "dca.lump": "about $2.9 million",
  "dca.first_close": "$993",
  "dca.spy_value": "$78,800",
- "dca.spy_multiple": "2.2"
+ "dca.spy_multiple": "2.2",
+ "ercot.year": "2025",
+ "ercot.hours_in_year": "8,760",
+ "ercot.median": "$27.34",
+ "ercot.max": "$1,963.41",
+ "ercot.max_short": "$1,963",
+ "ercot.max_when": "7 to 8 a.m. on January&nbsp;15",
+ "ercot.max_multiple": "70",
+ "ercot.top1_hours": "88",
+ "ercot.top1_share": "8.5%",
+ "ercot.hours_above": "269",
+ "ercot.bill_cut": "16%",
+ "ercot.run_share": "96.9%",
+ "ercot.saved_per_mw": "$46,000",
+ "ercot.published": "January 1, 2026",
+ "btc.subsidy": "3.125",
+ "btc.last_halving": "April 2024"
 }
