@@ -43,6 +43,13 @@ jobs:
       - name: Rebuild reading page
         run: python scripts/build_reading.py
 
+      - name: Recalculate the $10-a-day bitcoin page (fetches prices on the daily run)
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then python scripts/build_dca.py --offline; else python scripts/build_dca.py; fi
+
+      - name: Redraw Archibald jobs chart
+        run: python scripts/build_archibald.py
+
       - name: Rebuild writing page and weekly posts
         run: python scripts/build_writing.py
 
@@ -74,3 +81,9 @@ jobs:
           path: .
       - id: deploy
         uses: actions/deploy-pages@v4
+
+      # Fails the run (GitHub emails Jack) if the résumé PDF fell behind the résumé page. Runs after
+      # deploy, so a PDF problem never blocks the rest of the site.
+      - name: Check résumé PDF is current
+        run: |
+          test "$(sha256sum resume.html | cut -d' ' -f1)" = "$(cat resume/.source-hash)" || { echo "Résumé PDF is out of date"; exit 1; }

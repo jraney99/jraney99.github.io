@@ -165,6 +165,43 @@ def list_html(items, topics):
     return ''.join(out)
 
 
+SITE = 'https://jackraney.com'
+
+
+def canonical(path):
+    path = path[:-5] if path.endswith('.html') else path
+    return SITE + '/' if path == 'index' else f'{SITE}/{path}'
+
+
+def write_if_changed(path, text):
+    if not os.path.exists(path) or open(path, encoding='utf-8').read() != text:
+        open(path, 'w', encoding='utf-8').write(text)
+        print('wrote', os.path.relpath(path, ROOT))
+
+
+def sitemap():
+    pages = sorted(os.path.relpath(p, ROOT) for p in glob.glob(os.path.join(ROOT, '*.html')) + glob.glob(os.path.join(ROOT, 'notes', '*.html'))
+                   if os.path.basename(p) != '404.html')
+    pages.sort(key=lambda p: p != 'index.html')
+    urls = ''.join(f'  <url><loc>{canonical(p)}</loc></url>\n' for p in pages)
+    return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n'
+
+
+def feed(items):
+    """RSS 2.0 for the Writing page, newest 30 pieces."""
+    def rfc822(d):
+        return date.fromisoformat(d).strftime('%a, %d %b %Y 12:00:00 +0000')
+    entries = ''
+    for i in items[:30]:
+        link = canonical(i['url'])
+        entries += (f'  <item><title>{html.escape(i["title"])}</title><link>{link}</link><guid>{link}</guid>'
+                    f'<pubDate>{rfc822(i["date"])}</pubDate><description>{html.escape(i["dek"])}</description></item>\n')
+    return ('<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel>\n'
+            f'  <title>Jack Raney: writing</title><link>{SITE}/writing</link>\n'
+            '  <description>Case studies, memos, essays and weekly notes by Jack Raney.</description>\n'
+            f'{entries}</channel></rss>\n')
+
+
 def main():
     data = json.load(open(os.path.join(ROOT, 'data', 'writing.json'), encoding='utf-8'))
     topics = data['topics']
@@ -192,6 +229,9 @@ def main():
                   series=p.get('series')) for p in posts]
     order = {id(i): n for n, i in enumerate(items + data['items'])}
     items = sorted(items + data['items'], key=lambda i: (i['date'], -order[id(i)]), reverse=True)
+
+    write_if_changed(os.path.join(ROOT, 'sitemap.xml'), sitemap())
+    write_if_changed(os.path.join(ROOT, 'feed.xml'), feed(items))
 
     page = open(PAGE, encoding='utf-8').read()
     a, b = page.index(START) + len(START), page.index(END)

@@ -20,10 +20,10 @@
     {"url": "calculator.html", "kind": "Tool", "topic": "energy", "date": "2026-10-16", "title": "ERCOT power cost calculator", "dek": "Pick a site size and a shut-off price, then replay every hour of 2025 at a Texas trading hub."},
     {"url": "power-hedge.html", "kind": "Tool", "topic": "energy", "date": "2026-10-16", "title": "How a power hedge settles", "dek": "A fixed price never delivers a megawatt-hour. Slide the market price and see who pays whom."},
     {"url": "mining-plain-english.html", "kind": "Essay", "topic": "bitcoin", "date": "2026-10-16", "title": "Bitcoin mining in plain English", "dek": "I came to bitcoin as a believer, and to mining when I saw it is really a power business."},
-    {"url": "bitcoin-dca.html", "kind": "Essay", "topic": "bitcoin", "date": "2026-10-16", "title": "$10 a day in bitcoin, since 2017", "dek": "$35,800 in, about $314,000 out, and two drops of more than 75% along the way."},
+    {"url": "bitcoin-dca.html", "kind": "Essay", "topic": "bitcoin", "date": "2026-10-16", "title": "$10 a day in bitcoin, since 2017", "dek": "$35,850 in, about $303,000 out, and two drops of more than 75% along the way."},
     {"url": "bitcoin-rules.html", "kind": "Explainer", "topic": "bitcoin", "date": "2026-10-16", "title": "What bitcoin’s rules promise, and what they don’t", "dek": "A fixed supply, a ledger that is expensive to fake and no one in charge. And what none of that guarantees."},
     {"url": "custody.html", "kind": "Explainer", "topic": "bitcoin", "date": "2026-10-16", "title": "Six ways to hold bitcoin", "dek": "From an exchange account to multisig: who holds the key, and what each model trades away."},
     {"url": "bitcoin-reading.html", "kind": "Explainer", "topic": "bitcoin", "date": "2026-10-16", "title": "A bitcoin reading list", "dek": "Primary sources, free courses and books, each in a line."},
-    {"url": "bitcoin-glossary.html", "kind": "Explainer", "topic": "bitcoin", "date": "2026-10-16", "title": "A bitcoin glossary", "dek": "549 bitcoin, money and finance terms in plain English, searchable."}
+    {"url": "bitcoin-glossary.html", "kind": "Explainer", "topic": "bitcoin", "date": "2026-10-16", "title": "A bitcoin glossary", "dek": "Bitcoin, money and finance terms in plain English, each with an example, and searchable."}
   ]
 }

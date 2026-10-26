@@ -9,6 +9,8 @@ import hashlib
 import json
 import os
 import re
+import subprocess
+import datetime
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,9 +27,28 @@ def asset_versions():
     return out
 
 
+def derived_facts():
+    """Facts computed from the site itself, never typed: the footer's "Updated" month comes from the
+    latest commit, and the glossary count from the glossary page."""
+    out = {}
+    try:
+        d = subprocess.run(['git', '-C', ROOT, 'log', '-1', '--format=%cs'], capture_output=True, text=True, timeout=30).stdout.strip()
+        if re.fullmatch(r'\d{4}-\d{2}-\d{2}', d):
+            out['site.updated'] = datetime.date.fromisoformat(d).strftime('%B %Y')
+    except (OSError, subprocess.SubprocessError):
+        pass
+    gloss = os.path.join(ROOT, 'bitcoin-glossary.html')
+    if os.path.exists(gloss):
+        n = len(re.findall(r'<dt>', open(gloss, encoding='utf-8').read()))
+        if n:
+            out['glossary.terms'] = str(n)
+    return out
+
+
 def main():
     versions = asset_versions()
     facts = json.load(open(os.path.join(ROOT, 'data', 'facts.json'), encoding='utf-8'))
+    facts.update(derived_facts())
     changed, unknown = [], set()
     for path in sorted(glob.glob(os.path.join(ROOT, '*.html')) + glob.glob(os.path.join(ROOT, 'notes', '*.html'))):
         s = open(path, encoding='utf-8').read()
