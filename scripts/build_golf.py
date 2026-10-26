@@ -126,17 +126,8 @@ def body(g):
     practice = []
     if g.get('courses_played'):
         practice.append(f'I’ve played {g["courses_played"]} different courses')
-    p = g.get('putting') or {}
-    if p.get('nights') and p.get('since'):
-        s = date.fromisoformat(p['since'])
-        line = f'logged {p["nights"]} nights of putting practice since {s.strftime("%B")} {s.day}'
-        if p.get('goal'):
-            line += f' (goal: {p["goal"]} putts a night)'
-        if (p.get('streak') or 0) >= 3:
-            line += f', with a current streak of {p["streak"]} nights'
-        practice.append(line)
     if practice:
-        out.append('        <div class="prose"><h2>Practice and play</h2><p>' + ', and I’ve '.join(practice) + '.</p></div>\n')
+        out.append('        <div class="prose"><p>' + ' '.join(practice) + ', and counting.</p></div>\n')
     out.append(f'        <p class="note">From my GHIN record: every Handicap Index revision and every posted score. '
                f'Course names are left out. Updated daily; last checked {date.fromisoformat(today).strftime("%B")} '
                f'{date.fromisoformat(today).day}, {today[:4]}.</p>\n')
