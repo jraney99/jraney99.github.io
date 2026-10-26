@@ -4,3 +4,5 @@ private/
 
 # macOS folder settings file.
 .DS_Store
+__pycache__/
+*.pyc
