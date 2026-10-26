@@ -1752,7 +1752,7 @@ table.data--text th, table.data--text td { text-align: left; white-space: normal
 
 .site-foot__grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1.4fr);
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, 1fr) auto;
   gap: 1.5rem 3rem;
   padding-block: 2.5rem 3rem;
 }
@@ -1774,8 +1774,13 @@ table.data--text th, table.data--text td { text-align: left; white-space: normal
 
 .site-foot__note { font-size: var(--fs-note); color: var(--muted); line-height: 1.55; }
 
+.site-foot__label { margin: 0 0 0.55rem !important; font-size: var(--fs-note); font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.site-foot__note { text-align: right; }
+
 @media (max-width: 760px) {
-  .site-foot__grid { grid-template-columns: minmax(0, 1fr); }
+  .site-foot__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .site-foot__grid > :first-child, .site-foot__note { grid-column: 1 / -1; }
+  .site-foot__note { text-align: left; }
 }
 
 /* ---------- print ---------- */
