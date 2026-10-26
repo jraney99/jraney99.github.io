@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>What an AI agent actually is · Jack Raney</title>
+  <meta name="description" content="A plain-English walk from a folder of files to a working agent, using the one I built for myself.">
+  <link rel="canonical" href="https://jackraney.com/what-is-an-ai-agent">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Jack Raney">
+  <meta property="og:title" content="What an AI agent actually is">
+  <meta property="og:description" content="A plain-English walk from a folder of files to a working agent, using the one I built for myself.">
+  <meta property="og:url" content="https://jackraney.com/what-is-an-ai-agent">
+  <meta property="og:image" content="https://jackraney.com/assets/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-10-26">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f4f1e8">
+  <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="assets/img/favicon-64.png" sizes="64x64" type="image/png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Besley:wght@400..700&family=Overpass:ital,wght@0,300..900;1,300..900&family=Overpass+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css?v=6893d4f85b">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap site-head__row">
+    <a class="wordmark" href="index.html">Jack Raney</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html#work">Work</a>
+      <a href="writing.html">Writing</a>
+      <a href="about.html">About</a>
+      <a href="resume.html">Résumé</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch theme">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <article>
+    <header class="wrap doc-head">
+      <div class="doc-head__inner">
+        <a class="back" href="index.html">← Home</a>
+        <h1>What an AI agent actually is</h1>
+        <p class="dek">A plain-English walk from a folder of files to a working agent, using the one I built for myself.</p>
+        <p class="doc-date"><time datetime="2026-10">October 2026</time></p>
+      </div>
+    </header>
+
+    <div class="wrap memo">
+      <div class="prose">
+        <p>If you have used ChatGPT, you have used the engine inside an AI agent. You typed a question, it typed an answer. That is a chatbot. An agent is what you get when you give that same engine a job and let it act: read your email, add a meeting to your calendar, reconcile your bank accounts, check its own work, and ask you before it does anything risky.</p>
+        <p>The easiest way to understand an agent is to picture a new hire. You would not hand a new hire a laptop and walk away. You would give them a job description, the keys and logins they need, a notebook, a calendar, and some clear limits on what they can do without asking. An agent is built from the same five things. I will walk through each one using <a class="inline-link" href="archibald.html">Archibald</a>, the agent I built to run my own finances, email and schedule. The examples are real files from it, lightly condensed, published in my <a class="inline-link" href="https://github.com/jraney99/archibald-agent">public GitHub repository</a> with personal details removed.</p>
+
+        <h2>Start with something you already know: files</h2>
+        <p>Everything that makes an agent an agent lives in a folder on a computer, as ordinary files. Most of them are plain English. There is no magic box. If you can read a memo, you can read most of an agent.</p>
+        <p>Archibald runs on a Mac mini on my desk, using an open-source program called OpenClaw that connects the files to an AI model and to my phone. The folder holds instructions, small programs, notes and a schedule. Every part below is one kind of file in that folder.</p>
+
+        <p class="layer">The new hire's brain</p>
+        <h2>The model</h2>
+        <p>The model is the engine: Claude, ChatGPT or similar. It reads text and writes text, and it is very good at both. On its own, that is all it can do. It cannot open your inbox, it does not remember yesterday, and it does nothing until you type. A model is a brilliant new hire on their first morning, before anyone has told them anything.</p>
+
+        <p class="layer">The job description</p>
+        <h2>Instructions</h2>
+        <p>The first thing you give a new hire is a description of the job. For an agent, that is a set of instruction files, written in plain English. Archibald has one per job it does, called a skill. Here is part of the one for its to-do list:</p>
+        <figure class="file"><figcaption>skills/to-do/SKILL.md (excerpt)</figcaption><pre>---
+name: to-do
+description: Track promises, follow-ups, returns, appointments,
+  and project actions from capture through verified completion.
+---
+
+Capture an explicit promise or requested task immediately.
+Preserve who owns it, its source, and the next step.
+Require the user&#x27;s confirmation or a verified result as
+evidence before completion.
+Do not infer that a past deadline, fired reminder, or quiet
+email thread means a task was done.</pre></figure>
+        <p>Read it like a manager’s memo, because that is what it is. It says what the job is, how to do it, and, just as important, what not to assume. Lines like the last one matter most. Most of what makes an agent dependable is instructions like this, usually written after watching it get something wrong.</p>
+
+        <p class="layer">The keys and logins</p>
+        <h2>Tools</h2>
+        <p>A new hire with a job description but no logins can only talk about the work. Tools are how an agent acts. A tool is a small program the agent is allowed to run: one that reads email, one that adds a calendar event, one that pulls bank transactions. The model decides which tool fits the request, and the program does the actual work the same way every time.</p>
+        <p>Here is how Archibald’s rulebook describes the tool for sending an email I ask for:</p>
+        <figure class="file"><figcaption>docs/RULES.md (condensed)</figcaption><pre>An email the user ASKS for (&quot;tell X I&#x27;ll be late&quot;):
+  python3 Skills/email-monitor/scripts/propose_email.py
+      --to &lt;addr&gt; --subject &lt;s&gt; --body &lt;text&gt;
+It sends NOTHING. It queues the draft and the user gets ✅/❌;
+his tap sends it.</pre></figure>
+        <p>Notice the design: the tool that writes the email cannot send it. It drafts, I tap ✅ on my phone, and only my tap sends it. Good tools do one job, and the risky step stays with a person.</p>
+
+        <p class="layer">The notebook</p>
+        <h2>Memory</h2>
+        <p>A model forgets everything when a conversation ends. An agent remembers because it writes things down, in files, and reads them back. Archibald’s notebook has three drawers, so it reads only what a task needs instead of everything it knows:</p>
+        <figure class="file"><figcaption>docs/AGENTS.md (condensed)</figcaption><pre>Tier   Location                          When to load
+HOT    MEMORY.md (100 lines or fewer)    Every session
+WARM   memory/projects/, memory/domains/ When the topic matches
+COLD   memory/archive/                   Only when asked</pre></figure>
+        <p>The short file is read every time, like the sticky note on a monitor. Project notes come out when the topic comes up. The archive stays in the drawer unless I ask about something old.</p>
+
+        <p class="layer">The calendar</p>
+        <h2>A schedule</h2>
+        <p>A chatbot waits for you. An agent also works on a schedule, like a new hire with recurring meetings on their calendar. Archibald has <span data-fact="archibald.live_jobs">153</span> scheduled jobs: pulling bank and card transactions, sorting email, closing the books each month, checking its own accuracy every week.</p>
+        <p>Here is something most people do not expect: <span data-fact="archibald.no_model_jobs">152</span> of those <span data-fact="archibald.live_jobs">153</span> jobs do not use the AI model at all. They are plain programs that follow fixed steps. The model is saved for the parts that need judgment, like reading an email and deciding what it is about. That keeps an agent cheaper, faster and more predictable than handing everything to AI.</p>
+
+        <p class="layer">The limits</p>
+        <h2>Rules for what it cannot do without asking</h2>
+        <p>You would not give a new hire the company card on day one with no limit. An agent needs the same limits, and the important ones should not depend on the model remembering them. Here is Archibald’s rule for my brokerage account:</p>
+        <figure class="file"><figcaption>docs/RULES.md (condensed)</figcaption><pre>Brokerage: look freely. To buy, sell or cancel, propose the
+trade: the user gets it in plain words with Approve / Deny and
+his tap places it. Never place orders yourself.</pre></figure>
+        <p>That rule is also enforced by code. A small program called a guard checks every action before it runs, and if the model tries to place a trade itself, the guard blocks it. Archibald has <span data-fact="archibald.guards">10</span> guards like that, for email, money, my data and its own settings. The principle in its rulebook is simple: Archibald proposes; the human applies.</p>
+
+        <h2>Putting it together</h2>
+        <p>Here is one ordinary request, start to finish. Say I text Archibald: “Tell the restaurant I’m running late.”</p>
+        <ul>
+          <li><strong>The model</strong> reads the message and works out what I want.</li>
+          <li><strong>The instructions</strong> tell it to look in my own records first: the calendar event for tonight, my contacts, past emails with the restaurant.</li>
+          <li><strong>The tools</strong> read the calendar and find the restaurant’s email address, then draft the note.</li>
+          <li><strong>The notebook</strong> supplies the standing rules I have given it for how my emails should read.</li>
+          <li><strong>The limits</strong> stop it from sending. The draft lands on my phone with ✅ and ❌.</li>
+        </ul>
+        <p>I tap ✅ and the email goes. Total effort on my side: one text and one tap.</p>
+
+        <h2>The one-sentence version</h2>
+        <p>An agent is a model with a job description, the keys to do the job, a notebook to remember it, a calendar to do it on, and rules for what it cannot do without asking.</p>
+        <p>None of those parts is mysterious on its own. The skill is in the details: instructions written after real mistakes, tools that do one job, and limits enforced by code rather than by hope. If you want to see how that plays out over months, I wrote about <a class="inline-link" href="building-an-agent.html">why I built mine</a> and <a class="inline-link" href="archibald.html">how it works today</a>.</p>
+      </div>
+
+      <a class="next-link" href="building-an-agent.html">
+        <span class="next-link__label">Next</span>
+        <span class="title">Why I built my own AI agent →</span>
+      </a>
+
+      <p class="ask">Questions, or want help putting an agent to work? Email me at <a class="inline-link" href="mailto:jack@jackraney.com">jack@jackraney.com</a>.</p>
+    </div>
+  </article>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap site-foot__grid">
+    <div>
+      <p class="site-foot__name">Jack Raney</p>
+      <p>Finance and operations · Dallas, Texas</p>
+    </div>
+    <ul>
+      <li><a href="mailto:jack@jackraney.com">jack@jackraney.com</a></li>
+      <li><a href="https://www.linkedin.com/in/jack-raney">LinkedIn</a></li>
+      <li><a href="https://github.com/jraney99">GitHub</a></li>
+      <li><a href="https://otianai.com">Otian AI</a></li>
+      <li><a href="reading.html">Reading</a></li>
+      <li><a href="resume.html">Résumé</a></li>
+    </ul>
+    <p class="site-foot__note">Updated <span data-fact="site.updated">October 2026</span>.</p>
+  </div>
+</footer>
+
+<script src="assets/js/site.js?v=f38dbc4ce4"></script>
+<script src="assets/data/ercot.js"></script>
+<script src="assets/js/hours.js"></script>
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a7e1ae8552384ed28cf6cd992b1cf6b8"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

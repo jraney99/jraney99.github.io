@@ -1,29 +1,163 @@
 {
-  "note": "Everything listed on writing.html. Weekly posts in posts/*.json are added automatically; list hand-made pages here. Newest first by date; ties keep this order.",
-  "topics": {
-    "energy": "Energy and data centers",
-    "bitcoin": "Bitcoin",
-    "ai": "AI agents",
-    "finance": "Finance and underwriting"
+ "note": "Everything listed on writing.html. Weekly posts in posts/*.json are added automatically; list hand-made pages here. Newest first by date; ties keep this order.",
+ "topics": {
+  "energy": "Energy and data centers",
+  "bitcoin": "Bitcoin",
+  "ai": "AI agents",
+  "finance": "Finance and underwriting"
+ },
+ "items": [
+  {
+   "url": "what-is-an-ai-agent.html",
+   "kind": "Explainer",
+   "topic": "ai",
+   "date": "2026-10-26",
+   "title": "What an AI agent actually is",
+   "dek": "From a folder of files to a working agent, in plain English, using the one I built."
   },
-  "items": [
-    {"url": "downside-first.html", "kind": "Essay", "topic": "finance", "date": "2026-10-21", "title": "Downside first", "dek": "The most important question I learned underwriting loans, and how it followed me to bitcoin mining and a startup."},
-    {"url": "building-an-agent.html", "kind": "Essay", "topic": "ai", "date": "2026-10-21", "title": "Why I built my own AI agent", "dek": "I built it to run my own admin and to learn the skill I think every company will need. What I’d tell a leader starting out."},
-    {"url": "power-bill.html", "kind": "Case study", "topic": "energy", "date": "2026-10-16", "title": "The $1.8M power bill", "dek": "Three sets of numbers that should have matched, and another customer’s charges on our power bill."},
-    {"url": "cost-model.html", "kind": "Case study", "topic": "energy", "date": "2026-10-16", "title": "One model for 18 sites", "dek": "Replacing a pile of separate reports with a single cost model. Includes a sample file you can open."},
-    {"url": "archibald.html", "kind": "Case study", "topic": "ai", "date": "2026-10-16", "title": "Archibald, the system that runs my admin", "dek": "An AI agent system I built for myself with no engineering background. Otian AI grew out of it."},
-    {"url": "otian.html", "kind": "Case study", "topic": "ai", "date": "2026-10-16", "title": "Otian AI, from formation to launch", "dek": "The business side of a bootstrapped software company: the LLC, pricing, a growth model and our first paying clients."},
-    {"url": "what-miners-know.html", "kind": "Memo", "topic": "energy", "date": "2026-10-16", "title": "What bitcoin miners know about power", "dek": "Miners learned to run around the price of electricity. AI data centers are being pushed to learn the same thing."},
-    {"url": "what-backstops-buy.html", "kind": "Memo", "topic": "energy", "date": "2026-10-16", "title": "What a Google backstop buys", "dek": "Two miners raised nearly $5 billion against leases to a young AI cloud. In a data center lease, credit is the product."},
-    {"url": "empty-building.html", "kind": "Memo", "topic": "finance", "date": "2026-10-16", "title": "Underwriting the empty building", "dek": "The same building, five ways: loan-to-value from 34% to 268% depending on how fast it re-lets."},
-    {"url": "credit-memo.html", "kind": "Memo", "topic": "finance", "date": "2026-10-16", "title": "Sample credit memo: a data center loan", "dek": "A made-up 40 MW construction loan, screened the way I did it at Thorofare."},
-    {"url": "calculator.html", "kind": "Tool", "topic": "energy", "date": "2026-10-16", "title": "ERCOT power cost calculator", "dek": "Pick a site size and a shut-off price, then replay every hour of 2025 at a Texas trading hub."},
-    {"url": "power-hedge.html", "kind": "Tool", "topic": "energy", "date": "2026-10-16", "title": "How a power hedge settles", "dek": "A fixed price never delivers a megawatt-hour. Slide the market price and see who pays whom."},
-    {"url": "mining-plain-english.html", "kind": "Essay", "topic": "bitcoin", "date": "2026-10-16", "title": "Bitcoin mining in plain English", "dek": "I came to bitcoin as a believer, and to mining when I saw it is really a power business."},
-    {"url": "bitcoin-dca.html", "kind": "Essay", "topic": "bitcoin", "date": "2026-10-16", "title": "$10 a day in bitcoin, since 2017", "dek": "$35,850 in, about $303,000 out, and two drops of more than 75% along the way."},
-    {"url": "bitcoin-rules.html", "kind": "Explainer", "topic": "bitcoin", "date": "2026-10-16", "title": "What bitcoin’s rules promise, and what they don’t", "dek": "A fixed supply, a ledger that is expensive to fake and no one in charge. And what none of that guarantees."},
-    {"url": "custody.html", "kind": "Explainer", "topic": "bitcoin", "date": "2026-10-16", "title": "Six ways to hold bitcoin", "dek": "From an exchange account to multisig: who holds the key, and what each model trades away."},
-    {"url": "bitcoin-reading.html", "kind": "Explainer", "topic": "bitcoin", "date": "2026-10-16", "title": "A bitcoin reading list", "dek": "Primary sources, free courses and books, each in a line."},
-    {"url": "bitcoin-glossary.html", "kind": "Explainer", "topic": "bitcoin", "date": "2026-10-16", "title": "A bitcoin glossary", "dek": "Bitcoin, money and finance terms in plain English, each with an example, and searchable."}
-  ]
+  {
+   "url": "downside-first.html",
+   "kind": "Essay",
+   "topic": "finance",
+   "date": "2026-10-21",
+   "title": "Downside first",
+   "dek": "The most important question I learned underwriting loans, and how it followed me to bitcoin mining and a startup."
+  },
+  {
+   "url": "building-an-agent.html",
+   "kind": "Essay",
+   "topic": "ai",
+   "date": "2026-10-21",
+   "title": "Why I built my own AI agent",
+   "dek": "I built it to run my own admin and to learn the skill I think every company will need. What I’d tell a leader starting out."
+  },
+  {
+   "url": "power-bill.html",
+   "kind": "Case study",
+   "topic": "energy",
+   "date": "2026-10-16",
+   "title": "The $1.8M power bill",
+   "dek": "Three sets of numbers that should have matched, and another customer’s charges on our power bill."
+  },
+  {
+   "url": "cost-model.html",
+   "kind": "Case study",
+   "topic": "energy",
+   "date": "2026-10-16",
+   "title": "One model for 18 sites",
+   "dek": "Replacing a pile of separate reports with a single cost model. Includes a sample file you can open."
+  },
+  {
+   "url": "archibald.html",
+   "kind": "Case study",
+   "topic": "ai",
+   "date": "2026-10-16",
+   "title": "Archibald, the system that runs my admin",
+   "dek": "An AI agent system I built for myself with no engineering background. Otian AI grew out of it."
+  },
+  {
+   "url": "otian.html",
+   "kind": "Case study",
+   "topic": "ai",
+   "date": "2026-10-16",
+   "title": "Otian AI, from formation to launch",
+   "dek": "The business side of a bootstrapped software company: the LLC, pricing, a growth model and our first paying clients."
+  },
+  {
+   "url": "what-miners-know.html",
+   "kind": "Memo",
+   "topic": "energy",
+   "date": "2026-10-16",
+   "title": "What bitcoin miners know about power",
+   "dek": "Miners learned to run around the price of electricity. AI data centers are being pushed to learn the same thing."
+  },
+  {
+   "url": "what-backstops-buy.html",
+   "kind": "Memo",
+   "topic": "energy",
+   "date": "2026-10-16",
+   "title": "What a Google backstop buys",
+   "dek": "Two miners raised nearly $5 billion against leases to a young AI cloud. In a data center lease, credit is the product."
+  },
+  {
+   "url": "empty-building.html",
+   "kind": "Memo",
+   "topic": "finance",
+   "date": "2026-10-16",
+   "title": "Underwriting the empty building",
+   "dek": "The same building, five ways: loan-to-value from 34% to 268% depending on how fast it re-lets."
+  },
+  {
+   "url": "credit-memo.html",
+   "kind": "Memo",
+   "topic": "finance",
+   "date": "2026-10-16",
+   "title": "Sample credit memo: a data center loan",
+   "dek": "A made-up 40 MW construction loan, screened the way I did it at Thorofare."
+  },
+  {
+   "url": "calculator.html",
+   "kind": "Tool",
+   "topic": "energy",
+   "date": "2026-10-16",
+   "title": "ERCOT power cost calculator",
+   "dek": "Pick a site size and a shut-off price, then replay every hour of 2025 at a Texas trading hub."
+  },
+  {
+   "url": "power-hedge.html",
+   "kind": "Tool",
+   "topic": "energy",
+   "date": "2026-10-16",
+   "title": "How a power hedge settles",
+   "dek": "A fixed price never delivers a megawatt-hour. Slide the market price and see who pays whom."
+  },
+  {
+   "url": "mining-plain-english.html",
+   "kind": "Essay",
+   "topic": "bitcoin",
+   "date": "2026-10-16",
+   "title": "Bitcoin mining in plain English",
+   "dek": "I came to bitcoin as a believer, and to mining when I saw it is really a power business."
+  },
+  {
+   "url": "bitcoin-dca.html",
+   "kind": "Essay",
+   "topic": "bitcoin",
+   "date": "2026-10-16",
+   "title": "$10 a day in bitcoin, since 2017",
+   "dek": "$35,850 in, about $303,000 out, and two drops of more than 75% along the way."
+  },
+  {
+   "url": "bitcoin-rules.html",
+   "kind": "Explainer",
+   "topic": "bitcoin",
+   "date": "2026-10-16",
+   "title": "What bitcoin’s rules promise, and what they don’t",
+   "dek": "A fixed supply, a ledger that is expensive to fake and no one in charge. And what none of that guarantees."
+  },
+  {
+   "url": "custody.html",
+   "kind": "Explainer",
+   "topic": "bitcoin",
+   "date": "2026-10-16",
+   "title": "Six ways to hold bitcoin",
+   "dek": "From an exchange account to multisig: who holds the key, and what each model trades away."
+  },
+  {
+   "url": "bitcoin-reading.html",
+   "kind": "Explainer",
+   "topic": "bitcoin",
+   "date": "2026-10-16",
+   "title": "A bitcoin reading list",
+   "dek": "Primary sources, free courses and books, each in a line."
+  },
+  {
+   "url": "bitcoin-glossary.html",
+   "kind": "Explainer",
+   "topic": "bitcoin",
+   "date": "2026-10-16",
+   "title": "A bitcoin glossary",
+   "dek": "Bitcoin, money and finance terms in plain English, each with an example, and searchable."
+  }
+ ]
 }

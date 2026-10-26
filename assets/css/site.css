@@ -1915,3 +1915,9 @@ input[type="range"]:active { cursor: grabbing; }
 .wlist a:hover .wlist__title { color: var(--accent-2); text-decoration-color: currentColor; }
 .wlist a:active .wlist__title { transition-duration: 0.08s; opacity: 0.75; }
 .wlist__dek { display: block; color: var(--muted); }
+
+/* ---------- file excerpts (what-is-an-ai-agent) ---------- */
+.prose figure.file { margin: 1.25rem 0 1.5rem; border: 1px solid var(--rule-2); border-radius: 3px; background: var(--paper-3); overflow: hidden; }
+.prose figure.file figcaption { font-family: var(--sans); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.02em; color: var(--muted); padding: 0.5rem 0.9rem; border-bottom: 1px solid var(--rule); }
+.prose figure.file pre { margin: 0; padding: 0.9rem; overflow-x: auto; font-family: "Overpass Mono", ui-monospace, Menlo, monospace; font-size: 0.82rem; line-height: 1.55; white-space: pre-wrap; word-break: break-word; color: var(--ink); }
+.prose .layer { font-family: var(--sans); font-size: 0.8rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: -0.4rem; }
