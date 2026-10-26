@@ -8,6 +8,14 @@
  },
  "items": [
   {
+   "url": "how-i-use-ai.html",
+   "kind": "Essay",
+   "topic": "ai",
+   "date": "2026-10-26",
+   "title": "How I actually use AI",
+   "dek": "Three examples I can walk anyone through: faster, better work, and things I would not have seen."
+  },
+  {
    "url": "what-is-an-ai-agent.html",
    "kind": "Explainer",
    "topic": "ai",

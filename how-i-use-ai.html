@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>How I actually use AI · Jack Raney</title>
+  <meta name="description" content="Three examples I can walk anyone through: moving faster, doing better work, and finding things I would not have seen.">
+  <link rel="canonical" href="https://jackraney.com/how-i-use-ai">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Jack Raney">
+  <meta property="og:title" content="How I actually use AI">
+  <meta property="og:description" content="Three examples I can walk anyone through: moving faster, doing better work, and finding things I would not have seen.">
+  <meta property="og:url" content="https://jackraney.com/how-i-use-ai">
+  <meta property="og:image" content="https://jackraney.com/assets/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-10-26">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f4f1e8">
+  <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="assets/img/favicon-64.png" sizes="64x64" type="image/png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Besley:wght@400..700&family=Overpass:ital,wght@0,300..900;1,300..900&family=Overpass+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css?v=9d596d8752">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap site-head__row">
+    <a class="wordmark" href="index.html">Jack Raney</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html#work">Work</a>
+      <a href="writing.html">Writing</a>
+      <a href="about.html">About</a>
+      <a href="resume.html">Résumé</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch theme">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <article>
+    <header class="wrap doc-head">
+      <div class="doc-head__inner">
+        <a class="back" href="index.html">← Home</a>
+        <h1>How I actually use AI</h1>
+        <p class="dek">Three examples I can walk anyone through: moving faster, doing better work, and finding things I would not have seen.</p>
+        <p class="doc-date"><time datetime="2026-10">October 2026</time></p>
+      </div>
+    </header>
+
+    <div class="wrap memo">
+      <div class="prose">
+        <p>Plenty of people use AI. Fewer can show you what it changed. Here are three examples from my own work and life, each one something I can open on a screen and walk through: how AI makes me faster, how it makes my work better, and how it shows me things I would have missed.</p>
+
+        <h2>Faster: an agent that runs my admin, and a site that keeps itself current</h2>
+        <p>Since April 2026 I have run my own finances, email and schedule through <a class="inline-link" href="archibald.html">Archibald</a>, an AI agent system I built. It pulls transactions from six bank and card feeds, reconciles them, checks statements and closes each month. It sorts my email and keeps my calendar. That gives me back about five hours a week.</p>
+        <p>The part people do not expect: <span data-fact="archibald.no_model_jobs">152</span> of its <span data-fact="archibald.live_jobs">153</span> scheduled jobs do not use an AI model at all. I use AI to build the system, and then most of the work runs as plain code that does the same thing every time. AI is saved for the steps that need judgment. That is what makes it fast and cheap enough to run every day.</p>
+        <p>This website is the second half of the example. I built it with AI, and it keeps itself current. Each case study started as an interview: the AI asked me one question at a time, and the page used my answers, not its guesses. Every morning the site recalculates its numbers on its own, from the bitcoin page to Archibald’s job counts to my golf handicap. Twice a week Archibald drafts a post, asks me a few questions on my phone, and publishes only when I tap Approve.</p>
+
+        <h2>Better: AI that gets checked before it counts</h2>
+        <p>The fastest way to do worse work with AI is to trust it. So I build the checking in.</p>
+        <ul>
+          <li><strong>Drafts are fact-checked against my own record.</strong> When I set up the weekly posts, the first test draft invented a claim about my time at MARA. A second pass now compares every sentence about me with what my site says and what I answered, and cuts anything it cannot back up before I ever see it.</li>
+          <li><strong>Rules live in code, not in instructions.</strong> If Archibald breaks an instruction twice, I replace the instruction with code that checks the action before it runs. Email goes out only after I approve that exact draft. A trade goes through only after I tap Allow. It has <span data-fact="archibald.guards">10</span> of these guards.</li>
+          <li><strong>“Done” has to be true.</strong> An audit of 366 of Archibald’s replies found that every wrong number came from the model answering from memory instead of running the step. Now a reply that says something was saved or booked is sent back unless the step actually ran.</li>
+        </ul>
+        <p>It is the same habit I learned underwriting loans and checking power bills: a report that says everything is fine is not proof. Check the thing itself.</p>
+
+        <h2>Non-obvious: finding what I would not have seen</h2>
+        <p>AI is most useful to me when it turns a pile of records into a question I had not thought to ask.</p>
+        <ul>
+          <li><strong>My golf game.</strong> I am a <span data-fact="golf.handicap">4.1</span> handicap working toward scratch. Pulling every round I have posted to GHIN, hole by hole, showed that par 4s cost me more strokes than par 3s and par 5s combined. That one finding tells me where to aim my practice. It lives on my <a class="inline-link" href="golf.html">Road to scratch</a> page and updates itself after every round.</li>
+          <li><strong>Bitcoin against the S&amp;P&nbsp;500.</strong> I wanted to know what $10 a day into bitcoin since 2017 would have done, against the same $10 a day into the S&amp;P&nbsp;500. AI helped me build the simulation from daily prices: about <span data-fact="dca.multiple">8.5</span> times the money in for bitcoin, against <span data-fact="dca.spy_multiple">2.2</span> for the S&amp;P, with two drops of more than 75% along the way. The <a class="inline-link" href="bitcoin-dca.html">page</a> recalculates every day.</li>
+          <li><strong>Power prices.</strong> Every hour of <span data-fact="ercot.year">2025</span> at a Texas power hub showed that the <span data-fact="ercot.top1_hours">88</span> most expensive hours, 1% of the year, made up <span data-fact="ercot.top1_share">8.5%</span> of the year’s power cost. A site that sat those hours out would have cut its bill by about <span data-fact="ercot.bill_cut">16%</span>. That became my <a class="inline-link" href="calculator.html">power cost calculator</a>.</li>
+        </ul>
+
+        <h2>What most people get wrong</h2>
+        <p>Two things, in my experience.</p>
+        <p><strong>They use it like a search box.</strong> A one-line question gets a generic answer. The results change when you give AI real context and a real job: your files, your numbers, what good looks like, and what it must not do.</p>
+        <p><strong>They stop at chatting.</strong> A conversation helps once. A system helps every day. The leverage comes when the thing you figured out in a chat becomes something that runs on its own, gets checked, and asks you only when it should.</p>
+        <p>If you want to see how the agent side works from the ground up, start with <a class="inline-link" href="what-is-an-ai-agent.html">what an AI agent actually is</a>.</p>
+      </div>
+
+      <a class="next-link" href="what-is-an-ai-agent.html">
+        <span class="next-link__label">Next</span>
+        <span class="title">What an AI agent actually is →</span>
+      </a>
+
+      <p class="ask">Want me to walk you through any of these? Email me at <a class="inline-link" href="mailto:jack@jackraney.com">jack@jackraney.com</a>.</p>
+    </div>
+  </article>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap site-foot__grid">
+    <div>
+      <p class="site-foot__name">Jack Raney</p>
+      <p>Finance and operations · Dallas, Texas</p>
+    </div>
+    <div class="site-foot__col">
+      <p class="site-foot__label">Contact</p>
+      <ul>
+        <li><a href="mailto:jack@jackraney.com">jack@jackraney.com</a></li>
+        <li><a href="https://www.linkedin.com/in/jack-raney">LinkedIn</a></li>
+        <li><a href="https://github.com/jraney99">GitHub</a></li>
+      </ul>
+    </div>
+    <div class="site-foot__col">
+      <p class="site-foot__label">More</p>
+      <ul>
+        <li><a href="https://otianai.com">Otian AI</a></li>
+        <li><a href="reading.html">Reading</a></li>
+        <li><a href="resume.html">Résumé</a></li>
+      </ul>
+    </div>
+    <p class="site-foot__note">Updated <span data-fact="site.updated">October 2026</span>.</p>
+  </div>
+</footer>
+
+<script src="assets/js/site.js?v=f38dbc4ce4"></script>
+<script src="assets/data/ercot.js"></script>
+<script src="assets/js/hours.js"></script>
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a7e1ae8552384ed28cf6cd992b1cf6b8"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
