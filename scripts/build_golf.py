@@ -167,12 +167,12 @@ def hero_card(stats, g):
     rows = []
     for r in recent[:5]:
         d = date.fromisoformat(r['date']).strftime('%b %-d')
-        holes = f'{r["holes"]} holes'
-        tag = ' \u00b7 shots tracked' if r['date'] in tracked_dates else ''
+        name = r.get('course') or 'Posted round'
+        sub = f'{d} \u00b7 {r["holes"]} holes' + (' \u00b7 shots tracked' if r['date'] in tracked_dates else '')
         diff = r.get('differential')
         dcls = 'pos' if diff is not None and diff <= idx else 'warn'
         dtxt = f'<span class="num num--md {dcls}">{diff:.1f}</span>' if diff is not None else ''
-        rows.append(f'<li><span class="course"><b>{d}</b><small>{holes}{tag}</small></span>'
+        rows.append(f'<li><span class="course"><b>{name}</b><small>{sub}</small></span>'
                     f'<span class="score"><span class="num num--md">{r["score"]}</span>{dtxt}</span></li>')
     avg = sum(r['score'] for r in full18) / max(1, len(full18))
     gap = f'I\u2019m {abs(stats["sg"]["total"]):.0f} strokes a round from my goal of scratch.' if stats else \
@@ -381,10 +381,11 @@ def page_rounds(stats, g):
         diff = r.get('differential')
         dcls = 'pos' if diff is not None and diff <= idx else 'warn'
         has_shots = 'Yes' if r['date'] in tracked else '\u2013'
-        grows.append(f'<tr><td>{d}</td><td>{r["holes"]}</td><td class="num num--md">{r["score"]}</td>'
+        name = r.get('course') or '\u2013'
+        grows.append(f'<tr><td>{d}</td><td>{name}</td><td>{r["holes"]}</td><td class="num num--md">{r["score"]}</td>'
                      f'<td><span class="{dcls}">{diff:.1f}</span></td><td>{has_shots}</td></tr>')
     ghin_table = card('Latest posted rounds (GHIN)',
-                      '    <div class="table-wrap"><table class="gtable"><thead><tr><th>Date</th><th>Holes</th>'
+                      '    <div class="table-wrap"><table class="gtable"><thead><tr><th>Date</th><th>Course</th><th>Holes</th>'
                       '<th>Score</th><th>Differential</th><th>Shots tracked</th></tr></thead><tbody>'
                       + ''.join(grows) + '</tbody></table></div>\n'
                       '    <p class="vs-note">A differential at or under my index beat my handicap. Rounds without '
