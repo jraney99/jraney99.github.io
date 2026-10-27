@@ -57,8 +57,11 @@
  "driving": {
   "penalties": 14,
   "sg_round": -1.5,
-  "avg_yd": 241,
-  "longest_yd": 340,
+  "tee_shots": 63,
+  "driver_shots": 27,
+  "driver_median_yd": 277,
+  "driver_longest_yd": 340,
+  "driver_measured": 23,
   "fairways": {
    "hit": 26,
    "of": 63

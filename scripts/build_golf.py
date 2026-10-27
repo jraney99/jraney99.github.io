@@ -263,7 +263,7 @@ def bypar_card(g):
 
 def highlights_card(stats):
     d = stats['driving']
-    items = [('Longest drive', f'{d["longest_yd"]} yd'), ('Average drive', f'{d["avg_yd"]} yd'),
+    items = [('Driver, longest', f'{d["driver_longest_yd"]} yd'), ('Driver, median', f'{d["driver_median_yd"]} yd'),
              ('Greens in regulation', f'{stats["approach"]["gir_pct"]}%'), ('Putts per round', stats['putting']['putts_round'])]
     rows = ''.join(f'<li><span class="course"><b>{n}</b></span><span class="score"><span class="num num--md">{v}</span></span></li>'
                    for n, v in items)
@@ -289,13 +289,20 @@ def page_driving(stats, g):
     left = (focus_card('driving penalties',
                        'Penalty balls off the tee are the whole story. Nothing else in my driving needs to change first.',
                        sg(d['sg_round']), 'Strokes/rnd')
-            + card('', statpair('Average drive', f'{d["avg_yd"]}', 'Longest', f'{d["longest_yd"]}'))
+            + card('', statpair('Driver, median', f'{d["driver_median_yd"]} yd', 'Longest', f'{d["driver_longest_yd"]} yd'))
             + card('', statpair('Tee-shot penalties', stats['leaks'][0]['basis'].split()[0], 'Fairways', f'{fw["hit"] / fw["of"]:.0%}')))
-    right = card('What matters off the tee',
+    driver_pct = d['driver_shots'] / d['tee_shots'] if d['tee_shots'] else 0
+    right = (card('Club off the tee',
+                  f'    <p style="margin:0;font-size:0.95rem">Driver on {d["driver_shots"]} of {d["tee_shots"]} tee shots '
+                  f'({driver_pct:.0%}); the rest were 3-wood or an iron. The distance numbers above are driver only, '
+                  f'measured from shot GPS across {d["driver_measured"]} drives that did not take a penalty. '
+                  f'Blending every club off the tee into one "average drive" reads nearly 40 yd shorter '
+                  f'and means nothing, so it is not on this page.</p>')
+             + card('What matters off the tee',
                  f'    <p style="margin:0;font-size:0.95rem">I hit {fw["hit"]} of {fw["of"]} fairways ({fw["hit"] / fw["of"]:.0%}). '
                  'That number barely matters: in Shot Scope’s data, fairway percentage is almost flat from scratch to a '
                  '20 handicap. What separates handicaps off the tee is the disaster rate, penalty balls and the spots you '
-                 f'cannot advance from. The penalties alone cost about {abs(stats["leaks"][0]["per_round"]):.1f} strokes a round.</p>')
+                 f'cannot advance from. The penalties alone cost about {abs(stats["leaks"][0]["per_round"]):.1f} strokes a round.</p>'))
     return f'<div class="ggrid"><div class="gcol">{left}</div><div class="gcol">{right}</div></div>'
 
 
