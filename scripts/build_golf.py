@@ -451,7 +451,39 @@ def page_practice(stats, g):
                   '\n    <p class="vs-note">Clubs open their own pages: every swing, drawn out</p>')
              + card('Wedge matrix', wedge))
     chip = '<p><span class="sample-chip">Preview \u00b7 sample numbers until my first TrackMan session lands</span></p>'
-    return chip + f'<div class="ggrid3"><div class="gcol">{left}</div><div class="gcol">{mid}</div><div class="gcol">{right}</div></div>'
+    return plans_cards() + chip + f'<div class="ggrid3"><div class="gcol">{left}</div><div class="gcol">{mid}</div><div class="gcol">{right}</div></div>'
+
+
+def plans_cards():
+    """The issued practice plans (data/golf-plans.json, from Archibald's practice-plan skill)."""
+    path = os.path.join(ROOT, 'data', 'golf-plans.json')
+    if not os.path.exists(path):
+        return ''
+    plans = json.load(open(path, encoding='utf-8'))
+    if not plans:
+        return ''
+    cur = plans[0]
+    d = date.fromisoformat(cur['date']).strftime('%A, %b %-d')
+    where = f' at {cur["location"]}' if cur.get('location') else ''
+    bench = ' \u00b7 benchmark session' if cur.get('benchmark') else ''
+    rows = ''.join(f'<li><span class="from">{b["balls"]}</span><span style="min-width:0">'
+                   f'<b>{b["title"]}.</b> {b["detail"]}</span><span class="n"></span>'
+                   f'<span class="val">{b.get("target") or ""}</span></li>' for b in cur['blocks'])
+    log = []
+    for p in plans[:6]:
+        dot = ' \u00b7 '
+        kind = p['type'].title() + (dot + 'benchmark' if p.get('benchmark') else '')
+        sub = date.fromisoformat(p['date']).strftime('%b %-d') + (dot + p['location'] if p.get('location') else '')
+        log.append(f'<li><span class="course"><b>{kind}</b><small>{sub}</small></span>'
+                   f'<span class="score"><span class="n">{p.get("status", "planned")}</span></span></li>')
+    log = ''.join(log)
+    current = card(f'Current plan \u00b7 {d}',
+                   f'    <p style="margin:0 0 0.8rem;font-size:0.92rem">{cur["type"].title()} session{where}{bench}. '
+                   f'Built from the live leak table: {cur.get("focus", "")}.</p>\n'
+                   f'    <ul class="drows">{rows}</ul>\n'
+                   f'    <p class="vs-note">{cur.get("note", "")}</p>')
+    loglist = card('Plan log', f'    <ul class="rounds-list" style="margin-top:0">{log}</ul>')
+    return f'<div class="ggrid"><div class="gcol">{current}</div><div class="gcol">{loglist}</div></div>'
 
 
 
