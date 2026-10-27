@@ -316,7 +316,7 @@ def page_approach(stats, g):
                        sg(a['sg_round']), 'Strokes/rnd')
             + card('', statpair('Greens in regulation', f'{a["gir_pct"]}%', 'Shots', sum(v['shots'] for v in a['buckets'].values())))
             + card('', statpair('Proximity, greens hit', f'{a["prox_gir_ft"]} ft', 'Proximity, all', f'{a["prox_all_ft"]} ft')))
-    mid = card('SG by distance (yd)', f'    <ul class="drows">{rows}</ul>')
+    mid = card('SG by distance (yd)', f'    <ul class="plan">{rows}</ul>')
     right = card('Where approach shots finish', missgrid)
     return f'<div class="ggrid3"><div class="gcol">{left}</div><div class="gcol">{mid}</div><div class="gcol">{right}</div></div>'
 
@@ -330,7 +330,7 @@ def page_short(stats, g):
     left = (focus_card('inside 50 yards', 'My biggest gap to scratch. A scratch player gets up and down just over half the time; '
                        f'I’m at {ud["made"] / ud["of"]:.0%} on these rounds.', sg(s['sg_round']), 'Strokes/rnd')
             + card('', statpair('Up and down', f'{ud["made"]}/{ud["of"]}', 'Usual miss', (disp.get('tendency') or '?').title())))
-    right = card('SG by distance (yd)', f'    <ul class="drows">{rows}</ul>')
+    right = card('SG by distance (yd)', f'    <ul class="plan">{rows}</ul>')
     return f'<div class="ggrid"><div class="gcol">{left}</div><div class="gcol">{right}</div></div>'
 
 
@@ -466,9 +466,9 @@ def plans_cards():
     d = date.fromisoformat(cur['date']).strftime('%A, %b %-d')
     where = f' at {cur["location"]}' if cur.get('location') else ''
     bench = ' \u00b7 benchmark session' if cur.get('benchmark') else ''
-    rows = ''.join(f'<li><span class="from">{b["balls"]}</span><span style="min-width:0">'
-                   f'<b>{b["title"]}.</b> {b["detail"]}</span><span class="n"></span>'
-                   f'<span class="val">{b.get("target") or ""}</span></li>' for b in cur['blocks'])
+    rows = ''.join(f'<li><span class="balls">{b["balls"]}</span><span class="body"><b>{b["title"]}.</b> {b["detail"]}'
+                   + (f'<span class="tgt">Target: {b["target"]}</span>' if b.get('target') else '')
+                   + '</span></li>' for b in cur['blocks'])
     log = []
     for p in plans[:6]:
         dot = ' \u00b7 '
@@ -480,7 +480,7 @@ def plans_cards():
     current = card(f'Current plan \u00b7 {d}',
                    f'    <p style="margin:0 0 0.8rem;font-size:0.92rem">{cur["type"].title()} session{where}{bench}. '
                    f'Built from the live leak table: {cur.get("focus", "")}.</p>\n'
-                   f'    <ul class="drows">{rows}</ul>\n'
+                   f'    <ul class="plan">{rows}</ul>\n'
                    f'    <p class="vs-note">{cur.get("note", "")}</p>')
     loglist = card('Plan log', f'    <ul class="rounds-list" style="margin-top:0">{log}</ul>')
     return f'<div class="ggrid"><div class="gcol">{current}</div><div class="gcol">{loglist}</div></div>'

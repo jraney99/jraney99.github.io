@@ -251,3 +251,12 @@
 /* trackman: neutral metric bars (no gained/lost meaning) */
 .rbar i.neu { background: var(--ink-2); }
 .sample-chip { display: inline-block; border: 1px solid var(--signal); color: var(--signal); border-radius: 999px; font-family: var(--sans); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.04em; padding: 0.32rem 0.8rem; margin-bottom: 1.1rem; }
+
+/* practice plan blocks: wide prose rows, not the narrow .drows metric grid */
+.plan { list-style: none; margin: 0; padding: 0; }
+.plan li { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); gap: 0.9rem; padding: 0.7rem 0; border-top: 1px solid var(--rule); }
+.plan li:first-child { border-top: 0; }
+.plan .balls { font-family: var(--serif); font-weight: 600; font-size: 1.05rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.plan .body { min-width: 0; font-size: 0.92rem; }
+.plan .body b { color: var(--ink); }
+.plan .tgt { display: block; margin-top: 0.3rem; font-family: var(--sans); font-size: 0.76rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--lose-hard); }
