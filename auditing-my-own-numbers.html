@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>I audited my own dashboard and found four bugs · Jack Raney</title>
+  <meta name="description" content="I built a system to measure my golf game. The useful part was not the charts. It was everything the charts got wrong.">
+  <link rel="canonical" href="https://jackraney.com/auditing-my-own-numbers">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Jack Raney">
+  <meta property="og:title" content="I audited my own dashboard and found four bugs">
+  <meta property="og:description" content="I built a system to measure my golf game. The useful part was not the charts. It was everything the charts got wrong.">
+  <meta property="og:url" content="https://jackraney.com/auditing-my-own-numbers">
+  <meta property="og:image" content="https://jackraney.com/assets/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-10-27">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f4f1e8">
+  <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="assets/img/favicon-64.png" sizes="64x64" type="image/png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Besley:wght@400..700&family=Overpass:ital,wght@0,300..900;1,300..900&family=Overpass+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css?v=7b682ff78f">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap site-head__row">
+    <a class="wordmark" href="index.html">Jack Raney</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html#work">Work</a>
+      <a href="writing.html">Writing</a>
+      <a href="about.html">About</a>
+      <a href="resume.html">Résumé</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch theme">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <article>
+    <header class="wrap doc-head">
+      <div class="doc-head__inner">
+        <a class="back" href="writing.html">&larr; All writing</a>
+        <h1>I audited my own dashboard and found four bugs</h1>
+        <p class="dek">I built a system to measure my golf game. The useful part was not the charts. It was everything the charts got wrong.</p>
+        <p class="doc-date"><time datetime="2026-10-27">October 2026</time></p>
+      </div>
+    </header>
+
+    <div class="wrap memo">
+      <div class="prose">
+        <p>I built a system that measures my own golf game. Every morning it reads my scores and my shot data, works out where I lose strokes against a scratch player, and writes the answer to a page. Building it was the easy part. The part worth writing about is what happened when I went looking for mistakes in my own numbers.</p>
+
+        <p>I found four in an afternoon. None of them looked like errors. Every one produced a plausible number that a reasonable person would have believed.</p>
+
+        <h2>One round was only nine holes</h2>
+        <p>Five rounds had shot data. Four were eighteen holes and one was nine. Every rate divided by five, so every rate was about a tenth too low. My putting read 28.8 a round when the honest number is 32.0 per eighteen holes.</p>
+        <p>That one mattered more than it sounds, because I had tuned the engine to agree with a commercial product that does the same calculation. It agreed. It agreed because I had quietly absorbed my own error into the baseline to make the two match. A number that reconciles is not the same as a number that is right.</p>
+
+        <h2>The average drive was not an average drive</h2>
+        <p>The page said 241 yards. The figure came from every tee shot on a par 4 or par 5, which is the correct definition for strokes gained but the wrong one for distance. Only 27 of my 63 tee shots were driver. The rest were 3 wood and the occasional iron. Driver alone is 277.</p>
+        <p>I only caught it because the longest drive on the same card said 340, and the gap felt wrong.</p>
+
+        <h2>One shot moved an average by seventeen feet</h2>
+        <p>My approach accuracy showed 63 feet. Hidden inside it was a single shot recorded as finishing 275 yards from the hole, which is not a thing that happens. It had taken a penalty, so the next shot was played from a drop far back, and the system measured the distance to the drop instead of to where the ball landed. Removing penalty shots and reporting the median instead of the mean moved the number to 46 feet.</p>
+
+        <h2>An alert that would have cried wolf forever</h2>
+        <p>The system compares today's figures with yesterday's so it only republishes when something changes. Saving to a file turns numeric labels into text, so the comparison never matched, and it reported a change every single day. On its own that is harmless. It would have tripped a second check that treats "something changed but no files differ" as suspicious, and sent me a failure alert every quiet day for as long as the thing ran.</p>
+
+        <h2>The bigger one: two of my four numbers were not findings</h2>
+        <p>After the bugs I added a range to every figure. The site had been telling me my putting costs 1.2 strokes a round. Measured over 81 holes the honest range is minus 3.3 to plus 0.8. It contains zero. I cannot tell my putting apart from a scratch player's on the data I have. The same was true of my driving.</p>
+        <p>Two of the four things the page had been asserting about my game were noise with a decimal point on them. They now say so, and a weakness has to clear zero before the system is allowed to send me to practise it.</p>
+
+        <h2>Why this is the job</h2>
+        <p>This is the same work as reading a power bill. At MARA I was asked to look into ours and traced <a class="inline-link" href="power-bill.html">$1.8 million in billing errors</a> back to their source, by checking invoices against interval meter data rather than against the previous invoice. Everything had reconciled for months. Reconciling was the problem.</p>
+        <p>A dashboard that nobody audits is worse than no dashboard, because it is confidently wrong and it is wrong in the same direction every day. Mine was telling me to practise the right things for the wrong reasons, and it would have gone on telling me that indefinitely.</p>
+        <p>So the rules now: every number carries a range, anything computed on too few shots is marked as such instead of being shown as a fact, nothing publishes unless the parts add up to the whole, and once a month an independent source recalculates the same thing so I find out when I have drifted. That last one is the only check I actually trust, because it is the only one I did not write.</p>
+      </div>
+    </div>
+  </article>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap site-foot__grid">
+    <div>
+      <p class="site-foot__name">Jack Raney</p>
+      <p>Finance and operations · Dallas, Texas</p>
+    </div>
+    <div class="site-foot__col">
+      <p class="site-foot__label">Contact</p>
+      <ul>
+        <li><a href="mailto:jack@jackraney.com">jack@jackraney.com</a></li>
+        <li><a href="https://www.linkedin.com/in/jack-raney">LinkedIn</a></li>
+        <li><a href="https://github.com/jraney99">GitHub</a></li>
+        <li><a href="https://t.me/jr231099">Telegram</a></li>
+      </ul>
+    </div>
+    <div class="site-foot__col">
+      <p class="site-foot__label">More</p>
+      <ul>
+        <li><a href="https://otianai.com">Otian AI</a></li>
+        <li><a href="reading.html">Reading</a></li>
+        <li><a href="resume.html">Résumé</a></li>
+      </ul>
+    </div>
+    <p class="site-foot__note">Updated <span data-fact="site.updated">October 2026</span>.</p>
+  </div>
+</footer>
+
+<script src="assets/js/site.js?v=f38dbc4ce4"></script>
+<script src="assets/data/ercot.js"></script>
+<script src="assets/js/hours.js"></script>
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a7e1ae8552384ed28cf6cd992b1cf6b8"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

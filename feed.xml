@@ -2,6 +2,7 @@
 <rss version="2.0"><channel>
   <title>Jack Raney: writing</title><link>https://jackraney.com/writing</link>
   <description>Case studies, memos, essays and weekly notes by Jack Raney.</description>
+  <item><title>I audited my own dashboard and found four bugs</title><link>https://jackraney.com/auditing-my-own-numbers</link><guid>https://jackraney.com/auditing-my-own-numbers</guid><pubDate>Tue, 27 Oct 2026 12:00:00 +0000</pubDate><description>I built a system to measure my golf game. The useful part was not the charts. It was everything the charts got wrong.</description></item>
   <item><title>How I actually use AI</title><link>https://jackraney.com/how-i-use-ai</link><guid>https://jackraney.com/how-i-use-ai</guid><pubDate>Mon, 26 Oct 2026 12:00:00 +0000</pubDate><description>Three examples I can walk anyone through: faster, better work, and things I would not have seen.</description></item>
   <item><title>What an AI agent actually is</title><link>https://jackraney.com/what-is-an-ai-agent</link><guid>https://jackraney.com/what-is-an-ai-agent</guid><pubDate>Mon, 26 Oct 2026 12:00:00 +0000</pubDate><description>From a folder of files to a working agent, in plain English, using the one I built.</description></item>
   <item><title>Downside first</title><link>https://jackraney.com/downside-first</link><guid>https://jackraney.com/downside-first</guid><pubDate>Wed, 21 Oct 2026 12:00:00 +0000</pubDate><description>The most important question I learned underwriting loans, and how it followed me to bitcoin mining and a startup.</description></item>

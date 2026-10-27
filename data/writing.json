@@ -8,6 +8,14 @@
  },
  "items": [
   {
+   "url": "auditing-my-own-numbers.html",
+   "kind": "Essay",
+   "topic": "finance",
+   "date": "2026-10-27",
+   "title": "I audited my own dashboard and found four bugs",
+   "dek": "I built a system to measure my golf game. The useful part was not the charts. It was everything the charts got wrong."
+  },
+  {
    "url": "how-i-use-ai.html",
    "kind": "Essay",
    "topic": "ai",
