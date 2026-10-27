@@ -264,3 +264,6 @@
 /* a bucket with too little data behind it: visible, but never presented as a finding */
 .drows li.thin { opacity: 0.55; }
 .drows li.thin .val { font-weight: 400; }
+
+/* the 95% range under a strokes gained tile */
+.tile-ci { display: block; margin-top: 0.3rem; font-family: var(--sans); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.02em; color: var(--muted); }

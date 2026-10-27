@@ -36,6 +36,17 @@ def month(d):
     return date.fromisoformat(d).strftime('%b %Y')
 
 
+def decisive(rng):
+    return bool(rng) and (rng[0] < 0) == (rng[1] < 0)
+
+
+def rng_text(ci):
+    if not ci:
+        return ''
+    fmt = lambda x: ('−' if x < 0 else '+') + f'{abs(x):.1f}'
+    return f'{fmt(ci[0])} to {fmt(ci[1])}'
+
+
 def sg(v, dec=1):
     cls = 'pos' if v > 0 else 'neg' if v < 0 else ''
     txt = ('+' if v > 0 else '−' if v < 0 else '') + f'{abs(v):.{dec}f}'
@@ -183,9 +194,21 @@ def briefing(stats, g):
     worst_app = min(solid_app, key=lambda b: solid_app[b]['sg_round']) if solid_app else None
     app_spread = (max(abs(v['sg_round']) for v in solid_app.values()) if solid_app else 0)
 
+    ci = sg.get('ci') or {}
+    names = {'driving': 'driving', 'approach': 'approach play', 'short': 'the short game', 'putting': 'putting'}
+    real = [names[c] for c in ('driving', 'approach', 'short', 'putting') if decisive(ci.get(c))]
+    unsure = [names[c] for c in ('driving', 'approach', 'short', 'putting') if not decisive(ci.get(c))]
+
     story = []
     story.append(f'<b>{share}% of the gap is in two places:</b> {leaks[0]["name"].lower()} '
                  f'and {leaks[1]["name"].lower()}. Everything else is close enough to scratch to leave alone for now.')
+    if unsure:
+        join = lambda xs: xs[0] if len(xs) == 1 else ', '.join(xs[:-1]) + ' and ' + xs[-1]
+        story.append(f'Two of these are established and two are not. Over {stats["holes"]} holes, '
+                     f'{join(real)} {"is" if len(real) == 1 else "are"} measurably worse than scratch. '
+                     f'{join(unsure).capitalize()} {"is" if len(unsure) == 1 else "are"} not: the range still '
+                     f'includes zero, so I cannot tell {"it" if len(unsure) == 1 else "them"} apart from '
+                     f'scratch yet. More rounds would settle it.')
     story.append(f'You hit <b>{d["tee_penalties"]} penalty balls off the tee</b> across these rounds, about '
                  f'{pens_round:.1f} a round, and you pull driver on only {d["driver_shots"]} of '
                  f'{d["tee_shots"]} tee shots. Distance is not the problem: your driver carries a '
@@ -270,9 +293,11 @@ def sg_card(stats):
         v = per[key]
         color = 'var(--gain)' if v > 0 else 'var(--lose-hard)' if key == worst else 'var(--lose)'
         chip = '<span class="focus-chip">Focus</span>' if key == worst else ''
+        ci = (stats['sg'].get('ci') or {}).get(key)
+        band = f'<span class="tile-ci">{rng_text(ci)}</span>' if ci else ''
         tiles.append(f'<a class="sg-tile{" focus" if key == worst else ""}" href="{href}">{chip}'
                      f'<span class="lbl">{name}</span><span class="tbar"><i style="width:{min(abs(v) / 5, 1) * 100:.0f}%;background:{color}"></i></span>'
-                     f'<span class="num num--md">{sg(v)}</span></a>')
+                     f'<span class="num num--md">{sg(v)}</span>{band}</a>')
     worst_name = dict((k, n) for k, n, _ in CATS)[worst]
     inner = (f'    <div class="sg-total"><div><span class="lbl">Total SG</span><p>Per round vs scratch</p></div>'
              f'<span class="num num--lg">{sg(stats["sg"]["total"])}</span></div>\n'
@@ -358,7 +383,31 @@ def page_driving(stats, g):
             + card('', statpair('Driver, median', f'{d["driver_median_yd"]} yd', 'Longest', f'{d["driver_longest_yd"]} yd'))
             + card('', statpair('Tee-shot penalties', stats['leaks'][0]['basis'].split()[0], 'Fairways', f'{fw["hit"] / fw["of"]:.0%}')))
     driver_pct = d['driver_shots'] / d['tee_shots'] if d['tee_shots'] else 0
-    right = (card('Club off the tee',
+    td = d.get('tee_decision') or {}
+    tee_card = ''
+    if td.get('clubs'):
+        rows = []
+        for c in td['clubs']:
+            med = c['median_yd'] or '–'
+            rows.append(f'<tr><td>{c["club"]}</td><td>{c["shots"]}</td><td>{sg(c["sg_per_shot"], 2)}</td>'
+                        f'<td>{c["penalty_rate"]}%</td><td>{med}</td></tr>')
+        rows = ''.join(rows)
+        v = td.get('verdict') or {}
+        if v and v.get('callable'):
+            verdict = (f'<b>{v["better"]} is the better play.</b> It returns {abs(v["gap_per_shot"]):.2f} strokes '
+                       f'more per tee shot than {v["worse"].lower()}, and the ranges do not overlap.')
+        elif v:
+            verdict = (f'<b>Not callable yet.</b> {v["better"]} is ahead by {abs(v["gap_per_shot"]):.2f} strokes a '
+                       f'tee shot and goes {abs(v["yards"])} yd further, but the ranges still overlap, so I cannot '
+                       f'say the trade is paying. More tracked rounds decide it.')
+        else:
+            verdict = 'Not enough tee shots yet to compare clubs.'
+        tee_card = card('Is the lay-up paying?',
+                        '    <div class="table-wrap"><table class="gtable"><thead><tr><th>Club</th><th>Tee shots</th>'
+                        '<th>SG per shot</th><th>Penalty rate</th><th>Median</th></tr></thead><tbody>'
+                        + rows + '</tbody></table></div>\n'
+                        f'    <p style="margin:0.8rem 0 0;font-size:0.92rem">{verdict}</p>')
+    right = (tee_card + card('Club off the tee',
                   f'    <p style="margin:0;font-size:0.95rem">Driver on {d["driver_shots"]} of {d["tee_shots"]} tee shots '
                   f'({driver_pct:.0%}); the rest were 3-wood or an iron. The distance numbers above are driver only, '
                   f'measured from shot GPS across {d["driver_measured"]} drives that did not take a penalty. '

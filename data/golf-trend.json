@@ -1,0 +1,17 @@
+[
+ {
+  "date": "2026-10-27",
+  "rounds": 5,
+  "holes": 81,
+  "sg": {
+   "driving": -1.5,
+   "approach": -3.1,
+   "short": -4.2,
+   "putting": -1.2
+  },
+  "total": -10.0,
+  "scoring": 85.8,
+  "gir": 33,
+  "putts": 32.0
+ }
+]
