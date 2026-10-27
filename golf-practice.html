@@ -15,82 +15,37 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#f4f1e8">
+  <meta name="theme-color" content="#0b0c0d">
   <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="icon" href="assets/img/favicon-64.png" sizes="64x64" type="image/png">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
-  <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Besley:wght@400..700&family=Overpass:ital,wght@0,300..900;1,300..900&family=Overpass+Mono:wght@400;500&display=swap">
-  <link rel="stylesheet" href="assets/css/site.css?v=be5772e691">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght@500;600&display=swap">
+  <link rel="stylesheet" href="assets/css/golf.css?v=5f2a442847">
 </head>
 <body>
 
 <a class="skip" href="#main">Skip to content</a>
 
-<header class="site-head">
-  <div class="wrap site-head__row">
+<header class="gtop">
+  <div class="who">
     <a class="wordmark" href="index.html">Jack Raney</a>
-    <nav class="site-nav" aria-label="Main">
-      <a href="index.html#work">Work</a>
-      <a href="writing.html">Writing</a>
-      <a href="about.html">About</a>
-      <a href="resume.html">Résumé</a>
-    </nav>
-    <button class="theme-toggle" type="button" aria-label="Switch theme">
-      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
-    </button>
+    <span class="chip">Index<b>4.1</b></span>
   </div>
+  <nav class="gnav" aria-label="Golf section"><a href="golf.html">Overview</a><a href="golf-driving.html">Driving</a><a href="golf-approach.html">Approach</a><a href="golf-short-game.html">Short game</a><a href="golf-putting.html">Putting</a><a href="golf-rounds.html">Rounds</a><strong>Practice</strong></nav>
+  <div class="gpills"><span class="gpill">Goal: Scratch</span><span class="gpill">5 rounds</span></div>
 </header>
 
-<main id="main">
-  <article>
-    <header class="wrap doc-head">
-      <div class="doc-head__inner">
-        <a class="back" href="golf.html">← Road to scratch</a>
-        <h1>Practice, measured</h1>
-        <p class="dek">TrackMan practice sessions: speeds, carries, gapping and dispersion per club.</p>
-        <nav class="golf-nav" aria-label="Golf section"><a href="golf.html">Overview</a><a href="golf-driving.html">Driving</a><a href="golf-approach.html">Approach</a><a href="golf-short-game.html">Short game</a><a href="golf-putting.html">Putting</a><a href="golf-rounds.html">Rounds</a><strong>Practice</strong></nav>
-      </div>
-    </header>
-
-    <div class="wrap memo">
-      <div class="stack">
-        <div class="prose"><p>This page is waiting on its data. I practice on a TrackMan simulator, and each session’s shots, club speed, ball speed, smash factor, carry and dispersion per club, will land here: a true gapping chart from measured carries, not guesses, and the spread of each club mapped the same way the approach page maps my on-course misses.</p><p>The point of putting practice data next to play data is the loop: if four weeks of wedge work do not move my proximity from 75–125 yards on the course, the practice was the wrong practice. The site will show both sides.</p></div>
-        <p class="note">5 Arccos rounds, Apr to Jun 2026, 81 holes; strokes gained vs a scratch baseline calibrated to Arccos. I wear the sensors every round now, so this fills in as I play. Updated automatically.</p>
-      </div>
-    </div>
-  </article>
-</main>
-
-<footer class="site-foot">
-  <div class="wrap site-foot__grid">
-    <div>
-      <p class="site-foot__name">Jack Raney</p>
-      <p>Finance and operations · Dallas, Texas</p>
-    </div>
-    <div class="site-foot__col">
-      <p class="site-foot__label">Contact</p>
-      <ul>
-        <li><a href="mailto:jack@jackraney.com">jack@jackraney.com</a></li>
-        <li><a href="https://www.linkedin.com/in/jack-raney">LinkedIn</a></li>
-        <li><a href="https://github.com/jraney99">GitHub</a></li>
-      </ul>
-    </div>
-    <div class="site-foot__col">
-      <p class="site-foot__label">More</p>
-      <ul>
-        <li><a href="https://otianai.com">Otian AI</a></li>
-        <li><a href="reading.html">Reading</a></li>
-        <li><a href="resume.html">Résumé</a></li>
-      </ul>
-    </div>
-    <p class="site-foot__note">Updated <span data-fact="site.updated">October 2026</span>.</p>
+<main id="main" class="gwrap">
+<section>
+  <h2 class="gsect">Practice, measured</h2>
+  <div class="gcard ">
+    <p style="margin:0 0 0.8rem;font-size:0.95rem">This page is waiting on its data. I practice on a TrackMan simulator, and each session’s shots, club speed, ball speed, smash factor, carry and dispersion per club, will land here: a true gapping chart from measured carries, and each club’s spread mapped the same way the approach page maps my on-course misses.</p>    <p style="margin:0;font-size:0.95rem">The point of putting practice next to play is the loop: if four weeks of wedge work don’t move my proximity from 75–125 yards on the course, it was the wrong practice. This page will show both sides.</p>
   </div>
-</footer>
+</section>
 
-<script src="assets/js/site.js?v=f38dbc4ce4"></script>
-<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a7e1ae8552384ed28cf6cd992b1cf6b8"}'></script><!-- End Cloudflare Web Analytics -->
+<p class="gnote">5 Arccos rounds, Apr to Jun 2026, 81 holes; strokes gained vs a scratch baseline calibrated to Arccos. I wear the sensors every round now, so this fills in as I play. Handicap and scoring history come from my GHIN record, updated daily. <a href="index.html">jackraney.com</a> · <a href="about.html">about me</a></p>
+</main>
 </body>
 </html>

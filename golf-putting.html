@@ -15,90 +15,68 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#f4f1e8">
+  <meta name="theme-color" content="#0b0c0d">
   <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="icon" href="assets/img/favicon-64.png" sizes="64x64" type="image/png">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
-  <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Besley:wght@400..700&family=Overpass:ital,wght@0,300..900;1,300..900&family=Overpass+Mono:wght@400;500&display=swap">
-  <link rel="stylesheet" href="assets/css/site.css?v=be5772e691">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght@500;600&display=swap">
+  <link rel="stylesheet" href="assets/css/golf.css?v=5f2a442847">
 </head>
 <body>
 
 <a class="skip" href="#main">Skip to content</a>
 
-<header class="site-head">
-  <div class="wrap site-head__row">
+<header class="gtop">
+  <div class="who">
     <a class="wordmark" href="index.html">Jack Raney</a>
-    <nav class="site-nav" aria-label="Main">
-      <a href="index.html#work">Work</a>
-      <a href="writing.html">Writing</a>
-      <a href="about.html">About</a>
-      <a href="resume.html">Résumé</a>
-    </nav>
-    <button class="theme-toggle" type="button" aria-label="Switch theme">
-      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
-    </button>
+    <span class="chip">Index<b>4.1</b></span>
   </div>
+  <nav class="gnav" aria-label="Golf section"><a href="golf.html">Overview</a><a href="golf-driving.html">Driving</a><a href="golf-approach.html">Approach</a><a href="golf-short-game.html">Short game</a><strong>Putting</strong><a href="golf-rounds.html">Rounds</a><a href="golf-practice.html">Practice</a></nav>
+  <div class="gpills"><span class="gpill">Goal: Scratch</span><span class="gpill">5 rounds</span></div>
 </header>
 
-<main id="main">
-  <article>
-    <header class="wrap doc-head">
-      <div class="doc-head__inner">
-        <a class="back" href="golf.html">← Road to scratch</a>
-        <h1>Putting</h1>
-        <p class="dek">Make rates by distance against a scratch player, lag putting and the three-putt autopsy.</p>
-        <nav class="golf-nav" aria-label="Golf section"><a href="golf.html">Overview</a><a href="golf-driving.html">Driving</a><a href="golf-approach.html">Approach</a><a href="golf-short-game.html">Short game</a><strong>Putting</strong><a href="golf-rounds.html">Rounds</a><a href="golf-practice.html">Practice</a></nav>
-      </div>
-    </header>
-
-    <div class="wrap memo">
-      <div class="stack">
-        <dl class="figures figures--3"><div><dt>Strokes gained, per round</dt><dd>−1.2</dd></div><div><dt>Putts per round</dt><dd>28.8</dd></div><div><dt>Three-putts</dt><dd>8</dd></div></dl>
-        <figure class="exhibit"><figcaption class="exhibit__head"><span class="label">Exhibit 1</span><span class="exhibit__title">First putts: make rate against a scratch player</span></figcaption>
-          <div class="table-wrap"><table class="data"><thead><tr><th scope="col">From</th><th scope="col">Putts</th><th scope="col">Made</th><th scope="col">Scratch</th><th scope="col">Gap</th><th scope="col">SG per round</th></tr></thead><tbody><tr><td>0-3 ft</td><td>10</td><td>90%</td><td>96%</td><td>−6%</td><td>−0.1</td></tr><tr><td>3-5 ft</td><td>3</td><td>33%</td><td>76%</td><td>−43%</td><td>−0.3</td></tr><tr><td>5-10 ft</td><td>15</td><td>33%</td><td>48%</td><td>−15%</td><td>−0.5</td></tr><tr><td>10-15 ft</td><td>14</td><td>14%</td><td>23%</td><td>−9%</td><td>−0.4</td></tr><tr><td>15-25 ft</td><td>17</td><td>24%</td><td>12%</td><td>+12%</td><td>+0.4</td></tr><tr><td>25-40 ft</td><td>13</td><td>15%</td><td>6%</td><td>+9%</td><td>+0.3</td></tr><tr><td>40+ ft</td><td>8</td><td>0%</td><td>3%</td><td>−3%</td><td>−0.3</td></tr></tbody></table></div>
-          <p class="exhibit__note">Scratch make rates from Arccos’s data. Distances come from GPS, so treat the short buckets as approximate.</p>
-        </figure>
-        <figure class="exhibit exhibit--narrow"><figcaption class="exhibit__head"><span class="label">Exhibit 2</span><span class="exhibit__title">Lag putting: what the first putt leaves</span></figcaption>
-          <div class="table-wrap"><table class="data"><thead><tr><th scope="col">First putt from</th><th scope="col">Holes</th><th scope="col">Average leave</th><th scope="col">Inside 3 ft</th></tr></thead><tbody><tr><td>10-20 ft</td><td>23</td><td>1.6 ft</td><td>96%</td></tr><tr><td>20-30 ft</td><td>17</td><td>2.0 ft</td><td>88%</td></tr><tr><td>30-40 ft</td><td>4</td><td>4.5 ft</td><td>50%</td></tr><tr><td>40+ ft</td><td>8</td><td>14.6 ft</td><td>38%</td></tr></tbody></table></div>
-        </figure>
-        <div class="prose"><h2>Three-putt autopsy</h2><p>8 three-putts in these rounds, and they share one cause: lag distance. My first putt on three-putt holes averaged 39 feet, against 19 feet on two-putt holes. The fix is not holing more putts, it is distance control from 25 feet and out.</p></div>
-        <p class="note">5 Arccos rounds, Apr to Jun 2026, 81 holes; strokes gained vs a scratch baseline calibrated to Arccos. I wear the sensors every round now, so this fills in as I play. Updated automatically.</p>
-      </div>
-    </div>
-  </article>
-</main>
-
-<footer class="site-foot">
-  <div class="wrap site-foot__grid">
-    <div>
-      <p class="site-foot__name">Jack Raney</p>
-      <p>Finance and operations · Dallas, Texas</p>
-    </div>
-    <div class="site-foot__col">
-      <p class="site-foot__label">Contact</p>
-      <ul>
-        <li><a href="mailto:jack@jackraney.com">jack@jackraney.com</a></li>
-        <li><a href="https://www.linkedin.com/in/jack-raney">LinkedIn</a></li>
-        <li><a href="https://github.com/jraney99">GitHub</a></li>
-      </ul>
-    </div>
-    <div class="site-foot__col">
-      <p class="site-foot__label">More</p>
-      <ul>
-        <li><a href="https://otianai.com">Otian AI</a></li>
-        <li><a href="reading.html">Reading</a></li>
-        <li><a href="resume.html">Résumé</a></li>
-      </ul>
-    </div>
-    <p class="site-foot__note">Updated <span data-fact="site.updated">October 2026</span>.</p>
+<main id="main" class="gwrap">
+<div class="ggrid3"><div class="gcol"><section>
+  <div class="gcard ">
+    <div class="focus-card"><div><h2>Focus area: 5-10 ft putts</h2><p>Tighten this band first; the rest of my putting holds up against scratch.</p></div><div class="big"><span class="num num--lg"><span class="neg">−1.2</span></span><small>Strokes/rnd</small></div></div>
   </div>
-</footer>
-
-<script src="assets/js/site.js?v=f38dbc4ce4"></script>
-<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a7e1ae8552384ed28cf6cd992b1cf6b8"}'></script><!-- End Cloudflare Web Analytics -->
+</section>
+<section>
+  <div class="gcard ">
+<div class="statpair"><div><span class="lbl">Putts per round</span><span class="num num--lg">28.8</span></div><div><span class="lbl">3-putts/rnd</span><span class="num num--lg">1.6</span></div></div>
+  </div>
+</section>
+</div><div class="gcol"><section>
+  <h2 class="gsect">SG by putt distance</h2>
+  <div class="gcard ">
+    <span class="opp-chip">#1 opportunity: 5-10 ft</span>
+    <ul class="drows"><li><span class="from">0-3'</span><span class="rbar"><i class="" style="width:7%"></i></span><span class="n">10 putts</span><span class="val"><span class="neg">−0.1</span></span></li><li><span class="from">3-5'</span><span class="rbar"><i class="" style="width:20%"></i></span><span class="n">3 putts</span><span class="val"><span class="neg">−0.3</span></span></li><li><span class="from">5-10'</span><span class="rbar"><i class="" style="width:33%"></i></span><span class="n">15 putts</span><span class="val"><span class="neg">−0.5</span></span></li><li><span class="from">10-15'</span><span class="rbar"><i class="" style="width:27%"></i></span><span class="n">14 putts</span><span class="val"><span class="neg">−0.4</span></span></li><li><span class="from">15-25'</span><span class="rbar"><i class="ok" style="width:27%"></i></span><span class="n">17 putts</span><span class="val"><span class="pos">+0.4</span></span></li><li><span class="from">25-40'</span><span class="rbar"><i class="ok" style="width:20%"></i></span><span class="n">13 putts</span><span class="val"><span class="pos">+0.3</span></span></li><li><span class="from">40+'</span><span class="rbar"><i class="" style="width:20%"></i></span><span class="n">8 putts</span><span class="val"><span class="neg">−0.3</span></span></li></ul>
+  </div>
+</section>
+<section>
+  <h2 class="gsect">Make rate by distance</h2>
+  <div class="gcard ">
+    <ul class="drows"><li><span class="from">0-3'</span><span class="rbar"><i class="" style="width:90%"></i><span class="tick" style="left:96%"></span></span><span class="n"></span><span class="val"><span class="neg">90% (-6%)</span></span></li><li><span class="from">3-5'</span><span class="rbar"><i class="" style="width:33%"></i><span class="tick" style="left:76%"></span></span><span class="n"></span><span class="val"><span class="neg">33% (-43%)</span></span></li><li><span class="from">5-10'</span><span class="rbar"><i class="" style="width:33%"></i><span class="tick" style="left:48%"></span></span><span class="n"></span><span class="val"><span class="neg">33% (-15%)</span></span></li><li><span class="from">10-15'</span><span class="rbar"><i class="" style="width:14%"></i><span class="tick" style="left:23%"></span></span><span class="n"></span><span class="val"><span class="neg">14% (-9%)</span></span></li><li><span class="from">15-25'</span><span class="rbar"><i class="ok" style="width:24%"></i><span class="tick" style="left:12%"></span></span><span class="n"></span><span class="val"><span class="pos">24% (+12%)</span></span></li><li><span class="from">25-40'</span><span class="rbar"><i class="ok" style="width:15%"></i><span class="tick" style="left:6%"></span></span><span class="n"></span><span class="val"><span class="pos">15% (+9%)</span></span></li><li><span class="from">40+'</span><span class="rbar"><i class="" style="width:3%"></i><span class="tick" style="left:3%"></span></span><span class="n"></span><span class="val"><span class="neg">0% (-3%)</span></span></li></ul>
+    <p class="vs-note">▏ marks a scratch player’s make rate (Arccos data)</p>
+  </div>
+</section>
+</div><div class="gcol"><section>
+  <h2 class="gsect">Lag putting</h2>
+  <div class="gcard ">
+    <p class="lbl">Avg leave distance after first putt</p>
+    <ul class="drows"><li><span class="from">10-20'</span><span class="rbar"><i class="ok" style="width:11%"></i></span><span class="n">23 holes · 96% inside 3′</span><span class="val"><span class="pos">1.6′</span></span></li><li><span class="from">20-30'</span><span class="rbar"><i class="ok" style="width:13%"></i></span><span class="n">17 holes · 88% inside 3′</span><span class="val"><span class="pos">2.0′</span></span></li><li><span class="from">30-40'</span><span class="rbar"><i class="" style="width:30%"></i></span><span class="n">4 holes · 50% inside 3′</span><span class="val"><span class="neg">4.5′</span></span></li><li><span class="from">40+'</span><span class="rbar"><i class="" style="width:97%"></i></span><span class="n">8 holes · 38% inside 3′</span><span class="val"><span class="neg">14.6′</span></span></li></ul>
+  </div>
+</section>
+<section>
+  <h2 class="gsect">3-putt autopsy</h2>
+  <div class="gcard ">
+    <div class="autopsy"><div class="autopsy-bar"><i style="width:100%">100%</i></div><p class="legend"><span><i style="background:var(--red)"></i>Poor lag (8)</span><span><i style="background:var(--yellow)"></i>Missed short (0)</span></p><p><b>Focus: lag putting.</b> All of my three-putts come from leaving the first putt too far away (average first putt 39′, against 19′ on two-putt holes). The fix is distance control from 25 feet out, not holing more putts.</p><p class="leak__basis">8 three-putt holes across these rounds</p></div>
+  </div>
+</section>
+</div></div>
+<p class="gnote">5 Arccos rounds, Apr to Jun 2026, 81 holes; strokes gained vs a scratch baseline calibrated to Arccos. I wear the sensors every round now, so this fills in as I play. Handicap and scoring history come from my GHIN record, updated daily. <a href="index.html">jackraney.com</a> · <a href="about.html">about me</a></p>
+</main>
 </body>
 </html>

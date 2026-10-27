@@ -17,12 +17,12 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SPAN = re.compile(r'(<span data-fact="([^"]+)">)(.*?)(</span>)', re.S)
 
 
-ASSET = re.compile(r'(assets/(?:css/site\.css|js/site\.js))(\?v=[0-9a-f]+)?')
+ASSET = re.compile(r'(assets/(?:css/site\.css|css/golf\.css|js/site\.js))(\?v=[0-9a-f]+)?')
 
 
 def asset_versions():
     out = {}
-    for rel in ('assets/css/site.css', 'assets/js/site.js'):
+    for rel in ('assets/css/site.css', 'assets/css/golf.css', 'assets/js/site.js'):
         out[rel] = hashlib.sha256(open(os.path.join(ROOT, rel), 'rb').read()).hexdigest()[:10]
     return out
 

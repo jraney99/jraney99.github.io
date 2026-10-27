@@ -15,83 +15,52 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#f4f1e8">
+  <meta name="theme-color" content="#0b0c0d">
   <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="icon" href="assets/img/favicon-64.png" sizes="64x64" type="image/png">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
-  <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Besley:wght@400..700&family=Overpass:ital,wght@0,300..900;1,300..900&family=Overpass+Mono:wght@400;500&display=swap">
-  <link rel="stylesheet" href="assets/css/site.css?v=be5772e691">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght@500;600&display=swap">
+  <link rel="stylesheet" href="assets/css/golf.css?v=5f2a442847">
 </head>
 <body>
 
 <a class="skip" href="#main">Skip to content</a>
 
-<header class="site-head">
-  <div class="wrap site-head__row">
+<header class="gtop">
+  <div class="who">
     <a class="wordmark" href="index.html">Jack Raney</a>
-    <nav class="site-nav" aria-label="Main">
-      <a href="index.html#work">Work</a>
-      <a href="writing.html">Writing</a>
-      <a href="about.html">About</a>
-      <a href="resume.html">Résumé</a>
-    </nav>
-    <button class="theme-toggle" type="button" aria-label="Switch theme">
-      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
-    </button>
+    <span class="chip">Index<b>4.1</b></span>
   </div>
+  <nav class="gnav" aria-label="Golf section"><a href="golf.html">Overview</a><strong>Driving</strong><a href="golf-approach.html">Approach</a><a href="golf-short-game.html">Short game</a><a href="golf-putting.html">Putting</a><a href="golf-rounds.html">Rounds</a><a href="golf-practice.html">Practice</a></nav>
+  <div class="gpills"><span class="gpill">Goal: Scratch</span><span class="gpill">5 rounds</span></div>
 </header>
 
-<main id="main">
-  <article>
-    <header class="wrap doc-head">
-      <div class="doc-head__inner">
-        <a class="back" href="golf.html">← Road to scratch</a>
-        <h1>Driving</h1>
-        <p class="dek">Off the tee: distance, penalties and the misses that cost strokes.</p>
-        <nav class="golf-nav" aria-label="Golf section"><a href="golf.html">Overview</a><strong>Driving</strong><a href="golf-approach.html">Approach</a><a href="golf-short-game.html">Short game</a><a href="golf-putting.html">Putting</a><a href="golf-rounds.html">Rounds</a><a href="golf-practice.html">Practice</a></nav>
-      </div>
-    </header>
-
-    <div class="wrap memo">
-      <div class="stack">
-        <dl class="figures figures--4"><div><dt>Strokes gained, per round</dt><dd>−1.5</dd></div><div><dt>Tee-shot penalties</dt><dd>10</dd></div><div><dt>Average drive</dt><dd>241 yd</dd></div><div><dt>Longest drive</dt><dd>340 yd</dd></div></dl>
-        <div class="prose"><h2>What matters off the tee</h2><p>I hit 26 of 63 fairways (41%). That number barely matters: in Shot Scope’s data, fairway percentage is almost flat from scratch to a 20 handicap. What separates handicaps off the tee is the disaster rate, penalty balls and the spots you cannot advance from. That is where my strokes go: the penalties alone cost about 2.4 strokes a round when they come from the tee.</p></div>
-        <p class="note">5 Arccos rounds, Apr to Jun 2026, 81 holes; strokes gained vs a scratch baseline calibrated to Arccos. I wear the sensors every round now, so this fills in as I play. Updated automatically.</p>
-      </div>
-    </div>
-  </article>
-</main>
-
-<footer class="site-foot">
-  <div class="wrap site-foot__grid">
-    <div>
-      <p class="site-foot__name">Jack Raney</p>
-      <p>Finance and operations · Dallas, Texas</p>
-    </div>
-    <div class="site-foot__col">
-      <p class="site-foot__label">Contact</p>
-      <ul>
-        <li><a href="mailto:jack@jackraney.com">jack@jackraney.com</a></li>
-        <li><a href="https://www.linkedin.com/in/jack-raney">LinkedIn</a></li>
-        <li><a href="https://github.com/jraney99">GitHub</a></li>
-      </ul>
-    </div>
-    <div class="site-foot__col">
-      <p class="site-foot__label">More</p>
-      <ul>
-        <li><a href="https://otianai.com">Otian AI</a></li>
-        <li><a href="reading.html">Reading</a></li>
-        <li><a href="resume.html">Résumé</a></li>
-      </ul>
-    </div>
-    <p class="site-foot__note">Updated <span data-fact="site.updated">October 2026</span>.</p>
+<main id="main" class="gwrap">
+<div class="ggrid"><div class="gcol"><section>
+  <div class="gcard ">
+    <div class="focus-card"><div><h2>Focus area: driving penalties</h2><p>Penalty balls off the tee are the whole story. Nothing else in my driving needs to change first.</p></div><div class="big"><span class="num num--lg"><span class="neg">−1.5</span></span><small>Strokes/rnd</small></div></div>
   </div>
-</footer>
-
-<script src="assets/js/site.js?v=f38dbc4ce4"></script>
-<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a7e1ae8552384ed28cf6cd992b1cf6b8"}'></script><!-- End Cloudflare Web Analytics -->
+</section>
+<section>
+  <div class="gcard ">
+<div class="statpair"><div><span class="lbl">Average drive</span><span class="num num--lg">241</span></div><div><span class="lbl">Longest</span><span class="num num--lg">340</span></div></div>
+  </div>
+</section>
+<section>
+  <div class="gcard ">
+<div class="statpair"><div><span class="lbl">Tee-shot penalties</span><span class="num num--lg">10</span></div><div><span class="lbl">Fairways</span><span class="num num--lg">41%</span></div></div>
+  </div>
+</section>
+</div><div class="gcol"><section>
+  <h2 class="gsect">What matters off the tee</h2>
+  <div class="gcard ">
+    <p style="margin:0;font-size:0.95rem">I hit 26 of 63 fairways (41%). That number barely matters: in Shot Scope’s data, fairway percentage is almost flat from scratch to a 20 handicap. What separates handicaps off the tee is the disaster rate, penalty balls and the spots you cannot advance from. The penalties alone cost about 2.4 strokes a round.</p>
+  </div>
+</section>
+</div></div>
+<p class="gnote">5 Arccos rounds, Apr to Jun 2026, 81 holes; strokes gained vs a scratch baseline calibrated to Arccos. I wear the sensors every round now, so this fills in as I play. Handicap and scoring history come from my GHIN record, updated daily. <a href="index.html">jackraney.com</a> · <a href="about.html">about me</a></p>
+</main>
 </body>
 </html>
