@@ -183,7 +183,8 @@ def write_if_changed(path, text):
 
 def sitemap():
     pages = sorted(os.path.relpath(p, ROOT) for p in glob.glob(os.path.join(ROOT, '*.html')) + glob.glob(os.path.join(ROOT, 'notes', '*.html'))
-                   if os.path.basename(p) != '404.html')
+                   if os.path.basename(p) != '404.html'
+                   and not os.path.basename(p).startswith('golf-'))  # golf deep pages stay unlisted by Jack's choice
     pages.sort(key=lambda p: p != 'index.html')
     urls = ''.join(f'  <url><loc>{canonical(p)}</loc></url>\n' for p in pages)
     return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n'

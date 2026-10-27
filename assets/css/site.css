@@ -1934,3 +1934,45 @@ input[type="range"]:active { cursor: grabbing; }
 
 /* ---------- home: timeline logos ---------- */
 .timeline .tl-logo { width: 1.5em; height: 1.5em; border-radius: 5px; vertical-align: -0.42em; margin-right: 0.55rem; box-shadow: 0 0 0 1px var(--rule); }
+
+/* ---------- golf section (build_golf.py; layout after Arccos's dashboard) ---------- */
+.golf-nav { display: flex; flex-wrap: wrap; gap: 0.35rem 1.1rem; margin-top: 1rem; font-family: var(--sans); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.golf-nav a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--link-line); }
+.golf-nav strong { color: var(--muted); }
+.gap-ledger { list-style: none; margin: 0; padding: 0; }
+.gap-ledger li { display: grid; grid-template-columns: 10.5rem minmax(0, 1fr) 3.6rem auto; gap: 1rem; align-items: center; padding: 0.75rem 0.9rem; border-bottom: 1px solid var(--rule); }
+.gap-ledger .cat { font-weight: 700; color: var(--ink); font-size: 0.95rem; text-decoration: none; }
+.gap-ledger .sg { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--ink); text-align: right; }
+.gap-ledger li.worst .sg { color: var(--signal); }
+.gap-ledger .open { font-family: var(--sans); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); text-decoration: none; white-space: nowrap; }
+.bar { display: block; height: 10px; background: var(--paper-3); border-radius: 2px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--accent); }
+.gap-ledger li.worst .bar i { background: var(--signal-fill); }
+.bar--table { width: 100%; min-width: 70px; }
+.bar--table i.pos { background: var(--blue); }
+.leaks { list-style: none; margin: 0 0 1.5rem; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.leaks li { display: flex; gap: 0.8rem; border: 1px solid var(--rule-2); border-radius: 3px; background: var(--card); padding: 1rem; }
+.leaks li > div { min-width: 0; flex: 1; }
+.leak__rank { font-family: var(--serif); font-size: 1.5rem; font-weight: 700; color: var(--signal); line-height: 1; }
+.leak__name { font-weight: 700; color: var(--ink); margin: 0 0 0.3rem; }
+.leak__gain { font-size: 0.9rem; color: var(--ink-2); margin: 0 0 0.55rem; }
+.leaks .bar i { background: var(--signal-fill); }
+.leak__basis { font-family: var(--sans); font-size: 0.75rem; color: var(--muted); margin: 0.45rem 0 0; }
+.figures.bands dd small { font-size: 0.65em; color: var(--muted); font-weight: 400; }
+.figures--5 { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0 1.5rem; }
+.miss-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; max-width: 26rem; margin: 0 auto; text-align: center; font-family: var(--sans); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+.miss { border: 1px solid var(--rule-2); border-radius: 3px; padding: 0.7rem 0.4rem; background: var(--card); }
+.miss b { display: block; font-family: var(--serif); font-size: 1.35rem; color: var(--ink); margin-top: 0.15rem; }
+.miss--long { grid-column: 2; }
+.miss--left { grid-column: 1; grid-row: 2; }
+.miss--gir { grid-column: 2; grid-row: 2; background: var(--accent); border-color: var(--accent-2); color: rgba(255, 255, 255, 0.8); }
+.miss--gir b { color: #fff; }
+.miss--right { grid-column: 3; grid-row: 2; }
+.miss--short { grid-column: 2; grid-row: 3; }
+@media (max-width: 720px) {
+  .leaks { grid-template-columns: minmax(0, 1fr); }
+  .figures--5 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.8rem 1.5rem; }
+  .gap-ledger li { grid-template-columns: minmax(0, 1fr) 3.6rem; row-gap: 0.4rem; padding-inline: 0; }
+  .gap-ledger .bar { grid-column: 1 / -1; grid-row: 2; }
+  .gap-ledger .open { display: none; }
+}

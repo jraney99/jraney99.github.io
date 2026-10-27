@@ -1,0 +1,280 @@
+{
+ "updated": "2026-10-27",
+ "source": "5 Arccos rounds, Apr to Jun 2026, 81 holes; strokes gained vs a scratch baseline calibrated to Arccos",
+ "rounds_n": 5,
+ "holes": 81,
+ "scoring": {
+  "avg18": 85.8,
+  "vs_par": 14.8,
+  "bands": {
+   "eagle": 1,
+   "birdie": 4,
+   "par": 29,
+   "bogey": 30,
+   "double+": 17
+  },
+  "by_par": {
+   "3": 0.7,
+   "4": 1.0,
+   "5": 0.2
+  },
+  "par4_by_length": {
+   "350-420": 1.0,
+   "<350": 0.4,
+   ">420": 1.7
+  }
+ },
+ "sg": {
+  "per_round": {
+   "driving": -1.5,
+   "approach": -3.2,
+   "short": -4.2,
+   "putting": -1.2
+  },
+  "total": -10.1,
+  "focus": "short"
+ },
+ "leaks": [
+  {
+   "name": "Driving penalties",
+   "per_round": -2.4,
+   "share": 43,
+   "basis": "10 tee-shot penalties; each costs the stroke plus position"
+  },
+  {
+   "name": "0-20 yd short game",
+   "per_round": -2.0,
+   "share": 35,
+   "basis": "34 shots"
+  },
+  {
+   "name": "20-35 yd short game",
+   "per_round": -1.2,
+   "share": 22,
+   "basis": "21 shots"
+  }
+ ],
+ "driving": {
+  "penalties": 14,
+  "sg_round": -1.5,
+  "avg_yd": 241,
+  "longest_yd": 340,
+  "fairways": {
+   "hit": 26,
+   "of": 63
+  }
+ },
+ "approach": {
+  "sg_round": -3.2,
+  "buckets": {
+   "50-75": {
+    "shots": 7,
+    "sg_round": -0.4
+   },
+   "75-100": {
+    "shots": 12,
+    "sg_round": -1.0
+   },
+   "100-125": {
+    "shots": 10,
+    "sg_round": -0.6
+   },
+   "125-150": {
+    "shots": 19,
+    "sg_round": -1.1
+   },
+   "150-175": {
+    "shots": 14,
+    "sg_round": -0.1
+   },
+   "175-200": {
+    "shots": 13,
+    "sg_round": -0.6
+   },
+   "200+": {
+    "shots": 16,
+    "sg_round": 0.6
+   }
+  },
+  "gir_pct": 33,
+  "miss_dir": {
+   "long": 6,
+   "left": 12,
+   "right": 7,
+   "short": 26
+  },
+  "prox_gir_ft": 27,
+  "prox_all_ft": 63,
+  "dispersion": {
+   "lateral_sd": 15.5,
+   "depth_sd": 16.7,
+   "tendency": "left, short"
+  }
+ },
+ "short": {
+  "sg_round": -4.2,
+  "buckets": {
+   "0-20": {
+    "shots": 34,
+    "sg_round": -2.0
+   },
+   "20-35": {
+    "shots": 21,
+    "sg_round": -1.2
+   },
+   "35-50": {
+    "shots": 12,
+    "sg_round": -1.0
+   }
+  },
+  "updown": {
+   "made": 9,
+   "of": 47
+  },
+  "dispersion": {
+   "lateral_sd": 8.2,
+   "depth_sd": 13.2,
+   "tendency": "center, pin high"
+  }
+ },
+ "putting": {
+  "sg_round": -1.2,
+  "putts_round": 28.8,
+  "buckets": {
+   "0-3": {
+    "n": 10,
+    "made_pct": 90,
+    "sg_round": -0.1,
+    "scratch_pct": 96
+   },
+   "3-5": {
+    "n": 3,
+    "made_pct": 33,
+    "sg_round": -0.3,
+    "scratch_pct": 76
+   },
+   "5-10": {
+    "n": 15,
+    "made_pct": 33,
+    "sg_round": -0.5,
+    "scratch_pct": 48
+   },
+   "10-15": {
+    "n": 14,
+    "made_pct": 14,
+    "sg_round": -0.4,
+    "scratch_pct": 23
+   },
+   "15-25": {
+    "n": 17,
+    "made_pct": 24,
+    "sg_round": 0.4,
+    "scratch_pct": 12
+   },
+   "25-40": {
+    "n": 13,
+    "made_pct": 15,
+    "sg_round": 0.3,
+    "scratch_pct": 6
+   },
+   "40+": {
+    "n": 8,
+    "made_pct": 0,
+    "sg_round": -0.3,
+    "scratch_pct": 3
+   }
+  },
+  "lag": {
+   "10-20": {
+    "n": 23,
+    "avg_leave_ft": 1.6,
+    "inside3_pct": 96
+   },
+   "20-30": {
+    "n": 17,
+    "avg_leave_ft": 2.0,
+    "inside3_pct": 88
+   },
+   "30-40": {
+    "n": 4,
+    "avg_leave_ft": 4.5,
+    "inside3_pct": 50
+   },
+   "40+": {
+    "n": 8,
+    "avg_leave_ft": 14.6,
+    "inside3_pct": 38
+   }
+  },
+  "three_putts": 8,
+  "three_putt_first_ft": 39,
+  "two_putt_first_ft": 19
+ },
+ "rounds": [
+  {
+   "date": "2026-06-04",
+   "course": "Castlewood CC - Hill",
+   "score": 82,
+   "par": 70,
+   "holes": 18,
+   "sg": {
+    "driving": -2.0,
+    "approach": -3.7,
+    "short": -1.1,
+    "putting": -2.2
+   }
+  },
+  {
+   "date": "2026-05-09",
+   "course": "TPC at Las Colinas",
+   "score": 87,
+   "par": 70,
+   "holes": 18,
+   "sg": {
+    "driving": -2.8,
+    "approach": -1.0,
+    "putting": 1.3,
+    "short": -8.7
+   }
+  },
+  {
+   "date": "2026-04-29",
+   "course": "Sherrill Park GC - Two",
+   "score": 39,
+   "par": 35,
+   "holes": 9,
+   "sg": {
+    "driving": -1.1,
+    "approach": -0.7,
+    "short": -0.3,
+    "putting": -1.7
+   }
+  },
+  {
+   "date": "2026-04-23",
+   "course": "Bear Creek GC - West",
+   "score": 83,
+   "par": 72,
+   "holes": 18,
+   "sg": {
+    "driving": -2.4,
+    "approach": -5.3,
+    "short": -2.7,
+    "putting": 0.6
+   }
+  },
+  {
+   "date": "2026-04-15",
+   "course": "Texas Rangers GC",
+   "score": 91,
+   "par": 72,
+   "holes": 18,
+   "sg": {
+    "driving": 0.8,
+    "approach": -5.2,
+    "short": -8.4,
+    "putting": -3.9
+   }
+  }
+ ]
+}
