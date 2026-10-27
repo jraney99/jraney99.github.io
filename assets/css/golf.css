@@ -247,3 +247,7 @@
   .num--xl { font-size: 2.8rem; }
   .bands .num--lg { font-size: 1.45rem; }
 }
+
+/* trackman: neutral metric bars (no gained/lost meaning) */
+.rbar i.neu { background: var(--ink-2); }
+.sample-chip { display: inline-block; border: 1px solid var(--signal); color: var(--signal); border-radius: 999px; font-family: var(--sans); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.04em; padding: 0.32rem 0.8rem; margin-bottom: 1.1rem; }

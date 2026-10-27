@@ -411,14 +411,48 @@ def page_rounds(stats, g):
 
 
 def page_practice(stats, g):
-    return card('TrackMan practice data',
-                '    <p style="margin:0 0 0.8rem;font-size:0.95rem">This page is waiting on its data. I practice on a TrackMan '
-                'simulator, and each session’s shots, club speed, ball speed, smash factor, carry and dispersion per club, '
-                'will land here: a true gapping chart from measured carries, and each club’s spread mapped the same way the '
-                'approach page maps my on-course misses.</p>'
-                '    <p style="margin:0;font-size:0.95rem">The point of putting practice next to play is the loop: if four weeks '
-                'of wedge work don’t move my proximity from 75–125 yards on the course, it was the wrong practice. '
-                'This page will show both sides.</p>')
+    """The TrackMan tab. SAMPLE numbers (clearly flagged on the page) until the first
+    real TPS export lands; the parser will then feed data/trackman.json and this
+    function switches to it."""
+    gap = [('Dr', 282, 9), ('3w', 258, 8), ('2i', 240, 8), ('4i', 222, 7), ('5i', 212, 6), ('6i', 200, 6),
+           ('7i', 188, 5), ('8i', 176, 5), ('9i', 164, 5), ('Pw', 150, 4), ('50\u00b0', 136, 4),
+           ('54\u00b0', 120, 4), ('58\u00b0', 105, 4)]
+    gap_rows = ''.join(drow(c, rbar(v / 300, 'neu'), f'\u00b1{s} yd', f'{v}') for c, v, s in gap)
+    disp = [('Dr', 24, 'right'), ('3w', 19, 'right'), ('5i', 13, 'straight'), ('7i', 9, 'straight'),
+            ('Pw', 6, 'left'), ('58\u00b0', 4, 'straight')]
+    disp_rows = ''.join(drow(c, rbar(v / 30, '' if v > 15 else 'ok'), f'misses {t}', f'\u00b1{v}')
+                        for c, v, t in disp)
+    wedge = ('    <div class="table-wrap"><table class="gtable"><thead><tr><th>Club</th><th>1/2</th><th>3/4</th><th>Full</th></tr></thead><tbody>'
+             '<tr><td>Pw</td><td>96</td><td>124</td><td class="num num--md">150</td></tr>'
+             '<tr><td>50\u00b0</td><td>88</td><td>114</td><td class="num num--md">136</td></tr>'
+             '<tr><td>54\u00b0</td><td>76</td><td>101</td><td class="num num--md">120</td></tr>'
+             '<tr><td>58\u00b0</td><td>62</td><td>88</td><td class="num num--md">105</td></tr>'
+             '</tbody></table></div>\n    <p class="vs-note">Carries in yards; the matrix my 75\u2013125 yd approach bucket trains against</p>')
+    sessions = [('Nov 12', 'Wedge block', '84 balls'), ('Nov 8', 'Driver corridor', '52 balls'),
+                ('Nov 5', 'Gapping check', '96 balls'), ('Nov 2', 'Wedge block', '74 balls')]
+    sess_rows = ''.join(f'<li><span class="course"><b>{t}</b><small>{d} \u00b7 {b}</small></span>'
+                        f'<span class="score"><span class="num num--md">\u2192</span></span></li>'
+                        for d, t, b in sessions)
+    loop = ('    <ul class="leaks">'
+            '<li><span class="leak__rank">1</span><div><p class="leak__name">Driving penalties \u2194 driver corridor</p>'
+            '<p class="leak__gain">On-course leak: 2.4 strokes a round. Practice target: two-thirds of drives inside \u00b118 yd.</p>'
+            + rbar(0.75) + '<p class="leak__basis">Currently \u00b124 yd \u00b7 sample</p></div></li>'
+            '<li><span class="leak__rank">2</span><div><p class="leak__name">Short game \u2194 wedge matrix</p>'
+            '<p class="leak__gain">On-course leak: 3.2 strokes inside 50 yd. Practice target: half-swing carries within \u00b14 yd.</p>'
+            + rbar(0.55) + '<p class="leak__basis">Currently \u00b16 yd \u00b7 sample</p></div></li></ul>')
+    left = (card('', statpair('Sessions, 30 days', '6', 'Balls hit', '412')
+                 + '\n    ' + statpair('Driver ball speed', '167 mph', 'Smash factor', '1.48').replace('statpair', 'statpair" style="margin-top:1rem'))
+            + card('Session log', f'    <ul class="rounds-list" style="margin-top:0">{sess_rows}</ul>'
+                   '\n    <p class="vs-note">Each session will open its own page, like a round</p>')
+            + card('Practice against play', loop))
+    mid = card('Gapping: carry per club', f'    <ul class="drows">{gap_rows}</ul>'
+               '\n    <p class="vs-note">Median carry \u00b7 spread across recorded swings</p>')
+    right = (card('Dispersion: left-right spread', f'    <ul class="drows">{disp_rows}</ul>'
+                  '\n    <p class="vs-note">Clubs open their own pages: every swing, drawn out</p>')
+             + card('Wedge matrix', wedge))
+    chip = '<p><span class="sample-chip">Preview \u00b7 sample numbers until my first TrackMan session lands</span></p>'
+    return chip + f'<div class="ggrid3"><div class="gcol">{left}</div><div class="gcol">{mid}</div><div class="gcol">{right}</div></div>'
+
 
 
 SUBPAGES = {
