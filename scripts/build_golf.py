@@ -187,8 +187,6 @@ def briefing(stats, g):
     idx = g['revisions'][-1]['index']
     r18 = [r for r in (g.get('recent_rounds') or []) if r.get('holes') == 18 and r.get('score')]
     avg = sum(r['score'] for r in r18) / len(r18) if r18 else None
-    top2 = sum(abs(l['per_round']) for l in leaks[:2])
-    share = round(top2 / gap * 100) if gap else 0
 
     d, a, sh, p = stats['driving'], stats['approach'], stats['short'], stats['putting']
     rounds18 = stats['holes'] / 18
@@ -391,8 +389,11 @@ def page_driving(stats, g):
     d = stats['driving']
     fw = d['fairways']
     pen_leak = next((l for l in stats.get('leaks', []) if 'penalt' in l['name'].lower()), None)
-    focus_line = (f'Penalty balls off the tee cost about {abs(pen_leak["per_round"]):.1f} strokes a round, '
-                  f'which is the largest single thing in my game right now.' if pen_leak else
+    leaks_ = stats.get('leaks') or []
+    first = bool(leaks_) and leaks_[0] is pen_leak
+    focus_line = (f'Penalty balls off the tee cost about {abs(pen_leak["per_round"]):.1f} strokes a round'
+                  + (', the largest single thing in my game right now.' if first else
+                     f', ranked {leaks_.index(pen_leak) + 1} of the things worth fixing.') if pen_leak else
                   'Penalties off the tee are no longer clearing the bar as a measured leak. '
                   'Distance and dispersion are what is left here.')
     left = (focus_card('off the tee', focus_line, sg(d['sg_round']), 'Strokes/rnd')
@@ -433,7 +434,9 @@ def page_driving(stats, g):
                  f'    <p style="margin:0;font-size:0.95rem">I hit {fw["hit"]} of {fw["of"]} fairways ({fw["hit"] / fw["of"]:.0%}). '
                  'That number barely matters: in Shot Scope’s data, fairway percentage is almost flat from scratch to a '
                  '20 handicap. What separates handicaps off the tee is the disaster rate, penalty balls and the spots you '
-                 f'cannot advance from. The penalties alone cost about {abs(stats["leaks"][0]["per_round"]):.1f} strokes a round.</p>'))
+                 + (f'The penalties alone cost about {abs(pen_leak["per_round"]):.1f} strokes a round.'
+                    if pen_leak else 'Penalties are not clearing the bar as a measured leak right now.')
+                 + '</p>'))
     return f'<div class="ggrid"><div class="gcol">{left}</div><div class="gcol">{right}</div></div>'
 
 
@@ -461,12 +464,16 @@ def page_approach(stats, g):
 
 def page_short(stats, g):
     s = stats['short']
-    ud = s['updown']
+    ud = s.get('updown_greenside') or s['updown']
+    pitch = s.get('updown_pitch') or {}
     disp = s.get('dispersion') or {}
     rows = ''.join(drow(f'{b}', rbar(abs(v['sg_round']) / 2.5, 'ok' if v['sg_round'] > 0 else ''),
                         f'{v["shots"]} shots', sg(v['sg_round']), v.get('thin')) for b, v in s['buckets'].items())
-    left = (focus_card('inside 50 yards', 'My biggest gap to scratch. A scratch player gets up and down just over half the time; '
-                       f'I’m at {ud["made"] / ud["of"]:.0%} on these rounds.', sg(s['sg_round']), 'Strokes/rnd')
+    ud_pct = (ud['made'] / ud['of']) if ud.get('of') else 0
+    focus_line = (f'A scratch player gets up and down a little over half the time from inside 30 yards. '
+                  f'I’m at {ud_pct:.0%} ({ud["made"]} of {ud["of"]})'
+                  + (f', and {pitch["made"]} of {pitch["of"]} from 30 to 50.' if pitch.get('of') else '.'))
+    left = (focus_card('inside 50 yards', focus_line, sg(s['sg_round']), 'Strokes/rnd')
             + card('', statpair('Up and down, inside 30 yd',
                                 f'{(s.get("updown_greenside") or ud)["made"]}/{(s.get("updown_greenside") or ud)["of"]}',
                                 'Usual miss', (disp.get('tendency') or '?').title())))
@@ -626,7 +633,7 @@ SUBPAGES = {
     'golf-driving.html': ('Driving', 'Off the tee: distance, penalties and the misses that cost strokes.', page_driving),
     'golf-approach.html': ('Approach', 'Approach play by distance: strokes gained, proximity and greens hit, against scratch.', page_approach),
     'golf-short-game.html': ('Short game', 'Inside 50 yards: up and down rate and where strokes leak around the green.', page_short),
-    'golf-putting.html': ('Putting', 'Make rates by distance against a scratch player, lag putting and the three-putt autopsy.', page_putting),
+    'golf-putting.html': ('Putting', 'Make rates by distance against a scratch player, and what precedes a three-putt.', page_putting),
     'golf-rounds.html': ('Rounds & scoring', 'Every sensor-tracked round, and scoring by hole type and length.', page_rounds),
     'golf-trackman.html': ('TrackMan', 'Every practice session on TrackMan: speeds, carries, gapping and dispersion per club.', page_practice),
 }
@@ -634,7 +641,12 @@ SUBPAGES = {
 
 def write_page(fname, title, ogtitle, desc, content, g, stats):
     index = g['revisions'][-1]['index']
-    note = (f'{stats["source"]}. I wear the sensors every round now, so this fills in as I play. ' if stats else '')
+    note = (f'{stats["source"]} I wear the sensors every round now, so this fills in as I play. ' if stats else '')
+    excluded = ((stats or {}).get('quality') or {}).get('excluded_rounds') or []
+    if excluded:
+        note += (f'{len(excluded)} round{"" if len(excluded) == 1 else "s"} '
+                 f'({", ".join(excluded)}) {"is" if len(excluded) == 1 else "are"} left out because the '
+                 f'shot data does not match the scorecard. ')
     note += (f'Handicap and scoring history come from my GHIN record, updated daily. '
              f'<a href="index.html">jackraney.com</a> · <a href="about.html">about me</a>')
     html = SHELL.format(title=title, ogtitle=ogtitle, desc=desc, slug=fname.replace('.html', ''),
