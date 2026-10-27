@@ -27,30 +27,30 @@
  "sg": {
   "per_round": {
    "driving": -1.5,
-   "approach": -3.2,
+   "approach": -3.1,
    "short": -4.2,
    "putting": -1.2
   },
-  "total": -10.1,
+  "total": -10.0,
   "focus": "short"
  },
  "leaks": [
   {
    "name": "Driving penalties",
-   "per_round": -2.4,
-   "share": 43,
+   "per_round": -2.7,
+   "share": 46,
    "basis": "10 tee-shot penalties; each costs the stroke plus position"
   },
   {
    "name": "0-20 yd short game",
-   "per_round": -2.0,
-   "share": 35,
+   "per_round": -1.9,
+   "share": 33,
    "basis": "34 shots"
   },
   {
    "name": "20-35 yd short game",
    "per_round": -1.2,
-   "share": 22,
+   "share": 21,
    "basis": "21 shots"
   }
  ],
@@ -68,7 +68,7 @@
   }
  },
  "approach": {
-  "sg_round": -3.2,
+  "sg_round": -3.1,
   "buckets": {
    "50-75": {
     "shots": 7,
@@ -80,7 +80,7 @@
    },
    "100-125": {
     "shots": 10,
-    "sg_round": -0.6
+    "sg_round": -0.7
    },
    "125-150": {
     "shots": 19,
@@ -88,7 +88,7 @@
    },
    "150-175": {
     "shots": 14,
-    "sg_round": -0.1
+    "sg_round": 0.0
    },
    "175-200": {
     "shots": 13,
@@ -96,18 +96,18 @@
    },
    "200+": {
     "shots": 16,
-    "sg_round": 0.6
+    "sg_round": 0.7
    }
   },
   "gir_pct": 33,
   "miss_dir": {
    "long": 6,
-   "left": 12,
+   "left": 11,
    "right": 7,
-   "short": 26
+   "short": 25
   },
-  "prox_gir_ft": 27,
-  "prox_all_ft": 63,
+  "prox_gir_ft": 26,
+  "prox_all_ft": 46,
   "dispersion": {
    "lateral_sd": 15.5,
    "depth_sd": 16.7,
@@ -119,7 +119,7 @@
   "buckets": {
    "0-20": {
     "shots": 34,
-    "sg_round": -2.0
+    "sg_round": -1.9
    },
    "20-35": {
     "shots": 21,
@@ -127,7 +127,7 @@
    },
    "35-50": {
     "shots": 12,
-    "sg_round": -1.0
+    "sg_round": -1.1
    }
   },
   "updown": {
@@ -142,7 +142,7 @@
  },
  "putting": {
   "sg_round": -1.2,
-  "putts_round": 28.8,
+  "putts_round": 32.0,
   "buckets": {
    "0-3": {
     "n": 10,
@@ -159,19 +159,19 @@
    "5-10": {
     "n": 15,
     "made_pct": 33,
-    "sg_round": -0.5,
+    "sg_round": -0.6,
     "scratch_pct": 48
    },
    "10-15": {
     "n": 14,
     "made_pct": 14,
-    "sg_round": -0.4,
+    "sg_round": -0.5,
     "scratch_pct": 23
    },
    "15-25": {
     "n": 17,
     "made_pct": 24,
-    "sg_round": 0.4,
+    "sg_round": 0.5,
     "scratch_pct": 12
    },
    "25-40": {
@@ -183,7 +183,7 @@
    "40+": {
     "n": 8,
     "made_pct": 0,
-    "sg_round": -0.3,
+    "sg_round": -0.4,
     "scratch_pct": 3
    }
   },
@@ -221,10 +221,10 @@
    "par": 70,
    "holes": 18,
    "sg": {
-    "driving": -2.0,
-    "approach": -3.7,
-    "short": -1.1,
-    "putting": -2.2
+    "driving": -1.8,
+    "approach": -3.3,
+    "short": -0.6,
+    "putting": -2.1
    }
   },
   {
@@ -234,10 +234,10 @@
    "par": 70,
    "holes": 18,
    "sg": {
-    "driving": -2.8,
-    "approach": -1.0,
-    "putting": 1.3,
-    "short": -8.7
+    "driving": -2.6,
+    "approach": -0.5,
+    "putting": 1.4,
+    "short": -8.3
    }
   },
   {
@@ -247,9 +247,9 @@
    "par": 35,
    "holes": 9,
    "sg": {
-    "driving": -1.1,
-    "approach": -0.7,
-    "short": -0.3,
+    "driving": -1.0,
+    "approach": -0.5,
+    "short": -0.0,
     "putting": -1.7
    }
   },
@@ -260,10 +260,10 @@
    "par": 72,
    "holes": 18,
    "sg": {
-    "driving": -2.4,
-    "approach": -5.3,
-    "short": -2.7,
-    "putting": 0.6
+    "driving": -2.2,
+    "approach": -5.0,
+    "short": -2.1,
+    "putting": 0.7
    }
   },
   {
@@ -273,10 +273,10 @@
    "par": 72,
    "holes": 18,
    "sg": {
-    "driving": 0.8,
-    "approach": -5.2,
-    "short": -8.4,
-    "putting": -3.9
+    "driving": 0.9,
+    "approach": -4.8,
+    "short": -7.9,
+    "putting": -3.8
    }
   }
  ]
