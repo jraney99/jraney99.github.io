@@ -1926,3 +1926,8 @@ input[type="range"]:active { cursor: grabbing; }
 .prose figure.file figcaption { font-family: var(--sans); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.02em; color: var(--muted); padding: 0.5rem 0.9rem; border-bottom: 1px solid var(--rule); }
 .prose figure.file pre { margin: 0; padding: 0.9rem; overflow-x: auto; font-family: "Overpass Mono", ui-monospace, Menlo, monospace; font-size: 0.82rem; line-height: 1.55; white-space: pre-wrap; word-break: break-word; color: var(--ink); }
 .prose .layer { font-family: var(--sans); font-size: 0.8rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: -0.4rem; }
+
+/* ---------- audio readings (build_audio.py adds the player when a recording exists) ---------- */
+.audio-note { margin: 0 0 1.75rem; }
+.audio-note p { font-family: var(--sans); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.02em; color: var(--muted); margin: 0 0 0.45rem; }
+.audio-note audio { display: block; width: 100%; max-width: 30rem; }

@@ -57,6 +57,9 @@ jobs:
       - name: Rebuild writing page and weekly posts
         run: python scripts/build_writing.py
 
+      - name: Add audio players where a recording exists
+        run: python scripts/build_audio.py
+
       - name: Yearly ERCOT refresh (only does work once a new full year is published)
         if: github.event_name != 'push'
         run: |
