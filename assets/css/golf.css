@@ -260,3 +260,7 @@
 .plan .body { min-width: 0; font-size: 0.92rem; }
 .plan .body b { color: var(--ink); }
 .plan .tgt { display: block; margin-top: 0.3rem; font-family: var(--sans); font-size: 0.76rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--lose-hard); }
+
+/* a bucket with too little data behind it: visible, but never presented as a finding */
+.drows li.thin { opacity: 0.55; }
+.drows li.thin .val { font-weight: 400; }

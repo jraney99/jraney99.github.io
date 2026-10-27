@@ -179,9 +179,9 @@ def briefing(stats, g):
     rounds18 = stats['holes'] / 18
     pens_round = d['tee_penalties'] / rounds18
     ud_pct = round(sh['updown']['made'] / sh['updown']['of'] * 100) if sh['updown']['of'] else 0
-    worst_app = min(a['buckets'], key=lambda b: a['buckets'][b]['sg_round']) if a['buckets'] else None
-    app_spread = (max(abs(v['sg_round']) for v in a['buckets'].values())
-                  if a['buckets'] else 0)
+    solid_app = {b: v for b, v in a['buckets'].items() if not v.get('thin')}
+    worst_app = min(solid_app, key=lambda b: solid_app[b]['sg_round']) if solid_app else None
+    app_spread = (max(abs(v['sg_round']) for v in solid_app.values()) if solid_app else 0)
 
     story = []
     story.append(f'<b>{share}% of the gap is in two places:</b> {leaks[0]["name"].lower()} '
@@ -342,8 +342,11 @@ def focus_card(title, text, big_val, big_lbl):
                      f'<div class="big"><span class="num num--lg">{big_val}</span><small>{big_lbl}</small></div></div>'))
 
 
-def drow(frm, bar, n, val):
-    return f'<li><span class="from">{frm}</span>{bar}<span class="n">{n}</span><span class="val">{val}</span></li>'
+def drow(frm, bar, n, val, thin=False):
+    cls = ' class="thin"' if thin else ''
+    note = ' · too few to read' if thin else ''
+    return (f'<li{cls}><span class="from">{frm}</span>{bar}<span class="n">{n}{note}</span>'
+            f'<span class="val">{val}</span></li>')
 
 
 def page_driving(stats, g):
@@ -372,7 +375,7 @@ def page_driving(stats, g):
 def page_approach(stats, g):
     a = stats['approach']
     rows = ''.join(drow(f'{b}', rbar(abs(v['sg_round']) / 2.5, 'ok' if v['sg_round'] > 0 else ''),
-                        f'{v["shots"]} shots', sg(v['sg_round'])) for b, v in a['buckets'].items())
+                        f'{v["shots"]} shots', sg(v['sg_round']), v.get('thin')) for b, v in a['buckets'].items())
     m, disp = a['miss_dir'], a.get('dispersion') or {}
     missgrid = (f'    <div class="miss-grid">'
                 f'<span class="miss miss--long">Long<b>{m["long"]}</b></span>'
@@ -396,7 +399,7 @@ def page_short(stats, g):
     ud = s['updown']
     disp = s.get('dispersion') or {}
     rows = ''.join(drow(f'{b}', rbar(abs(v['sg_round']) / 2.5, 'ok' if v['sg_round'] > 0 else ''),
-                        f'{v["shots"]} shots', sg(v['sg_round'])) for b, v in s['buckets'].items())
+                        f'{v["shots"]} shots', sg(v['sg_round']), v.get('thin')) for b, v in s['buckets'].items())
     left = (focus_card('inside 50 yards', 'My biggest gap to scratch. A scratch player gets up and down just over half the time; '
                        f'I’m at {ud["made"] / ud["of"]:.0%} on these rounds.', sg(s['sg_round']), 'Strokes/rnd')
             + card('', statpair('Up and down', f'{ud["made"]}/{ud["of"]}', 'Usual miss', (disp.get('tendency') or '?').title())))
@@ -406,21 +409,24 @@ def page_short(stats, g):
 
 def page_putting(stats, g):
     p = stats['putting']
-    worst = min(p['buckets'], key=lambda b: p['buckets'][b]['sg_round'])
+    solid = {b: v for b, v in p['buckets'].items() if not v.get('thin')} or p['buckets']
+    worst = min(solid, key=lambda b: solid[b]['sg_round'])
     sg_rows = ''.join(drow(f"{b}'", rbar(abs(v['sg_round']) / 1.5, 'ok' if v['sg_round'] > 0 else ''),
-                           f'{v["n"]} putts', sg(v['sg_round'])) for b, v in p['buckets'].items())
+                           f'{v["n"]} putts', sg(v['sg_round']), v.get('thin')) for b, v in p['buckets'].items())
     make_rows = []
     for b, v in p['buckets'].items():
         delta = v['made_pct'] - (v['scratch_pct'] or 0)
         cls = 'pos' if delta > 0 else 'neg'
         make_rows.append(drow(f"{b}'", rbar(v['made_pct'] / 100, 'ok' if delta >= 0 else '', tick=v['scratch_pct']),
-                              '', f'<span class="{cls}">{v["made_pct"]}% ({delta:+d}%)</span>'))
+                              f'{v["n"]} putts', f'<span class="{cls}">{v["made_pct"]}% ({delta:+d}%)</span>',
+                              v.get('thin')))
     lag_rows = []
     for b, v in p['lag'].items():
         good = v['avg_leave_ft'] <= 3
         lag_rows.append(drow(f"{b}'", rbar(min(v['avg_leave_ft'] / 15, 1), 'ok' if good else ''),
                              f'{v["n"]} holes · {v["inside3_pct"]}% inside 3′',
-                             f'<span class="{"pos" if good else "neg"}">{v["avg_leave_ft"]}′</span>'))
+                             f'<span class="{"pos" if good else "neg"}">{v["avg_leave_ft"]}′</span>',
+                             v.get('thin')))
     autopsy = card('3-putt autopsy',
                    '    <div class="autopsy"><div class="autopsy-bar"><i style="width:100%">100%</i></div>'
                    '<p class="legend"><span><i style="background:var(--red)"></i>Poor lag (' + str(p['three_putts']) + ')</span>'

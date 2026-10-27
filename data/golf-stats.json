@@ -73,31 +73,38 @@
   "buckets": {
    "50-75": {
     "shots": 7,
-    "sg_round": -0.4
+    "sg_round": -0.4,
+    "thin": true
    },
    "75-100": {
     "shots": 12,
-    "sg_round": -1.0
+    "sg_round": -1.0,
+    "thin": false
    },
    "100-125": {
     "shots": 10,
-    "sg_round": -0.7
+    "sg_round": -0.7,
+    "thin": false
    },
    "125-150": {
     "shots": 19,
-    "sg_round": -1.1
+    "sg_round": -1.1,
+    "thin": false
    },
    "150-175": {
     "shots": 14,
-    "sg_round": 0.0
+    "sg_round": 0.0,
+    "thin": false
    },
    "175-200": {
     "shots": 13,
-    "sg_round": -0.6
+    "sg_round": -0.6,
+    "thin": false
    },
    "200+": {
     "shots": 16,
-    "sg_round": 0.7
+    "sg_round": 0.7,
+    "thin": false
    }
   },
   "gir_pct": 33,
@@ -120,15 +127,18 @@
   "buckets": {
    "0-20": {
     "shots": 34,
-    "sg_round": -1.9
+    "sg_round": -1.9,
+    "thin": false
    },
    "20-35": {
     "shots": 21,
-    "sg_round": -1.2
+    "sg_round": -1.2,
+    "thin": false
    },
    "35-50": {
     "shots": 12,
-    "sg_round": -1.1
+    "sg_round": -1.1,
+    "thin": false
    }
   },
   "updown": {
@@ -149,65 +159,76 @@
     "n": 10,
     "made_pct": 90,
     "sg_round": -0.1,
-    "scratch_pct": 96
+    "scratch_pct": 96,
+    "thin": false
    },
    "3-5": {
     "n": 3,
     "made_pct": 33,
     "sg_round": -0.3,
-    "scratch_pct": 76
+    "scratch_pct": 76,
+    "thin": true
    },
    "5-10": {
     "n": 15,
     "made_pct": 33,
     "sg_round": -0.6,
-    "scratch_pct": 48
+    "scratch_pct": 48,
+    "thin": false
    },
    "10-15": {
     "n": 14,
     "made_pct": 14,
     "sg_round": -0.5,
-    "scratch_pct": 23
+    "scratch_pct": 23,
+    "thin": false
    },
    "15-25": {
     "n": 17,
     "made_pct": 24,
     "sg_round": 0.5,
-    "scratch_pct": 12
+    "scratch_pct": 12,
+    "thin": false
    },
    "25-40": {
     "n": 13,
     "made_pct": 15,
     "sg_round": 0.3,
-    "scratch_pct": 6
+    "scratch_pct": 6,
+    "thin": false
    },
    "40+": {
     "n": 8,
     "made_pct": 0,
     "sg_round": -0.4,
-    "scratch_pct": 3
+    "scratch_pct": 3,
+    "thin": false
    }
   },
   "lag": {
    "10-20": {
     "n": 23,
     "avg_leave_ft": 1.6,
-    "inside3_pct": 96
+    "inside3_pct": 96,
+    "thin": false
    },
    "20-30": {
     "n": 17,
     "avg_leave_ft": 2.0,
-    "inside3_pct": 88
+    "inside3_pct": 88,
+    "thin": false
    },
    "30-40": {
     "n": 4,
     "avg_leave_ft": 4.5,
-    "inside3_pct": 50
+    "inside3_pct": 50,
+    "thin": true
    },
    "40+": {
     "n": 8,
     "avg_leave_ft": 14.6,
-    "inside3_pct": 38
+    "inside3_pct": 38,
+    "thin": false
    }
   },
   "three_putts": 8,
@@ -280,5 +301,10 @@
     "putting": -3.8
    }
   }
- ]
+ ],
+ "quality": {
+  "thin_below": 8,
+  "checked": true,
+  "problems": []
+ }
 }
