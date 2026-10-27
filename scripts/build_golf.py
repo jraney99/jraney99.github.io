@@ -178,7 +178,11 @@ SCRATCH = {'gir_pct': 52, 'updown_pct': 54, 'putts': 29.9, 'three_putts': 0.8}
 def briefing(stats, g):
     """The whole game in one card: where the strokes are, and what to do about it.
     Every sentence is generated from the data, so it cannot go stale."""
-    sg, leaks = stats['sg'], stats['leaks']
+    sg, leaks = stats['sg'], (stats.get('leaks') or [])
+    if not leaks:
+        return card('The short version',
+                    '    <p style="margin:0;font-size:0.95rem">Not enough tracked rounds yet to say where '
+                    'the strokes go. Play a few with the sensors on and this fills in.</p>')
     gap = abs(sg['total'])
     idx = g['revisions'][-1]['index']
     r18 = [r for r in (g.get('recent_rounds') or []) if r.get('holes') == 18 and r.get('score')]
@@ -189,7 +193,9 @@ def briefing(stats, g):
     d, a, sh, p = stats['driving'], stats['approach'], stats['short'], stats['putting']
     rounds18 = stats['holes'] / 18
     pens_round = d['tee_penalties'] / rounds18
-    ud_pct = round(sh['updown']['made'] / sh['updown']['of'] * 100) if sh['updown']['of'] else 0
+    gs = sh.get('updown_greenside') or sh['updown']
+    ud_pct = round(gs['made'] / gs['of'] * 100) if gs.get('of') else 0
+    pitch = sh.get('updown_pitch') or {}
     solid_app = {b: v for b, v in a['buckets'].items() if not v.get('thin')}
     worst_app = min(solid_app, key=lambda b: solid_app[b]['sg_round']) if solid_app else None
     app_spread = (max(abs(v['sg_round']) for v in solid_app.values()) if solid_app else 0)
@@ -200,27 +206,33 @@ def briefing(stats, g):
     unsure = [names[c] for c in ('driving', 'approach', 'short', 'putting') if not decisive(ci.get(c))]
 
     story = []
-    story.append(f'<b>{share}% of the gap is in two places:</b> {leaks[0]["name"].lower()} '
-                 f'and {leaks[1]["name"].lower()}. Everything else is close enough to scratch to leave alone for now.')
-    if unsure:
-        join = lambda xs: xs[0] if len(xs) == 1 else ', '.join(xs[:-1]) + ' and ' + xs[-1]
-        story.append(f'Two of these are established and two are not. Over {stats["holes"]} holes, '
-                     f'{join(real)} {"is" if len(real) == 1 else "are"} measurably worse than scratch. '
-                     f'{join(unsure).capitalize()} {"is" if len(unsure) == 1 else "are"} not: the range still '
-                     f'includes zero, so I cannot tell {"it" if len(unsure) == 1 else "them"} apart from '
-                     f'scratch yet. More rounds would settle it.')
+    named = ' and '.join(l['name'].lower() for l in leaks[:2])
+    story.append(f'<b>The biggest {"two are" if len(leaks) > 1 else "one is"}:</b> {named}.')
+    join = lambda xs: xs[0] if len(xs) == 1 else ', '.join(xs[:-1]) + ' and ' + xs[-1]
+    if real:
+        story.append(f'Over {stats["holes"]} holes, {join(real)} '
+                     f'{"is" if len(real) == 1 else "are"} measurably worse than scratch.'
+                     + (f' {join(unsure).capitalize()} {"is" if len(unsure) == 1 else "are"} not: '
+                        f'{"its range" if len(unsure) == 1 else "their ranges"} still '
+                        f'{"includes" if len(unsure) == 1 else "include"} zero, so I cannot tell '
+                        f'{"it" if len(unsure) == 1 else "them"} apart from scratch yet.' if unsure else ''))
+    elif unsure:
+        story.append(f'Nothing here clears the bar yet: over {stats["holes"]} holes every category\u2019s '
+                     f'range still includes zero. These are directions, not findings.')
     story.append(f'You hit <b>{d["tee_penalties"]} penalty balls off the tee</b> across these rounds, about '
                  f'{pens_round:.1f} a round, and you pull driver on only {d["driver_shots"]} of '
                  f'{d["tee_shots"]} tee shots. Distance is not the problem: your driver carries a '
                  f'{d["driver_median_yd"]} yd median. Where the ball goes is.')
-    story.append(f'Inside 50 yards you get up and down <b>{ud_pct}% of the time</b>, against about '
-                 f'{SCRATCH["updown_pct"]}% for a scratch player. That one number is worth more than '
-                 f'anything else on this page.')
+    story.append(f'From inside 30 yards you get up and down <b>{ud_pct}% of the time</b> ({gs["made"]} of '
+                 f'{gs["of"]}), against about {SCRATCH["updown_pct"]}% for a scratch player. That is the '
+                 f'comparable number; wider definitions of scrambling flatter nobody.'
+                 + (f' From 30 to 50 yards you are {pitch["made"]} of {pitch["of"]}.'
+                    if pitch.get('of') else ''))
     if p['three_putts']:
-        story.append(f'Your putting is nearly scratch from every distance except the first one: all '
-                     f'<b>{p["three_putts"]} three-putts</b> came from a first putt averaging '
+        story.append(f'Your <b>{p["three_putts"]} three-putts</b> followed first putts averaging '
                      f'{p["three_putt_first_ft"]} ft, against {p["two_putt_first_ft"]} ft on holes you '
-                     f'two-putted. It is distance control, not stroke.')
+                     f'two-putted. Long first putts precede them. Whether the miss was the lag or the '
+                     f'one after it is not something the shot data records.')
     if worst_app and app_spread < 1.5:
         story.append(f'Approach is {sg["per_round"]["approach"]:+.1f} a round but spread evenly across the '
                      f'distances, with no single yardage standing out. You hit {a["gir_pct"]}% of greens '
@@ -261,8 +273,9 @@ def hero_card(stats, g):
         rows.append(f'<li><span class="course"><b>{name}</b><small>{sub}</small></span>'
                     f'<span class="score"><span class="num num--md">{r["score"]}</span>{dtxt}</span></li>')
     avg = sum(r['score'] for r in full18) / max(1, len(full18))
-    gap = f'I\u2019m {abs(stats["sg"]["total"]):.0f} strokes a round from my goal of scratch.' if stats else \
-          f'Scratch is 0.0. My index is {show(idx)}.'
+    gap = (f'On the {stats["rounds_n"]} rounds with shot data, which averaged '
+           f'{stats["scoring"]["avg18"]:.1f}, I was {abs(stats["sg"]["total"]):.0f} strokes a round from scratch.'
+           ) if stats else f'Scratch is 0.0. My index is {show(idx)}.'
     inner = (f'    <div class="hero-score"><span class="num num--xl">{avg:.1f}</span>'
              f'<span class="vs">avg of my last {len(full18)} posted rounds</span></div>\n'
              f'    <p class="goal-line">{gap}</p>\n'
@@ -377,11 +390,14 @@ def drow(frm, bar, n, val, thin=False):
 def page_driving(stats, g):
     d = stats['driving']
     fw = d['fairways']
-    left = (focus_card('driving penalties',
-                       'Penalty balls off the tee are the whole story. Nothing else in my driving needs to change first.',
-                       sg(d['sg_round']), 'Strokes/rnd')
+    pen_leak = next((l for l in stats.get('leaks', []) if 'penalt' in l['name'].lower()), None)
+    focus_line = (f'Penalty balls off the tee cost about {abs(pen_leak["per_round"]):.1f} strokes a round, '
+                  f'which is the largest single thing in my game right now.' if pen_leak else
+                  'Penalties off the tee are no longer clearing the bar as a measured leak. '
+                  'Distance and dispersion are what is left here.')
+    left = (focus_card('off the tee', focus_line, sg(d['sg_round']), 'Strokes/rnd')
             + card('', statpair('Driver, median', f'{d["driver_median_yd"]} yd', 'Longest', f'{d["driver_longest_yd"]} yd'))
-            + card('', statpair('Tee-shot penalties', stats['leaks'][0]['basis'].split()[0], 'Fairways', f'{fw["hit"] / fw["of"]:.0%}')))
+            + card('', statpair('Tee-shot penalties', d['tee_penalties'], 'Fairways', f'{fw["hit"] / fw["of"]:.0%}')))
     driver_pct = d['driver_shots'] / d['tee_shots'] if d['tee_shots'] else 0
     td = d.get('tee_decision') or {}
     tee_card = ''
@@ -451,7 +467,9 @@ def page_short(stats, g):
                         f'{v["shots"]} shots', sg(v['sg_round']), v.get('thin')) for b, v in s['buckets'].items())
     left = (focus_card('inside 50 yards', 'My biggest gap to scratch. A scratch player gets up and down just over half the time; '
                        f'I’m at {ud["made"] / ud["of"]:.0%} on these rounds.', sg(s['sg_round']), 'Strokes/rnd')
-            + card('', statpair('Up and down', f'{ud["made"]}/{ud["of"]}', 'Usual miss', (disp.get('tendency') or '?').title())))
+            + card('', statpair('Up and down, inside 30 yd',
+                                f'{(s.get("updown_greenside") or ud)["made"]}/{(s.get("updown_greenside") or ud)["of"]}',
+                                'Usual miss', (disp.get('tendency') or '?').title())))
     right = card('SG by distance (yd)', f'    <ul class="plan">{rows}</ul>')
     return f'<div class="ggrid"><div class="gcol">{left}</div><div class="gcol">{right}</div></div>'
 
@@ -469,29 +487,21 @@ def page_putting(stats, g):
         make_rows.append(drow(f"{b}'", rbar(v['made_pct'] / 100, 'ok' if delta >= 0 else '', tick=v['scratch_pct']),
                               f'{v["n"]} putts', f'<span class="{cls}">{v["made_pct"]}% ({delta:+d}%)</span>',
                               v.get('thin')))
-    lag_rows = []
-    for b, v in p['lag'].items():
-        good = v['avg_leave_ft'] <= 3
-        lag_rows.append(drow(f"{b}'", rbar(min(v['avg_leave_ft'] / 15, 1), 'ok' if good else ''),
-                             f'{v["n"]} holes · {v["inside3_pct"]}% inside 3′',
-                             f'<span class="{"pos" if good else "neg"}">{v["avg_leave_ft"]}′</span>',
-                             v.get('thin')))
-    autopsy = card('3-putt autopsy',
-                   '    <div class="autopsy"><div class="autopsy-bar"><i style="width:100%">100%</i></div>'
-                   '<p class="legend"><span><i style="background:var(--red)"></i>Poor lag (' + str(p['three_putts']) + ')</span>'
-                   '<span><i style="background:var(--yellow)"></i>Missed short (0)</span></p>'
-                   '<p><b>Focus: lag putting.</b> All of my three-putts come from leaving the first putt too far away '
-                   f'(average first putt {p["three_putt_first_ft"]}′, against {p["two_putt_first_ft"]}′ on two-putt holes). '
-                   'The fix is distance control from 25 feet out, not holing more putts.</p>'
-                   f'<p class="leak__basis">{p["three_putts"]} three-putt holes across these rounds</p></div>')
+    autopsy = card('Three-putts',
+                   f'    <p style="margin:0 0 0.5rem;font-size:0.95rem">{p["three_putts"]} three-putt holes. '
+                   f'On them my first putt averaged {p["three_putt_first_ft"]} ft, against '
+                   f'{p["two_putt_first_ft"]} ft on holes I two-putted. Long first putts are what precedes '
+                   f'them.</p>'
+                   '    <p class="leak__basis">Arccos does not record where the second putt was played from, '
+                   'so I cannot say whether these were poor lags or missed short ones. Only the first putt '
+                   'is measured.</p>')
     left = (focus_card(f'{worst} ft putts', 'Tighten this band first; the rest of my putting holds up against scratch.',
                        sg(p['sg_round']), 'Strokes/rnd')
-            + card('', statpair('Putts per round', p['putts_round'], '3-putts/rnd', round(p['three_putts'] / stats['rounds_n'], 1))))
+            + card('', statpair('Putts per round', p['putts_round'], '3-putts/rnd', round(p['three_putts'] / (stats['holes'] / 18), 1))))
     mid = (card('SG by putt distance', f'    <span class="opp-chip">#1 opportunity: {worst} ft</span>\n    <ul class="drows">{sg_rows}</ul>')
            + card('Make rate by distance', f'    <ul class="drows">{"".join(make_rows)}</ul>\n'
                   '    <p class="vs-note">▏ marks a scratch player’s make rate (Arccos data)</p>'))
-    right = (card('Lag putting', '    <p class="lbl">Avg leave distance after first putt</p>\n'
-                  f'    <ul class="drows">{"".join(lag_rows)}</ul>') + autopsy)
+    right = autopsy
     return f'<div class="ggrid3"><div class="gcol">{left}</div><div class="gcol">{mid}</div><div class="gcol">{right}</div></div>'
 
 
