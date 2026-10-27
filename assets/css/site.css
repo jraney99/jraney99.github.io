@@ -1931,3 +1931,6 @@ input[type="range"]:active { cursor: grabbing; }
 .audio-note { margin: 0 0 1.75rem; }
 .audio-note p { font-family: var(--sans); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.02em; color: var(--muted); margin: 0 0 0.45rem; }
 .audio-note audio { display: block; width: 100%; max-width: 30rem; }
+
+/* ---------- home: timeline logos ---------- */
+.timeline .tl-logo { width: 1.5em; height: 1.5em; border-radius: 5px; vertical-align: -0.42em; margin-right: 0.55rem; box-shadow: 0 0 0 1px var(--rule); }
