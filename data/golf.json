@@ -112,6 +112,7 @@
    "holes": 18,
    "course": "Shangri La Resort - Champions/Heritage",
    "score": 75,
+   "raw": null,
    "differential": 2.6
   },
   {
@@ -119,6 +120,7 @@
    "holes": 18,
    "course": "Shangri La Resort - Heritage/Legends",
    "score": 83,
+   "raw": 83,
    "differential": 7.9
   },
   {
@@ -126,6 +128,7 @@
    "holes": 18,
    "course": "Irving Golf Club",
    "score": 76,
+   "raw": null,
    "differential": 3.7
   },
   {
@@ -133,6 +136,7 @@
    "holes": 18,
    "course": "San Francisco GC",
    "score": 80,
+   "raw": 80,
    "differential": 7.4
   },
   {
@@ -140,6 +144,7 @@
    "holes": 18,
    "course": "Castlewood (The Club at) - Hill",
    "score": 82,
+   "raw": 82,
    "differential": 8.6
   },
   {
@@ -147,6 +152,7 @@
    "holes": 18,
    "course": "The Nelson Golf and Sports Club - TPC",
    "score": 87,
+   "raw": 87,
    "differential": 10.4
   },
   {
@@ -154,6 +160,7 @@
    "holes": 9,
    "course": "Sherrill Park Golf Course - Course #2",
    "score": 39,
+   "raw": 39,
    "differential": 2.6
   },
   {
@@ -161,6 +168,7 @@
    "holes": 18,
    "course": "Bear Creek Golf Club - West",
    "score": 83,
+   "raw": 83,
    "differential": 9.5
   },
   {
@@ -168,6 +176,7 @@
    "holes": 18,
    "course": "Arlington Golf Association - Texas Rangers Golf Club",
    "score": 88,
+   "raw": 91,
    "differential": 12.2
   },
   {
@@ -175,6 +184,7 @@
    "holes": 18,
    "course": "The Los Angeles Country Club - NORTH",
    "score": 82,
+   "raw": 82,
    "differential": 6.0
   }
  ],
