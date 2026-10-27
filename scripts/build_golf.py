@@ -159,22 +159,32 @@ def rbar(frac, cls='', tick=None):
 # hub cards
 # ---------------------------------------------------------------------------
 
-def hero_card(stats):
-    s = stats['scoring']
+def hero_card(stats, g):
+    recent = [r for r in (g.get('recent_rounds') or []) if r.get('score')]
+    full18 = [r for r in recent if r.get('holes') == 18]
+    idx = num(g['revisions'][-1]['index'])
+    tracked_dates = {r['date'] for r in stats['rounds']} if stats else set()
     rows = []
-    for r in stats['rounds'][:5]:
+    for r in recent[:5]:
         d = date.fromisoformat(r['date']).strftime('%b %-d')
-        holes = '' if r['holes'] == 18 else f' · 9H'
-        over = r['score'] - r['par']
-        rows.append(f'<li><span class="course"><b>{r["course"]}</b><small>{d}{holes}</small></span>'
-                    f'<span class="score"><span class="num num--md">{r["score"]}</span>'
-                    f'<span class="num num--md warn">+{over}</span></span></li>')
-    inner = (f'    <div class="hero-score"><span class="num num--xl">{s["avg18"]}</span>'
-             f'<span class="vs">+{s["vs_par"]} vs par</span></div>\n'
-             f'    <p class="goal-line">I’m {abs(stats["sg"]["total"]):.0f} strokes a round from my goal of scratch.</p>\n'
-             f'    <p class="lbl" style="margin-top:1.2rem">Recent rounds</p>\n'
-             f'    <ul class="rounds-list">{"".join(rows)}</ul>')
-    return card('Scoring average', inner, cls='gcard--hero')
+        holes = f'{r["holes"]} holes'
+        tag = ' \u00b7 shots tracked' if r['date'] in tracked_dates else ''
+        diff = r.get('differential')
+        dcls = 'pos' if diff is not None and diff <= idx else 'warn'
+        dtxt = f'<span class="num num--md {dcls}">{diff:.1f}</span>' if diff is not None else ''
+        rows.append(f'<li><span class="course"><b>{d}</b><small>{holes}{tag}</small></span>'
+                    f'<span class="score"><span class="num num--md">{r["score"]}</span>{dtxt}</span></li>')
+    avg = sum(r['score'] for r in full18) / max(1, len(full18))
+    gap = f'I\u2019m {abs(stats["sg"]["total"]):.0f} strokes a round from my goal of scratch.' if stats else \
+          f'Scratch is 0.0. My index is {show(idx)}.'
+    inner = (f'    <div class="hero-score"><span class="num num--xl">{avg:.1f}</span>'
+             f'<span class="vs">avg of my last {len(full18)} posted rounds</span></div>\n'
+             f'    <p class="goal-line">{gap}</p>\n'
+             f'    <p class="lbl" style="margin-top:1.2rem">Recent rounds \u00b7 score and differential</p>\n'
+             f'    <ul class="rounds-list">{"".join(rows)}</ul>\n'
+             f'    <p class="vs-note" style="text-align:left">From my GHIN record, every posted round. A differential at or '
+             f'under my index beat my handicap.</p>')
+    return card('Scoring', inner, cls='gcard--hero')
 
 
 def scoring_card(stats):
@@ -185,8 +195,9 @@ def scoring_card(stats):
                     f'<span class="blbl" style="color:{BAND_COLORS[k]}">{k.replace("+", "+").replace("double+", "dbl+").title()}</span>'
                     f'<small>{v / total:.0%}</small></div>' for k, v in b.items())
     inner = (statpair('Rounds', stats['rounds_n'], 'Holes', stats['holes'])
-             + f'\n    <div class="bandbar">{segs}</div>\n    <div class="bands">{cells}</div>')
-    return card('Scoring', inner)
+             + f'\n    <div class="bandbar">{segs}</div>\n    <div class="bands">{cells}</div>'
+             + '\n    <p class="vs-note">Sensor-tracked rounds only</p>')
+    return card('Scoring bands', inner)
 
 
 def sg_card(stats):
@@ -360,6 +371,24 @@ def page_putting(stats, g):
 
 
 def page_rounds(stats, g):
+    idx = num(g['revisions'][-1]['index'])
+    tracked = {r['date'] for r in stats['rounds']}
+    grows = []
+    for r in (g.get('recent_rounds') or []):
+        if not r.get('score'):
+            continue
+        d = date.fromisoformat(r['date']).strftime('%b %d, %Y')
+        diff = r.get('differential')
+        dcls = 'pos' if diff is not None and diff <= idx else 'warn'
+        has_shots = 'Yes' if r['date'] in tracked else '\u2013'
+        grows.append(f'<tr><td>{d}</td><td>{r["holes"]}</td><td class="num num--md">{r["score"]}</td>'
+                     f'<td><span class="{dcls}">{diff:.1f}</span></td><td>{has_shots}</td></tr>')
+    ghin_table = card('Latest posted rounds (GHIN)',
+                      '    <div class="table-wrap"><table class="gtable"><thead><tr><th>Date</th><th>Holes</th>'
+                      '<th>Score</th><th>Differential</th><th>Shots tracked</th></tr></thead><tbody>'
+                      + ''.join(grows) + '</tbody></table></div>\n'
+                      '    <p class="vs-note">A differential at or under my index beat my handicap. Rounds without '
+                      'sensor shots count for scoring and handicap, but not for the strokes-gained pages.</p>')
     rows = []
     for r in stats['rounds']:
         tot = sum(r['sg'].values())
@@ -377,7 +406,7 @@ def page_rounds(stats, g):
                     for b, v in sorted(stats['scoring']['par4_by_length'].items()))
     small = (f'<div class="ggrid">{card("Average over par, by hole", f"    <ul class=_drows_>{bypar}</ul>".replace("_", chr(34)))}'
              f'{card("Par 4s by length (yd)", f"    <ul class=_drows_>{bylen}</ul>".replace("_", chr(34)))}</div>')
-    return table + small
+    return ghin_table + table + small
 
 
 def page_practice(stats, g):
@@ -408,7 +437,7 @@ def write_page(fname, title, ogtitle, desc, content, g, stats):
              f'<a href="index.html">jackraney.com</a> · <a href="about.html">about me</a>')
     html = SHELL.format(title=title, ogtitle=ogtitle, desc=desc, slug=fname.replace('.html', ''),
                         index=index, nav=nav_links(fname),
-                        rounds_pill=f'{stats["rounds_n"]} rounds' if stats else 'GHIN',
+                        rounds_pill=f'{g["rounds_last_12_months"]} rounds \u00b7 12 mo',
                         content=content, note=note)
     path = os.path.join(ROOT, fname)
     old = open(path, encoding='utf-8').read() if os.path.exists(path) else ''
@@ -427,7 +456,7 @@ def main():
     stats = json.load(open(spath, encoding='utf-8')) if os.path.exists(spath) else None
     if stats:
         hub = (f'<div class="ggrid">'
-               f'<div class="gcol">{hero_card(stats)}{sg_card(stats)}</div>'
+               f'<div class="gcol">{hero_card(stats, g)}{sg_card(stats)}</div>'
                f'<div class="gcol">{scoring_card(stats)}{leaks_card(stats)}</div>'
                f'<section class="span2">{handicap_card(g)}</section>'
                f'<div class="gcol">{bypar_card(g)}</div>'
