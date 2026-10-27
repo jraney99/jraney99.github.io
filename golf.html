@@ -15,14 +15,16 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#0b0c0d">
+  <meta name="theme-color" content="#f4f1e8">
   <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="icon" href="assets/img/favicon-64.png" sizes="64x64" type="image/png">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght@500;600&display=swap">
-  <link rel="stylesheet" href="assets/css/golf.css?v=5f2a442847">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Besley:wght@400..700&family=Overpass:ital,wght@0,300..900;1,300..900&family=Overpass+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css?v=7b682ff78f">
+  <link rel="stylesheet" href="assets/css/golf.css?v=9160643f17">
 </head>
 <body>
 
@@ -34,7 +36,11 @@
     <span class="chip">Index<b>4.1</b></span>
   </div>
   <nav class="gnav" aria-label="Golf section"><strong>Overview</strong><a href="golf-driving.html">Driving</a><a href="golf-approach.html">Approach</a><a href="golf-short-game.html">Short game</a><a href="golf-putting.html">Putting</a><a href="golf-rounds.html">Rounds</a><a href="golf-practice.html">Practice</a></nav>
-  <div class="gpills"><span class="gpill">Goal: Scratch</span><span class="gpill">5 rounds</span></div>
+  <div class="gpills"><span class="gpill">Goal: Scratch</span><span class="gpill">5 rounds</span>
+    <button class="theme-toggle" type="button" aria-label="Switch theme">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
+    </button>
+  </div>
 </header>
 
 <main id="main" class="gwrap">
@@ -51,7 +57,7 @@
   <h2 class="gsect">Strokes gained breakdown</h2>
   <div class="gcard ">
     <div class="sg-total"><div><span class="lbl">Total SG</span><p>Per round vs scratch</p></div><span class="num num--lg"><span class="neg">−10.1</span></span></div>
-    <div class="sg-tiles"><a class="sg-tile" href="golf-driving.html"><span class="lbl">Driving</span><span class="tbar"><i style="width:30%;background:var(--yellow)"></i></span><span class="num num--md"><span class="neg">−1.5</span></span></a><a class="sg-tile" href="golf-approach.html"><span class="lbl">Approach</span><span class="tbar"><i style="width:64%;background:var(--yellow)"></i></span><span class="num num--md"><span class="neg">−3.2</span></span></a><a class="sg-tile focus" href="golf-short-game.html"><span class="focus-chip">Focus</span><span class="lbl">Short</span><span class="tbar"><i style="width:84%;background:var(--red)"></i></span><span class="num num--md"><span class="neg">−4.2</span></span></a><a class="sg-tile" href="golf-putting.html"><span class="lbl">Putting</span><span class="tbar"><i style="width:24%;background:var(--yellow)"></i></span><span class="num num--md"><span class="neg">−1.2</span></span></a></div>
+    <div class="sg-tiles"><a class="sg-tile" href="golf-driving.html"><span class="lbl">Driving</span><span class="tbar"><i style="width:30%;background:var(--lose)"></i></span><span class="num num--md"><span class="neg">−1.5</span></span></a><a class="sg-tile" href="golf-approach.html"><span class="lbl">Approach</span><span class="tbar"><i style="width:64%;background:var(--lose)"></i></span><span class="num num--md"><span class="neg">−3.2</span></span></a><a class="sg-tile focus" href="golf-short-game.html"><span class="focus-chip">Focus</span><span class="lbl">Short</span><span class="tbar"><i style="width:84%;background:var(--lose-hard)"></i></span><span class="num num--md"><span class="neg">−4.2</span></span></a><a class="sg-tile" href="golf-putting.html"><span class="lbl">Putting</span><span class="tbar"><i style="width:24%;background:var(--lose)"></i></span><span class="num num--md"><span class="neg">−1.2</span></span></a></div>
     <p class="sg-line"><b>Short</b> is my biggest opportunity.</p>
   </div>
 </section>
@@ -59,8 +65,8 @@
   <h2 class="gsect">Scoring</h2>
   <div class="gcard ">
 <div class="statpair"><div><span class="lbl">Rounds</span><span class="num num--lg">5</span></div><div><span class="lbl">Holes</span><span class="num num--lg">81</span></div></div>
-    <div class="bandbar"><i style="width:1.2%;background:#2f9e57"></i><i style="width:4.9%;background:#3fca7d"></i><i style="width:35.8%;background:#e9c23f"></i><i style="width:37.0%;background:#ef8b4e"></i><i style="width:21.0%;background:#f4645f"></i></div>
-    <div class="bands"><div><span class="num num--lg">1</span><span class="blbl" style="color:#2f9e57">Eagle</span><small>1%</small></div><div><span class="num num--lg">4</span><span class="blbl" style="color:#3fca7d">Birdie</span><small>5%</small></div><div><span class="num num--lg">29</span><span class="blbl" style="color:#e9c23f">Par</span><small>36%</small></div><div><span class="num num--lg">30</span><span class="blbl" style="color:#ef8b4e">Bogey</span><small>37%</small></div><div><span class="num num--lg">17</span><span class="blbl" style="color:#f4645f">Dbl+</span><small>21%</small></div></div>
+    <div class="bandbar"><i style="width:1.2%;background:var(--accent-2)"></i><i style="width:4.9%;background:var(--accent)"></i><i style="width:35.8%;background:var(--mark)"></i><i style="width:37.0%;background:var(--signal-fill)"></i><i style="width:21.0%;background:var(--signal)"></i></div>
+    <div class="bands"><div><span class="num num--lg">1</span><span class="blbl" style="color:var(--accent-2)">Eagle</span><small>1%</small></div><div><span class="num num--lg">4</span><span class="blbl" style="color:var(--accent)">Birdie</span><small>5%</small></div><div><span class="num num--lg">29</span><span class="blbl" style="color:var(--mark)">Par</span><small>36%</small></div><div><span class="num num--lg">30</span><span class="blbl" style="color:var(--signal-fill)">Bogey</span><small>37%</small></div><div><span class="num num--lg">17</span><span class="blbl" style="color:var(--signal)">Dbl+</span><small>21%</small></div></div>
   </div>
 </section>
 <section>
@@ -113,5 +119,6 @@
 </div></div>
 <p class="gnote">5 Arccos rounds, Apr to Jun 2026, 81 holes; strokes gained vs a scratch baseline calibrated to Arccos. I wear the sensors every round now, so this fills in as I play. Handicap and scoring history come from my GHIN record, updated daily. <a href="index.html">jackraney.com</a> · <a href="about.html">about me</a></p>
 </main>
+<script src="assets/js/site.js?v=f38dbc4ce4"></script>
 </body>
 </html>

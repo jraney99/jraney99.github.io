@@ -20,7 +20,8 @@ PAGES = [('golf.html', 'Overview'), ('golf-driving.html', 'Driving'), ('golf-app
          ('golf-rounds.html', 'Rounds'), ('golf-practice.html', 'Practice')]
 CATS = [('driving', 'Driving', 'golf-driving.html'), ('approach', 'Approach', 'golf-approach.html'),
         ('short', 'Short', 'golf-short-game.html'), ('putting', 'Putting', 'golf-putting.html')]
-BAND_COLORS = {'eagle': '#2f9e57', 'birdie': '#3fca7d', 'par': '#e9c23f', 'bogey': '#ef8b4e', 'double+': '#f4645f'}
+BAND_COLORS = {'eagle': 'var(--accent-2)', 'birdie': 'var(--accent)', 'par': 'var(--mark)',
+               'bogey': 'var(--signal-fill)', 'double+': 'var(--signal)'}
 
 
 def num(v):
@@ -97,13 +98,15 @@ SHELL = '''<!doctype html>
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#0b0c0d">
+  <meta name="theme-color" content="#f4f1e8">
   <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="icon" href="assets/img/favicon-64.png" sizes="64x64" type="image/png">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <script>try{{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}}catch(e){{}}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght@500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Besley:wght@400..700&family=Overpass:ital,wght@0,300..900;1,300..900&family=Overpass+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
   <link rel="stylesheet" href="assets/css/golf.css">
 </head>
 <body>
@@ -116,13 +119,18 @@ SHELL = '''<!doctype html>
     <span class="chip">Index<b>{index}</b></span>
   </div>
   <nav class="gnav" aria-label="Golf section">{nav}</nav>
-  <div class="gpills"><span class="gpill">Goal: Scratch</span><span class="gpill">{rounds_pill}</span></div>
+  <div class="gpills"><span class="gpill">Goal: Scratch</span><span class="gpill">{rounds_pill}</span>
+    <button class="theme-toggle" type="button" aria-label="Switch theme">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
+    </button>
+  </div>
 </header>
 
 <main id="main" class="gwrap">
 {content}
 <p class="gnote">{note}</p>
 </main>
+<script src="assets/js/site.js"></script>
 </body>
 </html>
 '''
@@ -186,7 +194,7 @@ def sg_card(stats):
     tiles = []
     for key, name, href in CATS:
         v = per[key]
-        color = 'var(--green)' if v > 0 else 'var(--red)' if key == worst else 'var(--yellow)'
+        color = 'var(--gain)' if v > 0 else 'var(--lose-hard)' if key == worst else 'var(--lose)'
         chip = '<span class="focus-chip">Focus</span>' if key == worst else ''
         tiles.append(f'<a class="sg-tile{" focus" if key == worst else ""}" href="{href}">{chip}'
                      f'<span class="lbl">{name}</span><span class="tbar"><i style="width:{min(abs(v) / 5, 1) * 100:.0f}%;background:{color}"></i></span>'
