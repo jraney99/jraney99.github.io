@@ -305,6 +305,7 @@
  "quality": {
   "thin_below": 8,
   "checked": true,
-  "problems": []
+  "problems": [],
+  "warnings": []
  }
 }
