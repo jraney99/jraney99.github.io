@@ -17,7 +17,7 @@ PAR_HOLES = {'3': 4, '4': 10, '5': 4}  # a typical 18-hole card
 
 PAGES = [('golf.html', 'Overview'), ('golf-driving.html', 'Driving'), ('golf-approach.html', 'Approach'),
          ('golf-short-game.html', 'Short game'), ('golf-putting.html', 'Putting'),
-         ('golf-rounds.html', 'Rounds'), ('golf-practice.html', 'Practice')]
+         ('golf-rounds.html', 'Rounds'), ('golf-trackman.html', 'TrackMan')]
 CATS = [('driving', 'Driving', 'golf-driving.html'), ('approach', 'Approach', 'golf-approach.html'),
         ('short', 'Short', 'golf-short-game.html'), ('putting', 'Putting', 'golf-putting.html')]
 BAND_COLORS = {'eagle': 'var(--accent-2)', 'birdie': 'var(--accent)', 'par': 'var(--mark)',
@@ -411,7 +411,7 @@ def page_rounds(stats, g):
 
 
 def page_practice(stats, g):
-    return card('Practice, measured',
+    return card('TrackMan practice data',
                 '    <p style="margin:0 0 0.8rem;font-size:0.95rem">This page is waiting on its data. I practice on a TrackMan '
                 'simulator, and each session’s shots, club speed, ball speed, smash factor, carry and dispersion per club, '
                 'will land here: a true gapping chart from measured carries, and each club’s spread mapped the same way the '
@@ -427,7 +427,7 @@ SUBPAGES = {
     'golf-short-game.html': ('Short game', 'Inside 50 yards: up and down rate and where strokes leak around the green.', page_short),
     'golf-putting.html': ('Putting', 'Make rates by distance against a scratch player, lag putting and the three-putt autopsy.', page_putting),
     'golf-rounds.html': ('Rounds & scoring', 'Every sensor-tracked round, and scoring by hole type and length.', page_rounds),
-    'golf-practice.html': ('Practice, measured', 'TrackMan practice sessions: speeds, carries, gapping and dispersion per club.', page_practice),
+    'golf-trackman.html': ('TrackMan', 'Every practice session on TrackMan: speeds, carries, gapping and dispersion per club.', page_practice),
 }
 
 
