@@ -55,7 +55,8 @@
   }
  ],
  "driving": {
-  "penalties": 14,
+  "penalties_total": 14,
+  "tee_penalties": 10,
   "sg_round": -1.5,
   "tee_shots": 63,
   "driver_shots": 27,

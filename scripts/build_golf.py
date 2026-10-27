@@ -159,6 +159,69 @@ def rbar(frac, cls='', tick=None):
 # hub cards
 # ---------------------------------------------------------------------------
 
+# Scratch benchmarks used for the plain-English comparisons. Sources on the pages that
+# use them: Shot Scope by-handicap data (GIR, up-and-down) and Arccos (putting).
+SCRATCH = {'gir_pct': 52, 'updown_pct': 54, 'putts': 29.9, 'three_putts': 0.8}
+
+
+def briefing(stats, g):
+    """The whole game in one card: where the strokes are, and what to do about it.
+    Every sentence is generated from the data, so it cannot go stale."""
+    sg, leaks = stats['sg'], stats['leaks']
+    gap = abs(sg['total'])
+    idx = g['revisions'][-1]['index']
+    r18 = [r for r in (g.get('recent_rounds') or []) if r.get('holes') == 18 and r.get('score')]
+    avg = sum(r['score'] for r in r18) / len(r18) if r18 else None
+    top2 = sum(abs(l['per_round']) for l in leaks[:2])
+    share = round(top2 / gap * 100) if gap else 0
+
+    d, a, sh, p = stats['driving'], stats['approach'], stats['short'], stats['putting']
+    rounds18 = stats['holes'] / 18
+    pens_round = d['tee_penalties'] / rounds18
+    ud_pct = round(sh['updown']['made'] / sh['updown']['of'] * 100) if sh['updown']['of'] else 0
+    worst_app = min(a['buckets'], key=lambda b: a['buckets'][b]['sg_round']) if a['buckets'] else None
+    app_spread = (max(abs(v['sg_round']) for v in a['buckets'].values())
+                  if a['buckets'] else 0)
+
+    story = []
+    story.append(f'<b>{share}% of the gap is in two places:</b> {leaks[0]["name"].lower()} '
+                 f'and {leaks[1]["name"].lower()}. Everything else is close enough to scratch to leave alone for now.')
+    story.append(f'You hit <b>{d["tee_penalties"]} penalty balls off the tee</b> across these rounds, about '
+                 f'{pens_round:.1f} a round, and you pull driver on only {d["driver_shots"]} of '
+                 f'{d["tee_shots"]} tee shots. Distance is not the problem: your driver carries a '
+                 f'{d["driver_median_yd"]} yd median. Where the ball goes is.')
+    story.append(f'Inside 50 yards you get up and down <b>{ud_pct}% of the time</b>, against about '
+                 f'{SCRATCH["updown_pct"]}% for a scratch player. That one number is worth more than '
+                 f'anything else on this page.')
+    if p['three_putts']:
+        story.append(f'Your putting is nearly scratch from every distance except the first one: all '
+                     f'<b>{p["three_putts"]} three-putts</b> came from a first putt averaging '
+                     f'{p["three_putt_first_ft"]} ft, against {p["two_putt_first_ft"]} ft on holes you '
+                     f'two-putted. It is distance control, not stroke.')
+    if worst_app and app_spread < 1.5:
+        story.append(f'Approach is {sg["per_round"]["approach"]:+.1f} a round but spread evenly across the '
+                     f'distances, with no single yardage standing out. You hit {a["gir_pct"]}% of greens '
+                     f'against about {SCRATCH["gir_pct"]}% for scratch, so this improves as the rest does.')
+
+    acts = []
+    for i, l in enumerate(leaks[:3], 1):
+        acts.append(f'<li><span class="leak__rank">{i}</span><div><p class="leak__name">{l["name"]}</p>'
+                    f'<p class="leak__gain">Worth about <b>{abs(l["per_round"]):.1f} strokes a round</b>. '
+                    f'{l["basis"]}.</p></div></li>')
+
+    head = (f'    <div class="hero-score"><span class="num num--xl">{gap:.1f}</span>'
+            f'<span class="vs">strokes from scratch, per 18 holes</span></div>\n'
+            f'    <p class="goal-line">Index {idx}'
+            + (f' \u00b7 scoring average {avg:.1f}' if avg else '') +
+            f' \u00b7 measured over {stats["rounds_n"]} tracked rounds ({stats["holes"]} holes).</p>\n')
+    body = ''.join(f'<p style="margin:0.7rem 0 0;font-size:0.95rem">{s}</p>' for s in story)
+    todo = ('    <p class="lbl" style="margin-top:1.4rem">What to work on, in order</p>\n'
+            f'    <ol class="leaks">{"".join(acts)}</ol>\n')
+    note = ('    <p class="vs-note" style="text-align:left">This reads itself off the data every day. '
+            'Practice plans are built from the same three lines, so what you practice follows what this says.</p>')
+    return card('The short version', head + body + todo + note, cls='gcard--hero')
+
+
 def hero_card(stats, g):
     recent = [r for r in (g.get('recent_rounds') or []) if r.get('score')]
     full18 = [r for r in recent if r.get('holes') == 18]
@@ -529,7 +592,8 @@ def main():
     spath = os.path.join(ROOT, 'data', 'golf-stats.json')
     stats = json.load(open(spath, encoding='utf-8')) if os.path.exists(spath) else None
     if stats:
-        hub = (f'<div class="ggrid">'
+        hub = (f'<section class="span2" style="margin-bottom:1.3rem">{briefing(stats, g)}</section>'
+               f'<div class="ggrid">'
                f'<div class="gcol">{hero_card(stats, g)}{sg_card(stats)}</div>'
                f'<div class="gcol">{scoring_card(stats)}{leaks_card(stats)}</div>'
                f'<section class="span2">{handicap_card(g)}</section>'
