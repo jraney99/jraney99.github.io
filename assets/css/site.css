@@ -1001,6 +1001,63 @@ a:hover { color: var(--accent-2); }
 
 .shot img { display: block; width: 100%; height: auto; }
 
+/* The Archibald app: phones rising out of a warm charcoal field. Each phone
+   is a bezel around a screenshot, cropped by the panel's bottom edge. */
+.panel--app { background: #3b3a35; }
+.phones {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 4cqw;
+  padding: 0 6cqw;
+}
+.phones .phone {
+  flex: 0 0 29cqw;
+  margin-bottom: -34cqw;
+}
+.phones .phone:nth-child(2) { margin-bottom: -22cqw; }
+.phone {
+  border: 0.55cqw solid #15110e;
+  border-radius: 3.6cqw;
+  overflow: hidden;
+  background: #15110e;
+  box-shadow: 0 2cqw 6cqw rgba(0, 0, 0, 0.45);
+}
+.phone img { display: block; width: 100%; height: auto; border-radius: 3cqw; }
+.panel:not(.panel--wide) .phones .phone { flex-basis: 30cqw; margin-bottom: -38cqw; }
+.panel:not(.panel--wide) .phones .phone:nth-child(2) { margin-bottom: -26cqw; }
+
+/* The full screenshots on the app page: four phones in a row, two on a phone. */
+.shots {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1rem, 2.5vw, 2rem);
+  margin: 0 0 1.5rem;
+  padding: 0;
+  max-width: 64rem;
+}
+.shots__item {
+  margin: 0;
+  container-type: inline-size;
+}
+.shots__item .phone { border-width: 2.2cqw; border-radius: 12cqw; }
+.shots__item .phone img { border-radius: 10cqw; }
+.shots__item figcaption {
+  margin-top: 0.6rem;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: var(--fs-note);
+  color: var(--muted);
+  text-align: center;
+}
+@media (max-width: 640px) {
+  .shots { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .panel--wide .phones .phone { flex-basis: 30cqw; margin-bottom: -38cqw; }
+  .panel--wide .phones .phone:nth-child(2) { margin-bottom: -26cqw; }
+}
+
 /* On a phone every panel takes the 16:10 layout. The bill drops its small
    caption and moves its key under the chart, so nothing runs together. */
 @media (max-width: 640px) {

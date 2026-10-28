@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Archibald on a phone · Jack Raney</title>
+  <meta name="description" content="The iPhone app Jack Raney built for Archibald, his personal AI agent: every open decision in one queue, seven dashboards read from the Mac, and the same chat in a second pane.">
+  <link rel="canonical" href="https://jackraney.com/archibald-app">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Jack Raney">
+  <meta property="og:title" content="Archibald on a phone">
+  <meta property="og:description" content="The iPhone app I built for my personal AI agent: one queue of decisions, seven dashboards, one chat, and nothing it works out on its own.">
+  <meta property="og:url" content="https://jackraney.com/archibald-app">
+  <meta property="og:image" content="https://jackraney.com/assets/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f4f1e8">
+  <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="assets/img/favicon-64.png" sizes="64x64" type="image/png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Besley:wght@400..700&family=Overpass:ital,wght@0,300..900;1,300..900&family=Overpass+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css?v=702d7c651f">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap site-head__row">
+    <a class="wordmark" href="index.html">Jack Raney</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html#work">Work</a>
+      <a href="writing.html">Writing</a>
+      <a href="about.html">About</a>
+      <a href="resume.html">Résumé</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch theme">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <header class="wrap doc-head">
+    <div class="doc-head__inner">
+      <a class="back" href="index.html#work">← All work</a>
+      <h1>Archibald on a phone</h1>
+      <p class="dek">In October 2026 I built an iPhone app for <a href="archibald.html">Archibald</a>, the agent that runs my admin from a Mac mini. Every decision it is waiting on, seven dashboards and the same chat, in one place.</p>
+      <p class="doc-meta">Personal project · Builder · October 2026 to present</p>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="page-visual">
+      <div class="panel panel--wide panel--app" aria-hidden="true">
+        <div class="phones">
+          <div class="phone"><img src="assets/img/app/boards.jpg" width="600" height="1304" alt="" decoding="async"></div>
+          <div class="phone"><img src="assets/img/app/today.jpg" width="600" height="1304" alt="" decoding="async"></div>
+          <div class="phone"><img src="assets/img/app/agent.jpg" width="600" height="1304" alt="" decoding="async"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap doc-body">
+
+    <div class="prose">
+      <p>Archibald talks to me on Telegram. That is fine for a conversation, but every decision it needed from me arrived as its own message with buttons, and every number I wanted to check meant asking for it. I wanted one screen that shows what is waiting on me, and dashboards I can open without typing a question.</p>
+      <p>The app runs on my iPhone and talks only to the Mac. It computes nothing itself: every number on it comes from the same reader script the Mac already uses, stamped with when it was read and where it came from. The point was to see Archibald’s work, not to build a second copy of it.</p>
+    </div>
+
+    <section class="doc-section" aria-labelledby="s-tabs">
+      <h2 id="s-tabs">What is on it</h2>
+      <div class="stack">
+        <div class="prose">
+          <ul>
+            <li><strong>Today.</strong> It opens on the needs-you queue: every open decision from every skill, from meal prompts and email drafts to transaction questions and calendar approvals, as one kind of card with the same buttons the Telegram prompt carries. Below that, the day: the schedule with real leave-by times, meal windows, water with quick logs, the putting streak, and the car, home and markets lines.</li>
+            <li><strong>Chat.</strong> The same conversation Telegram sees, in a second pane. Each line says which surface it came from, and a working line answers “is he stuck?” A message sent while the Mac is away waits in the thread and goes when it is back.</li>
+            <li><strong>Boards.</strong> Seven dashboards: Money, Mail, Health, Home, Wardrobe, Car and Travel, and Golf. Each is fed by readers that already exist on the Mac, and every figure shows its own time and source. The Golf board opens the <a href="golf.html">golf section of this site</a> rather than rendering the same numbers a second time.</li>
+            <li><strong>Archibald.</strong> The agent itself: busy or idle, what it is waiting on from me, the machinery (gateway, failing jobs, last runs), and this phone’s pairing.</li>
+          </ul>
+        </div>
+        <dl class="figures figures--4">
+          <div><dt>Tabs</dt><dd>4</dd></div>
+          <div><dt>Boards</dt><dd>7</dd></div>
+          <div><dt>Routes on the Mac</dt><dd>20</dd></div>
+          <div><dt>Live event kinds</dt><dd>5</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="doc-section" aria-labelledby="s-shots">
+      <h2 id="s-shots">The four tabs</h2>
+      <div class="shots" role="list">
+        <figure class="shots__item" role="listitem"><div class="phone"><img src="assets/img/app/today.jpg" width="600" height="1304" alt="The Today tab: a needs-you queue of decision cards with buttons, then the day’s schedule" loading="lazy" decoding="async"></div><figcaption>Today</figcaption></figure>
+        <figure class="shots__item" role="listitem"><div class="phone"><img src="assets/img/app/chat.jpg" width="600" height="1304" alt="The Chat tab: the same conversation as Telegram, each line labeled with the surface it came from" loading="lazy" decoding="async"></div><figcaption>Chat</figcaption></figure>
+        <figure class="shots__item" role="listitem"><div class="phone"><img src="assets/img/app/home.jpg" width="600" height="1304" alt="The Home board: lights, night light, the bed and the wake alarm, each with its source and when it was read" loading="lazy" decoding="async"></div><figcaption>Boards: Home</figcaption></figure>
+        <figure class="shots__item" role="listitem"><div class="phone"><img src="assets/img/app/agent.jpg" width="600" height="1304" alt="The Archibald tab: whether the agent is busy, what it is waiting on, and the machinery behind it" loading="lazy" decoding="async"></div><figcaption>Archibald</figcaption></figure>
+      </div>
+      <p class="note">These screenshots come from the app’s showcase mode: a build that pairs itself to a stand-in laptop whose every string is rewritten before it is served. No real account, balance, name, doctor, club or message can appear, and a test fails the build if one ever could. The numbers are invented.</p>
+    </section>
+
+    <section class="doc-section" aria-labelledby="s-mac">
+      <h2 id="s-mac">How it reaches the Mac</h2>
+      <div class="prose">
+        <p>There is no sign-in. I ask Archibald to pair my phone and get an eight-character code, good for ten minutes and one use. Five wrong guesses void it. The Mac’s address is typed once on the pairing screen, and it and the token the Mac hands back live in the iPhone’s Keychain. No address is written anywhere in the code or in any build.</p>
+        <p>The agent runtime on the Mac listens only to the Mac itself. A tunnel forwards exactly one path of it to the internet, the one the phone uses, and answers everything else with a 404, so the runtime’s control surface never leaves the machine. Every request carries the phone’s token, and re-pairing revokes the old one.</p>
+        <p>On the Mac side the app is served by a plugin I wrote for the agent runtime: <span class="nowrap">20 routes</span> and one WebSocket that carries five kinds of event, such as a new decision appearing or one being settled. Both halves are built to a single contract file. A test on the app side reads that file and fails if a route or event in it is not served, and the stand-in laptop the app is developed against replays the same fixture files the Mac-side plugin’s tests use.</p>
+      </div>
+    </section>
+
+    <section class="doc-section" aria-labelledby="s-rules">
+      <h2 id="s-rules">Rules that keep it honest</h2>
+      <div class="prose">
+        <ul>
+          <li><strong>The phone never computes a number.</strong> Every figure comes from a named reader on the Mac, never from a raw file, and carries the time it was read and the script it came from. The app shows both.</li>
+          <li><strong>A tap runs the same script a Telegram tap runs.</strong> A decision made on either surface settles on both, and the card collapses to the same outcome sentence the edited Telegram message shows. Chat is a real agent turn with every <a href="archibald.html#s-guards">guard</a> in force.</li>
+          <li><strong>Nothing is decided from the lock screen.</strong> A notification opens the app on the item. The decision is made in the app, where the Mac’s own answer comes back, so “did that go?” always has an answer.</li>
+          <li><strong>Bad data never crashes it.</strong> Replies are repaired on arrival, and a card the app cannot draw shows a note with a button to copy the details.</li>
+          <li><strong>The app talks to two places only:</strong> the Mac, and Apple’s notification service through Expo. The push side is built on the phone and switched off on the Mac until I sign off which events are allowed to buzz me.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="doc-section" aria-labelledby="s-built">
+      <h2 id="s-built">How it was built</h2>
+      <div class="prose">
+        <p>It is a React Native app, built with Expo and written in TypeScript, with a Swift share extension. It started from the app kit of Otian’s own product, so the palette, the interface pieces, the Markdown rendering and the socket layer were already written and tested. The screens, the pairing, the contract and the Mac-side plugin are new. I built it in Claude Code, the same way I build Archibald.</p>
+        <p>The first version went from that starting point to a TestFlight build in two days, October 26 and 27, 2026, and it is still changing. It has one user. It is installed through TestFlight, is not in the App Store, and is not meant to be: it is the phone half of a system that runs one person’s life.</p>
+      </div>
+    </section>
+
+    <a class="next-link" href="otian.html">
+      <span class="next-link__label">Next</span>
+      <span class="title">Otian AI, from formation to launch →</span>
+    </a>
+
+    <p class="ask">Questions about the app? Email me at <a class="inline-link" href="mailto:jack@jackraney.com">jack@jackraney.com</a>.</p>
+
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap site-foot__grid">
+    <div>
+      <p class="site-foot__name">Jack Raney</p>
+      <p>Finance and operations · Dallas, Texas</p>
+    </div>
+    <div class="site-foot__col">
+      <p class="site-foot__label">Contact</p>
+      <ul>
+        <li><a href="mailto:jack@jackraney.com">jack@jackraney.com</a></li>
+        <li><a href="https://www.linkedin.com/in/jack-raney">LinkedIn</a></li>
+        <li><a href="https://github.com/jraney99">GitHub</a></li>
+        <li><a href="https://t.me/jr231099">Telegram</a></li>
+      </ul>
+    </div>
+    <div class="site-foot__col">
+      <p class="site-foot__label">More</p>
+      <ul>
+        <li><a href="https://otianai.com">Otian AI</a></li>
+        <li><a href="reading.html">Reading</a></li>
+        <li><a href="resume.html">Résumé</a></li>
+      </ul>
+    </div>
+    <p class="site-foot__note">Updated <span data-fact="site.updated">October 2026</span>.</p>
+  </div>
+</footer>
+
+<script src="assets/js/site.js?v=f38dbc4ce4"></script>
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a7e1ae8552384ed28cf6cd992b1cf6b8"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
