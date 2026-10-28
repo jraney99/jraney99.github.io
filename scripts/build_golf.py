@@ -176,8 +176,8 @@ SCRATCH = {'gir_pct': 52, 'updown_pct': 54, 'putts': 29.9, 'three_putts': 0.8}
 
 
 def briefing(stats, g):
-    """The whole game in one card: where the strokes are, and what to do about it.
-    Every sentence is generated from the data, so it cannot go stale."""
+    """The whole game in one short card: the gap, one line on what is established, the four
+    numbers behind it, the three jobs. Every value is read off the data, so it cannot go stale."""
     sg, leaks = stats['sg'], (stats.get('leaks') or [])
     if not leaks:
         return card('The short version',
@@ -190,68 +190,51 @@ def briefing(stats, g):
 
     d, a, sh, p = stats['driving'], stats['approach'], stats['short'], stats['putting']
     rounds18 = stats['holes'] / 18
-    pens_round = d['tee_penalties'] / rounds18
     gs = sh.get('updown_greenside') or sh['updown']
-    ud_pct = round(gs['made'] / gs['of'] * 100) if gs.get('of') else 0
     pitch = sh.get('updown_pitch') or {}
-    solid_app = {b: v for b, v in a['buckets'].items() if not v.get('thin')}
-    worst_app = min(solid_app, key=lambda b: solid_app[b]['sg_round']) if solid_app else None
-    app_spread = (max(abs(v['sg_round']) for v in solid_app.values()) if solid_app else 0)
 
     ci = sg.get('ci') or {}
     names = {'driving': 'driving', 'approach': 'approach play', 'short': 'the short game', 'putting': 'putting'}
     real = [names[c] for c in ('driving', 'approach', 'short', 'putting') if decisive(ci.get(c))]
     unsure = [names[c] for c in ('driving', 'approach', 'short', 'putting') if not decisive(ci.get(c))]
-
-    story = []
-    named = ' and '.join(l['name'].lower() for l in leaks[:2])
-    story.append(f'<b>The biggest {"two are" if len(leaks) > 1 else "one is"}:</b> {named}.')
     join = lambda xs: xs[0] if len(xs) == 1 else ', '.join(xs[:-1]) + ' and ' + xs[-1]
     if real:
-        story.append(f'Over {stats["holes"]} holes, {join(real)} '
-                     f'{"is" if len(real) == 1 else "are"} measurably worse than scratch.'
-                     + (f' {join(unsure).capitalize()} {"is" if len(unsure) == 1 else "are"} not: '
-                        f'{"its range" if len(unsure) == 1 else "their ranges"} still '
-                        f'{"includes" if len(unsure) == 1 else "include"} zero, so I cannot tell '
-                        f'{"it" if len(unsure) == 1 else "them"} apart from scratch yet.' if unsure else ''))
-    elif unsure:
-        story.append(f'Nothing here clears the bar yet: over {stats["holes"]} holes every category\u2019s '
-                     f'range still includes zero. These are directions, not findings.')
-    story.append(f'You hit <b>{d["tee_penalties"]} penalty balls off the tee</b> across these rounds, about '
-                 f'{pens_round:.1f} a round, and you pull driver on only {d["driver_shots"]} of '
-                 f'{d["tee_shots"]} tee shots. Distance is not the problem: your driver carries a '
-                 f'{d["driver_median_yd"]} yd median. Where the ball goes is.')
-    story.append(f'From inside 30 yards you get up and down <b>{ud_pct}% of the time</b> ({gs["made"]} of '
-                 f'{gs["of"]}), against about {SCRATCH["updown_pct"]}% for a scratch player. That is the '
-                 f'comparable number; wider definitions of scrambling flatter nobody.'
-                 + (f' From 30 to 50 yards you are {pitch["made"]} of {pitch["of"]}.'
-                    if pitch.get('of') else ''))
-    if p['three_putts']:
-        story.append(f'Your <b>{p["three_putts"]} three-putts</b> followed first putts averaging '
-                     f'{p["three_putt_first_ft"]} ft, against {p["two_putt_first_ft"]} ft on holes you '
-                     f'two-putted. Long first putts precede them. Whether the miss was the lag or the '
-                     f'one after it is not something the shot data records.')
-    if worst_app and app_spread < 1.5:
-        story.append(f'Approach is {sg["per_round"]["approach"]:+.1f} a round but spread evenly across the '
-                     f'distances, with no single yardage standing out. You hit {a["gir_pct"]}% of greens '
-                     f'against about {SCRATCH["gir_pct"]}% for scratch, so this improves as the rest does.')
+        verdict = (f'{join(real).capitalize()} {"is" if len(real) == 1 else "are"} measurably worse than scratch'
+                   + (f'. {join(unsure).capitalize()} {"is" if len(unsure) == 1 else "are"} not callable yet'
+                      if unsure else '') + '.')
+    else:
+        verdict = f'Nothing clears the bar yet: over {stats["holes"]} holes every range still includes zero.'
 
-    acts = []
-    for i, l in enumerate(leaks[:3], 1):
-        acts.append(f'<li><span class="leak__rank">{i}</span><div><p class="leak__name">{l["name"]}</p>'
-                    f'<p class="leak__gain">Worth about <b>{abs(l["per_round"]):.1f} strokes a round</b>. '
-                    f'{l["basis"]}.</p></div></li>')
+    rows = [('Tee penalties', f'{d["tee_penalties"]} in {d["tee_shots"]} tee shots \u00b7 driver median '
+             f'{d["driver_median_yd"]} yd, so it is direction, not distance',
+             f'{d["tee_penalties"] / rounds18:.1f}<small>/rnd</small>')]
+    if gs.get('of'):
+        basis = f'{gs["made"]} of {gs["of"]} \u00b7 scratch about {SCRATCH["updown_pct"]}%'
+        if pitch.get('of'):
+            basis += f' \u00b7 {pitch["made"]} of {pitch["of"]} from 30 to 50 yd'
+        rows.append(('Up and down, inside 30 yd', basis, f'{round(gs["made"] / gs["of"] * 100)}%'))
+    if p['three_putts']:
+        rows.append(('Three-putts', f'first putts {p["three_putt_first_ft"]} ft, against '
+                     f'{p["two_putt_first_ft"]} ft on holes you two-putted', p['three_putts']))
+    rows.append(('Greens in regulation', f'scratch about {SCRATCH["gir_pct"]}%', f'{a["gir_pct"]}%'))
+
+    facts = ''.join(f'<li><span class="k">{k}<small>{n}</small></span><span class="val">{v}</span></li>'
+                    for k, n, v in rows)
+    ranks = ''.join(f'<li><span class="r">{i}</span><span class="k">{l["name"]}</span>'
+                    f'<span class="val">{abs(l["per_round"]):.1f}</span></li>'
+                    for i, l in enumerate(leaks[:3], 1))
 
     head = (f'    <div class="hero-score"><span class="num num--xl">{gap:.1f}</span>'
             f'<span class="vs">strokes from scratch, per 18 holes</span></div>\n'
             f'    <p class="goal-line">Index {idx}'
             + (f' \u00b7 scoring average {avg:.1f}' if avg else '') +
-            f' \u00b7 measured over {stats["rounds_n"]} tracked rounds ({stats["holes"]} holes).</p>\n')
-    body = ''.join(f'<p style="margin:0.7rem 0 0;font-size:0.95rem">{s}</p>' for s in story)
-    todo = ('    <p class="lbl" style="margin-top:1.4rem">What to work on, in order</p>\n'
-            f'    <ol class="leaks">{"".join(acts)}</ol>\n')
-    note = ('    <p class="vs-note" style="text-align:left">This reads itself off the data every day. '
-            'Practice plans are built from the same three lines, so what you practice follows what this says.</p>')
+            f' \u00b7 {stats["rounds_n"]} tracked rounds, {stats["holes"]} holes</p>\n'
+            f'    <p class="brief-verdict">{verdict}</p>\n')
+    body = f'    <ul class="brows">{facts}</ul>\n'
+    todo = ('    <p class="lbl" style="margin-top:1.2rem">What to work on \u00b7 strokes a round</p>\n'
+            f'    <ol class="ranks">{ranks}</ol>\n')
+    note = ('    <p class="vs-note" style="text-align:left">Read off the tracked rounds daily. '
+            'The practice plans follow these three lines.</p>')
     return card('The short version', head + body + todo + note, cls='gcard--hero')
 
 

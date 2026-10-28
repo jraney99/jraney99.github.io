@@ -185,6 +185,33 @@
 .rbar i.ok { background: var(--gain); }
 .rbar .tick { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--ink); opacity: 0.65; }
 
+/* ---------- the short version: one verdict line, numbers as rows ---------- */
+.brief-verdict { margin: 0.5rem 0 0; color: var(--ink-2); font-size: 0.95rem; }
+.brows, .ranks { list-style: none; margin: 1.1rem 0 0; padding: 0; display: grid; gap: 0 2rem; }
+.brows li, .ranks li {
+  display: grid; gap: 0.3rem 0.9rem; align-items: baseline;
+  padding: 0.5rem 0; border-top: 1px solid var(--rule);
+}
+.brows li { grid-template-columns: minmax(0, 1fr) auto; }
+.ranks li { grid-template-columns: 1.3rem minmax(0, 1fr) auto; padding: 0.42rem 0; }
+.brows li:first-child, .ranks li:first-child { border-top: 0; padding-top: 0; }
+.brows .k, .ranks .k { font-weight: 700; font-size: 0.9rem; min-width: 0; }
+.brows .k small { display: block; margin-top: 0.15rem; font-weight: 400; color: var(--muted); font-size: 0.78rem; font-family: var(--sans); }
+.brows .val, .ranks .val {
+  font-family: var(--serif); font-weight: 600; font-size: 1.15rem; text-align: right;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.brows .val small { font-family: var(--sans); font-size: 0.72rem; font-weight: 400; color: var(--muted); }
+.ranks .r { font-family: var(--serif); font-weight: 700; color: var(--lose-hard); }
+.ranks .val { color: var(--lose-hard); }
+/* wide enough for the full-width card: two columns of facts, the three jobs in a row */
+@media (min-width: 760px) {
+  .brows { grid-template-columns: 1fr 1fr; }
+  .ranks { grid-template-columns: repeat(3, 1fr); gap: 0; }
+  .brows li:nth-child(-n+2), .ranks li { border-top: 0; padding-top: 0; }
+  .ranks li + li { border-left: 1px solid var(--rule); padding-left: 1.6rem; margin-left: 1.6rem; }
+}
+
 /* ---------- focus-area card (facet pages) ---------- */
 .focus-card { display: flex; gap: 1.2rem; align-items: center; }
 .focus-card h2 { margin: 0 0 0.35rem; font-size: 1.05rem; font-family: var(--serif); }
