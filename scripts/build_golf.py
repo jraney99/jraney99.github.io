@@ -552,10 +552,137 @@ def page_rounds(stats, g):
     return ghin_table + table + small
 
 
+def trackman_data():
+    """data/trackman.json, written by Archibald's trackman skill from TPS exports.
+    Absent or empty until the first session lands, which is the normal state."""
+    path = os.path.join(ROOT, 'data', 'trackman.json')
+    if not os.path.exists(path):
+        return None
+    try:
+        tm = json.load(open(path, encoding='utf-8'))
+    except (OSError, ValueError):
+        return None
+    return tm if tm.get('clubs') else None
+
+
+def _loop_rows(tm, stats):
+    """Pair each on-course leak with what the sim says about the club it needs.
+
+    One row per leak, and only when there is a measurement on the practice side:
+    a leak with nothing to pair against is left out rather than given a number.
+    """
+    clubs = {c['club']: c for c in tm['clubs']}
+    wedge_spreads = [c['carry_spread'] for c in tm['clubs']
+                     if c.get('carry_spread') and (c['club'] in ('Pw', 'Gw', 'Sw', 'Lw')
+                                                   or c['club'].endswith('°'))]
+    rows, shown = [], set()
+    for leak in (stats.get('leaks') or [])[:3]:
+        name = leak['name'].lower()
+        measured = target = None
+        kind = 'driver' if ('penalt' in name or 'driv' in name or 'tee' in name) else 'wedge'
+        if kind in shown:
+            continue          # one practice figure answers one leak, not three
+        if kind == 'driver':
+            d = clubs.get('Dr')
+            if d and d.get('corridor_pct') is not None:
+                measured = '%d%% of drives inside a 36 yd corridor · ±%s yd spread' % (
+                    d['corridor_pct'], d.get('side_spread', '?'))
+                target = 'two thirds inside the corridor'
+                frac = d['corridor_pct'] / 100.0
+        elif wedge_spreads:
+            med = sorted(wedge_spreads)[len(wedge_spreads) // 2]
+            measured = '±%s yd carry spread across the wedges' % med
+            target = 'within ±4 yd'
+            frac = max(0.05, min(1.0, 4.0 / med)) if med else 0.05
+        if not measured:
+            continue
+        shown.add(kind)
+        rows.append('<li><span class="leak__rank">%d</span><div>'
+                    '<p class="leak__name">%s</p>'
+                    '<p class="leak__gain">On the course: <b>%.1f strokes a round</b>. '
+                    'Practice target: %s.</p>%s'
+                    '<p class="leak__basis">Measured in the bay: %s</p></div></li>'
+                    % (len(rows) + 1, leak['name'], abs(leak['per_round']), target,
+                       rbar(frac), measured))
+    if not rows:
+        return ''
+    return '    <ul class="leaks">%s</ul>' % ''.join(rows)
+
+
+def page_trackman_real(tm, stats):
+    """The TrackMan tab on real measurements."""
+    clubs = [c for c in tm['clubs'] if c.get('carry')]
+    longest = max([c['carry'] for c in clubs] or [1])
+    gap_rows = ''.join(
+        drow(c['club'], rbar(c['carry'] / longest, 'neu'),
+             ('±%s yd' % c['carry_spread']) if c.get('carry_spread') else ('%d shots' % c['n']),
+             str(c['carry']), c['thin'])
+        for c in clubs)
+
+    withside = [c for c in tm['clubs'] if c.get('side_spread') is not None]
+    widest = max([c['side_spread'] for c in withside] or [1]) or 1
+    disp_rows = ''.join(
+        drow(c['club'], rbar(c['side_spread'] / widest, '' if c['side_spread'] > 15 else 'ok'),
+             'misses %s' % c['side_bias'], '±%s' % c['side_spread'], c['thin'])
+        for c in withside)
+
+    wrows = ''.join(
+        '<tr><td>%s</td><td>%s</td><td>%s</td><td class="num num--md">%s</td></tr>'
+        % (w['club'], w.get('half', '—'), w.get('three_q', '—'), w.get('full', '—'))
+        for w in tm['wedges'])
+    inferred = any(w.get('inferred') for w in tm['wedges'])
+    wedge = ('    <div class="table-wrap"><table class="gtable"><thead><tr><th>Club</th>'
+             '<th>1/2</th><th>3/4</th><th>Full</th></tr></thead><tbody>%s</tbody></table></div>\n'
+             '    <p class="vs-note">Carries in yards.%s</p>'
+             % (wrows, ' Swing lengths inferred from carry clusters: the export records '
+                       'no swing length, so this is a reading of the numbers.' if inferred else ''))
+
+    sess_rows = ''.join(
+        '<li><span class="course"><b>%s</b><small>%s · %d balls</small></span>'
+        '<span class="score"><span class="n">%s</span></span></li>'
+        % (s['label'], s['date'], s['balls'],
+           (s['grade'] or {}).get('summary', '') if s.get('grade') else '—')
+        for s in tm['sessions'])
+
+    u = tm.get('units') or {}
+    note = ('Measured on TrackMan over the last %d days, %d balls across %d sessions. '
+            'Distances read as %s and speeds as %s. Medians, with spread as half the '
+            'central 80%% of shots. Clubs under 8 shots are marked and never set a '
+            'practice plan.' % (tm.get('window_days', 180), tm.get('balls_total', 0),
+                               tm.get('sessions_n', 0), u.get('dist', 'unknown'),
+                               u.get('speed', 'unknown')))
+    probs = tm.get('problems') or []
+    if probs:
+        note += ' Flagged on import: ' + '; '.join(probs[:3]) + '.'
+
+    strip = statpair('Sessions, 30 days', str(tm.get('sessions_30d', 0)),
+                     'Balls, 30 days', str(tm.get('balls_30d', 0)))
+    drv = tm.get('driver') or {}
+    if drv.get('ball_speed'):
+        strip += '\n    ' + statpair('Driver ball speed', '%s mph' % drv['ball_speed'],
+                                     'Smash factor', str(drv.get('smash', '—')))
+
+    loop = _loop_rows(tm, stats)
+    left = card('', strip) + card('Session log', '    <ul class="rounds-list" style="margin-top:0">%s</ul>' % sess_rows)
+    if loop:
+        left += card('Practice against play', loop)
+    mid = card('Gapping: carry per club', '    <ul class="drows">%s</ul>\n'
+                                          '    <p class="vs-note">Median carry · spread across recorded swings</p>' % gap_rows)
+    right = card('Dispersion: left-right spread', '    <ul class="drows">%s</ul>' % disp_rows)
+    if tm['wedges']:
+        right += card('Wedge matrix', wedge)
+    return (plans_cards()
+            + '<div class="ggrid3"><div class="gcol">%s</div><div class="gcol">%s</div>'
+              '<div class="gcol">%s</div></div>' % (left, mid, right)
+            + '<section><p class="vs-note">%s</p></section>' % note)
+
+
 def page_practice(stats, g):
-    """The TrackMan tab. SAMPLE numbers (clearly flagged on the page) until the first
-    real TPS export lands; the parser will then feed data/trackman.json and this
-    function switches to it."""
+    """The TrackMan tab. Real measurements once data/trackman.json exists; until
+    then SAMPLE numbers, clearly flagged on the page."""
+    tm = trackman_data()
+    if tm:
+        return page_trackman_real(tm, stats)
     gap = [('Dr', 282, 9), ('3w', 258, 8), ('2i', 240, 8), ('4i', 222, 7), ('5i', 212, 6), ('6i', 200, 6),
            ('7i', 188, 5), ('8i', 176, 5), ('9i', 164, 5), ('Pw', 150, 4), ('50\u00b0', 136, 4),
            ('54\u00b0', 120, 4), ('58\u00b0', 105, 4)]
