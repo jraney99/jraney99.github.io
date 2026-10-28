@@ -224,6 +224,42 @@ EXPLAIN = {
                  'from the same band. Inside 3 feet everyone makes nearly all of them, so the bands that '
                  'matter are the ones between 5 and 20 feet, where the gap is real and the sample is '
                  'small.'),
+    'carry': ('Carry, and why it is not the number on the sign',
+              'Carry is where the ball lands, not where it finishes. On the course it rolls out, '
+              'sometimes a long way, so a 150 yard carry is not a 150 yard club on firm ground. The '
+              'gapping table below uses carry because it is the part a swing controls.'),
+    'smash': ('Ball speed, club speed and smash factor',
+              'Club speed is how fast the head is moving, ball speed is how fast the ball leaves, and '
+              'smash factor is one divided by the other. It is a strike-quality number: about 1.50 off '
+              'a driver is the ceiling, and anything well under it means the ball is not being found '
+              'in the middle.'),
+    'spread': ('Spread, and why it is not the average',
+               'The middle 80% of shots with a club, halved. A 12 yard spread means a typical shot '
+               'lands within 12 yards either side of the usual one. It ignores the two or three worst '
+               'strikes of a session on purpose, because one cold top says nothing about a gap.'),
+    'gapping': ('Gapping',
+                'The carry distance between one club and the next. Even gaps mean every yardage has a '
+                'club; a 25 yard hole between two of them is a shot that has to be hit soft or hard, '
+                'which is where approach misses come from. A gap that is too small means a club is '
+                'doing nothing.'),
+    'corridor': ('The corridor',
+                 'A 36 yard wide strip, 18 either side of the target line, which is roughly a generous '
+                 'fairway. The driver figure is the share of balls that finished inside it, which is '
+                 'the practice version of the penalty problem on the course.'),
+    'swinglen': ('Why swing lengths are "inferred"',
+                 'TrackMan records the ball, not the backswing. The wedge matrix groups each club\u2019s '
+                 'shots by carry and calls the groups short, stock and full, which is a guess from the '
+                 'result. It only appears for a club with enough shots and clear separation between '
+                 'them, and it is never presented as something measured.'),
+    'practicegrade': ('How a session is graded',
+                      'Against the plan it was given, not against a perfect session. Only two things '
+                      'are graded: whether the driver stayed in the corridor and whether the wedges '
+                      'carried consistent distances. Carry accuracy against a target is not graded at '
+                      'all, because the export records no intended target.'),
+    'preview': ('Why these numbers are grey',
+                'They are a worked example, not my practice. The page swaps to real figures the first '
+                'time a TrackMan session is exported and emailed in, and the preview chip disappears '
+                'with them.'),
     'plans': ('How practice follows from this',
               'The leak table is read straight into my practice sessions: the top leaks become the blocks '
               'I hit, and the session is built around them rather than around whatever I feel like '
@@ -815,21 +851,29 @@ def _loop_rows(tm, stats):
     return '    <ul class="leaks">%s</ul>' % ''.join(rows)
 
 
+def grade_text(grade):
+    """A session's grade against its plan. The skill publishes the whole grading dict, but the
+    same field is a plain summary string elsewhere in that pipeline, so accept either."""
+    if isinstance(grade, dict):
+        return grade.get('summary') or '\u2014'
+    return str(grade) if grade else '\u2014'
+
+
 def page_trackman_real(tm, stats):
     """The TrackMan tab on real measurements."""
     clubs = [c for c in tm['clubs'] if c.get('carry')]
     longest = max([c['carry'] for c in clubs] or [1])
     gap_rows = ''.join(
         drow(c['club'], rbar(c['carry'] / longest, 'neu'),
-             ('±%s yd' % c['carry_spread']) if c.get('carry_spread') else ('%d shots' % c['n']),
-             str(c['carry']), c['thin'])
+             ('±%s yd' % c['carry_spread']) if c.get('carry_spread') else ('%s shots' % c.get('n', '?')),
+             str(c['carry']), c.get('thin'))
         for c in clubs)
 
     withside = [c for c in tm['clubs'] if c.get('side_spread') is not None]
     widest = max([c['side_spread'] for c in withside] or [1]) or 1
     disp_rows = ''.join(
         drow(c['club'], rbar(c['side_spread'] / widest, '' if c['side_spread'] > 15 else 'ok'),
-             'misses %s' % c['side_bias'], '±%s' % c['side_spread'], c['thin'])
+             'misses %s' % c.get('side_bias', '?'), '±%s' % c['side_spread'], c.get('thin'))
         for c in withside)
 
     wrows = ''.join(
@@ -847,7 +891,7 @@ def page_trackman_real(tm, stats):
         '<li><span class="course"><b>%s</b><small>%s · %d balls</small></span>'
         '<span class="score"><span class="n">%s</span></span></li>'
         % (s['label'], s['date'], s['balls'],
-           (s['grade'] or {}).get('summary', '') if s.get('grade') else '—')
+           grade_text(s.get('grade')))
         for s in tm['sessions'])
 
     u = tm.get('units') or {}
@@ -869,14 +913,17 @@ def page_trackman_real(tm, stats):
                                      'Smash factor', str(drv.get('smash', '—')))
 
     loop = _loop_rows(tm, stats)
-    left = card('', strip) + card('Session log', '    <ul class="rounds-list" style="margin-top:0">%s</ul>' % sess_rows)
+    left = (card('', strip, explain=('smash', 'carry'))
+            + card('Session log', '    <ul class="rounds-list" style="margin-top:0">%s</ul>' % sess_rows))
     if loop:
-        left += card('Practice against play', loop)
+        left += card('Practice against play', loop, explain=('practicegrade',))
     mid = card('Gapping: carry per club', '    <ul class="drows">%s</ul>\n'
-                                          '    <p class="vs-note">Median carry · spread across recorded swings</p>' % gap_rows)
-    right = card('Dispersion: left-right spread', '    <ul class="drows">%s</ul>' % disp_rows)
+                                          '    <p class="vs-note">Median carry · spread across recorded swings</p>' % gap_rows,
+               explain=('gapping', 'carry'))
+    right = card('Dispersion: left-right spread', '    <ul class="drows">%s</ul>' % disp_rows,
+                 explain=('corridor', 'spread'))
     if tm['wedges']:
-        right += card('Wedge matrix', wedge)
+        right += card('Wedge matrix', wedge, explain=('swinglen',))
     return (plans_cards()
             + '<div class="ggrid3"><div class="gcol">%s</div><div class="gcol">%s</div>'
               '<div class="gcol">%s</div></div>' % (left, mid, right)
@@ -916,15 +963,18 @@ def page_practice(stats, g):
             '<p class="leak__gain">On-course leak: 3.2 strokes inside 50 yd. Practice target: half-swing carries within \u00b14 yd.</p>'
             + rbar(0.55) + '<p class="leak__basis">Currently \u00b16 yd \u00b7 sample</p></div></li></ul>')
     left = (card('', statpair('Sessions, 30 days', '6', 'Balls hit', '412')
-                 + '\n    ' + statpair('Driver ball speed', '167 mph', 'Smash factor', '1.48').replace('statpair', 'statpair" style="margin-top:1rem'))
+                 + '\n    ' + statpair('Driver ball speed', '167 mph', 'Smash factor', '1.48').replace('statpair', 'statpair" style="margin-top:1rem'),
+                 explain=('smash', 'preview'))
             + card('Session log', f'    <ul class="rounds-list" style="margin-top:0">{sess_rows}</ul>'
                    '\n    <p class="vs-note">Each session will open its own page, like a round</p>')
-            + card('Practice against play', loop))
+            + card('Practice against play', loop, explain=('practicegrade',)))
     mid = card('Gapping: carry per club', f'    <ul class="drows">{gap_rows}</ul>'
-               '\n    <p class="vs-note">Median carry \u00b7 spread across recorded swings</p>')
+               '\n    <p class="vs-note">Median carry \u00b7 spread across recorded swings</p>',
+               explain=('gapping', 'carry'))
     right = (card('Dispersion: left-right spread', f'    <ul class="drows">{disp_rows}</ul>'
-                  '\n    <p class="vs-note">Clubs open their own pages: every swing, drawn out</p>')
-             + card('Wedge matrix', wedge))
+                  '\n    <p class="vs-note">Clubs open their own pages: every swing, drawn out</p>',
+                  explain=('corridor', 'spread'))
+             + card('Wedge matrix', wedge, explain=('swinglen',)))
     chip = '<p><span class="sample-chip">Preview \u00b7 sample numbers until my first TrackMan session lands</span></p>'
     return plans_cards() + chip + f'<div class="ggrid3"><div class="gcol">{left}</div><div class="gcol">{mid}</div><div class="gcol">{right}</div></div>'
 
@@ -957,7 +1007,8 @@ def plans_cards():
                    f'Built from the live leak table: {cur.get("focus", "")}.</p>\n'
                    f'    <ul class="plan">{rows}</ul>\n'
                    f'    <p class="vs-note">{cur.get("note", "")}</p>')
-    loglist = card('Plan log', f'    <ul class="rounds-list" style="margin-top:0">{log}</ul>')
+    loglist = card('Plan log', f'    <ul class="rounds-list" style="margin-top:0">{log}</ul>',
+                   explain=('plans', 'practicegrade'))
     return f'<div class="ggrid"><div class="gcol">{current}</div><div class="gcol">{loglist}</div></div>'
 
 
