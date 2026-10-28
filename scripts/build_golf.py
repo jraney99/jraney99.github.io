@@ -260,6 +260,17 @@ EXPLAIN = {
                 'They are a worked example, not my practice. The page swaps to real figures the first '
                 'time a TrackMan session is exported and emailed in, and the preview chip disappears '
                 'with them.'),
+    'swingweight': ('Swingweight',
+                    'How heavy a club feels through the swing rather than what it weighs on a scale: '
+                    'the balance between head and grip, written as a letter and a number. C9 is '
+                    'slightly lighter than the D0 to D2 most stock clubs are built to. The gap between '
+                    'C9 and C9+ is about the weight of a dollar bill, which is why the wedges can sit '
+                    'either side of it without feeling different.'),
+    'lie': ('Lie angle, and why it shows up in the dispersion',
+            'The angle between the shaft and the ground at address. Too upright and the face points '
+            'left at impact, too flat and it points right, by a few yards per degree at full-iron '
+            'distance. It is the first thing worth checking against a one-sided miss on the dispersion '
+            'table, before anything in the swing.'),
     'plans': ('How practice follows from this',
               'The leak table is read straight into my practice sessions: the top leaks become the blocks '
               'I hit, and the session is built around them rather than around whatever I feel like '
@@ -859,6 +870,55 @@ def grade_text(grade):
     return str(grade) if grade else '\u2014'
 
 
+def clubs_data():
+    """data/clubs.json: the bag as built. Absent means the card does not render."""
+    path = os.path.join(ROOT, 'data', 'clubs.json')
+    if not os.path.exists(path):
+        return None
+    try:
+        d = json.load(open(path, encoding='utf-8'))
+    except (OSError, ValueError):
+        return None
+    return d if d.get('clubs') else None
+
+
+def bag_card():
+    """What is in the bag, as built. Every column that is blank for every club is dropped,
+    so the table fills out as the specs arrive rather than showing a grid of dashes."""
+    d = clubs_data()
+    if not d:
+        return ''
+    clubs = d['clubs']
+    cols = [('club', 'Club'), ('model', 'Model'), ('loft', 'Loft'), ('shaft', 'Shaft'),
+            ('flex', 'Flex'), ('length', 'Length'), ('lie', 'Lie'), ('grip', 'Grip'),
+            ('swingweight', 'Swing wt')]
+    used = [(k, label) for k, label in cols if any(str(c.get(k) or '').strip() for c in clubs)]
+    head = ''.join('<th>%s</th>' % label for _, label in used)
+    rows = ''
+    for c in clubs:
+        cells = ''
+        for k, _ in used:
+            v = str(c.get(k) or '').strip()
+            if k == 'club' and c.get('make') and str(c.get('make')).strip():
+                v = '%s <small>%s</small>' % (v, c['make'])
+            cells += '<td>%s</td>' % (v or '\u2013')
+        rows += '<tr>%s</tr>' % cells
+    missing = sum(1 for c in clubs for k, _ in used if not str(c.get(k) or '').strip())
+    notes = ''.join('<li>%s</li>' % n for n in (d.get('build_notes') or []))
+    inner = ('    <div class="table-wrap"><table class="gtable bag"><thead><tr>%s</tr></thead>'
+             '<tbody>%s</tbody></table></div>\n' % (head, rows))
+    if notes:
+        inner += '    <p class="lbl" style="margin-top:1.2rem">How it was built</p>\n' \
+                 '    <ul class="buildnotes">%s</ul>\n' % notes
+    src = d.get('source') or ''
+    if missing:
+        src += ' %d spec%s still to fill in.' % (missing, '' if missing == 1 else 's')
+    if d.get('ball'):
+        src = 'Ball: %s. %s' % (d['ball'], src)
+    inner += '    <p class="vs-note" style="text-align:left">%s</p>' % src.strip()
+    return card('What is in the bag', inner, explain=('swingweight', 'lie'))
+
+
 def page_trackman_real(tm, stats):
     """The TrackMan tab on real measurements."""
     clubs = [c for c in tm['clubs'] if c.get('carry')]
@@ -927,7 +987,8 @@ def page_trackman_real(tm, stats):
     return (plans_cards()
             + '<div class="ggrid3"><div class="gcol">%s</div><div class="gcol">%s</div>'
               '<div class="gcol">%s</div></div>' % (left, mid, right)
-            + '<section><p class="vs-note">%s</p></section>' % note)
+            + '<section><p class="vs-note">%s</p></section>' % note
+            + bag_card())
 
 
 def page_practice(stats, g):
@@ -976,7 +1037,10 @@ def page_practice(stats, g):
                   explain=('corridor', 'spread'))
              + card('Wedge matrix', wedge, explain=('swinglen',)))
     chip = '<p><span class="sample-chip">Preview \u00b7 sample numbers until my first TrackMan session lands</span></p>'
-    return plans_cards() + chip + f'<div class="ggrid3"><div class="gcol">{left}</div><div class="gcol">{mid}</div><div class="gcol">{right}</div></div>'
+    return (plans_cards() + chip
+            + f'<div class="ggrid3"><div class="gcol">{left}</div><div class="gcol">{mid}</div>'
+              f'<div class="gcol">{right}</div></div>'
+            + bag_card())
 
 
 def plans_cards():

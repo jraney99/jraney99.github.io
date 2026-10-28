@@ -445,3 +445,9 @@
    inside a grid the gap already handles it */
 .gwrap > section + section, .gwrap > div + section, .gwrap > section + div { margin-top: 2.3rem; }
 .gsect { margin-top: 0; }
+
+/* what is in the bag */
+.bag td small { color: var(--muted); font-size: 0.78em; }
+.bag td:first-child { font-weight: 700; white-space: nowrap; }
+.buildnotes { margin: 0.5rem 0 0; padding-left: 1.1rem; color: var(--ink-2); font-size: 0.9rem; }
+.buildnotes li { margin-top: 0.35rem; max-width: 70ch; }

@@ -1,0 +1,25 @@
+{
+  "updated": "2026-10-28",
+  "source": "From the Oly fitting order, Oct 2026. Anything blank is still to be filled in.",
+  "build_notes": [
+    "Driver is a stock build: Ping does not sell the head on its own.",
+    "Grips are Golf Pride Tour Velvet, regripped by me. Ping does not offer the midsize Z-Chord, and their answer to midsize is a double wrap of the standard size.",
+    "Swingweight is C9+ through the irons and the 58, C9 in the 50 and the 54. The difference between the two is about the weight of a dollar bill."
+  ],
+  "clubs": [
+    {"key": "Dr",  "club": "Driver",     "make": "Ping", "model": "", "loft": "", "shaft": "", "flex": "", "length": "", "lie": "", "grip": "Tour Velvet", "swingweight": ""},
+    {"key": "3w",  "club": "3 wood",     "make": "", "model": "", "loft": "", "shaft": "", "flex": "", "length": "", "lie": "", "grip": "Tour Velvet", "swingweight": ""},
+    {"key": "4i",  "club": "4 iron",     "make": "Ping", "model": "", "loft": "", "shaft": "", "flex": "", "length": "", "lie": "", "grip": "Tour Velvet", "swingweight": "C9+"},
+    {"key": "5i",  "club": "5 iron",     "make": "Ping", "model": "", "loft": "", "shaft": "", "flex": "", "length": "", "lie": "", "grip": "Tour Velvet", "swingweight": "C9+"},
+    {"key": "6i",  "club": "6 iron",     "make": "Ping", "model": "", "loft": "", "shaft": "", "flex": "", "length": "", "lie": "", "grip": "Tour Velvet", "swingweight": "C9+"},
+    {"key": "7i",  "club": "7 iron",     "make": "Ping", "model": "", "loft": "", "shaft": "", "flex": "", "length": "", "lie": "", "grip": "Tour Velvet", "swingweight": "C9+"},
+    {"key": "8i",  "club": "8 iron",     "make": "Ping", "model": "", "loft": "", "shaft": "", "flex": "", "length": "", "lie": "", "grip": "Tour Velvet", "swingweight": "C9+"},
+    {"key": "9i",  "club": "9 iron",     "make": "Ping", "model": "", "loft": "", "shaft": "", "flex": "", "length": "", "lie": "", "grip": "Tour Velvet", "swingweight": "C9+"},
+    {"key": "Pw",  "club": "Pitching wedge", "make": "Ping", "model": "", "loft": "", "shaft": "", "flex": "", "length": "", "lie": "", "grip": "Tour Velvet", "swingweight": "C9+"},
+    {"key": "50",  "club": "50°",        "make": "Ping", "model": "", "loft": "50°", "shaft": "", "flex": "", "length": "", "lie": "", "grip": "Tour Velvet", "swingweight": "C9"},
+    {"key": "54",  "club": "54°",        "make": "Ping", "model": "", "loft": "54°", "shaft": "", "flex": "", "length": "", "lie": "", "grip": "Tour Velvet", "swingweight": "C9"},
+    {"key": "58",  "club": "58°",        "make": "Ping", "model": "", "loft": "58°", "shaft": "", "flex": "", "length": "", "lie": "", "grip": "Tour Velvet", "swingweight": "C9+"},
+    {"key": "Pt",  "club": "Putter",     "make": "", "model": "", "loft": "", "shaft": "", "flex": "", "length": "", "lie": "", "grip": "", "swingweight": ""}
+  ],
+  "ball": ""
+}
