@@ -15,7 +15,7 @@ from datetime import date
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAR_HOLES = {'3': 4, '4': 10, '5': 4}  # a typical 18-hole card
 
-PAGES = [('golf.html', 'Overview'), ('golf-driving.html', 'Driving'), ('golf-approach.html', 'Approach'),
+PAGES = [('golf.html', 'Overview'), ('golf-story.html', 'My game'), ('golf-driving.html', 'Driving'), ('golf-approach.html', 'Approach'),
          ('golf-short-game.html', 'Short game'), ('golf-putting.html', 'Putting'),
          ('golf-rounds.html', 'Rounds'), ('golf-trackman.html', 'TrackMan')]
 CATS = [('driving', 'Driving', 'golf-driving.html'), ('approach', 'Approach', 'golf-approach.html'),
@@ -815,7 +815,319 @@ def plans_cards():
 
 
 
+# ---------------------------------------------------------------------------
+# the story page: what the numbers mean, what connects to what, what to do
+# ---------------------------------------------------------------------------
+
+EXPLAIN = {
+    'index': ('What a Handicap Index is',
+              'Not an average. Each round becomes a <b>differential</b>, which is the score adjusted '
+              'for how hard that course plays. The index is the average of the best 8 of the last 20 '
+              'differentials, so it describes my better days, not my typical ones. That is why my index '
+              'is lower than my scoring average, and why both are true at once.'),
+    'differential': ('Differential',
+                     'One round\u2019s score, adjusted for course difficulty, so a 79 on a hard course can '
+                     'beat a 76 on an easy one. A differential at or under my index means that round beat '
+                     'my handicap.'),
+    'scratch': ('Who "scratch" is here',
+                'A 0.0 handicap player. Every comparison on these pages is against what that player would '
+                'be expected to do from the same place on the course, not against tour professionals.'),
+    'expected': ('Expected strokes, the idea everything else is built on',
+                 'From any spot on a course there is an average number of strokes it takes to hole out. '
+                 'From 150 yards in the fairway a scratch player averages about 2.9. From 15 feet, about '
+                 '1.8. Those averages are the measuring stick: every shot moves me from one expected '
+                 'number to another.'),
+    'sg': ('Strokes gained, in one sentence',
+           'Take the expected strokes where the ball started, subtract the expected strokes where it ended, '
+           'subtract 1 for the shot I just played. Positive means I gained ground on scratch; negative means '
+           'I lost it. A 150 yard approach to 15 feet is 2.9 &minus; 1.8 &minus; 1 = <b>+0.1</b>: slightly '
+           'better than par for that shot.'),
+    'categories': ('Why the four categories add up to the total',
+                   'Every shot belongs to exactly one category, decided by where it was played from: off '
+                   'the tee on a par 4 or 5 is driving, a full shot to the green is approach, anything '
+                   'inside 50 yards that is not a putt is short game, and a putt is putting. Add the four '
+                   'up and you get the whole gap to scratch, which is why they always sum to the total.'),
+    'range': ('Why every number has a range',
+              'These come from a handful of rounds, so each figure is an estimate. The range is the band the '
+              'true number is 95% likely to sit in. When the range crosses zero, I genuinely cannot tell '
+              'that part of my game apart from scratch yet, no matter what the headline number says. Those '
+              'get called "not callable", and they never set the practice agenda.'),
+    'thin': ('"Too few to read"',
+             'A distance bucket with fewer than 8 shots behind it is greyed out and never chosen as a '
+             'focus area. Three good chips in a row is not evidence. Under 3 shots it is not published '
+             'at all.'),
+    'gir': ('Green in regulation',
+            'On the green in two shots fewer than par: one shot on a par 3, two on a par 4, three on a '
+            'par 5. Miss it and I need an up and down to save par.'),
+    'updown': ('Up and down',
+               'Missed the green, then holed out in two more shots: one chip or pitch, one putt. The rate '
+               'here counts only shots from inside 30 yards, which is what a scratch comparison is built '
+               'on. The 30 to 50 yard pitches are reported separately, because mixing them in flatters '
+               'the number.'),
+    'prox': ('Proximity',
+             'How far from the hole an approach finishes, measured as the middle value rather than the '
+             'average so one shank does not move it. Closer means shorter putts, which is most of what '
+             'putting is.'),
+    'dispersion': ('Dispersion and miss tendency',
+                   'Lateral is left and right spread, depth is long and short. Both are standard '
+                   'deviations in yards: roughly two thirds of shots land inside that figure. The '
+                   'tendency is where the middle of the pattern sits, which says more about club '
+                   'selection and aim than any single miss.'),
+    'threeputt': ('Three-putts',
+                  'Three or more putts on one hole. What matters is what preceded them: the length of '
+                  'the first putt. The data records where each putt started but not how far the second '
+                  'one was left, so I can say long first putts come before three-putts, and not whether '
+                  'the lag or the short one was the miss.'),
+    'leak': ('What a "leak" is, and what the share means',
+             'A bucket of shots that is measurably costing strokes against scratch, priced per round. '
+             'The share is how much of the total available improvement sits in that one bucket, so a '
+             '41% share means fixing it is worth 41% of everything on the table.'),
+    'plans': ('How practice follows from this',
+              'The leak table is read straight into my practice sessions: the top leaks become the blocks '
+              'I hit, and the session is built around them rather than around whatever I feel like '
+              'practising. That is also why a bucket with too few shots is never allowed to rank, '
+              'because a fluke would set the agenda for weeks.'),
+    'penalty': ('What a penalty shot costs',
+                'Measured, not assumed: tee shots that took a penalty are compared against my clean tee '
+                'shots on the same holes. The difference is what one costs.'),
+}
+
+
+def ex(key):
+    title, body = EXPLAIN[key]
+    return f'<details class="ex"><summary>{title}</summary><div>{body}</div></details>'
+
+
+def an(score):
+    """"an 84", "a 79": the eighties are the only scores that take "an"."""
+    return ('an ' if 80 <= score < 90 else 'a ') + f'{score:.0f}'
+
+
+def para(text):
+    return f'    <p class="story-p">{text}</p>\n'
+
+
+def story_where(stats, g):
+    idx = g['revisions'][-1]['index']
+    r18 = [r for r in (g.get('recent_rounds') or []) if r.get('holes') == 18 and r.get('score')]
+    avg = sum(r['score'] for r in r18) / len(r18) if r18 else None
+    sc = stats['scoring']
+    gap = abs(stats['sg']['total'])
+    out = (f'    <div class="hero-score"><span class="num num--xl">{idx}</span>'
+           f'<span class="vs">Handicap Index</span></div>\n')
+    bits = [f'My index is {idx}']
+    if avg:
+        bits.append(f'I shoot about {avg:.0f} on the rounds I post')
+    bits.append(f'and on the {stats["rounds_n"]} rounds where every shot was recorded I averaged '
+                f'{sc["avg18"]:.1f}, which is {gap:.0f} strokes a round worse than a scratch player '
+                'would be from the same places')
+    out += para('. '.join(bits[:1]) + ', ' + ', '.join(bits[1:]) + '.')
+    out += para('Those three numbers disagree on purpose, and that is the first thing worth '
+                'understanding about my own data.')
+    out += '    ' + ex('index') + '\n'
+    b = sc['bands']
+    holes = sum(b.values()) or 1
+    out += para(f'Hole by hole, those rounds were {b["birdie"]} birdies and {b["eagle"]} eagle, '
+                f'{b["par"]} pars, {b["bogey"]} bogeys and <b>{b["double+"]} doubles or worse</b> '
+                f'across {holes} holes. The doubles are {b["double+"] / holes:.0%} of my holes and they '
+                'are where the round actually goes. Nothing on this page matters as much as how those '
+                'holes start and end.')
+    return card('Where I stand', out, cls='gcard--hero')
+
+
+def story_chain(stats, g):
+    steps = [('Every shot', 'start and end position, recorded by the sensors in my grips'),
+             ('Expected strokes', 'what a scratch player would need from each of those positions'),
+             ('Strokes gained, per shot', 'the difference the shot made, against that standard'),
+             ('Four categories', 'driving, approach, short game, putting: every shot lands in one'),
+             ('The gap', f'{abs(stats["sg"]["total"]):.0f} strokes a round, which is the four added up'),
+             ('Leaks', 'the distance buckets inside those categories that are actually losing strokes'),
+             ('Practice', 'the sessions are built from the leak table, in order')]
+    items = ''.join(f'<li><span class="step-n">{i}</span><div><b>{n}</b><span>{d}</span></div></li>'
+                    for i, (n, d) in enumerate(steps, 1))
+    out = para('Everything on this site comes out of one chain. Each link is simple; the confusion comes '
+               'from meeting them out of order.')
+    out += f'    <ol class="chain">{items}</ol>\n'
+    out += '    ' + ex('expected') + '\n    ' + ex('sg') + '\n    ' + ex('categories') + '\n'
+    out += para('The handicap is a separate chain that runs alongside it, built from scores rather than '
+                'shots. That is why rounds I played without the sensors still move my index but never '
+                'appear on the strokes gained pages.')
+    out += '    ' + ex('differential') + '\n    ' + ex('scratch') + '\n'
+    return card('How one shot becomes a handicap', out)
+
+
+def story_parts(stats, g):
+    sg_pr, ci = stats['sg']['per_round'], (stats['sg'].get('ci') or {})
+    d, a, sh, p = stats['driving'], stats['approach'], stats['short'], stats['putting']
+    gs = sh.get('updown_greenside') or sh['updown']
+    pitch = sh.get('updown_pitch') or {}
+    fw = d.get('fairways') or {}
+    blocks = []
+
+    def block(key, name, href, lead, extra=''):
+        v = sg_pr[key]
+        rng = ci.get(key)
+        verdict = ('<span class="tag tag--real">established</span>' if decisive(rng)
+                   else '<span class="tag">not callable yet</span>')
+        return (f'<div class="part"><div class="part-head"><h3><a href="{href}">{name}</a></h3>'
+                f'<span class="num num--md">{sg(v)}</span></div>'
+                f'<p class="part-rng">{rng_text(rng)} a round {verdict}</p>'
+                f'<p class="story-p">{lead}</p>{extra}</div>')
+
+    miss = a.get('miss_dir') or {}
+    short_miss = miss.get('short', 0)
+    miss_total = sum(miss.values()) or 1
+    blocks.append(block(
+        'driving', 'Driving', 'golf-driving.html',
+        ((f'I hit {fw["hit"]} of {fw["of"]} fairways and my driver goes ' if fw.get('of')
+          else 'My driver goes ')
+         + f'{d["driver_median_yd"]} yards, which is not the problem. The problem is '
+           f'{d["tee_penalties"]} penalty balls off the tee in {d["tee_shots"]} tee shots. '
+           'Distance I have; the ball being in play I do not.'),
+        '    ' + ex('penalty')))
+    blocks.append(block(
+        'approach', 'Approach', 'golf-approach.html',
+        f'I hit {a["gir_pct"]}% of greens against about {SCRATCH["gir_pct"]}% for scratch, and when I do '
+        f'hit one I am {a["prox_gir_ft"]} feet away. No single yardage stands out as the villain. What '
+        f'does stand out is the direction: {short_miss} of my {miss_total} misses are <b>short</b>, more '
+        f'than every other miss put together, and the pattern sits {a.get("dispersion", {}).get("tendency", "")}.',
+        '    ' + ex('gir') + '\n    ' + ex('prox') + '\n    ' + ex('dispersion')))
+    short_lead = (f'This is the biggest single hole in my game and it follows directly from the one '
+                  f'above. Missing {100 - a["gir_pct"]}% of greens means about '
+                  f'{round((100 - a["gir_pct"]) / 100 * 18)} chances a round to save par with a chip and '
+                  'a putt. ')
+    if gs.get('of'):
+        short_lead += (f'I convert {round(gs["made"] / gs["of"] * 100)}% of the ones inside 30 yards, '
+                       f'{gs["made"]} of {gs["of"]}, where scratch converts about '
+                       f'{SCRATCH["updown_pct"]}%.')
+        if pitch.get('of'):
+            short_lead += f' From 30 to 50 yards I am {pitch["made"]} of {pitch["of"]}.'
+    else:
+        short_lead += 'No greenside chances have been recorded yet, so there is no conversion rate to show.'
+    blocks.append(block('short', 'Short game', 'golf-short-game.html', short_lead, '    ' + ex('updown')))
+    blocks.append(block(
+        'putting', 'Putting', 'golf-putting.html',
+        f'I take {p["putts_round"]:.0f} putts a round, which sounds bad until you remember I am putting '
+        f'from further away than a scratch player because of everything above. My {p["three_putts"]} '
+        f'three-putts followed first putts averaging {p["three_putt_first_ft"]} feet, against '
+        f'{p["two_putt_first_ft"]} feet on the holes I two-putted.',
+        '    ' + ex('threeputt')))
+    out = para('Four parts, in the order the shots happen. Two of them are established findings and two '
+               'are not yet, which matters more than the headline numbers.')
+    out += '    ' + ex('range') + '\n'
+    out += f'    <div class="parts">{"".join(blocks)}</div>\n'
+    return card('The four parts, and how they feed each other', out)
+
+
+def story_leaks(stats):
+    leaks = stats.get('leaks') or []
+    if not leaks:
+        return ''
+    out = para('Narrowed from the four parts down to the buckets actually losing the strokes, in order, '
+               'priced per round.')
+    rows = ''.join(f'<li><span class="leak__rank">{i}</span><div><p class="leak__name">{l["name"]}</p>'
+                   f'<p class="leak__gain">About <b>{abs(l["per_round"]):.1f} strokes a round</b>, '
+                   f'{l["share"]}% of everything available. {l["basis"]}.</p>'
+                   + rbar(l['share'] / 100) + '</div></li>'
+                   for i, l in enumerate(leaks, 1))
+    out += f'    <ol class="leaks">{rows}</ol>\n'
+    out += '    ' + ex('leak') + '\n    ' + ex('thin') + '\n    ' + ex('plans') + '\n'
+    return card('Where the strokes actually go', out)
+
+
+def story_plan(stats, g):
+    leaks = stats.get('leaks') or []
+    d, a, sh = stats['driving'], stats['approach'], stats['short']
+    gs = sh.get('updown_greenside') or sh['updown']
+    rounds18 = stats['holes'] / 18
+    out = para('Three things, in this order, because this is the order the data puts them in. Each one '
+               'has a number attached, so it is possible to be wrong about it later.')
+    goals, gained = [], 0.0
+    pens = d['tee_penalties']
+    if pens:
+        half = pens / 2.0
+        goals.append(('Put the tee ball in play',
+                      f'{pens} penalty tee shots in {d["tee_shots"]} swings is {pens / rounds18:.1f} a '
+                      f'round. Halving that to {half:.0f} is worth about '
+                      f'{(pens - half) / rounds18:.1f} strokes a round on its own.',
+                      f'{pens / d["tee_shots"]:.0%} of tee shots \u2192 {pens / d["tee_shots"] / 2:.0%}'))
+        gained += (pens - half) / rounds18
+    if gs.get('of'):
+        now = gs['made'] / gs['of']
+        target = min(0.45, now + 0.12)
+        extra = (target - now) * gs['of']
+        goals.append(('Get up and down from inside 30 yards',
+                      f'{round(now * 100)}% now against about {SCRATCH["updown_pct"]}% for scratch. '
+                      f'Getting to {round(target * 100)}% would have saved {extra:.0f} shots over these '
+                      f'rounds, about {extra / rounds18:.1f} a round.',
+                      f'{round(now * 100)}% \u2192 {round(target * 100)}%'))
+        gained += extra / rounds18
+    miss = a.get('miss_dir') or {}
+    shorts = miss.get('short', 0)
+    if shorts and shorts >= max([v for k, v in miss.items() if k != 'short'] or [0]):
+        goals.append(('Take enough club',
+                      f'{shorts} of {sum(miss.values())} approach misses are short. That is a club '
+                      'selection habit, not a swing fault, and it is the cheapest thing on this list to '
+                      f'change. It also feeds the item above: short misses leave the longest chips.',
+                      'one more club'))
+    items = ''.join(f'<li><span class="step-n">{i}</span><div><b>{t}</b><span>{why}</span>'
+                    f'<span class="goal-move">{mv}</span></div></li>'
+                    for i, (t, why, mv) in enumerate(goals, 1))
+    out += f'    <ol class="chain chain--goals">{items}</ol>\n'
+    if gained:
+        avg = stats['scoring']['avg18']
+        out += para(f'The two I can put a number on are worth about {gained:.1f} strokes a round between '
+                    f'them, which turns the {avg:.0f} I average with shots tracked into '
+                    f'{an(avg - gained)}.'
+                    + (f' Closing those buckets all the way to scratch would be '
+                       f'{sum(abs(l["per_round"]) for l in leaks[:3]):.1f}, but that is the ceiling rather '
+                       'than a plan.' if leaks else ''))
+    out += para('Nothing here says swing differently. Everything here says play differently and practise '
+                'the two shots that keep costing me, which is what the practice plans are built from.')
+    return card('What I am working on, and why', out)
+
+
+def story_limits(stats, g):
+    q = stats.get('quality') or {}
+    out = para(f'This is built on {stats["rounds_n"]} rounds and {stats["holes"]} holes. That is enough to '
+               'be useful and not enough to be certain, and the honest version of this page says which is '
+               'which.')
+    limits = [
+        ('Two of the four parts are not callable yet',
+         'Driving and putting both have ranges that still cross zero. They may be fine, they may be bad, '
+         'and more rounds will say.'),
+        ('Every lie is assumed',
+         'The data records where the ball was, not what it was sitting on. A chip from thick rough and a '
+         'chip from the fairway are scored the same, so my short game number is probably a little harsher '
+         'than the truth.'),
+        ('Distances are raw GPS',
+         'Mine are measured from where the ball started to where it stopped, so they include roll. The '
+         'figures inside the Arccos app are modelled and run longer.'),
+        ('Some rounds are missing',
+         'Only the rounds where I wore the sensors are here. Rounds without them still move my handicap '
+         'and still appear on the rounds page, but they cannot be broken down.'),
+        ('The scratch baseline is calibrated, not published',
+         'The expected-strokes table behind all of this was assembled from public sources and tuned to '
+         'agree with Arccos on these same rounds, so it is a reasonable standard rather than an '
+         'independent one.'),
+    ]
+    if q.get('excluded_rounds'):
+        limits.append(('A round was thrown out',
+                       f'{", ".join(q["excluded_rounds"])}: the shot data disagreed with the scorecard, '
+                       'so it is excluded from every number here.'))
+    out += '    <dl class="limits">' + ''.join(f'<dt>{t}</dt><dd>{b}</dd>' for t, b in limits) + '</dl>\n'
+    out += para('When any of that changes, these pages change with it. They rebuild from the data every '
+                'morning, so nothing here is a claim I wrote once and left standing.')
+    return card('What this data cannot tell me', out)
+
+
+def page_story(stats, g):
+    return (story_where(stats, g) + story_chain(stats, g) + story_parts(stats, g)
+            + story_leaks(stats) + story_plan(stats, g) + story_limits(stats, g))
+
+
 SUBPAGES = {
+    'golf-story.html': ('My game', 'The whole picture in plain language: what every number means, what connects to what, and what I am working on.', page_story),
     'golf-driving.html': ('Driving', 'Off the tee: distance, penalties and the misses that cost strokes.', page_driving),
     'golf-approach.html': ('Approach', 'Approach play by distance: strokes gained, proximity and greens hit, against scratch.', page_approach),
     'golf-short-game.html': ('Short game', 'Inside 50 yards: up and down rate and where strokes leak around the green.', page_short),
