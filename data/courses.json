@@ -1,0 +1,559 @@
+{
+ "updated": "2026-10-28",
+ "courses": [
+  {
+   "name": "Alondra Park Golf Course",
+   "city": "Lawndale",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Altadena Town and Country Club",
+   "city": "Altadena",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Annandale Golf Club",
+   "city": "Pasadena",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Arroyo Trabuco Golf Club",
+   "city": "Mission Viejo",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Bear Creek Golf Club",
+   "city": "Murrieta",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Brentwood Country Club",
+   "city": "Los Angeles",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Brookside Golf Course - E.O. Nay",
+   "city": "Pasadena",
+   "state": "CA",
+   "times": 2,
+   "first": "2015-07-05",
+   "last": "2015-10-18"
+  },
+  {
+   "name": "Calabasas Country Club",
+   "city": "Calabasas",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Castlewood CC - Hill",
+   "city": "Pleasanton",
+   "state": "CA",
+   "times": 1,
+   "first": "2026-06-04",
+   "last": "2026-06-04"
+  },
+  {
+   "name": "Chester Washington Golf Course",
+   "city": "Los Angeles",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Coronado Municipal Golf Course",
+   "city": "Coronado",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Costa Mesa Country Club",
+   "city": "Costa Mesa",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Dad Miller Golf Course",
+   "city": "Anaheim",
+   "state": "CA",
+   "times": 1,
+   "first": "2015-04-19",
+   "last": "2015-04-19"
+  },
+  {
+   "name": "David L. Baker Memorial Golf Course",
+   "city": "Fountain Valley",
+   "state": "CA",
+   "times": 1,
+   "first": "2015-03-22",
+   "last": "2015-03-22"
+  },
+  {
+   "name": "DeBell Golf Club",
+   "city": "Burbank",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Diamond Bar Golf Club",
+   "city": "Diamond Bar",
+   "state": "CA",
+   "times": 1,
+   "first": "2015-04-12",
+   "last": "2015-04-12"
+  },
+  {
+   "name": "Eaton Canyon Golf Course",
+   "city": "Pasadena",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "El Dorado Park Golf Course",
+   "city": "Long Beach",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Harding Golf Course",
+   "city": "Los Angeles",
+   "state": "CA",
+   "times": 1,
+   "first": "2015-02-21",
+   "last": "2015-02-21"
+  },
+  {
+   "name": "Heartwell Golf Course",
+   "city": "Long Beach",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Hillcrest Country Club",
+   "city": "Los Angeles",
+   "state": "CA",
+   "times": 1,
+   "state_rank": 35,
+   "state_list": "Best in California (2025-26)"
+  },
+  {
+   "name": "Indian Wells Golf Resort",
+   "city": "Indian Wells",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "La Purisima Golf Course",
+   "city": "Lompoc",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Lakewood Country Club",
+   "city": "Lakewood",
+   "state": "CA",
+   "times": 4,
+   "first": "2015-03-01",
+   "last": "2015-10-11"
+  },
+  {
+   "name": "Los Angeles Country Club - North Course",
+   "city": "Los Angeles",
+   "state": "CA",
+   "times": 1,
+   "rank": 16,
+   "list": "America's 100 Greatest (2025-26)",
+   "state_rank": 3,
+   "state_list": "Best in California (2025-26)"
+  },
+  {
+   "name": "Los Coyotes Country Club",
+   "city": "Buena Park",
+   "state": "CA",
+   "times": 1,
+   "first": "2015-08-03",
+   "last": "2015-08-03"
+  },
+  {
+   "name": "Los Robles Greens",
+   "city": "Thousand Oaks",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Los Verdes Golf Course",
+   "city": "Rancho Palos Verdes",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Marbella Country Club",
+   "city": "San Juan Capistrano",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Meadowlark Golf Course",
+   "city": "Huntington Beach",
+   "state": "CA",
+   "times": 1,
+   "first": "2015-02-15",
+   "last": "2015-02-15"
+  },
+  {
+   "name": "Menifee Lakes Country Club",
+   "city": "Menifee",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Mountaingate Country Club",
+   "city": "Los Angeles",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Newport Beach Golf Course",
+   "city": "Newport Beach",
+   "state": "CA",
+   "times": 1,
+   "first": "2015-02-14",
+   "last": "2015-02-14"
+  },
+  {
+   "name": "Orinda Country Club",
+   "city": "Orinda",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "PGA West - Nicklaus Tournament Course",
+   "city": "La Quinta",
+   "state": "CA",
+   "times": 1,
+   "rank": 42,
+   "list": "America's 100 Greatest Public (2025-26)"
+  },
+  {
+   "name": "Palos Verdes Golf Club",
+   "city": "Palos Verdes Estates",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Penmar Golf Course",
+   "city": "Los Angeles",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Rancho Las Palmas Golf Course",
+   "city": "Rancho Mirage",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Recreation Park Golf Course",
+   "city": "Long Beach",
+   "state": "CA",
+   "times": 2,
+   "first": "2015-04-18",
+   "last": "2015-08-08"
+  },
+  {
+   "name": "Rio Hondo Country Club",
+   "city": "Downey",
+   "state": "CA",
+   "times": 1,
+   "first": "2015-07-19",
+   "last": "2015-07-19"
+  },
+  {
+   "name": "Rolling Hills Country Club",
+   "city": "Rolling Hills Estates",
+   "state": "CA",
+   "times": 1,
+   "state_rank": 51,
+   "state_list": "Best in California (2025-26)"
+  },
+  {
+   "name": "Royal Vista Golf Club",
+   "city": "Walnut",
+   "state": "CA",
+   "times": 1,
+   "first": "2015-07-12",
+   "last": "2015-07-12"
+  },
+  {
+   "name": "San Clemente Golf Course",
+   "city": "San Clemente",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "San Dimas Canyon Golf Course",
+   "city": "San Dimas",
+   "state": "CA",
+   "times": 1,
+   "first": "2015-06-06",
+   "last": "2015-06-06"
+  },
+  {
+   "name": "San Francisco Golf Club",
+   "city": "San Francisco",
+   "state": "CA",
+   "times": 1,
+   "rank": 33,
+   "list": "America's 100 Greatest (2025-26)",
+   "state_rank": 5,
+   "state_list": "Best in California (2025-26)"
+  },
+  {
+   "name": "Sandpiper Golf Club",
+   "city": "Goleta",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Santa Ana Country Club",
+   "city": "Santa Ana",
+   "state": "CA",
+   "times": 1,
+   "state_rank": 59,
+   "state_list": "Best in California (2025-26)"
+  },
+  {
+   "name": "Scholl Canyon Golf Course",
+   "city": "Glendale",
+   "state": "CA",
+   "times": 1,
+   "first": "2015-03-21",
+   "last": "2015-03-21"
+  },
+  {
+   "name": "Shady Canyon Golf Club",
+   "city": "Irvine",
+   "state": "CA",
+   "times": 1,
+   "state_rank": 33,
+   "state_list": "Best in California (2025-26)"
+  },
+  {
+   "name": "Shandin Hills Golf Course",
+   "city": "San Bernardino",
+   "state": "CA",
+   "times": 1,
+   "first": "2015-04-04",
+   "last": "2015-04-04"
+  },
+  {
+   "name": "Skylinks At Long Beach GC",
+   "city": "Long Beach",
+   "state": "CA",
+   "times": 1,
+   "first": "2026-07-12",
+   "last": "2026-07-12"
+  },
+  {
+   "name": "Skylinks Golf Course",
+   "city": "Long Beach",
+   "state": "CA",
+   "times": 1,
+   "first": "2015-08-09",
+   "last": "2015-08-09"
+  },
+  {
+   "name": "Stanford Golf Course",
+   "city": "Stanford",
+   "state": "CA",
+   "times": 1,
+   "state_rank": 57,
+   "state_list": "Best in California (2025-26)"
+  },
+  {
+   "name": "Stone Eagle Golf Club",
+   "city": "Palm Desert",
+   "state": "CA",
+   "times": 1,
+   "state_rank": 16,
+   "state_list": "Best in California (2025-26)"
+  },
+  {
+   "name": "Strawberry Farms Golf Club",
+   "city": "Irvine",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Talega Golf Club",
+   "city": "San Clemente",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "The Olympic Club - Cliffs Course",
+   "city": "San Francisco",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "The Olympic Club - Ocean Course",
+   "city": "San Francisco",
+   "state": "CA",
+   "times": 1,
+   "state_rank": 31,
+   "state_list": "Best in California (2025-26)"
+  },
+  {
+   "name": "The Quarry at La Quinta",
+   "city": "La Quinta",
+   "state": "CA",
+   "times": 1,
+   "rank": 85,
+   "list": "America's 100 Greatest (2025-26)",
+   "state_rank": 13,
+   "state_list": "Best in California (2025-26)"
+  },
+  {
+   "name": "The Ranch at Laguna Beach Golf Course",
+   "city": "Laguna Beach",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "The Valley Club of Montecito",
+   "city": "Montecito",
+   "state": "CA",
+   "times": 1,
+   "rank": 71,
+   "list": "America's 100 Greatest (2025-26)",
+   "state_rank": 9,
+   "state_list": "Best in California (2025-26)"
+  },
+  {
+   "name": "Torrey Pines Golf Course - North",
+   "city": "San Diego",
+   "state": "CA",
+   "times": 1,
+   "rank": 49,
+   "list": "America's 100 Greatest Public (2025-26)",
+   "state_rank": 49,
+   "state_list": "Best in California (2025-26)"
+  },
+  {
+   "name": "Trump National Golf Club Los Angeles",
+   "city": "Rancho Palos Verdes",
+   "state": "CA",
+   "times": 1,
+   "rank": 58,
+   "list": "America's 100 Greatest Public (2025-26)",
+   "state_rank": 58,
+   "state_list": "Best in California (2025-26)"
+  },
+  {
+   "name": "Virginia Country Club",
+   "city": "Long Beach",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Westchester Golf Course",
+   "city": "Los Angeles",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Westlake Golf Course",
+   "city": "Westlake Village",
+   "state": "CA",
+   "times": 1,
+   "first": "2015-03-15",
+   "last": "2015-03-15"
+  },
+  {
+   "name": "Willowick Golf Course",
+   "city": "Santa Ana",
+   "state": "CA",
+   "times": 2,
+   "first": "2015-02-28",
+   "last": "2015-07-11"
+  },
+  {
+   "name": "Wilshire Country Club",
+   "city": "Los Angeles",
+   "state": "CA",
+   "times": 1,
+   "state_rank": 38,
+   "state_list": "Best in California (2025-26)"
+  },
+  {
+   "name": "Wilson Golf Course",
+   "city": "Los Angeles",
+   "state": "CA",
+   "times": 1,
+   "first": "2015-03-08",
+   "last": "2015-03-08"
+  },
+  {
+   "name": "Wood Ranch Golf Club",
+   "city": "Simi Valley",
+   "state": "CA",
+   "times": 1
+  },
+  {
+   "name": "Bear Creek GC - West",
+   "city": "Dallas",
+   "state": "TX",
+   "times": 1,
+   "first": "2026-04-23",
+   "last": "2026-04-23"
+  },
+  {
+   "name": "Irving Golf Club",
+   "city": "Irving",
+   "state": "TX",
+   "times": 1,
+   "first": "2026-08-15",
+   "last": "2026-08-15"
+  },
+  {
+   "name": "Shady Oaks Country Club",
+   "city": "Fort Worth",
+   "state": "TX",
+   "times": 1,
+   "first": "2026-08-20",
+   "last": "2026-08-20",
+   "state_rank": 16,
+   "state_list": "Best in Texas (2025-26)"
+  },
+  {
+   "name": "Sherrill Park GC - Two",
+   "city": "Richardson",
+   "state": "TX",
+   "times": 1,
+   "first": "2026-04-29",
+   "last": "2026-04-29"
+  },
+  {
+   "name": "TPC at Las Colinas",
+   "city": "Irving",
+   "state": "TX",
+   "times": 1,
+   "first": "2026-05-09",
+   "last": "2026-05-09"
+  },
+  {
+   "name": "Texas Rangers GC",
+   "city": "Arlington",
+   "state": "TX",
+   "times": 1,
+   "first": "2026-04-15",
+   "last": "2026-04-15"
+  }
+ ]
+}

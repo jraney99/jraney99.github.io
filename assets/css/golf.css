@@ -418,8 +418,10 @@
   border-left: 2px solid var(--rule-2); padding-left: 0.9rem;
 }
 .ex > div b { color: var(--ink); }
-/* on the story page they sit in the prose, one per line, not in a row */
-.story-p + .ex, .ex + .ex { margin-top: 0.6rem; }
+/* in prose they stack one per line; inside a card's row they sit side by side, so the
+   stacking margin must not apply there or every pill after the first is pushed down */
+.story-p + .ex, .gcard > .ex + .ex { margin-top: 0.6rem; }
+.ex-row .ex { margin-top: 0; align-self: start; }
 .gcard > .ex { display: block; margin-top: 1rem; }
 .chain { list-style: none; margin: 1.2rem 0 0; padding: 0; display: grid; gap: 0.1rem; }
 .chain li { display: grid; grid-template-columns: 1.6rem minmax(0, 1fr); gap: 0.9rem; padding: 0.6rem 0; border-top: 1px solid var(--rule); }
@@ -467,3 +469,37 @@
 .bag td:first-child { font-weight: 700; white-space: nowrap; }
 .buildnotes { margin: 0.5rem 0 0; padding-left: 1.1rem; color: var(--ink-2); font-size: 0.9rem; }
 .buildnotes li { margin-top: 0.35rem; max-width: 70ch; }
+
+/* the life list */
+.ranked td { vertical-align: top; }
+.ranked td b { display: block; }
+.ranked td small, .courselist small { display: block; color: var(--muted); font-size: 0.78rem; font-family: var(--sans); }
+/* the rank badge and the list it belongs to read as one line, not two */
+.ranked .rk + small { display: inline; }
+.ranked td:first-child { white-space: nowrap; line-height: 1.9; }
+.rk {
+  display: inline-block; font-family: var(--sans); font-size: 0.68rem; font-weight: 800;
+  letter-spacing: 0.04em; color: var(--muted); border: 1px solid var(--rule-2);
+  border-radius: 999px; padding: 0.05rem 0.45rem; margin-right: 0.3rem;
+}
+.rk--nat { color: var(--accent); border-color: var(--accent); }
+.courselist { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 2rem; }
+.courselist li {
+  break-inside: avoid; display: flex; align-items: baseline; justify-content: space-between;
+  gap: 0.6rem; padding: 0.4rem 0; border-top: 1px solid var(--rule);
+}
+.courselist li:first-child { border-top: 0; }
+.courselist .c { min-width: 0; }
+.courselist .c b { font-size: 0.92rem; font-weight: 600; }
+@media (max-width: 760px) { .courselist { columns: 1; } }
+.courselist .marks { flex: 0 0 auto; white-space: nowrap; }
+.courselist .marks .rk:last-child { margin-right: 0; }
+
+/* the life list, on a map */
+.usmap { display: block; width: 100%; height: auto; margin: 1.4rem 0 0.6rem; }
+.usmap .states path { fill: var(--paper-2); stroke: var(--rule); stroke-width: 0.8; }
+.usmap .pin circle {
+  fill: var(--accent); fill-opacity: 0.55; stroke: var(--accent); stroke-width: 1.2;
+}
+.usmap .pin--ranked circle { fill: var(--mark); fill-opacity: 0.8; stroke: var(--mark); }
+.usmap .pin:hover circle { fill-opacity: 0.95; }
