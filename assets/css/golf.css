@@ -221,11 +221,13 @@
 
 /* ---------- data rows ---------- */
 .drows { list-style: none; margin: 0; padding: 0; }
-.drows li { display: grid; grid-template-columns: 3.6rem minmax(0, 1fr) auto auto; gap: 0.9rem; align-items: center; padding: 0.55rem 0; border-top: 1px solid var(--rule); }
+.drows li { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.9rem; padding: 0.55rem 0; border-top: 1px solid var(--rule); }
 .drows li:first-child { border-top: 0; }
-.drows .from { font-weight: 700; font-size: 0.88rem; white-space: nowrap; }
-.drows .n { color: var(--muted); font-size: 0.8rem; white-space: nowrap; font-family: var(--sans); }
-.drows .val { font-family: var(--serif); font-weight: 600; font-size: 1.05rem; min-width: 3.2ch; text-align: right; font-variant-numeric: tabular-nums; }
+.drows .from { flex: 0 0 auto; min-width: 3.6rem; font-weight: 700; font-size: 0.88rem; white-space: nowrap; }
+.drows .rbar { flex: 1 1 6rem; min-width: 4rem; }
+.drows .n { flex: 1 0 100%; order: 3; color: var(--muted); font-size: 0.8rem; font-family: var(--sans); }
+.drows .n:empty { display: none; }
+.drows .val { flex: 0 0 auto; margin-left: auto; font-family: var(--serif); font-weight: 600; font-size: 1.05rem; min-width: 3.2ch; text-align: right; font-variant-numeric: tabular-nums; }
 .opp-chip {
   display: inline-block;
   border: 1px solid var(--lose-hard);
@@ -322,16 +324,36 @@
 .rnd summary:hover .chev { border-color: var(--accent); }
 .rnd .chev--none { border: 0; }
 .scard-body { padding: 0.2rem 0 1rem; }
-.scard { width: 100%; border-collapse: collapse; font-size: 0.8rem; font-variant-numeric: tabular-nums; }
-.scard th, .scard td { padding: 0.3rem 0.1rem; text-align: center; font-weight: 400; }
-.scard th { font-family: var(--sans); font-size: 0.68rem; color: var(--muted); font-weight: 700; }
-.scard th.lbl, .scard td.tot, .scard th.tot {
-  font-family: var(--sans); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--muted); font-weight: 800; text-align: left; white-space: nowrap; padding-right: 0.7rem;
+.scard-tees {
+  margin: 0 0 0.7rem; font-family: var(--sans); font-size: 0.76rem; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted);
 }
-.scard td.tot, .scard th.tot { text-align: right; padding-left: 0.7rem; padding-right: 0; color: var(--ink); font-family: var(--serif); font-size: 0.95rem; letter-spacing: 0; text-transform: none; }
-.scard tr:first-child th { border-bottom: 1px solid var(--rule); }
-.scard + .table-wrap { margin-top: 0.8rem; }
+.scard {
+  width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 0.82rem;
+  font-variant-numeric: tabular-nums; border: 1px solid var(--rule);
+}
+.scard th, .scard td {
+  padding: 0.34rem 0.2rem; text-align: center; font-weight: 400;
+  border-left: 1px solid var(--rule);
+}
+.scard th.rl {
+  font-family: var(--sans); font-size: 0.64rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); font-weight: 800; text-align: left; white-space: nowrap; width: 4.6rem;
+  padding-left: 0.6rem; padding-right: 0.6rem; border-left: 0; background: var(--paper-2);
+}
+.scard .r-hole th { font-family: var(--sans); font-size: 0.7rem; font-weight: 700; color: var(--muted); }
+.scard .r-hole { border-bottom: 1px solid var(--rule); background: var(--paper-2); }
+.scard .r-yds td, .scard .r-yds th.rl { color: var(--muted); font-size: 0.74rem; }
+.scard .r-par { border-bottom: 1px solid var(--rule); }
+.scard .r-score td { font-weight: 600; font-size: 0.95rem; }
+.scard .r-sg td { font-size: 0.76rem; }
+.scard .tot {
+  width: 3.4rem; border-left: 2px solid var(--rule-2); font-family: var(--serif); font-size: 0.95rem;
+  font-weight: 600; background: var(--paper-2); text-align: center; letter-spacing: 0;
+  text-transform: none; color: var(--ink);
+}
+.scard .r-hole .tot { font-family: var(--sans); font-size: 0.7rem; font-weight: 800; color: var(--muted); }
+.scard + .table-wrap, .table-wrap + .table-wrap { margin-top: 0.9rem; }
 .mk { display: inline-grid; place-items: center; min-width: 1.7em; height: 1.7em; font-weight: 600; }
 .mk--birdie, .mk--eagle { border: 1.5px solid var(--accent); border-radius: 50%; color: var(--accent); }
 .mk--eagle { box-shadow: 0 0 0 2.5px var(--paper), 0 0 0 4px var(--accent-2); }
@@ -345,14 +367,17 @@
    instead of letting that table scroll, and the whole phone layout runs off-screen */
 .gwrap { min-width: 0; width: 100%; box-sizing: border-box; }
 @media (max-width: 560px) {
-  .scard { font-size: 0.72rem; table-layout: fixed; width: 100%; }
-  .scard th, .scard td { padding: 0.28rem 0.02rem; }
-  .scard th.lbl { font-size: 0.58rem; letter-spacing: 0.06em; padding-right: 0.35rem; }
-  .scard td.tot, .scard th.tot { font-size: 0.82rem; padding-left: 0.35rem; }
+  .scard { font-size: 0.66rem; }
+  .scard th, .scard td { padding: 0.26rem 0.02rem; }
+  .scard th.rl {
+    width: 3.1rem; font-size: 0.5rem; letter-spacing: 0.02em; overflow: hidden;
+    padding-left: 0.35rem; padding-right: 0.25rem;
+  }
+  .scard td.tot, .scard th.tot { width: 2.5rem; font-size: 0.74rem; padding-left: 0.2rem; }
+  .scard .r-score td { font-size: 0.74rem; }
+  .scard .r-yds td { font-size: 0.6rem; }
+  .scard .r-sg td { font-size: 0.6rem; }
   .mk { min-width: 1.5em; height: 1.5em; }
-  /* fixed layout shares width evenly, which starves the label and total columns */
-  .scard th.lbl { width: 2.3rem; }
-  .scard td.tot, .scard th.tot { width: 2.2rem; }
   .rnd summary, .rnd--flat { gap: 0.5rem; grid-template-columns: minmax(0, 1fr) auto 2.6rem 0.7rem; }
 }
 
@@ -404,3 +429,8 @@
 .limits dd { margin: 0.2rem 0 0; color: var(--ink-2); font-size: 0.9rem; max-width: 62ch; }
 @media (max-width: 760px) { .parts { grid-template-columns: minmax(0, 1fr); } }
 .rnds .c small.muted-tag { color: var(--muted); font-weight: 400; }
+
+/* sections stacked down a page (the story page, the facet pages) need air between them;
+   inside a grid the gap already handles it */
+.gwrap > section + section, .gwrap > div + section, .gwrap > section + div { margin-top: 2.3rem; }
+.gsect { margin-top: 0; }

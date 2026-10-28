@@ -440,7 +440,7 @@ def page_approach(stats, g):
                        sg(a['sg_round']), 'Strokes/rnd')
             + card('', statpair('Greens in regulation', f'{a["gir_pct"]}%', 'Shots', sum(v['shots'] for v in a['buckets'].values())))
             + card('', statpair('Proximity, greens hit', f'{a["prox_gir_ft"]} ft', 'Proximity, all', f'{a["prox_all_ft"]} ft')))
-    mid = card('SG by distance (yd)', f'    <ul class="plan">{rows}</ul>')
+    mid = card('SG by distance (yd)', f'    <ul class="drows">{rows}</ul>')
     right = card('Where approach shots finish', missgrid)
     return f'<div class="ggrid3"><div class="gcol">{left}</div><div class="gcol">{mid}</div><div class="gcol">{right}</div></div>'
 
@@ -460,7 +460,7 @@ def page_short(stats, g):
             + card('', statpair('Up and down, inside 30 yd',
                                 f'{(s.get("updown_greenside") or ud)["made"]}/{(s.get("updown_greenside") or ud)["of"]}',
                                 'Usual miss', (disp.get('tendency') or '?').title())))
-    right = card('SG by distance (yd)', f'    <ul class="plan">{rows}</ul>')
+    right = card('SG by distance (yd)', f'    <ul class="drows">{rows}</ul>')
     return f'<div class="ggrid"><div class="gcol">{left}</div><div class="gcol">{right}</div></div>'
 
 
@@ -510,34 +510,65 @@ def merge_card(ghin, sensor):
     simply has no strokes-gained figure rather than a zero."""
     holes = {}
     for h in (ghin or []):
-        holes[h['h']] = {'par': h['par'], 'score': h.get('raw') or h['adj'], 'putts': h.get('putts'), 'sg': None}
+        holes[h['h']] = {'par': h['par'], 'score': h.get('raw') or h['adj'], 'putts': h.get('putts'),
+                         'yds': h.get('yds'), 'sg': None}
     for h in (sensor or []):
         e = holes.get(h['h'])
         if e is None:
             e = holes[h['h']] = {'par': h['par'], 'score': h['score'], 'putts': h.get('putts'), 'sg': None}
         e['sg'] = h.get('sg')
+        if e.get('yds') is None:
+            e['yds'] = h.get('yds')
     return [dict(holes[k], h=k) for k in sorted(holes)]
 
 
 def nine(label, rows, show_sg):
-    """One half of a scorecard: holes across, par / score / putts / SG down."""
+    """One half of a scorecard: holes across, yards / par / score / putts / SG down."""
+    dash = chr(8211)
+    cells = lambda key, fmt=str: ''.join(
+        f'<td>{fmt(r[key]) if r.get(key) is not None else dash}</td>' for r in rows)
+    tot = lambda key: sum(r[key] for r in rows if r.get(key) is not None)
     head = ''.join(f'<th>{r["h"]}</th>' for r in rows)
-    par = ''.join(f'<td>{r["par"]}</td>' for r in rows)
+    out = [f'<tr class="r-hole"><th class="rl">{label}</th>{head}'
+           f'<th class="tot">{"Out" if label == "Front" else "In"}</th></tr>']
+    if any(r.get('yds') is not None for r in rows):
+        out.append(f'<tr class="r-yds"><th class="rl">Yards</th>{cells("yds", lambda v: f"{v:,}")}'
+                   f'<td class="tot">{tot("yds"):,}</td></tr>')
+    out.append(f'<tr class="r-par"><th class="rl">Par</th>{cells("par")}'
+               f'<td class="tot">{tot("par")}</td></tr>')
     score = ''.join(
         f'<td><span class="mk mk--{band_for(r["score"] - r["par"])}">{r["score"]}</span></td>'
-        if r.get('score') is not None else '<td>\u2013</td>' for r in rows)
-    putts = ''.join(f'<td>{r["putts"] if r.get("putts") is not None else chr(8211)}</td>' for r in rows)
-    tot = lambda key: sum(r[key] for r in rows if r.get(key) is not None)
-    out = (f'<tr><th class="lbl">{label}</th>{head}<th class="tot">{"Out" if label == "Front" else "In"}</th></tr>'
-           f'<tr><th class="lbl">Par</th>{par}<td class="tot">{tot("par")}</td></tr>'
-           f'<tr><th class="lbl">Score</th>{score}<td class="tot">{tot("score")}</td></tr>')
+        if r.get('score') is not None else f'<td>{dash}</td>' for r in rows)
+    out.append(f'<tr class="r-score"><th class="rl">Score</th>{score}'
+               f'<td class="tot">{tot("score")}</td></tr>')
     if any(r.get('putts') is not None for r in rows):
-        out += f'<tr><th class="lbl">Putts</th>{putts}<td class="tot">{tot("putts")}</td></tr>'
+        out.append(f'<tr class="r-putts"><th class="rl">Putts</th>{cells("putts")}'
+                   f'<td class="tot">{tot("putts")}</td></tr>')
     if show_sg:
-        cells = ''.join(f'<td>{sg(r["sg"]) if r.get("sg") is not None else chr(8211)}</td>' for r in rows)
-        out += (f'<tr><th class="lbl">SG</th>{cells}'
-                f'<td class="tot">{sg(round(sum(r["sg"] for r in rows if r.get("sg") is not None), 1))}</td></tr>')
-    return f'    <div class="table-wrap"><table class="scard">{out}</table></div>\n'
+        sgc = ''.join(f'<td>{sg(r["sg"]) if r.get("sg") is not None else dash}</td>' for r in rows)
+        out.append(f'<tr class="r-sg"><th class="rl">SG</th>{sgc}'
+                   f'<td class="tot">{sg(round(tot("sg"), 1))}</td></tr>')
+    return f'    <div class="table-wrap"><table class="scard">{"".join(out)}</table></div>\n'
+
+
+def tee_line(r, rows):
+    """Which tees, how hard they rate, and the card's own totals. Each piece appears only
+    when it exists: GHIN carries the tee and rating, the yardages come from the course card."""
+    bits = []
+    if r.get('tee'):
+        bits.append(f'{r["tee"]} tees')
+    if r.get('rating') and r.get('slope'):
+        bits.append(f'{r["rating"]} / {r["slope"]}')
+    elif r.get('slope'):
+        bits.append(f'slope {r["slope"]}')
+    yds = sum(h['yds'] for h in rows if h.get('yds') is not None)
+    if yds:
+        bits.append(f'{yds:,} yards')
+    par = sum(h['par'] for h in rows)
+    if par:
+        bits.append(f'par {par}')
+    line = ' \u00b7 '.join(bits)
+    return f'    <p class="scard-tees">{line}</p>\n' if bits else ''
 
 
 def scorecard(rows, source, holes):
@@ -548,9 +579,8 @@ def scorecard(rows, source, holes):
     back = [r for r in rows if r['h'] > 9]
     html = (nine('Front', front, show_sg) if front else '') + (nine('Back', back, show_sg) if back else '')
     total = sum(r['score'] for r in rows if r.get('score') is not None)
-    par = sum(r['par'] for r in rows)
     putts = [r['putts'] for r in rows if r.get('putts') is not None]
-    bits = [f'{total} on a par {par}']
+    bits = [f'Round of {total}']
     if putts:
         bits.append(f'{sum(putts)} putts')
     if show_sg:
@@ -589,7 +619,8 @@ def page_rounds(stats, g):
                   if r.get('card') and tracked else 'From my GHIN card, hole by hole.'
                   if r.get('card') else 'From the shot data, hole by hole.')
         items.append(f'<li><details class="rnd"><summary>{head}<span class="chev"></span></summary>'
-                     f'<div class="scard-body">\n{scorecard(rows, source, r["holes"])}    </div></details></li>')
+                     f'<div class="scard-body">\n{tee_line(r, rows)}{scorecard(rows, source, r["holes"])}'
+                     '    </div></details></li>')
     ghin_table = card('Latest posted rounds (GHIN)',
                       f'    <ul class="rnds">{"".join(items)}</ul>\n'
                       '    <p class="vs-note">Open a round for the scorecard. A differential at or under my '
