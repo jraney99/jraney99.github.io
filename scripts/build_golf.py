@@ -151,9 +151,117 @@ def nav_links(current):
     return ''.join(f'<strong>{t}</strong>' if p == current else f'<a href="{p}">{t}</a>' for p, t in PAGES)
 
 
-def card(section, inner, cls='', icon=''):
+EXPLAIN = {
+    'index': ('What a Handicap Index is',
+              'Not an average. Each round becomes a <b>differential</b>, which is the score adjusted '
+              'for how hard that course plays. The index is the average of the best 8 of the last 20 '
+              'differentials, so it describes my better days, not my typical ones. That is why my index '
+              'is lower than my scoring average, and why both are true at once.'),
+    'differential': ('Differential',
+                     'One round\u2019s score, adjusted for course difficulty, so a 79 on a hard course can '
+                     'beat a 76 on an easy one. A differential at or under my index means that round beat '
+                     'my handicap.'),
+    'scratch': ('Who "scratch" is here',
+                'A 0.0 handicap player. Every comparison on these pages is against what that player would '
+                'be expected to do from the same place on the course, not against tour professionals.'),
+    'expected': ('Expected strokes, the idea everything else is built on',
+                 'From any spot on a course there is an average number of strokes it takes to hole out. '
+                 'From 150 yards in the fairway a scratch player averages about 2.9. From 15 feet, about '
+                 '1.8. Those averages are the measuring stick: every shot moves me from one expected '
+                 'number to another.'),
+    'sg': ('Strokes gained, in one sentence',
+           'Take the expected strokes where the ball started, subtract the expected strokes where it ended, '
+           'subtract 1 for the shot I just played. Positive means I gained ground on scratch; negative means '
+           'I lost it. A 150 yard approach to 15 feet is 2.9 &minus; 1.8 &minus; 1 = <b>+0.1</b>: slightly '
+           'better than par for that shot.'),
+    'categories': ('Why the four categories add up to the total',
+                   'Every shot belongs to exactly one category, decided by where it was played from: off '
+                   'the tee on a par 4 or 5 is driving, a full shot to the green is approach, anything '
+                   'inside 50 yards that is not a putt is short game, and a putt is putting. Add the four '
+                   'up and you get the whole gap to scratch, which is why they always sum to the total.'),
+    'range': ('Why every number has a range',
+              'These come from a handful of rounds, so each figure is an estimate. The range is the band the '
+              'true number is 95% likely to sit in. When the range crosses zero, I genuinely cannot tell '
+              'that part of my game apart from scratch yet, no matter what the headline number says. Those '
+              'get called "not callable", and they never set the practice agenda.'),
+    'thin': ('"Too few to read"',
+             'A distance bucket with fewer than 8 shots behind it is greyed out and never chosen as a '
+             'focus area. Three good chips in a row is not evidence. Under 3 shots it is not published '
+             'at all.'),
+    'gir': ('Green in regulation',
+            'On the green in two shots fewer than par: one shot on a par 3, two on a par 4, three on a '
+            'par 5. Miss it and I need an up and down to save par.'),
+    'updown': ('Up and down',
+               'Missed the green, then holed out in two more shots: one chip or pitch, one putt. The rate '
+               'here counts only shots from inside 30 yards, which is what a scratch comparison is built '
+               'on. The 30 to 50 yard pitches are reported separately, because mixing them in flatters '
+               'the number.'),
+    'prox': ('Proximity',
+             'How far from the hole an approach finishes, measured as the middle value rather than the '
+             'average so one shank does not move it. Closer means shorter putts, which is most of what '
+             'putting is.'),
+    'dispersion': ('Dispersion and miss tendency',
+                   'Lateral is left and right spread, depth is long and short. Both are standard '
+                   'deviations in yards: roughly two thirds of shots land inside that figure. The '
+                   'tendency is where the middle of the pattern sits, which says more about club '
+                   'selection and aim than any single miss.'),
+    'threeputt': ('Three-putts',
+                  'Three or more putts on one hole. What matters is what preceded them: the length of '
+                  'the first putt. The data records where each putt started but not how far the second '
+                  'one was left, so I can say long first putts come before three-putts, and not whether '
+                  'the lag or the short one was the miss.'),
+    'leak': ('What a "leak" is, and what the share means',
+             'A bucket of shots that is measurably costing strokes against scratch, priced per round. '
+             'The share is how much of the total available improvement sits in that one bucket, so a '
+             '41% share means fixing it is worth 41% of everything on the table.'),
+    'adjusted': ('Raw score and adjusted score',
+                 'GHIN caps every hole at net double bogey before it works out a handicap, so a blow-up '
+                 'hole counts for less than it cost me. The scorecard shows the <b>raw</b> score, what I '
+                 'actually made. The round total beside the course name is the adjusted one GHIN posted, '
+                 'which is why the two can differ.'),
+    'makerate': ('Make rate against scratch',
+                 'The share of putts holed from each distance band, next to what a scratch player holes '
+                 'from the same band. Inside 3 feet everyone makes nearly all of them, so the bands that '
+                 'matter are the ones between 5 and 20 feet, where the gap is real and the sample is '
+                 'small.'),
+    'plans': ('How practice follows from this',
+              'The leak table is read straight into my practice sessions: the top leaks become the blocks '
+              'I hit, and the session is built around them rather than around whatever I feel like '
+              'practising. That is also why a bucket with too few shots is never allowed to rank, '
+              'because a fluke would set the agenda for weeks.'),
+    'penalty': ('What a penalty shot costs',
+                'Measured, not assumed: tee shots that took a penalty are compared against my clean tee '
+                'shots on the same holes. The difference is what one costs.'),
+}
+
+
+def ex(key):
+    """One optional explanation, closed. The summary is kept short enough to read as a
+    button; the full title and the explanation are inside."""
+    title, body = EXPLAIN[key]
+    label = title.split(',')[0]
+    return (f'<details class="ex"><summary>{label}</summary>'
+            f'<div><b>{title}.</b> {body}</div></details>')
+
+
+def an(score):
+    """"an 84", "a 79": the eighties are the only scores that take "an"."""
+    return ('an ' if 80 <= score < 90 else 'a ') + f'{score:.0f}'
+
+
+def explainers(*keys):
+    """The same dropdowns the story page uses, put at the foot of the page whose numbers
+    they explain. Closed by default, so the page reads exactly as it did without them."""
+    body = '\n'.join('    ' + ex(k) for k in keys)
+    return card('What these numbers mean', body)
+
+
+def card(section, inner, cls='', icon='', explain=()):
     head = f'  <h2 class="gsect">{section}</h2>\n' if section else ''
-    return f'<section>\n{head}  <div class="gcard {cls}">\n{inner}\n  </div>\n</section>\n'
+    notes = ''.join('\n    ' + ex(k) for k in explain)
+    if notes:
+        notes = f'\n    <div class="ex-row">{notes}\n    </div>'
+    return f'<section>\n{head}  <div class="gcard {cls}">\n{inner}{notes}\n  </div>\n</section>\n'
 
 
 def statpair(a_lbl, a_val, b_lbl, b_val):
@@ -264,7 +372,7 @@ def hero_card(stats, g):
              f'    <ul class="rounds-list">{"".join(rows)}</ul>\n'
              f'    <p class="vs-note" style="text-align:left">From my GHIN record, every posted round. A differential at or '
              f'under my index beat my handicap.</p>')
-    return card('Scoring', inner, cls='gcard--hero')
+    return card('Scoring', inner, cls='gcard--hero', explain=('index', 'differential'))
 
 
 def scoring_card(stats):
@@ -297,7 +405,7 @@ def sg_card(stats):
              f'<span class="num num--lg">{sg(stats["sg"]["total"])}</span></div>\n'
              f'    <div class="sg-tiles">{"".join(tiles)}</div>\n'
              f'    <p class="sg-line"><b>{worst_name}</b> is my biggest opportunity.</p>')
-    return card('Strokes gained breakdown', inner)
+    return card('Strokes gained breakdown', inner, explain=('sg', 'range'))
 
 
 def leaks_card(stats):
@@ -307,7 +415,8 @@ def leaks_card(stats):
                     f'<p class="leak__gain">Fixing this is worth about {abs(l["per_round"]):.1f} strokes a round.</p>'
                     + rbar(l['share'] / 100)
                     + f'<p class="leak__basis">{l["share"]}% of the focus-area upside · {l["basis"]}</p></div></li>')
-    return card('Where to focus', f'    <ol class="leaks">{"".join(rows)}</ol>')
+    return card('Where to focus', f'    <ol class="leaks">{"".join(rows)}</ol>',
+                explain=('leak', 'thin'))
 
 
 def handicap_card(g):
@@ -381,7 +490,8 @@ def page_driving(stats, g):
                   'Distance and dispersion are what is left here.')
     left = (focus_card('off the tee', focus_line, sg(d['sg_round']), 'Strokes/rnd')
             + card('', statpair('Driver, median', f'{d["driver_median_yd"]} yd', 'Longest', f'{d["driver_longest_yd"]} yd'))
-            + card('', statpair('Tee-shot penalties', d['tee_penalties'], 'Fairways', f'{fw["hit"] / fw["of"]:.0%}')))
+            + card('', statpair('Tee-shot penalties', d['tee_penalties'], 'Fairways', f'{fw["hit"] / fw["of"]:.0%}'),
+                   explain=('penalty', 'sg')))
     driver_pct = d['driver_shots'] / d['tee_shots'] if d['tee_shots'] else 0
     td = d.get('tee_decision') or {}
     tee_card = ''
@@ -420,7 +530,7 @@ def page_driving(stats, g):
                  + (f'The penalties alone cost about {abs(pen_leak["per_round"]):.1f} strokes a round.'
                     if pen_leak else 'Penalties are not clearing the bar as a measured leak right now.')
                  + '</p>'))
-    return (f'<div class="ggrid"><div class="gcol">{left}</div><div class="gcol">{right}</div></div>' + explainers('sg', 'penalty', 'range'))
+    return (f'<div class="ggrid"><div class="gcol">{left}</div><div class="gcol">{right}</div></div>')
 
 
 def page_approach(stats, g):
@@ -441,8 +551,8 @@ def page_approach(stats, g):
             + card('', statpair('Greens in regulation', f'{a["gir_pct"]}%', 'Shots', sum(v['shots'] for v in a['buckets'].values())))
             + card('', statpair('Proximity, greens hit', f'{a["prox_gir_ft"]} ft', 'Proximity, all', f'{a["prox_all_ft"]} ft')))
     mid = card('SG by distance (yd)', f'    <ul class="drows">{rows}</ul>')
-    right = card('Where approach shots finish', missgrid)
-    return (f'<div class="ggrid3"><div class="gcol">{left}</div><div class="gcol">{mid}</div><div class="gcol">{right}</div></div>' + explainers('gir', 'prox', 'dispersion', 'range'))
+    right = card('Where approach shots finish', missgrid, explain=('gir', 'prox', 'dispersion'))
+    return (f'<div class="ggrid3"><div class="gcol">{left}</div><div class="gcol">{mid}</div><div class="gcol">{right}</div></div>')
 
 
 def page_short(stats, g):
@@ -460,8 +570,8 @@ def page_short(stats, g):
             + card('', statpair('Up and down, inside 30 yd',
                                 f'{(s.get("updown_greenside") or ud)["made"]}/{(s.get("updown_greenside") or ud)["of"]}',
                                 'Usual miss', (disp.get('tendency') or '?').title())))
-    right = card('SG by distance (yd)', f'    <ul class="drows">{rows}</ul>')
-    return (f'<div class="ggrid"><div class="gcol">{left}</div><div class="gcol">{right}</div></div>' + explainers('updown', 'sg', 'thin'))
+    right = card('SG by distance (yd)', f'    <ul class="drows">{rows}</ul>', explain=('updown', 'thin'))
+    return (f'<div class="ggrid"><div class="gcol">{left}</div><div class="gcol">{right}</div></div>')
 
 
 def page_putting(stats, g):
@@ -484,15 +594,16 @@ def page_putting(stats, g):
                    f'them.</p>'
                    '    <p class="leak__basis">Arccos does not record where the second putt was played from, '
                    'so I cannot say whether these were poor lags or missed short ones. Only the first putt '
-                   'is measured.</p>')
+                   'is measured.</p>', explain=('threeputt',))
     left = (focus_card(f'{worst} ft putts', 'Tighten this band first; the rest of my putting holds up against scratch.',
                        sg(p['sg_round']), 'Strokes/rnd')
             + card('', statpair('Putts per round', p['putts_round'], '3-putts/rnd', round(p['three_putts'] / (stats['holes'] / 18), 1))))
     mid = (card('SG by putt distance', f'    <span class="opp-chip">#1 opportunity: {worst} ft</span>\n    <ul class="drows">{sg_rows}</ul>')
            + card('Make rate by distance', f'    <ul class="drows">{"".join(make_rows)}</ul>\n'
-                  '    <p class="vs-note">▏ marks a scratch player’s make rate (Arccos data)</p>'))
+                  '    <p class="vs-note">▏ marks a scratch player’s make rate (Arccos data)</p>',
+                  explain=('makerate', 'thin')))
     right = autopsy
-    return (f'<div class="ggrid3"><div class="gcol">{left}</div><div class="gcol">{mid}</div><div class="gcol">{right}</div></div>' + explainers('makerate', 'threeputt', 'thin'))
+    return (f'<div class="ggrid3"><div class="gcol">{left}</div><div class="gcol">{mid}</div><div class="gcol">{right}</div></div>')
 
 
 def band_for(over):
@@ -625,7 +736,8 @@ def page_rounds(stats, g):
                       f'    <ul class="rnds">{"".join(items)}</ul>\n'
                       '    <p class="vs-note">Open a round for the scorecard. A differential at or under my '
                       'index beat my handicap. Rounds without sensor shots count for scoring and handicap, '
-                      'but not for the strokes-gained pages.</p>')
+                      'but not for the strokes-gained pages.</p>',
+                      explain=('adjusted', 'differential', 'index'))
     rows = []
     for r in stats['rounds']:
         tot = sum(r['sg'].values())
@@ -643,8 +755,7 @@ def page_rounds(stats, g):
                     for b, v in sorted(stats['scoring']['par4_by_length'].items()))
     small = (f'<div class="ggrid">{card("Average over par, by hole", f"    <ul class=_drows_>{bypar}</ul>".replace("_", chr(34)))}'
              f'{card("Par 4s by length (yd)", f"    <ul class=_drows_>{bylen}</ul>".replace("_", chr(34)))}</div>')
-    return (ghin_table + table + small
-            + explainers('adjusted', 'differential', 'index', 'sg'))
+    return ghin_table + table + small
 
 
 def trackman_data():
@@ -854,107 +965,6 @@ def plans_cards():
 # ---------------------------------------------------------------------------
 # the story page: what the numbers mean, what connects to what, what to do
 # ---------------------------------------------------------------------------
-
-EXPLAIN = {
-    'index': ('What a Handicap Index is',
-              'Not an average. Each round becomes a <b>differential</b>, which is the score adjusted '
-              'for how hard that course plays. The index is the average of the best 8 of the last 20 '
-              'differentials, so it describes my better days, not my typical ones. That is why my index '
-              'is lower than my scoring average, and why both are true at once.'),
-    'differential': ('Differential',
-                     'One round\u2019s score, adjusted for course difficulty, so a 79 on a hard course can '
-                     'beat a 76 on an easy one. A differential at or under my index means that round beat '
-                     'my handicap.'),
-    'scratch': ('Who "scratch" is here',
-                'A 0.0 handicap player. Every comparison on these pages is against what that player would '
-                'be expected to do from the same place on the course, not against tour professionals.'),
-    'expected': ('Expected strokes, the idea everything else is built on',
-                 'From any spot on a course there is an average number of strokes it takes to hole out. '
-                 'From 150 yards in the fairway a scratch player averages about 2.9. From 15 feet, about '
-                 '1.8. Those averages are the measuring stick: every shot moves me from one expected '
-                 'number to another.'),
-    'sg': ('Strokes gained, in one sentence',
-           'Take the expected strokes where the ball started, subtract the expected strokes where it ended, '
-           'subtract 1 for the shot I just played. Positive means I gained ground on scratch; negative means '
-           'I lost it. A 150 yard approach to 15 feet is 2.9 &minus; 1.8 &minus; 1 = <b>+0.1</b>: slightly '
-           'better than par for that shot.'),
-    'categories': ('Why the four categories add up to the total',
-                   'Every shot belongs to exactly one category, decided by where it was played from: off '
-                   'the tee on a par 4 or 5 is driving, a full shot to the green is approach, anything '
-                   'inside 50 yards that is not a putt is short game, and a putt is putting. Add the four '
-                   'up and you get the whole gap to scratch, which is why they always sum to the total.'),
-    'range': ('Why every number has a range',
-              'These come from a handful of rounds, so each figure is an estimate. The range is the band the '
-              'true number is 95% likely to sit in. When the range crosses zero, I genuinely cannot tell '
-              'that part of my game apart from scratch yet, no matter what the headline number says. Those '
-              'get called "not callable", and they never set the practice agenda.'),
-    'thin': ('"Too few to read"',
-             'A distance bucket with fewer than 8 shots behind it is greyed out and never chosen as a '
-             'focus area. Three good chips in a row is not evidence. Under 3 shots it is not published '
-             'at all.'),
-    'gir': ('Green in regulation',
-            'On the green in two shots fewer than par: one shot on a par 3, two on a par 4, three on a '
-            'par 5. Miss it and I need an up and down to save par.'),
-    'updown': ('Up and down',
-               'Missed the green, then holed out in two more shots: one chip or pitch, one putt. The rate '
-               'here counts only shots from inside 30 yards, which is what a scratch comparison is built '
-               'on. The 30 to 50 yard pitches are reported separately, because mixing them in flatters '
-               'the number.'),
-    'prox': ('Proximity',
-             'How far from the hole an approach finishes, measured as the middle value rather than the '
-             'average so one shank does not move it. Closer means shorter putts, which is most of what '
-             'putting is.'),
-    'dispersion': ('Dispersion and miss tendency',
-                   'Lateral is left and right spread, depth is long and short. Both are standard '
-                   'deviations in yards: roughly two thirds of shots land inside that figure. The '
-                   'tendency is where the middle of the pattern sits, which says more about club '
-                   'selection and aim than any single miss.'),
-    'threeputt': ('Three-putts',
-                  'Three or more putts on one hole. What matters is what preceded them: the length of '
-                  'the first putt. The data records where each putt started but not how far the second '
-                  'one was left, so I can say long first putts come before three-putts, and not whether '
-                  'the lag or the short one was the miss.'),
-    'leak': ('What a "leak" is, and what the share means',
-             'A bucket of shots that is measurably costing strokes against scratch, priced per round. '
-             'The share is how much of the total available improvement sits in that one bucket, so a '
-             '41% share means fixing it is worth 41% of everything on the table.'),
-    'adjusted': ('Raw score and adjusted score',
-                 'GHIN caps every hole at net double bogey before it works out a handicap, so a blow-up '
-                 'hole counts for less than it cost me. The scorecard shows the <b>raw</b> score, what I '
-                 'actually made. The round total beside the course name is the adjusted one GHIN posted, '
-                 'which is why the two can differ.'),
-    'makerate': ('Make rate against scratch',
-                 'The share of putts holed from each distance band, next to what a scratch player holes '
-                 'from the same band. Inside 3 feet everyone makes nearly all of them, so the bands that '
-                 'matter are the ones between 5 and 20 feet, where the gap is real and the sample is '
-                 'small.'),
-    'plans': ('How practice follows from this',
-              'The leak table is read straight into my practice sessions: the top leaks become the blocks '
-              'I hit, and the session is built around them rather than around whatever I feel like '
-              'practising. That is also why a bucket with too few shots is never allowed to rank, '
-              'because a fluke would set the agenda for weeks.'),
-    'penalty': ('What a penalty shot costs',
-                'Measured, not assumed: tee shots that took a penalty are compared against my clean tee '
-                'shots on the same holes. The difference is what one costs.'),
-}
-
-
-def ex(key):
-    title, body = EXPLAIN[key]
-    return f'<details class="ex"><summary>{title}</summary><div>{body}</div></details>'
-
-
-def an(score):
-    """"an 84", "a 79": the eighties are the only scores that take "an"."""
-    return ('an ' if 80 <= score < 90 else 'a ') + f'{score:.0f}'
-
-
-def explainers(*keys):
-    """The same dropdowns the story page uses, put at the foot of the page whose numbers
-    they explain. Closed by default, so the page reads exactly as it did without them."""
-    body = '\n'.join('    ' + ex(k) for k in keys)
-    return card('What these numbers mean', body)
-
 
 def para(text):
     return f'    <p class="story-p">{text}</p>\n'
@@ -1227,8 +1237,7 @@ def main():
                f'<section class="span2">{handicap_card(g)}</section>'
                f'<div class="gcol">{bypar_card(g)}</div>'
                f'<div class="gcol">{highlights_card(stats)}</div>'
-               f'</div>'
-               + explainers('sg', 'range', 'leak', 'thin'))
+               f'</div>')
     else:
         hub = f'<div class="ggrid"><section class="span2">{handicap_card(g)}</section><div class="gcol">{bypar_card(g)}</div></div>'
     write_page('golf.html', 'Road to scratch · Jack Raney', 'Road to scratch',
