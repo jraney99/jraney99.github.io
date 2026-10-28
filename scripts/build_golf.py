@@ -495,26 +495,102 @@ def page_putting(stats, g):
     return f'<div class="ggrid3"><div class="gcol">{left}</div><div class="gcol">{mid}</div><div class="gcol">{right}</div></div>'
 
 
+def band_for(over):
+    """The scoring band of one hole. 'dbl' rather than the bands card's 'double+'
+    because this one becomes a CSS class."""
+    return ('eagle' if over <= -2 else 'birdie' if over == -1 else 'par' if over == 0
+            else 'bogey' if over == 1 else 'dbl')
+
+
+def merge_card(ghin, sensor):
+    """One hole-by-hole card from whichever sources exist.
+
+    GHIN is the posted card and wins on par, score and putts; the sensors add strokes
+    gained, and stand alone when GHIN holds no hole detail. A hole the sensors missed
+    simply has no strokes-gained figure rather than a zero."""
+    holes = {}
+    for h in (ghin or []):
+        holes[h['h']] = {'par': h['par'], 'score': h.get('raw') or h['adj'], 'putts': h.get('putts'), 'sg': None}
+    for h in (sensor or []):
+        e = holes.get(h['h'])
+        if e is None:
+            e = holes[h['h']] = {'par': h['par'], 'score': h['score'], 'putts': h.get('putts'), 'sg': None}
+        e['sg'] = h.get('sg')
+    return [dict(holes[k], h=k) for k in sorted(holes)]
+
+
+def nine(label, rows, show_sg):
+    """One half of a scorecard: holes across, par / score / putts / SG down."""
+    head = ''.join(f'<th>{r["h"]}</th>' for r in rows)
+    par = ''.join(f'<td>{r["par"]}</td>' for r in rows)
+    score = ''.join(
+        f'<td><span class="mk mk--{band_for(r["score"] - r["par"])}">{r["score"]}</span></td>'
+        if r.get('score') is not None else '<td>\u2013</td>' for r in rows)
+    putts = ''.join(f'<td>{r["putts"] if r.get("putts") is not None else chr(8211)}</td>' for r in rows)
+    tot = lambda key: sum(r[key] for r in rows if r.get(key) is not None)
+    out = (f'<tr><th class="lbl">{label}</th>{head}<th class="tot">{"Out" if label == "Front" else "In"}</th></tr>'
+           f'<tr><th class="lbl">Par</th>{par}<td class="tot">{tot("par")}</td></tr>'
+           f'<tr><th class="lbl">Score</th>{score}<td class="tot">{tot("score")}</td></tr>')
+    if any(r.get('putts') is not None for r in rows):
+        out += f'<tr><th class="lbl">Putts</th>{putts}<td class="tot">{tot("putts")}</td></tr>'
+    if show_sg:
+        cells = ''.join(f'<td>{sg(r["sg"]) if r.get("sg") is not None else chr(8211)}</td>' for r in rows)
+        out += (f'<tr><th class="lbl">SG</th>{cells}'
+                f'<td class="tot">{sg(round(sum(r["sg"] for r in rows if r.get("sg") is not None), 1))}</td></tr>')
+    return f'    <div class="table-wrap"><table class="scard">{out}</table></div>\n'
+
+
+def scorecard(rows, source, holes):
+    if not rows:
+        return ''
+    show_sg = any(r.get('sg') is not None for r in rows)
+    front = [r for r in rows if r['h'] <= 9]
+    back = [r for r in rows if r['h'] > 9]
+    html = (nine('Front', front, show_sg) if front else '') + (nine('Back', back, show_sg) if back else '')
+    total = sum(r['score'] for r in rows if r.get('score') is not None)
+    par = sum(r['par'] for r in rows)
+    putts = [r['putts'] for r in rows if r.get('putts') is not None]
+    bits = [f'{total} on a par {par}']
+    if putts:
+        bits.append(f'{sum(putts)} putts')
+    if show_sg:
+        bits.append(f'{sg(round(sum(r["sg"] for r in rows if r.get("sg") is not None), 1))} strokes gained')
+    line = ' \u00b7 '.join(bits)
+    short = (f' Only {len(rows)} of the {holes} holes have shot data, so this card is '
+             'the part that was recorded.') if holes and len(rows) < holes else ''
+    return html + f'    <p class="scard-note">{line}. {source}{short}</p>\n'
+
+
 def page_rounds(stats, g):
     idx = num(g['revisions'][-1]['index'])
-    tracked = {r['date'] for r in stats['rounds']}
-    grows = []
+    sensor = {r['date']: r for r in stats['rounds']}
+    items = []
     for r in (g.get('recent_rounds') or []):
         if not r.get('score'):
             continue
         d = date.fromisoformat(r['date']).strftime('%b %d, %Y')
         diff = r.get('differential')
         dcls = 'pos' if diff is not None and diff <= idx else 'warn'
-        has_shots = 'Yes' if r['date'] in tracked else '\u2013'
+        dtxt = f'<span class="df {dcls}">{diff:.1f}</span>' if diff is not None else '<span class="df">\u2013</span>'
+        tracked = sensor.get(r['date'])
         name = r.get('course') or '\u2013'
-        grows.append(f'<tr><td>{d}</td><td>{name}</td><td>{r["holes"]}</td><td class="num num--md">{r["score"]}</td>'
-                     f'<td><span class="{dcls}">{diff:.1f}</span></td><td>{has_shots}</td></tr>')
+        tag = '<small>shots tracked</small>' if tracked else ''
+        head = (f'<span class="c"><b>{name}</b><small>{d} \u00b7 {r["holes"]} holes</small>{tag}</span>'
+                f'<span class="sc num num--md">{r["score"]}</span>{dtxt}')
+        rows = merge_card(r.get('card'), (tracked or {}).get('card'))
+        if not rows:
+            items.append(f'<li class="rnd rnd--flat">{head}<span class="chev chev--none"></span></li>')
+            continue
+        source = ('Par and score from my GHIN card; strokes gained from the shot data.'
+                  if r.get('card') and tracked else 'From my GHIN card, hole by hole.'
+                  if r.get('card') else 'From the shot data, hole by hole.')
+        items.append(f'<li><details class="rnd"><summary>{head}<span class="chev"></span></summary>'
+                     f'<div class="scard-body">\n{scorecard(rows, source, r["holes"])}    </div></details></li>')
     ghin_table = card('Latest posted rounds (GHIN)',
-                      '    <div class="table-wrap"><table class="gtable"><thead><tr><th>Date</th><th>Course</th><th>Holes</th>'
-                      '<th>Score</th><th>Differential</th><th>Shots tracked</th></tr></thead><tbody>'
-                      + ''.join(grows) + '</tbody></table></div>\n'
-                      '    <p class="vs-note">A differential at or under my index beat my handicap. Rounds without '
-                      'sensor shots count for scoring and handicap, but not for the strokes-gained pages.</p>')
+                      f'    <ul class="rnds">{"".join(items)}</ul>\n'
+                      '    <p class="vs-note">Open a round for the scorecard. A differential at or under my '
+                      'index beat my handicap. Rounds without sensor shots count for scoring and handicap, '
+                      'but not for the strokes-gained pages.</p>')
     rows = []
     for r in stats['rounds']:
         tot = sum(r['sg'].values())
