@@ -588,7 +588,7 @@ def page_approach(stats, g):
     missgrid = (f'    <div class="miss-grid">'
                 f'<span class="miss miss--long">Long<b>{m["long"]}</b></span>'
                 f'<span class="miss miss--left">Left<b>{m["left"]}</b></span>'
-                f'<span class="miss miss--gir">On green<b>{a["gir_pct"]}%</b></span>'
+                f'<span class="miss miss--gir"><i class="pin"></i>On green<b>{a["gir_pct"]}%</b></span>'
                 f'<span class="miss miss--right">Right<b>{m["right"]}</b></span>'
                 f'<span class="miss miss--short">Short<b>{m["short"]}</b></span></div>\n'
                 f'    <p class="vs-note" style="text-align:center">Typical spread ±{disp.get("lateral_sd", "?")} yd across, '
@@ -889,9 +889,9 @@ def bag_card():
     if not d:
         return ''
     clubs = d['clubs']
-    cols = [('club', 'Club'), ('model', 'Model'), ('loft', 'Loft'), ('shaft', 'Shaft'),
-            ('flex', 'Flex'), ('length', 'Length'), ('lie', 'Lie'), ('grip', 'Grip'),
-            ('swingweight', 'Swing wt')]
+    cols = [('club', 'Club'), ('model', 'Model'), ('loft', 'Loft'), ('grind', 'Grind'),
+            ('shaft', 'Shaft'), ('flex', 'Flex'), ('length', 'Length'), ('lie', 'Lie'),
+            ('grip', 'Grip'), ('swingweight', 'Swing wt')]
     used = [(k, label) for k, label in cols if any(str(c.get(k) or '').strip() for c in clubs)]
     head = ''.join('<th>%s</th>' % label for _, label in used)
     rows = ''
@@ -903,7 +903,9 @@ def bag_card():
                 v = '%s <small>%s</small>' % (v, c['make'])
             cells += '<td>%s</td>' % (v or '\u2013')
         rows += '<tr>%s</tr>' % cells
-    missing = sum(1 for c in clubs for k, _ in used if not str(c.get(k) or '').strip())
+    blank = lambda c, k: not str(c.get(k) or '').strip()
+    absent = [c['club'] for c in clubs if blank(c, 'model')]
+    partial = [c['club'] for c in clubs if not blank(c, 'model') and blank(c, 'shaft')]
     notes = ''.join('<li>%s</li>' % n for n in (d.get('build_notes') or []))
     inner = ('    <div class="table-wrap"><table class="gtable bag"><thead><tr>%s</tr></thead>'
              '<tbody>%s</tbody></table></div>\n' % (head, rows))
@@ -911,8 +913,10 @@ def bag_card():
         inner += '    <p class="lbl" style="margin-top:1.2rem">How it was built</p>\n' \
                  '    <ul class="buildnotes">%s</ul>\n' % notes
     src = d.get('source') or ''
-    if missing:
-        src += ' %d spec%s still to fill in.' % (missing, '' if missing == 1 else 's')
+    if absent:
+        src += ' Still to add: %s.' % ', '.join(absent)
+    if partial:
+        src += ' Build details still missing for the %s.' % ', '.join(c.lower() for c in partial)
     if d.get('ball'):
         src = 'Ball: %s. %s' % (d['ball'], src)
     inner += '    <p class="vs-note" style="text-align:left">%s</p>' % src.strip()
