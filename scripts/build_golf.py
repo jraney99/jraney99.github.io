@@ -420,7 +420,7 @@ def page_driving(stats, g):
                  + (f'The penalties alone cost about {abs(pen_leak["per_round"]):.1f} strokes a round.'
                     if pen_leak else 'Penalties are not clearing the bar as a measured leak right now.')
                  + '</p>'))
-    return f'<div class="ggrid"><div class="gcol">{left}</div><div class="gcol">{right}</div></div>'
+    return (f'<div class="ggrid"><div class="gcol">{left}</div><div class="gcol">{right}</div></div>' + explainers('sg', 'penalty', 'range'))
 
 
 def page_approach(stats, g):
@@ -442,7 +442,7 @@ def page_approach(stats, g):
             + card('', statpair('Proximity, greens hit', f'{a["prox_gir_ft"]} ft', 'Proximity, all', f'{a["prox_all_ft"]} ft')))
     mid = card('SG by distance (yd)', f'    <ul class="drows">{rows}</ul>')
     right = card('Where approach shots finish', missgrid)
-    return f'<div class="ggrid3"><div class="gcol">{left}</div><div class="gcol">{mid}</div><div class="gcol">{right}</div></div>'
+    return (f'<div class="ggrid3"><div class="gcol">{left}</div><div class="gcol">{mid}</div><div class="gcol">{right}</div></div>' + explainers('gir', 'prox', 'dispersion', 'range'))
 
 
 def page_short(stats, g):
@@ -461,7 +461,7 @@ def page_short(stats, g):
                                 f'{(s.get("updown_greenside") or ud)["made"]}/{(s.get("updown_greenside") or ud)["of"]}',
                                 'Usual miss', (disp.get('tendency') or '?').title())))
     right = card('SG by distance (yd)', f'    <ul class="drows">{rows}</ul>')
-    return f'<div class="ggrid"><div class="gcol">{left}</div><div class="gcol">{right}</div></div>'
+    return (f'<div class="ggrid"><div class="gcol">{left}</div><div class="gcol">{right}</div></div>' + explainers('updown', 'sg', 'thin'))
 
 
 def page_putting(stats, g):
@@ -492,7 +492,7 @@ def page_putting(stats, g):
            + card('Make rate by distance', f'    <ul class="drows">{"".join(make_rows)}</ul>\n'
                   '    <p class="vs-note">▏ marks a scratch player’s make rate (Arccos data)</p>'))
     right = autopsy
-    return f'<div class="ggrid3"><div class="gcol">{left}</div><div class="gcol">{mid}</div><div class="gcol">{right}</div></div>'
+    return (f'<div class="ggrid3"><div class="gcol">{left}</div><div class="gcol">{mid}</div><div class="gcol">{right}</div></div>' + explainers('makerate', 'threeputt', 'thin'))
 
 
 def band_for(over):
@@ -643,7 +643,8 @@ def page_rounds(stats, g):
                     for b, v in sorted(stats['scoring']['par4_by_length'].items()))
     small = (f'<div class="ggrid">{card("Average over par, by hole", f"    <ul class=_drows_>{bypar}</ul>".replace("_", chr(34)))}'
              f'{card("Par 4s by length (yd)", f"    <ul class=_drows_>{bylen}</ul>".replace("_", chr(34)))}</div>')
-    return ghin_table + table + small
+    return (ghin_table + table + small
+            + explainers('adjusted', 'differential', 'index', 'sg'))
 
 
 def trackman_data():
@@ -917,6 +918,16 @@ EXPLAIN = {
              'A bucket of shots that is measurably costing strokes against scratch, priced per round. '
              'The share is how much of the total available improvement sits in that one bucket, so a '
              '41% share means fixing it is worth 41% of everything on the table.'),
+    'adjusted': ('Raw score and adjusted score',
+                 'GHIN caps every hole at net double bogey before it works out a handicap, so a blow-up '
+                 'hole counts for less than it cost me. The scorecard shows the <b>raw</b> score, what I '
+                 'actually made. The round total beside the course name is the adjusted one GHIN posted, '
+                 'which is why the two can differ.'),
+    'makerate': ('Make rate against scratch',
+                 'The share of putts holed from each distance band, next to what a scratch player holes '
+                 'from the same band. Inside 3 feet everyone makes nearly all of them, so the bands that '
+                 'matter are the ones between 5 and 20 feet, where the gap is real and the sample is '
+                 'small.'),
     'plans': ('How practice follows from this',
               'The leak table is read straight into my practice sessions: the top leaks become the blocks '
               'I hit, and the session is built around them rather than around whatever I feel like '
@@ -936,6 +947,13 @@ def ex(key):
 def an(score):
     """"an 84", "a 79": the eighties are the only scores that take "an"."""
     return ('an ' if 80 <= score < 90 else 'a ') + f'{score:.0f}'
+
+
+def explainers(*keys):
+    """The same dropdowns the story page uses, put at the foot of the page whose numbers
+    they explain. Closed by default, so the page reads exactly as it did without them."""
+    body = '\n'.join('    ' + ex(k) for k in keys)
+    return card('What these numbers mean', body)
 
 
 def para(text):
@@ -1209,7 +1227,8 @@ def main():
                f'<section class="span2">{handicap_card(g)}</section>'
                f'<div class="gcol">{bypar_card(g)}</div>'
                f'<div class="gcol">{highlights_card(stats)}</div>'
-               f'</div>')
+               f'</div>'
+               + explainers('sg', 'range', 'leak', 'thin'))
     else:
         hub = f'<div class="ggrid"><section class="span2">{handicap_card(g)}</section><div class="gcol">{bypar_card(g)}</div></div>'
     write_page('golf.html', 'Road to scratch · Jack Raney', 'Road to scratch',
