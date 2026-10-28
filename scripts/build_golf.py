@@ -575,6 +575,10 @@ def page_rounds(stats, g):
         tracked = sensor.get(r['date'])
         name = r.get('course') or '\u2013'
         tag = '<small>shots tracked</small>' if tracked else ''
+        # A row with nothing to open should say why rather than ignoring the click. `raw` is the
+        # sum of GHIN's hole scores, so its absence is the one case where no card can ever exist.
+        if not tracked and not r.get('card') and not r.get('raw'):
+            tag = '<small class="muted-tag">posted as a total, no hole detail</small>'
         head = (f'<span class="c"><b>{name}</b><small>{d} \u00b7 {r["holes"]} holes</small>{tag}</span>'
                 f'<span class="sc num num--md">{r["score"]}</span>{dtxt}')
         rows = merge_card(r.get('card'), (tracked or {}).get('card'))

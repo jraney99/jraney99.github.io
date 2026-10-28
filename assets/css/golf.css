@@ -403,3 +403,4 @@
 .limits dt:first-child { margin-top: 0; }
 .limits dd { margin: 0.2rem 0 0; color: var(--ink-2); font-size: 0.9rem; max-width: 62ch; }
 @media (max-width: 760px) { .parts { grid-template-columns: minmax(0, 1fr); } }
+.rnds .c small.muted-tag { color: var(--muted); font-weight: 400; }
