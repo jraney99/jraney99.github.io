@@ -13,6 +13,7 @@ import os
 from html import escape
 from datetime import date, timedelta
 import golf_goals
+import golf_privacy
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAR_HOLES = {'3': 4, '4': 10, '5': 4}  # a typical 18-hole card
@@ -1657,7 +1658,7 @@ def page_courses(stats, g):
     states = sorted({c['state'] for c in cs if c.get('state')})
     ranked = [c for c in cs if c.get('rank') or c.get('state_rank')]
     figs = ('    <div class="statpair" style="grid-template-columns:repeat(3,minmax(0,1fr))">'
-            '<div><span class="lbl">Courses played</span><span class="num num--lg">%d</span></div>'
+            '<div><span class="lbl">Listed courses</span><span class="num num--lg">%d</span></div>'
             '<div><span class="lbl">States</span><span class="num num--lg">%d</span></div>'
             '<div><span class="lbl">Ranked by Golf Digest</span><span class="num num--lg">%d</span></div>'
             '</div>' % (len(cs), len(states), len(ranked)))
@@ -1763,6 +1764,7 @@ def write_page(fname, title, ogtitle, desc, content, g, stats):
 
 
 def main():
+    golf_privacy.apply(ROOT)
     gpath = os.path.join(ROOT, 'data', 'golf.json')
     if not os.path.exists(gpath):
         print('no data/golf.json; nothing to do')
