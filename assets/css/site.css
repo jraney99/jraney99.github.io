@@ -1426,6 +1426,7 @@ a:hover { color: var(--accent-2); }
 
 @media (max-width: 560px) {
   .figures--3, .figures--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .figures--3 > div:last-child { grid-column: 1 / -1; }
 }
 
 .figures dd small {
@@ -1723,6 +1724,7 @@ output.control__value { color: var(--signal); font-weight: 800; }
 /* ---------- tables ---------- */
 
 .table-wrap {
+  min-width: 0;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   max-width: 100%;
@@ -1760,7 +1762,7 @@ table.data thead th {
   min-width: 4.5rem;
 }
 
-table.data tr.total td {
+table.data tr.total > * {
   font-weight: 800;
   border-top: 1px solid var(--rule-2);
   border-bottom: 0;
@@ -1769,7 +1771,7 @@ table.data tr.total td {
 table.data .is-signal { color: var(--signal); font-weight: 800; }
 
 table.data--terms td { text-align: left; white-space: normal; }
-table.data--terms th { vertical-align: top; width: 9.5rem; }
+table.data--terms th { vertical-align: top; width: 9.5rem; white-space: normal; }
 table.data--text th, table.data--text td { text-align: left; white-space: normal; vertical-align: top; }
 
 @media (max-width: 480px) {
@@ -1991,3 +1993,26 @@ input[type="range"]:active { cursor: grabbing; }
 
 /* ---------- home: timeline logos ---------- */
 .timeline .tl-logo { width: 1.5em; height: 1.5em; border-radius: 5px; vertical-align: -0.42em; margin-right: 0.55rem; box-shadow: 0 0 0 1px var(--rule); }
+
+/* Keep titles and authors predictable when the reading column is narrow. */
+.shelf__count { white-space: nowrap; }
+@media (max-width: 600px) {
+  .prose ul.shelf li { display: block; }
+  .shelf__by { display: block; margin-top: 0.15rem; }
+  .shelf__genre { display: block; margin-top: 0.15rem; }
+}
+/* A second table in one exhibit needs a clear break, not a second table head. */
+.exhibit > .table-wrap + .table-wrap { margin-top: 1.25rem; }
+
+.button small { flex-shrink: 0; white-space: nowrap; }
+.table-wrap.is-scrollable::before {
+  content: 'Scroll sideways to see all columns →';
+  display: block; position: sticky; left: 0;
+  width: fit-content; max-width: 100%; padding: 0 0 0.55rem;
+  font-family: var(--sans); font-size: 0.75rem; line-height: 1.4; color: var(--muted);
+}
+@media print { .table-wrap.is-scrollable::before { display: none; } }
+
+.data--funding { table-layout: fixed; }
+.data--funding th:first-child { width: 60%; }
+.data--funding tbody th { white-space: normal; }

@@ -647,7 +647,6 @@
 }
 
 @media (max-width: 600px) {
-  .goal-history caption::after { content: ' · Scroll for all columns'; }
   .goal-range-table { min-width: 0; font-size: 0.78rem; }
   .goal-range-table th, .goal-range-table td { padding: 0.75rem 0.3rem; }
   .goal-range-table th:first-child { width: 27%; padding-left: 0; }

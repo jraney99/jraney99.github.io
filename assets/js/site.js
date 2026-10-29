@@ -34,3 +34,34 @@
 
 // Lets iOS Safari show :active (pressed) styles on tap.
 document.addEventListener('touchstart', function () {}, { passive: true });
+
+// Wide tables keep their columns readable; make the sideways scroll discoverable
+// and keyboard-accessible only while the table actually exceeds its container.
+(function () {
+  var wraps = Array.from(document.querySelectorAll('.table-wrap'));
+  function update(wrap) {
+    var wide = wrap.scrollWidth > wrap.clientWidth + 1;
+    wrap.classList.toggle('is-scrollable', wide);
+    if (wide) {
+      wrap.setAttribute('tabindex', '0');
+      wrap.setAttribute('role', 'region');
+      wrap.setAttribute('aria-label', 'Scrollable table; use left and right arrow keys to see all columns');
+    } else {
+      wrap.removeAttribute('tabindex');
+      wrap.removeAttribute('role');
+      wrap.removeAttribute('aria-label');
+    }
+  }
+  wraps.forEach(update);
+  if (typeof ResizeObserver !== 'undefined') {
+    var observer = new ResizeObserver(function (entries) {
+      entries.forEach(function (entry) { update(entry.target); });
+    });
+    wraps.forEach(function (wrap) { observer.observe(wrap); });
+  } else {
+    window.addEventListener('resize', function () { wraps.forEach(update); });
+  }
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () { wraps.forEach(update); });
+  }
+})();
