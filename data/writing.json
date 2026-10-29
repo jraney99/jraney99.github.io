@@ -13,7 +13,7 @@
    "topic": "finance",
    "date": "2026-10-27",
    "title": "I audited my own dashboard and found four bugs",
-   "dek": "I built a system to measure my golf game. The useful part was not the charts. It was everything the charts got wrong."
+   "dek": "I went looking for mistakes in my own golf numbers and found four in an afternoon. None of them looked like errors."
   },
   {
    "url": "how-i-use-ai.html",
@@ -45,7 +45,7 @@
    "topic": "ai",
    "date": "2026-10-21",
    "title": "Why I built my own AI agent",
-   "dek": "I built it to run my own admin and to learn the skill I think every company will need. What I’d tell a leader starting out."
+   "dek": "I built it to run my own admin and to learn the skill I think every company will need. What I\u2019d tell a leader starting out."
   },
   {
    "url": "power-bill.html",
@@ -53,7 +53,7 @@
    "topic": "energy",
    "date": "2026-10-16",
    "title": "The $1.8M power bill",
-   "dek": "Three sets of numbers that should have matched, and another customer’s charges on our power bill."
+   "dek": "Three sets of numbers that should have matched, and another customer\u2019s charges on our power bill."
   },
   {
    "url": "cost-model.html",
@@ -148,7 +148,7 @@
    "kind": "Explainer",
    "topic": "bitcoin",
    "date": "2026-10-16",
-   "title": "What bitcoin’s rules promise, and what they don’t",
+   "title": "What bitcoin\u2019s rules promise, and what they don\u2019t",
    "dek": "A fixed supply, a ledger that is expensive to fake and no one in charge. And what none of that guarantees."
   },
   {
