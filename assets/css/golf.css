@@ -293,6 +293,16 @@
   .bands .num--lg { font-size: 1.45rem; }
 }
 
+/* On a phone the nine tabs are twice the width of the screen, and a sideways scroll
+   with no edge to grab hid Courses and TrackMan completely (found 2026-10-29). Wrap
+   them instead: every tab visible, two or three short lines. */
+@media (max-width: 620px) {
+  .gnav {
+    flex-wrap: wrap; overflow-x: visible; gap: 0.45rem 1rem; padding-top: 0.2rem;
+  }
+  .gnav a, .gnav strong { font-size: 0.68rem; letter-spacing: 0.08em; padding-bottom: 0.15rem; }
+}
+
 /* trackman: neutral metric bars (no gained/lost meaning) */
 .rbar i.neu { background: var(--ink-2); }
 .sample-chip { display: inline-block; border: 1px solid var(--signal); color: var(--signal); border-radius: 999px; font-family: var(--sans); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.04em; padding: 0.32rem 0.8rem; margin-bottom: 1.1rem; }
