@@ -1,6 +1,6 @@
 {
  "updated": "2026-10-29",
- "source": "As ordered through the Oly fitting, October 2026. Three-wood specs and TaylorMade UDI 2-iron confirmed October 29, 2026.",
+ "source": "As ordered through the Oly fitting, October 2026. Three-wood specs and TaylorMade UDI 2-iron confirmed October 29, 2026. Driver shaft confirmed as TPT 14 L\u014c on October 29, 2026; Power/Nitro range unconfirmed.",
  "ball": "Titleist Pro V1x",
  "build_notes": [
   "The driver was ordered as a head only. Ping does not sell the head on its own, so it came as a stock build.",
@@ -16,12 +16,13 @@
    "model": "G430 LST",
    "loft": "9\u00b0",
    "grind": "",
-   "shaft": "TPT",
+   "shaft": "TPT 14 L\u014c",
    "flex": "",
    "length": "",
    "lie": "",
    "grip": "ZGRIP Cord midsize",
-   "swingweight": ""
+   "swingweight": "",
+   "shaft_source": "https://tptgolf.com/driver-shafts-specifications/"
   },
   {
    "key": "3w",
