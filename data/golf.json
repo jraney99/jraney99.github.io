@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-27",
+ "updated": "2026-10-29",
  "revisions": [
   {
    "date": "2025-12-27",
@@ -113,7 +113,11 @@
    "course": "Shangri La Resort - Champions/Heritage",
    "score": 75,
    "raw": null,
-   "differential": 2.6
+   "differential": 2.6,
+   "card": null,
+   "tee": "#2",
+   "rating": 72.8,
+   "slope": 138
   },
   {
    "date": "2026-10-23",
@@ -121,7 +125,174 @@
    "course": "Shangri La Resort - Heritage/Legends",
    "score": 83,
    "raw": 83,
-   "differential": 7.9
+   "differential": 7.9,
+   "card": [
+    {
+     "h": 1,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 2,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 3,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 4,
+     "par": 5,
+     "adj": 6,
+     "raw": 6,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 5,
+     "par": 3,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 6,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 7,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 8,
+     "par": 3,
+     "adj": 2,
+     "raw": 2,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 9,
+     "par": 5,
+     "adj": 7,
+     "raw": 7,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 10,
+     "par": 5,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 11,
+     "par": 3,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 12,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 13,
+     "par": 3,
+     "adj": 3,
+     "raw": 3,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 14,
+     "par": 4,
+     "adj": 6,
+     "raw": 6,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 15,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 16,
+     "par": 5,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 17,
+     "par": 3,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 18,
+     "par": 5,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    }
+   ],
+   "tee": "#2",
+   "rating": 73.4,
+   "slope": 138
   },
   {
    "date": "2026-08-15",
@@ -129,7 +300,11 @@
    "course": "Irving Golf Club",
    "score": 76,
    "raw": null,
-   "differential": 3.7
+   "differential": 3.7,
+   "card": null,
+   "tee": "Black",
+   "rating": 71.8,
+   "slope": 127
   },
   {
    "date": "2026-06-06",
@@ -137,7 +312,174 @@
    "course": "San Francisco GC",
    "score": 80,
    "raw": 80,
-   "differential": 7.4
+   "differential": 7.4,
+   "card": [
+    {
+     "h": 1,
+     "par": 5,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 2,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 3,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 4,
+     "par": 3,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 5,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 6,
+     "par": 4,
+     "adj": 6,
+     "raw": 6,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 7,
+     "par": 3,
+     "adj": 3,
+     "raw": 3,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 8,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 9,
+     "par": 5,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 10,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 11,
+     "par": 3,
+     "adj": 3,
+     "raw": 3,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 12,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 13,
+     "par": 3,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 14,
+     "par": 4,
+     "adj": 6,
+     "raw": 6,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 15,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 16,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 17,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 18,
+     "par": 5,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    }
+   ],
+   "tee": "White",
+   "rating": 71.2,
+   "slope": 134
   },
   {
    "date": "2026-06-04",
@@ -145,7 +487,174 @@
    "course": "Castlewood (The Club at) - Hill",
    "score": 82,
    "raw": 82,
-   "differential": 8.6
+   "differential": 8.6,
+   "card": [
+    {
+     "h": 1,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 2,
+     "par": 5,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 3,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 4,
+     "par": 3,
+     "adj": 3,
+     "raw": 3,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 5,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 6,
+     "par": 3,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 7,
+     "par": 4,
+     "adj": 7,
+     "raw": 7,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 8,
+     "par": 4,
+     "adj": 6,
+     "raw": 6,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 9,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 10,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 11,
+     "par": 5,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 12,
+     "par": 3,
+     "adj": 3,
+     "raw": 3,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 13,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 14,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 15,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 16,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 17,
+     "par": 3,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 18,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    }
+   ],
+   "tee": "Black",
+   "rating": 71.8,
+   "slope": 134
   },
   {
    "date": "2026-05-09",
@@ -153,7 +662,174 @@
    "course": "The Nelson Golf and Sports Club - TPC",
    "score": 87,
    "raw": 87,
-   "differential": 10.4
+   "differential": 10.4,
+   "card": [
+    {
+     "h": 1,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 2,
+     "par": 3,
+     "adj": 3,
+     "raw": 3,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 3,
+     "par": 4,
+     "adj": 6,
+     "raw": 6,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 4,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 5,
+     "par": 3,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 6,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 7,
+     "par": 5,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 8,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 9,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 10,
+     "par": 4,
+     "adj": 6,
+     "raw": 6,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 11,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 12,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 13,
+     "par": 3,
+     "adj": 3,
+     "raw": 3,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 14,
+     "par": 4,
+     "adj": 6,
+     "raw": 6,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 15,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 16,
+     "par": 5,
+     "adj": 6,
+     "raw": 6,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 17,
+     "par": 3,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 18,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    }
+   ],
+   "tee": "Byron Nelson",
+   "rating": 74.5,
+   "slope": 136
   },
   {
    "date": "2026-04-29",
@@ -161,7 +837,93 @@
    "course": "Sherrill Park Golf Course - Course #2",
    "score": 39,
    "raw": 39,
-   "differential": 2.6
+   "differential": 2.6,
+   "card": [
+    {
+     "h": 1,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 2,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 3,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 4,
+     "par": 3,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 5,
+     "par": 5,
+     "adj": 6,
+     "raw": 6,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 6,
+     "par": 4,
+     "adj": 3,
+     "raw": 3,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 7,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 8,
+     "par": 3,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 9,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    }
+   ],
+   "tee": "Black",
+   "rating": 35.9,
+   "slope": 133
   },
   {
    "date": "2026-04-23",
@@ -169,7 +931,174 @@
    "course": "Bear Creek Golf Club - West",
    "score": 83,
    "raw": 83,
-   "differential": 9.5
+   "differential": 9.5,
+   "card": [
+    {
+     "h": 1,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 2,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 3,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 4,
+     "par": 5,
+     "adj": 6,
+     "raw": 6,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 5,
+     "par": 3,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 6,
+     "par": 5,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 7,
+     "par": 4,
+     "adj": 6,
+     "raw": 6,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 8,
+     "par": 3,
+     "adj": 3,
+     "raw": 3,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 9,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 10,
+     "par": 5,
+     "adj": 7,
+     "raw": 7,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 11,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 12,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 13,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 14,
+     "par": 3,
+     "adj": 3,
+     "raw": 3,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 15,
+     "par": 5,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 16,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 17,
+     "par": 3,
+     "adj": 3,
+     "raw": 3,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 18,
+     "par": 4,
+     "adj": 6,
+     "raw": 6,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    }
+   ],
+   "tee": "Blue",
+   "rating": 71.5,
+   "slope": 137
   },
   {
    "date": "2026-04-15",
@@ -177,7 +1106,174 @@
    "course": "Arlington Golf Association - Texas Rangers Golf Club",
    "score": 88,
    "raw": 91,
-   "differential": 12.2
+   "differential": 12.2,
+   "card": [
+    {
+     "h": 1,
+     "par": 5,
+     "adj": 7,
+     "raw": 7,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 2,
+     "par": 4,
+     "adj": 6,
+     "raw": 8,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 3,
+     "par": 3,
+     "adj": 3,
+     "raw": 3,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 4,
+     "par": 4,
+     "adj": 7,
+     "raw": 7,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 5,
+     "par": 4,
+     "adj": 6,
+     "raw": 6,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 6,
+     "par": 3,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 7,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 8,
+     "par": 4,
+     "adj": 6,
+     "raw": 7,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 9,
+     "par": 5,
+     "adj": 6,
+     "raw": 6,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 10,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 11,
+     "par": 3,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 12,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 13,
+     "par": 5,
+     "adj": 3,
+     "raw": 3,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 14,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 15,
+     "par": 3,
+     "adj": 3,
+     "raw": 3,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 16,
+     "par": 4,
+     "adj": 6,
+     "raw": 6,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 17,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 18,
+     "par": 5,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    }
+   ],
+   "tee": "Black",
+   "rating": 73.7,
+   "slope": 132
   },
   {
    "date": "2026-04-11",
@@ -185,7 +1281,296 @@
    "course": "The Los Angeles Country Club - NORTH",
    "score": 82,
    "raw": 82,
-   "differential": 6.0
+   "differential": 6.0,
+   "card": [
+    {
+     "h": 1,
+     "par": 5,
+     "adj": 6,
+     "raw": 6,
+     "putts": 2,
+     "fw": false,
+     "gir": false
+    },
+    {
+     "h": 2,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": 3,
+     "fw": false,
+     "gir": true
+    },
+    {
+     "h": 3,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": 2,
+     "fw": false,
+     "gir": false
+    },
+    {
+     "h": 4,
+     "par": 3,
+     "adj": 5,
+     "raw": 5,
+     "putts": 3,
+     "fw": null,
+     "gir": false
+    },
+    {
+     "h": 5,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": 2,
+     "fw": false,
+     "gir": true
+    },
+    {
+     "h": 6,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": 2,
+     "fw": true,
+     "gir": false
+    },
+    {
+     "h": 7,
+     "par": 3,
+     "adj": 4,
+     "raw": 4,
+     "putts": 2,
+     "fw": null,
+     "gir": false
+    },
+    {
+     "h": 8,
+     "par": 5,
+     "adj": 4,
+     "raw": 4,
+     "putts": 2,
+     "fw": true,
+     "gir": true
+    },
+    {
+     "h": 9,
+     "par": 3,
+     "adj": 4,
+     "raw": 4,
+     "putts": 2,
+     "fw": null,
+     "gir": false
+    },
+    {
+     "h": 10,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": 2,
+     "fw": false,
+     "gir": true
+    },
+    {
+     "h": 11,
+     "par": 3,
+     "adj": 5,
+     "raw": 5,
+     "putts": 2,
+     "fw": null,
+     "gir": false
+    },
+    {
+     "h": 12,
+     "par": 4,
+     "adj": 6,
+     "raw": 6,
+     "putts": 2,
+     "fw": true,
+     "gir": false
+    },
+    {
+     "h": 13,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": 2,
+     "fw": false,
+     "gir": false
+    },
+    {
+     "h": 14,
+     "par": 5,
+     "adj": 5,
+     "raw": 5,
+     "putts": 2,
+     "fw": true,
+     "gir": true
+    },
+    {
+     "h": 15,
+     "par": 3,
+     "adj": 3,
+     "raw": 3,
+     "putts": 2,
+     "fw": null,
+     "gir": true
+    },
+    {
+     "h": 16,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": 2,
+     "fw": true,
+     "gir": true
+    },
+    {
+     "h": 17,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": 2,
+     "fw": false,
+     "gir": false
+    },
+    {
+     "h": 18,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": 2,
+     "fw": true,
+     "gir": true
+    }
+   ],
+   "tee": "Black",
+   "rating": 74.6,
+   "slope": 139
+  }
+ ],
+ "course_history": [
+  {
+   "course": "La Purisima Golf Course",
+   "rounds": 1,
+   "first": "2024-07-14",
+   "last": "2024-07-14"
+  },
+  {
+   "course": "Woodley Lakes Golf Course",
+   "rounds": 1,
+   "first": "2024-09-13",
+   "last": "2024-09-13"
+  },
+  {
+   "course": "Indian Wells Golf Resort - PLAYERS",
+   "rounds": 3,
+   "first": "2025-12-26",
+   "last": "2025-12-29"
+  },
+  {
+   "course": "Virginia Country Club",
+   "rounds": 1,
+   "first": "2025-12-30",
+   "last": "2025-12-30"
+  },
+  {
+   "course": "Tenison Park - Highlands",
+   "rounds": 1,
+   "first": "2026-01-06",
+   "last": "2026-01-06"
+  },
+  {
+   "course": "The Nelson Golf and Sports Club - CWV",
+   "rounds": 1,
+   "first": "2026-02-15",
+   "last": "2026-02-15"
+  },
+  {
+   "course": "Fort Worth Golf Association - Pecan Valley Golf Course - Hills",
+   "rounds": 1,
+   "first": "2026-02-27",
+   "last": "2026-02-27"
+  },
+  {
+   "course": "The Nelson Golf and Sports Club - TPC",
+   "rounds": 3,
+   "first": "2026-03-01",
+   "last": "2026-05-09"
+  },
+  {
+   "course": "Arlington Golf Association - Texas Rangers Golf Club",
+   "rounds": 2,
+   "first": "2026-03-10",
+   "last": "2026-04-15"
+  },
+  {
+   "course": "Driftwood Golf and Ranch Club",
+   "rounds": 3,
+   "first": "2026-03-11",
+   "last": "2026-03-13"
+  },
+  {
+   "course": "Austin Country Club",
+   "rounds": 1,
+   "first": "2026-03-14",
+   "last": "2026-03-14"
+  },
+  {
+   "course": "Royal Oaks Country Club (Dallas)",
+   "rounds": 1,
+   "first": "2026-03-31",
+   "last": "2026-03-31"
+  },
+  {
+   "course": "The Los Angeles Country Club - NORTH",
+   "rounds": 1,
+   "first": "2026-04-11",
+   "last": "2026-04-11"
+  },
+  {
+   "course": "Bear Creek Golf Club - West",
+   "rounds": 1,
+   "first": "2026-04-23",
+   "last": "2026-04-23"
+  },
+  {
+   "course": "Sherrill Park Golf Course - Course #2",
+   "rounds": 1,
+   "first": "2026-04-29",
+   "last": "2026-04-29"
+  },
+  {
+   "course": "Castlewood (The Club at) - Hill",
+   "rounds": 1,
+   "first": "2026-06-04",
+   "last": "2026-06-04"
+  },
+  {
+   "course": "San Francisco GC",
+   "rounds": 1,
+   "first": "2026-06-06",
+   "last": "2026-06-06"
+  },
+  {
+   "course": "Irving Golf Club",
+   "rounds": 1,
+   "first": "2026-08-15",
+   "last": "2026-08-15"
+  },
+  {
+   "course": "Shangri La Resort - Heritage/Legends",
+   "rounds": 1,
+   "first": "2026-10-23",
+   "last": "2026-10-23"
+  },
+  {
+   "course": "Shangri La Resort - Champions/Heritage",
+   "rounds": 1,
+   "first": "2026-10-24",
+   "last": "2026-10-24"
   }
  ],
  "by_par": {
@@ -216,7 +1601,7 @@
    105
   ]
  },
- "courses_played": 76,
+ "courses_played": 82,
  "arccos": {
   "rounds": 5,
   "last_round": "2026-06-04",
