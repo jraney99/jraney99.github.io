@@ -1076,7 +1076,15 @@ def page_practice(stats, g):
     gap = [('Dr', 282, 9), ('3w', 258, 8), ('2i', 240, 8), ('4i', 222, 7), ('5i', 212, 6), ('6i', 200, 6),
            ('7i', 188, 5), ('8i', 176, 5), ('9i', 164, 5), ('Pw', 150, 4), ('50\u00b0', 136, 4),
            ('54\u00b0', 120, 4), ('58\u00b0', 105, 4)]
-    gap_rows = ''.join(drow(c, rbar(v / 300, 'neu'), f'\u00b1{s} yd', f'{v}') for c, v, s in gap)
+    # The carries here are sample numbers, but the PGA marks beside them are real, so the
+    # preview shows the same comparison the live page will.
+    def sample_gap(c, v, sp):
+        pga = tour_mark('Carry', c)
+        tick = min(pga[0] / 300, 1.0) * 100 if pga else None
+        note = '\u00b1%s yd' % sp + (' \u00b7 PGA %s' % pga[0] if pga else '')
+        return drow(c, rbar(v / 300, 'neu', tick), note, str(v))
+
+    gap_rows = ''.join(sample_gap(c, v, sp) for c, v, sp in gap)
     disp = [('Dr', 24, 'right'), ('3w', 19, 'right'), ('5i', 13, 'straight'), ('7i', 9, 'straight'),
             ('Pw', 6, 'left'), ('58\u00b0', 4, 'straight')]
     disp_rows = ''.join(drow(c, rbar(v / 30, '' if v > 15 else 'ok'), f'misses {t}', f'\u00b1{v}')
@@ -1099,15 +1107,22 @@ def page_practice(stats, g):
             '<li><span class="leak__rank">2</span><div><p class="leak__name">Short game \u2194 wedge matrix</p>'
             '<p class="leak__gain">On-course leak: 3.2 strokes inside 50 yd. Practice target: half-swing carries within \u00b14 yd.</p>'
             + rbar(0.55) + '<p class="leak__basis">Currently \u00b16 yd \u00b7 sample</p></div></li></ul>')
+    tour_strip = ''
+    bs, sm = tour_mark('Ball Speed', 'Dr'), tour_mark('Smash Factor', 'Dr')
+    if bs and sm:
+        tour_strip = ('\n    <p class="vs-note" style="text-align:left">PGA average driver '
+                      'ball speed %g mph, smash %g</p>' % (bs[0], sm[0]))
     left = (card('', statpair('Sessions, 30 days', '6', 'Balls hit', '412')
-                 + '\n    ' + statpair('Driver ball speed', '167 mph', 'Smash factor', '1.48').replace('statpair', 'statpair" style="margin-top:1rem'),
+                 + '\n    ' + statpair('Driver ball speed', '167 mph', 'Smash factor', '1.48').replace('statpair', 'statpair" style="margin-top:1rem')
+                 + tour_strip,
                  explain=('smash', 'preview'))
             + card('Session log', f'    <ul class="rounds-list" style="margin-top:0">{sess_rows}</ul>'
                    '\n    <p class="vs-note">Each session will open its own page, like a round</p>')
             + card('Practice against play', loop, explain=('practicegrade',)))
     mid = card('Gapping: carry per club', f'    <ul class="drows">{gap_rows}</ul>'
-               '\n    <p class="vs-note">Median carry \u00b7 spread across recorded swings</p>',
-               explain=('gapping', 'carry'))
+               '\n    <p class="vs-note">Median carry \u00b7 spread across recorded swings '
+               '\u00b7 \u258f marks the PGA average</p>',
+               explain=('gapping', 'carry', 'tour'))
     right = (card('Dispersion: left-right spread', f'    <ul class="drows">{disp_rows}</ul>'
                   '\n    <p class="vs-note">Clubs open their own pages: every swing, drawn out</p>',
                   explain=('corridor', 'spread'))
