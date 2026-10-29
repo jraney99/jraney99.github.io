@@ -6,7 +6,7 @@
   "The driver was ordered as a head only. Ping does not sell the head on its own, so it came as a stock build.",
   "Every club has the same grip, ZGRIP Cord midsize, logo down. Ping does not offer that one in midsize, so their answer is a double wrap of the standard size. The alternative was standard Tour Velvet and a regrip by me.",
   "Swingweight is C-9 across the set. The rep's note was that the irons and the 58 would come out a touch over, C9+, and that the difference between the two is about the weight of a dollar bill.",
-  "Black Dot is Ping's standard lie. Everything is a quarter inch over standard length."
+  "Black Dot is Ping's standard lie. The Ping irons and wedges are a quarter inch over standard length. The three-wood has standard shaft length and standard lie."
  ],
  "clubs": [
   {
@@ -32,8 +32,8 @@
    "grind": "",
    "shaft": "Fubuki Z75x5ct",
    "flex": "S",
-   "length": "",
-   "lie": "",
+   "length": "Standard",
+   "lie": "Standard",
    "grip": "ZGRIP Cord midsize",
    "swingweight": ""
   },
