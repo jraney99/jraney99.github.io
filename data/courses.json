@@ -510,10 +510,20 @@
    "state_list": "Best in Hawaii (2025-26)"
   },
   {
-   "name": "Mauna Lani Resort",
+   "name": "Mauna Lani Resort - North",
    "city": "Waimea",
    "state": "HI",
-   "times": 1
+   "times": 1,
+   "state_rank": 17,
+   "state_list": "Best in Hawaii (2025-26)"
+  },
+  {
+   "name": "Mauna Lani Resort - South",
+   "city": "Waimea",
+   "state": "HI",
+   "times": 1,
+   "state_rank": 15,
+   "state_list": "Best in Hawaii (2025-26)"
   },
   {
    "name": "TPC Las Vegas",
