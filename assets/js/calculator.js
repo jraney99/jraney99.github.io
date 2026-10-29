@@ -163,7 +163,7 @@
     var hub = form.querySelector('input[name="hub"]:checked').value;
     var mw = parseFloat(mwInput.value);
     if (!isFinite(mw) || mw < 1) mw = 1;
-    if (mw > 5000) mw = 5000;
+    mw = Math.min(5000, Math.round(mw));
     var stop = parseInt(capInput.value, 10);
     return { hub: hub, mw: mw, stop: stop, cap: STOPS[stop] };
   }
@@ -355,7 +355,8 @@
     var mwText = int(state.mw) + ' MW';
 
     capOut.textContent = capLabel(cap);
-    if (parseFloat(mwRange.value) !== Math.min(state.mw, 1000)) mwRange.value = Math.min(state.mw, 1000);
+    capInput.setAttribute('aria-valuetext', isFinite(cap) ? '$' + int(cap) + ' per megawatt-hour' : 'Never shut off');
+    if (parseFloat(mwRange.value) !== state.mw) mwRange.value = state.mw;
 
     var lead = 'A ' + mwText + ' site at the ' + hubName + ' hub, running every hour of ' + YEAR + ', would have paid ' +
       moneyWords(always) + ' for energy, an average of ' + rate(avgAlways) + '/MWh. ';
@@ -399,7 +400,7 @@
   mwInput.addEventListener('change', function () {
     var v = parseFloat(mwInput.value);
     if (!isFinite(v) || v < 1) mwInput.value = 1;
-    if (v > 5000) mwInput.value = 5000;
+    else mwInput.value = Math.min(5000, Math.round(v));
     render();
   });
 

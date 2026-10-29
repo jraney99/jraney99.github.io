@@ -72,7 +72,7 @@
         <div class="control">
           <label class="control__label" for="mw">Site size</label>
           <div class="control__row">
-            <input type="range" id="mw-range" min="1" max="1000" step="1" value="100" aria-label="Site size in megawatts">
+            <input type="range" id="mw-range" min="1" max="5000" step="1" value="100" aria-label="Site size in megawatts">
             <span class="control__value"><input type="number" id="mw" min="1" max="5000" step="1" value="100" inputmode="numeric"> MW</span>
           </div>
         </div>
@@ -90,6 +90,7 @@
       </form>
 
       <div class="calc__results">
+        <noscript><p>This calculator needs JavaScript to update its results. Enable JavaScript and reload, or read the calculation method and download the hourly data below.</p></noscript>
         <p class="calc__summary" id="summary" aria-live="polite">Loading <span data-fact="ercot.year">2025</span> prices…</p>
 
         <dl class="figures figures--3" id="figures">
@@ -215,8 +216,8 @@
 
 <script src="assets/js/site.js?v=b06be45ed8"></script>
 <script src="assets/data/ercot.js"></script>
-<script src="assets/js/hours.js"></script>
-<script src="assets/js/calculator.js"></script>
+<script src="assets/js/hours.js?v=819bc818f8"></script>
+<script src="assets/js/calculator.js?v=6a4b985b6f"></script>
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a7e1ae8552384ed28cf6cd992b1cf6b8"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

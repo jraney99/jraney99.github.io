@@ -134,6 +134,7 @@
   function update() {
     var p = +r.value, bill = p * VOL, settle = (FIXED - p) * VOL;
     out.textContent = '$' + p + '/MWh';
+    r.setAttribute('aria-valuetext', '$' + p + ' per megawatt-hour');
     document.getElementById('h-bill').textContent = money(bill);
     document.getElementById('h-settle').textContent = money(Math.abs(settle));
     document.getElementById('h-settle-label').textContent = settle > 0 ? 'Site pays the trader' : settle < 0 ? 'Trader pays the site' : 'Settlement';

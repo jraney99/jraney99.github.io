@@ -83,6 +83,15 @@ jobs:
           CHROME: google-chrome
         run: python scripts/build_resume_pdf.py
 
+      - name: Validate pages and calculations before publication
+        run: |
+          python -m unittest discover -s scripts -p 'test_*.py'
+          python scripts/check_site.py
+          node --check assets/js/site.js
+          node --check assets/js/hours.js
+          node --check assets/js/calculator.js
+          node scripts/test_calculator.cjs
+
       - name: Commit changes
         run: |
           if [ -n "$(git status --porcelain)" ]; then
