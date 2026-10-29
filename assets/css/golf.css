@@ -549,3 +549,5 @@
   .tourlist .k { grid-column: 1 / -1; }
   .tourlist .mine { grid-column: 2; }
 }
+.trend td small { display: block; color: var(--muted); font-size: 0.76rem; font-family: var(--sans); }
+.trend .tot { font-weight: 700; }

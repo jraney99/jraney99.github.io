@@ -423,6 +423,97 @@ def briefing(stats, g):
     return card('The short version', head + body + todo + note, cls='gcard--hero')
 
 
+def road_card(stats, g):
+    """The one thing the section is named after: distance to scratch, and the rate.
+
+    The rate is measured from the first index on record to the current one, and the
+    projection it implies is stated as the naive arithmetic it is. Handicaps do not
+    fall in a straight line and this one has already gone up as well as down.
+    """
+    revs = g.get('revisions') or []
+    if len(revs) < 2:
+        return ''
+    first, last = revs[0], revs[-1]
+    now, start = num(last['index']), num(first['index'])
+    peak = max(num(r['index']) for r in revs)
+    peak_date = next(r['date'] for r in revs if num(r['index']) == peak)
+    year_ago = date.fromisoformat(last['date']).replace(
+        year=date.fromisoformat(last['date']).year - 1).isoformat()
+    low = min(num(r['index']) for r in revs if r['date'] >= year_ago)
+    days = (date.fromisoformat(last['date']) - date.fromisoformat(first['date'])).days or 1
+    moved = start - now
+    per_month = moved / (days / 30.44)
+
+    figs = ('    <div class="statpair" style="grid-template-columns:repeat(4,minmax(0,1fr))">'
+            '<div><span class="lbl">Today</span><span class="num num--lg">%s</span></div>'
+            '<div><span class="lbl">Where it started</span><span class="num num--lg">%s</span></div>'
+            '<div><span class="lbl">Low, 12 months</span><span class="num num--lg">%s</span></div>'
+            '<div><span class="lbl">Rounds a year</span><span class="num num--lg">%s</span></div></div>'
+            % (show(now), show(start), show(low), g.get('rounds_last_12_months', '\u2013')))
+
+    out = figs + '\n'
+    out += para('My index was %s when this record starts, on %s, and it peaked at %s on %s. It is '
+                '%s now.' % (show(start), month(first['date']), show(peak), month(peak_date), show(now)))
+    if moved > 0.05:
+        years = now / per_month / 12 if per_month > 0 else None
+        tail = ('. Carried on in a straight line that is another %s, which is not how handicaps '
+                'move and not a forecast: mine has gone up as well as down inside this same record'
+                % ('%.0f months' % (now / per_month) if years and years < 2
+                   else '%.1f years' % years if years else 'a long time'))
+        out += para('That is %.1f strokes in %d months, about %.2f a month%s.'
+                    % (moved, round(days / 30.44), per_month, tail))
+    elif moved < -0.05:
+        out += para('That is %.1f strokes the wrong way so far. The rate that matters has not '
+                    'started yet.' % abs(moved))
+    else:
+        out += para('Which is level, so far.')
+    if stats:
+        out += para('The other half of the same question: on the %d rounds with every shot '
+                    'recorded I am <b>%.0f strokes a round</b> from scratch, and the three leaks '
+                    'below are where %.0f of them sit.'
+                    % (stats['rounds_n'], abs(stats['sg']['total']),
+                       sum(abs(l['per_round']) for l in (stats.get('leaks') or [])[:3])))
+    out += '    ' + ex('index') + '\n'
+    return card('Road to scratch', out, cls='gcard--hero')
+
+
+def trend_card(stats):
+    """Whether the numbers are moving, from the snapshots taken as rounds come in."""
+    path = os.path.join(ROOT, 'data', 'golf-trend.json')
+    if not os.path.exists(path):
+        return ''
+    try:
+        snaps = json.load(open(path, encoding='utf-8'))
+    except (OSError, ValueError):
+        return ''
+    if not isinstance(snaps, list) or len(snaps) < 2:
+        return ''
+    rows = ''
+    for s in snaps:
+        sg = s.get('sg') or {}
+        cells = ''.join('<td>%s</td>' % sg_fmt(sg.get(k)) for k, _, _ in CATS)
+        rows += ('<tr><td><b>%d rounds</b><small>%d holes</small></td>%s<td class="tot">%s</td>'
+                 '<td>%s</td></tr>'
+                 % (s.get('rounds', 0), s.get('holes', 0), cells,
+                    sg_fmt(s.get('total')), s.get('scoring', '\u2013')))
+    head = ''.join('<th>%s</th>' % n for _, n, _ in CATS)
+    inner = ('    <div class="table-wrap"><table class="gtable trend"><thead><tr><th>Sample</th>%s'
+             '<th>Total</th><th>Scoring</th></tr></thead><tbody>%s</tbody></table></div>\n'
+             % (head, rows))
+    note = ('One row each time the numbers move. Collection started %s, so there is not enough '
+            'here to call a direction yet: that needs ten tracked rounds, and I have %d.'
+            % (month(snaps[0]['date']), (stats or {}).get('rounds_n', 0)))
+    if len({s['date'] for s in snaps}) < len(snaps):
+        note += (' The first rows share a date because a round was added back by a correction to '
+                 'the maths, not because of golf. Everything after them is play.')
+    inner += '    <p class="vs-note" style="text-align:left">%s</p>' % note
+    return card('Is it moving?', inner)
+
+
+def sg_fmt(v):
+    return sg(v) if isinstance(v, (int, float)) else '\u2013'
+
+
 def hero_card(stats, g):
     recent = [r for r in (g.get('recent_rounds') or []) if r.get('score')]
     full18 = [r for r in recent if r.get('holes') == 18]
@@ -504,11 +595,11 @@ def handicap_card(g):
     best = g.get('best_differential')
     minus = '−'
     best_txt = (f'{minus if best < 0 else ""}{abs(best):.1f}') if best is not None else '–'
-    chips = (f'<div class="statpair" style="grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:1rem">'
-             f'<div><span class="lbl">Handicap Index</span><span class="num num--lg">{show(cur)}</span></div>'
-             f'<div><span class="lbl">Low, 12 months</span><span class="num num--lg">{show(low)}</span></div>'
-             f'<div><span class="lbl">Rounds, 12 months</span><span class="num num--lg">{g["rounds_last_12_months"]}</span></div>'
-             f'<div><span class="lbl">Best differential</span><span class="num num--lg">{best_txt}</span></div></div>')
+    # Today, the low and the round count now head the Road to scratch card above this
+    # one, so only the figure that is not up there is repeated here.
+    chips = (f'<div class="statpair" style="margin-bottom:1rem">'
+             f'<div><span class="lbl">Best differential</span><span class="num num--lg">{best_txt}</span></div>'
+             f'<div><span class="lbl">Revisions on record</span><span class="num num--lg">{len(revs)}</span></div></div>')
     return card('Handicap Index, every revision', chips + chart(revs, today))
 
 
@@ -1656,7 +1747,9 @@ def main():
                f'<div class="ggrid">'
                f'<div class="gcol">{hero_card(stats, g)}{sg_card(stats)}</div>'
                f'<div class="gcol">{scoring_card(stats)}{leaks_card(stats)}</div>'
+               f'<section class="span2">{road_card(stats, g)}</section>'
                f'<section class="span2">{handicap_card(g)}</section>'
+               f'<section class="span2">{trend_card(stats)}</section>'
                f'<div class="gcol">{bypar_card(g)}</div>'
                f'<div class="gcol">{highlights_card(stats)}</div>'
                f'</div>')
