@@ -1,13 +1,26 @@
 """Partial-bag TrackMan sessions must not replace unhit clubs with invented data."""
 import copy
+import json
 import re
+import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
 import build_golf as golf
 
 
 class PartialBag(unittest.TestCase):
+    def test_goal_history_survives_empty_recent_window(self):
+        tm = {'clubs': [], 'session_stats': [{'id': 'old', 'date': '2026-10-29', 'clubs': []}]}
+        with tempfile.TemporaryDirectory() as root:
+            data = Path(root) / 'data'
+            data.mkdir()
+            (data / 'trackman.json').write_text(json.dumps(tm))
+            with patch.object(golf, 'ROOT', root):
+                self.assertIsNone(golf.trackman_data())
+                self.assertEqual(golf.trackman_data(include_history=True), tm)
+
     def render(self, clubs):
         tm = {'clubs': clubs, 'wedges': [], 'sessions': [], 'sessions_n': 1,
               'balls_total': 10, 'units': {'dist': 'yd', 'speed': 'mph'}}

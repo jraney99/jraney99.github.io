@@ -1,0 +1,54 @@
+{
+  "goals": [
+    {
+      "id": "road-to-315",
+      "title": "Road to 315",
+      "category": "Driving",
+      "page": "golf-driving.html",
+      "status": "active",
+      "started": "2026-10-29",
+      "source": "trackman",
+      "club": "Dr",
+      "club_label": "driver",
+      "metric": "carry",
+      "metric_label": "Median carry",
+      "unit": "yd",
+      "target": 315,
+      "direction": "higher",
+      "min_shots": 8,
+      "description": "Carry my driver 315 yards with a repeatable swing and usable dispersion.",
+      "guardrail": "Distance counts alongside accuracy. I am tracking the share of drives inside a 36-yard corridor so extra carry does not hide a wider miss.",
+      "analysis": {
+        "reviewed": "2026-10-29",
+        "basis": "Initial read: 10 drives at the end of an 81-shot session. I reported feeling tired. This is a starting point, not an established trend.",
+        "summary": "The first session points toward more ball speed and steadier contact. My upward strike was already around 5°. Launch and spin were promising in the middle of the sample, but varied between shots.",
+        "priorities": [
+          {"title": "Find the middle more often", "text": "Use impact-location feedback to tighten the strike pattern. Keep the ordinary shots in the sample, not just the good ones."},
+          {"title": "Build usable speed", "text": "Explore more club speed while preserving strike quality and direction. The ball-speed range below is an estimate to test, not a promise of 315 yards."},
+          {"title": "Keep launch and spin together", "text": "My fastest ball in the first session was not my longest carry. Lower spin alone is not the goal; the combination has to keep the ball in the air."}
+        ],
+        "experiment": {
+          "title": "Driver first, while fresh",
+          "text": "After warming up, hit 20 drives in four sets of five, with rest between sets. Keep the ball and simulator conditions consistent, record impact location, and export every shot.",
+          "review": "Compare median carry, ball speed and corridor percentage with the baseline. A longer best shot is useful evidence; a higher median without a wider miss is stronger evidence."
+        },
+        "ranges": [
+          {"key": "ball_speed", "label": "Ball speed", "unit": "mph", "range": "180–183 mph"},
+          {"key": "club_speed", "label": "Club speed", "unit": "mph", "range": "121–123 mph"},
+          {"key": "launch", "label": "Launch", "unit": "°", "range": "13–15°"},
+          {"key": "spin", "label": "Spin", "unit": "rpm", "range": "2,000–2,400 rpm"}
+        ],
+        "explainers": [
+          {"title": "Why ball speed matters", "text": "Ball speed is how fast the ball leaves the face. Both swing speed and strike efficiency contribute. TrackMan’s published carry optimizer gives about 310 yards at 120 mph club speed, 179 mph ball speed and a +5° attack angle. That is a reference point, not a personalized prediction."},
+          {"title": "Why lower spin is not always better", "text": "Carry depends on ball speed, launch and spin together. A low-spinning shot can roll a long way without carrying farther. This goal measures where the ball lands, not its final distance."},
+          {"title": "How reliable is this?", "text": "One session establishes a baseline. It cannot establish improvement or prove a swing diagnosis. Sessions with fewer than eight driver shots are marked as small samples and do not set the headline numbers. The export does not establish altitude, temperature or normalization settings; keep those consistent when comparing sessions."}
+        ],
+        "sources": [
+          {"title": "TrackMan carry optimizer", "url": "https://cdn.retailtribe.com/websites/merchant/golf/downloads/TrackMan_Driver_Optimization.pdf"},
+          {"title": "What determines carry", "url": "https://support.trackmangolf.com/hc/en-us/articles/39726543090971-Parameters-Carry-Tee-to-Green"},
+          {"title": "Normalization settings", "url": "https://support.trackmangolf.com/hc/en-us/articles/22372077711643-Shot-Analysis-How-To-Use-Normalization"}
+        ]
+      }
+    }
+  ]
+}

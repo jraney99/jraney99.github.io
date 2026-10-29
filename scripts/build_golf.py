@@ -11,6 +11,7 @@ import json
 import math
 import os
 from datetime import date
+import golf_goals
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAR_HOLES = {'3': 4, '4': 10, '5': 4}  # a typical 18-hole card
@@ -926,17 +927,18 @@ def page_rounds(stats, g):
     return ghin_table + table + small
 
 
-def trackman_data():
+def trackman_data(include_history=False):
     """data/trackman.json, written by Archibald's trackman skill from TPS exports.
     Absent or empty until the first session lands, which is the normal state."""
     path = os.path.join(ROOT, 'data', 'trackman.json')
     if not os.path.exists(path):
         return None
     try:
-        tm = json.load(open(path, encoding='utf-8'))
+        with open(path, encoding='utf-8') as source:
+            tm = json.load(source)
     except (OSError, ValueError):
         return None
-    return tm if tm.get('clubs') else None
+    return tm if tm.get('clubs') or (include_history and tm.get('session_stats')) else None
 
 
 def _loop_rows(tm, stats):
@@ -1773,9 +1775,12 @@ def main():
     g = json.load(open(gpath, encoding='utf-8'))
     spath = os.path.join(ROOT, 'data', 'golf-stats.json')
     stats = json.load(open(spath, encoding='utf-8')) if os.path.exists(spath) else None
+    goals = golf_goals.load_goals(ROOT)
+    tm = trackman_data(include_history=True)
     if stats:
         hub = (f'<section class="span2" style="margin-bottom:1.3rem">{briefing(stats, g)}</section>'
-               f'<div class="ggrid">'
+               + golf_goals.index(goals, tm)
+               + f'<div class="ggrid">'
                f'<div class="gcol">{hero_card(stats, g)}{sg_card(stats)}</div>'
                f'<div class="gcol">{scoring_card(stats)}{leaks_card(stats)}</div>'
                f'<section class="span2">{road_card(stats, g)}</section>'
@@ -1791,7 +1796,13 @@ def main():
                hub, g, stats)
     if stats:
         for fname, (title, desc, render) in SUBPAGES.items():
-            write_page(fname, f'{title} · Road to scratch · Jack Raney', title, desc, render(stats, g), g, stats)
+            content = render(stats, g)
+            goal_content = golf_goals.for_page(fname, goals, tm)
+            if goal_content:
+                content = goal_content + '<h2 class="gsect">On the course · Arccos</h2>' + content
+            if fname == 'golf-trackman.html':
+                content = golf_goals.related(goals) + content
+            write_page(fname, f'{title} · Road to scratch · Jack Raney', title, desc, content, g, stats)
 
 
 if __name__ == '__main__':
