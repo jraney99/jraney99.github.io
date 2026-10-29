@@ -1333,17 +1333,24 @@ def us_map(courses):
         cities = json.load(open(cpath, encoding='utf-8'))['cities']
     except (OSError, ValueError, KeyError):
         return ''
-    pr = m['projection']
-    p1, p2 = math.radians(pr['parallels'][0]), math.radians(pr['parallels'][1])
-    n = (math.sin(p1) + math.sin(p2)) / 2
-    cc = math.cos(p1) ** 2 + 2 * n * math.sin(p1)
-    rho0 = math.sqrt(cc - 2 * n * math.sin(math.radians(37.5))) / n
+    def projector(spec):
+        p1, p2 = math.radians(spec['parallels'][0]), math.radians(spec['parallels'][1])
+        n = (math.sin(p1) + math.sin(p2)) / 2
+        cc = math.cos(p1) ** 2 + 2 * n * math.sin(p1)
+        rho0 = math.sqrt(cc - 2 * n * math.sin(math.radians(spec.get('ref', 37.5)))) / n
 
-    def project(lat, lon):
-        lam = math.radians(lon - pr['lon0']) * n
-        rho = math.sqrt(cc - 2 * n * math.sin(math.radians(lat))) / n
-        x, y = rho * math.sin(lam), rho0 - rho * math.cos(lam)
-        return (x - pr['x0']) * pr['k'], (pr['y1'] - y) * pr['k']
+        def go(lat, lon):
+            lam = math.radians(lon - spec['lon0']) * n
+            rho = math.sqrt(cc - 2 * n * math.sin(math.radians(lat))) / n
+            x, y = rho * math.sin(lam), rho0 - rho * math.cos(lam)
+            return ((x - spec['x0']) * spec['k'] + spec.get('dx', 0),
+                    (spec['y1'] - y) * spec['k'] + spec.get('dy', 0))
+        return go
+
+    main_proj = projector(m['projection'])
+    # Hawaii sits in its own corner of the map on its own projection, so its pins
+    # have to go through that one or they land in the Pacific off Mexico.
+    insets = {'HI': projector(m['insets']['Hawaii'])} if m.get('insets', {}).get('Hawaii') else {}
 
     spots = {}
     for c in courses:
@@ -1355,7 +1362,8 @@ def us_map(courses):
     shapes = ''.join('<path d="%s"/>' % d for d in m['states'].values())
     pins = ''
     for key, here in sorted(spots.items(), key=lambda kv: -len(kv[1])):
-        x, y = project(*cities[key])
+        state = key.rsplit(', ', 1)[-1]
+        x, y = insets.get(state, main_proj)(*cities[key])
         ranked = [c for c in here if c.get('rank') or c.get('state_rank')]
         r = 4 + min(len(here), 12) * 0.9
         names = ', '.join(sorted(c['name'] for c in here)[:6])
@@ -1366,10 +1374,12 @@ def us_map(courses):
                  '<title>%s \u00b7 %d course%s%s</title></g>'
                  % (cls, x, y, r, key, len(here), '' if len(here) == 1 else 's',
                     ': ' + names if names else ''))
+    labels = ''.join('<text x="%g" y="%g">%s</text>' % (l['x'], l['y'], l['text'])
+                     for l in (m.get('labels') or []))
     return ('    <svg class="usmap" viewBox="%s" role="img" aria-label="Map of the United '
             'States with a pin on every town I have played a course in">'
-            '<g class="states">%s</g><g class="pins">%s</g></svg>\n'
-            % (m['viewBox'], shapes, pins))
+            '<g class="states">%s</g><g class="maplabels">%s</g><g class="pins">%s</g></svg>\n'
+            % (m['viewBox'], shapes, labels, pins))
 
 
 def courses_data():
@@ -1420,12 +1430,12 @@ def page_courses(stats, g):
         if c.get('state_rank'):
             sep = '<br>' if badges else ''
             badges += '%s<span class="rk">#%d</span><small>%s</small>' % (sep, c['state_rank'], c.get('state_list') or '')
-        rows += ('<tr><td>%s</td><td><b>%s</b><small>%s</small></td><td>%s</td></tr>'
-                 % (badges, c['name'], ', '.join(x for x in (c.get('city'), c.get('state')) if x),
-                    played_on(c) or '\u2013'))
+        rows += ('<tr><td><b>%s</b><small>%s</small></td><td>%s</td><td>%s</td></tr>'
+                 % (c['name'], ', '.join(x for x in (c.get('city'), c.get('state')) if x),
+                    badges, played_on(c) or '\u2013'))
     ranked_card = card('The ranked ones',
                        '    <div class="table-wrap"><table class="gtable ranked"><thead><tr>'
-                       '<th>Ranking</th><th>Course</th><th>Played</th></tr></thead><tbody>%s</tbody>'
+                       '<th>Course</th><th>Ranking</th><th>Played</th></tr></thead><tbody>%s</tbody>'
                        '</table></div>' % rows,
                        explain=('bestinstate',))
 

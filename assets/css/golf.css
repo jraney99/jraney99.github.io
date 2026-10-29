@@ -476,7 +476,7 @@
 .ranked td small, .courselist small { display: block; color: var(--muted); font-size: 0.78rem; font-family: var(--sans); }
 /* the rank badge and the list it belongs to read as one line, not two */
 .ranked .rk + small { display: inline; }
-.ranked td:first-child { white-space: nowrap; line-height: 1.9; }
+.ranked td:nth-child(2) { white-space: nowrap; line-height: 1.9; }
 .rk {
   display: inline-block; font-family: var(--sans); font-size: 0.68rem; font-weight: 800;
   letter-spacing: 0.04em; color: var(--muted); border: 1px solid var(--rule-2);
@@ -503,3 +503,7 @@
 }
 .usmap .pin--ranked circle { fill: var(--mark); fill-opacity: 0.8; stroke: var(--mark); }
 .usmap .pin:hover circle { fill-opacity: 0.95; }
+.usmap .maplabels text {
+  font-family: var(--sans); font-size: 13px; font-weight: 800; letter-spacing: 0.1em;
+  text-transform: uppercase; fill: var(--muted);
+}

@@ -502,6 +502,28 @@
    "times": 1
   },
   {
+   "name": "Mauna Kea Beach Hotel Golf Course",
+   "city": "Waimea",
+   "state": "HI",
+   "times": 1,
+   "state_rank": 5,
+   "state_list": "Best in Hawaii (2025-26)"
+  },
+  {
+   "name": "Mauna Lani Resort",
+   "city": "Waimea",
+   "state": "HI",
+   "times": 1
+  },
+  {
+   "name": "TPC Las Vegas",
+   "city": "Las Vegas",
+   "state": "NV",
+   "times": 1,
+   "state_rank": 17,
+   "state_list": "Best in Nevada (2025-26)"
+  },
+  {
    "name": "Shangri-La Resort",
    "city": "Afton",
    "state": "OK",
@@ -510,12 +532,28 @@
    "last": "2026-10-24"
   },
   {
+   "name": "Austin Country Club",
+   "city": "Austin",
+   "state": "TX",
+   "times": 1,
+   "state_rank": 10,
+   "state_list": "Best in Texas (2025-26)"
+  },
+  {
    "name": "Bear Creek Golf Club - West",
    "city": "Dallas",
    "state": "TX",
    "times": 1,
    "first": "2026-04-23",
    "last": "2026-04-23"
+  },
+  {
+   "name": "Driftwood Golf Club",
+   "city": "Driftwood",
+   "state": "TX",
+   "times": 1,
+   "state_rank": 18,
+   "state_list": "Best in Texas (2025-26)"
   },
   {
    "name": "Irving Golf Club",
