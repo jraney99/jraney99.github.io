@@ -1,6 +1,6 @@
 {
  "updated": "2026-10-29",
- "source": "As ordered through the Oly fitting, October 2026. Three-wood specs confirmed October 29, 2026.",
+ "source": "As ordered through the Oly fitting, October 2026. Three-wood specs and TaylorMade UDI 2-iron confirmed October 29, 2026.",
  "ball": "Titleist Pro V1x",
  "build_notes": [
   "The driver was ordered as a head only. Ping does not sell the head on its own, so it came as a stock build.",
@@ -35,6 +35,20 @@
    "length": "Standard",
    "lie": "Standard",
    "grip": "ZGRIP Cord midsize",
+   "swingweight": ""
+  },
+  {
+   "key": "2i",
+   "club": "2 iron",
+   "make": "TaylorMade",
+   "model": "UDI",
+   "loft": "",
+   "grind": "",
+   "shaft": "",
+   "flex": "",
+   "length": "",
+   "lie": "",
+   "grip": "",
    "swingweight": ""
   },
   {
