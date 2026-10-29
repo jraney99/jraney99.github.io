@@ -1067,9 +1067,23 @@ def bag_card():
     return card('What is in the bag', inner, explain=('swingweight', 'lie'))
 
 
+SAMPLE_GAPPING = [('Dr', 282, 9), ('3w', 258, 8), ('2i', 240, 8), ('4i', 222, 7),
+                  ('5i', 212, 6), ('6i', 200, 6), ('7i', 188, 5), ('8i', 176, 5),
+                  ('9i', 164, 5), ('Pw', 150, 4), ('50°', 136, 4), ('54°', 120, 4), ('58°', 105, 4)]
+SAMPLE_DISPERSION = [('Dr', 24, 'right'), ('3w', 19, 'right'), ('5i', 13, 'straight'),
+                     ('7i', 9, 'straight'), ('Pw', 6, 'left'), ('58°', 4, 'straight')]
+
+
 def page_trackman_real(tm, stats):
     """The TrackMan tab on real measurements."""
     clubs = [c for c in tm['clubs'] if c.get('carry')]
+    measured = {c['club'] for c in tm['clubs']}
+    # Keep the existing preview values for clubs not yet measured. They remain
+    # presentation-only samples: never add them to the ledger or practice grades.
+    clubs += [{'club': club, 'carry': carry, 'carry_spread': spread, 'sample': True}
+              for club, carry, spread in SAMPLE_GAPPING if club not in measured]
+    bag_order = {club: i for i, (club, _, _) in enumerate(SAMPLE_GAPPING)}
+    clubs.sort(key=lambda c: (bag_order.get(c['club'], 99), -c['carry']))
     # scale the bars to whichever is longer, his carry or the tour mark, so a tour
     # tick longer than anything he hits still lands inside the bar
     marks = [tour_mark('Carry', c['club']) for c in clubs]
@@ -1080,6 +1094,10 @@ def page_trackman_real(tm, stats):
         pga = tour_mark('Carry', c['club'])
         tick = min(pga[0] / longest, 1.0) * 100 if pga else None
         note = ('±%s yd' % c['carry_spread']) if c.get('carry_spread') else ('%s shots' % c.get('n', '?'))
+        if c.get('sample'):
+            note = 'Sample · not yet measured · ' + note
+        else:
+            note += ' · %s shots' % c.get('n', '?')
         if pga:
             note += ' · PGA %s' % pga[0]
         return drow(c['club'], rbar(c['carry'] / longest, 'neu', tick), note, str(c['carry']), c.get('thin'))
@@ -1087,10 +1105,15 @@ def page_trackman_real(tm, stats):
     gap_rows = ''.join(gap_row(c) for c in clubs)
 
     withside = [c for c in tm['clubs'] if c.get('side_spread') is not None]
+    withside += [{'club': club, 'side_spread': spread, 'side_bias': bias, 'sample': True}
+                 for club, spread, bias in SAMPLE_DISPERSION if club not in measured]
+    withside.sort(key=lambda c: bag_order.get(c['club'], 99))
     widest = max([c['side_spread'] for c in withside] or [1]) or 1
     disp_rows = ''.join(
         drow(c['club'], rbar(c['side_spread'] / widest, '' if c['side_spread'] > 15 else 'ok'),
-             'misses %s' % c.get('side_bias', '?'), '±%s' % c['side_spread'], c.get('thin'))
+             ('Sample · not yet measured' if c.get('sample') else
+              ('balanced left/right' if c.get('side_bias') == 'straight' else
+               'misses %s' % c.get('side_bias', '?'))), '±%s' % c['side_spread'], c.get('thin'))
         for c in withside)
 
     wrows = ''.join(
@@ -1103,6 +1126,13 @@ def page_trackman_real(tm, stats):
              '    <p class="vs-note">Carries in yards.%s</p>'
              % (wrows, ' Swing lengths inferred from carry clusters: the export records '
                        'no swing length, so this is a reading of the numbers.' if inferred else ''))
+    if not inferred:
+        wrows = ''.join('<tr><td>%s</td><td class="num num--md">%s</td><td>%s</td></tr>'
+                        % (w['club'], w.get('full', '—'), w['n']) for w in tm['wedges'])
+        wedge = ('<div class="table-wrap"><table class="gtable"><thead><tr><th>Club</th>'
+                 '<th>Carry</th><th>Shots</th></tr></thead><tbody>%s</tbody></table></div>'
+                 '<p class="vs-note">Median carry in yards. Swing lengths were not recorded; '
+                 'half- and three-quarter-swing distances are not measured yet.</p>' % wrows)
 
     sess_rows = ''.join(
         '<li><span class="course"><b>%s</b><small>%s · %d balls</small></span>'
@@ -1112,11 +1142,12 @@ def page_trackman_real(tm, stats):
         for s in tm['sessions'])
 
     u = tm.get('units') or {}
-    note = ('Measured on TrackMan over the last %d days, %d balls across %d sessions. '
+    note = ('Measured on TrackMan over the last %d days, %d balls across %d session%s. '
             'Distances read as %s and speeds as %s. Medians, with spread as half the '
             'central 80%% of shots. Clubs under 8 shots are marked and never set a '
             'practice plan.' % (tm.get('window_days', 180), tm.get('balls_total', 0),
-                               tm.get('sessions_n', 0), u.get('dist', 'unknown'),
+                               tm.get('sessions_n', 0), '' if tm.get('sessions_n') == 1 else 's',
+                               u.get('dist', 'unknown'),
                                u.get('speed', 'unknown')))
     probs = tm.get('problems') or []
     if probs:
@@ -1150,8 +1181,11 @@ def page_trackman_real(tm, stats):
     right = card('Dispersion: left-right spread', '    <ul class="drows">%s</ul>' % disp_rows,
                  explain=('corridor', 'spread'))
     if tm['wedges']:
-        right += card('Wedge matrix', wedge, explain=('swinglen',))
+        right += card('Wedge matrix' if inferred else 'Wedge carries', wedge, explain=('swinglen',))
+    coverage = ('<p><span class="sample-chip">Real measurements for %d clubs. '
+                'Clubs not yet hit retain their labeled sample values.</span></p>' % len(measured))
     return (plans_cards()
+            + coverage
             + '<div class="ggrid3"><div class="gcol">%s</div><div class="gcol">%s</div>'
               '<div class="gcol">%s</div></div>' % (left, mid, right)
             + '<section><p class="vs-note">%s</p></section>' % note
@@ -1164,9 +1198,7 @@ def page_practice(stats, g):
     tm = trackman_data()
     if tm:
         return page_trackman_real(tm, stats)
-    gap = [('Dr', 282, 9), ('3w', 258, 8), ('2i', 240, 8), ('4i', 222, 7), ('5i', 212, 6), ('6i', 200, 6),
-           ('7i', 188, 5), ('8i', 176, 5), ('9i', 164, 5), ('Pw', 150, 4), ('50\u00b0', 136, 4),
-           ('54\u00b0', 120, 4), ('58\u00b0', 105, 4)]
+    gap = SAMPLE_GAPPING
     # The carries here are sample numbers, but the PGA marks beside them are real, so the
     # preview shows the same comparison the live page will.
     def sample_gap(c, v, sp):
@@ -1176,8 +1208,7 @@ def page_practice(stats, g):
         return drow(c, rbar(v / 300, 'neu', tick), note, str(v))
 
     gap_rows = ''.join(sample_gap(c, v, sp) for c, v, sp in gap)
-    disp = [('Dr', 24, 'right'), ('3w', 19, 'right'), ('5i', 13, 'straight'), ('7i', 9, 'straight'),
-            ('Pw', 6, 'left'), ('58\u00b0', 4, 'straight')]
+    disp = SAMPLE_DISPERSION
     disp_rows = ''.join(drow(c, rbar(v / 30, '' if v > 15 else 'ok'), f'misses {t}', f'\u00b1{v}')
                         for c, v, t in disp)
     wedge = ('    <div class="table-wrap"><table class="gtable"><thead><tr><th>Club</th><th>1/2</th><th>3/4</th><th>Full</th></tr></thead><tbody>'
