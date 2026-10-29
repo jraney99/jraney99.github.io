@@ -247,5 +247,19 @@
     }
    }
   }
+ },
+ "on_course": {
+  "source": "PGA Tour season statistics, pgatour.com, 2026 season to date through the Butterfield Bermuda Championship",
+  "read": "2026-10-29",
+  "stats": {
+   "driving_distance_yd": 306.1,
+   "driving_accuracy_pct": 61.72,
+   "gir_pct": 66.73,
+   "gir_from_fairway_pct": 77.93,
+   "putts_per_round": 28.96,
+   "putting_average": 1.756,
+   "scrambling_pct": 59.35,
+   "scoring_average": 70.884
+  }
  }
 }

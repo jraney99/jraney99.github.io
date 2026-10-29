@@ -1390,9 +1390,82 @@ def story_limits(stats, g):
     return card('What this data cannot tell me', out)
 
 
+def story_tour(stats, g):
+    """How his game sits against the PGA Tour, where the numbers are comparable.
+
+    Every figure on the left is his own, measured the same way the tour stat is
+    where that is possible, and the ones that are not strictly comparable say so.
+    """
+    d = tour_data()
+    tour = ((d or {}).get('on_course') or {})
+    t = tour.get('stats') or {}
+    if not t:
+        return ''
+    dr, ap, pt = stats['driving'], stats['approach'], stats['putting']
+    fw = dr.get('fairways') or {}
+    holes = [h for r in stats['rounds'] for h in (r.get('card') or [])]
+    missed = [h for h in holes if not h.get('gir')]
+    saved = [h for h in missed if h.get('score') is not None and h['score'] <= h['par']]
+    r18 = [r for r in (g.get('recent_rounds') or []) if r.get('holes') == 18 and r.get('score')]
+    avg = sum(r['score'] for r in r18) / len(r18) if r18 else None
+
+    rows = []
+
+    def row(label, mine, theirs, fmt='%s', note='', good=None):
+        if mine is None or theirs is None:
+            return
+        gap = mine - theirs
+        if good is None:
+            good = abs(gap) < max(abs(theirs) * 0.02, 0.5)
+        rows.append({'label': label, 'mine': fmt % mine, 'theirs': fmt % theirs,
+                     'gap': gap, 'note': note, 'level': good})
+
+    row('Driver, off the tee', dr.get('driver_median_yd'), t.get('driving_distance_yd'), '%.0f yd',
+        'Mine is the median of my measured drives, start to rest. The tour stat is two holes a '
+        'round with whatever club, in all weather, so this is close but not identical.')
+    if fw.get('of'):
+        row('Fairways hit', round(fw['hit'] / fw['of'] * 100), t.get('driving_accuracy_pct'), '%.0f%%')
+    row('Greens in regulation', ap.get('gir_pct'), t.get('gir_pct'), '%.0f%%')
+    if missed:
+        row('Scrambling', round(len(saved) / len(missed) * 100), t.get('scrambling_pct'), '%.0f%%',
+            'Par or better after missing the green, counted the way the tour counts it: '
+            '%d of %d.' % (len(saved), len(missed)))
+    row('Putts per round', pt.get('putts_round'), t.get('putts_per_round'), '%.1f',
+        'Fewer greens should mean fewer putts, because a missed green usually becomes a chip '
+        'and one putt. Taking more of them while hitting half as many greens is the part worth '
+        'looking at.')
+    if avg:
+        row('Scoring average', avg, t.get('scoring_average'), '%.1f',
+            'Mine is every posted 18-hole round. Theirs is competition, on harder setups.')
+
+    cells = ''
+    for r in rows:
+        cls = 'tour-row tour-row--level' if r['level'] else 'tour-row'
+        sign = '+' if r['gap'] > 0 else '\u2212'
+        cells += ('<li class="%s"><span class="k">%s%s</span>'
+                  '<span class="mine">%s</span><span class="sep">vs</span>'
+                  '<span class="theirs">%s</span></li>'
+                  % (cls, r['label'],
+                     '<small>%s</small>' % r['note'] if r['note'] else '',
+                     r['mine'], r['theirs']))
+    out = para('One place I am already there, and a lot of places I am not. The tour figures are '
+               'this season to date; mine are measured the same way where that is possible.')
+    out += '    <ul class="tourlist">%s</ul>\n' % cells
+    level = [r['label'].lower() for r in rows if r['level']]
+    if level:
+        out += para('The only number that is level is <b>%s</b>. Everything that happens after the '
+                    'tee shot is roughly half of what a tour player does: they hit twice the greens '
+                    'and save par from a miss more than twice as often.' % level[0])
+    out += ('    <p class="vs-note" style="text-align:left">%s, read %s. Different courses, '
+            'different setups, and 5 tracked rounds against a season, so this is a yardstick '
+            'rather than a verdict.</p>' % (tour.get('source', ''), tour.get('read', '')))
+    return card('Against the tour', out)
+
+
 def page_story(stats, g):
     return (story_where(stats, g) + story_chain(stats, g) + story_parts(stats, g)
-            + story_leaks(stats) + story_plan(stats, g) + story_limits(stats, g))
+            + story_leaks(stats) + story_tour(stats, g) + story_plan(stats, g)
+            + story_limits(stats, g))
 
 
 def us_map(courses):
