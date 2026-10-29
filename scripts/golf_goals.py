@@ -141,6 +141,30 @@ def history(goal, rows):
             '<tbody>' + ''.join(trs) + '</tbody></table></div>')
 
 
+def training_section(goal):
+    training = goal['analysis'].get('training')
+    if not training:
+        return ''
+    exercises = ''.join(
+        f'<li><b>{esc(e["name"])}</b> · {esc(e["dose"])}'
+        f'<p>{esc(e["purpose"])} {esc(e["cue"])}</p></li>'
+        for e in training['exercises'])
+    sources = ' · '.join(f'<a href="{esc(s["url"])}">{esc(s["title"])}</a>'
+                         for s in training['sources'])
+    return (f'<section class="goal-training" aria-labelledby="{esc(goal["id"])}-training">'
+            f'<h3 id="{esc(goal["id"])}-training">{esc(training["title"])}</h3>'
+            f'<p>{esc(training["intro"])}</p><p class="goal-note">{esc(training["basis"])}</p>'
+            '<div class="goal-columns"><div class="goal-experiment"><h4>A six-week trial</h4>'
+            f'<p>{esc(training["schedule"])}</p><h4>Warm up first</h4><p>{esc(training["warmup"])}</p></div>'
+            '<div><h4>Driver-speed practice</h4>'
+            f'<p>{esc(training["speed"])}</p></div></div>'
+            '<details class="goal-ranges" open><summary>Gym exercises · power first, then strength</summary>'
+            f'<ol class="goal-priorities">{exercises}</ol></details>'
+            '<h4>How to progress</h4>'
+            f'<p>{esc(training["progression"])}</p><h4>Check that it transfers to carry</h4>'
+            f'<p>{esc(training["review"])}</p><p class="goal-note">Training references: {sources}</p></section>')
+
+
 def section(goal, tm):
     rows = observations(goal, tm)
     good = eligible(goal, rows)
@@ -181,7 +205,7 @@ def section(goal, tm):
             f'<ol class="goal-priorities">{priorities}</ol></div>'
             f'<div class="goal-experiment"><span class="lbl">Next practice experiment</span><h3>{esc(a["experiment"]["title"])}</h3>'
             f'<p>{esc(a["experiment"]["text"])}</p><p>{esc(a["experiment"]["review"])}</p>'
-            f'<p class="goal-note">{esc(goal["guardrail"])}</p></div></div>'
+            f'<p class="goal-note">{esc(goal["guardrail"])}</p></div></div>' + training_section(goal) +
             '<h3>Progress by session</h3>' + chart(goal, rows) + f'<p class="goal-note">{trend_note}</p>' + history(goal, rows) +
             '<details class="goal-ranges"><summary>Working ranges · provisional</summary>'
             '<p>Starting estimates to test, not requirements or guarantees. The current measurements update; these ranges stay dated until reviewed.</p>'

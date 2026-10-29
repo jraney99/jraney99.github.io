@@ -32,6 +32,30 @@
           "text": "After warming up, hit 20 drives in four sets of five, with rest between sets. Keep the ball and simulator conditions consistent, record impact location, and export every shot.",
           "review": "Compare median carry, ball speed and corridor percentage with the baseline. A longer best shot is useful evidence; a higher median without a wider miss is stronger evidence."
         },
+        "training": {
+          "title": "Training for more speed",
+          "intro": "My first session put club speed at 116.1 mph. The provisional 121–123 mph range means finding roughly 5–7 mph while keeping the strike. Strength and power training can support that goal, but no exercise or six-week block guarantees 315 yards.",
+          "basis": "Proposed starting plan with gym access. TrackMan cannot identify which muscles are limiting my swing; exercise selection and loading need to reflect training experience. The schedule below is a practical trial, not a tested prescription for my body.",
+          "schedule": "Monday and Thursday: warm up, short driver-speed block, power work, then strength. Leave at least 48 hours between hard sessions. Replace overlapping gym or speed work with these sessions rather than adding everything on top. Retest on a separate fresh day after six weeks.",
+          "warmup": "Start with 5 minutes of brisk walking or cycling, then 6–8 comfortable bodyweight squats, hip hinges and upper-back rotations per side. Before fast swings, build gradually from half-speed to normal driver speed over 8–10 swings.",
+          "exercises": [
+            {"name": "Vertical jump", "dose": "2 sets × 3 jumps", "purpose": "Practice producing force quickly through the legs.", "cue": "Use bodyweight, reset between jumps and land softly with control. Rest 60–90 seconds between sets; stop when jump height or landing quality drops."},
+            {"name": "Rotational medicine-ball throw", "dose": "2 sets × 3 throws per side", "purpose": "Practice accelerating through the hips and trunk.", "cue": "Start with a light 2 kg ball and a designated throwing wall or area. Turn through the hips and feet, release fast, then reset. Train both directions; rest 60–90 seconds between sets."},
+            {"name": "Goblet squat", "dose": "2 sets × 6–8 reps", "purpose": "Build leg strength to support force production.", "cue": "Hold a dumbbell at the chest; sit between the hips and stand through the whole foot. Choose a load that leaves 2–3 good repetitions in reserve. Rest 2 minutes."},
+            {"name": "Dumbbell Romanian deadlift", "dose": "2 sets × 6–8 reps", "purpose": "Strengthen the hip hinge and the back of the legs.", "cue": "Keep a slight knee bend, send the hips back and keep the weights close. Stop the descent before the back rounds. Leave 2–3 repetitions in reserve; rest 2 minutes."},
+            {"name": "Split squat", "dose": "2 sets × 6 reps per side", "purpose": "Develop strength and control on each leg.", "cue": "Use a comfortable staggered stance and lower straight down. Start with bodyweight or light dumbbells; hold a support if balance limits the movement. Rest 90 seconds between sets."},
+            {"name": "Cable row + dumbbell bench press", "dose": "2 sets × 8 reps of each", "purpose": "Build upper-body pulling and pushing strength.", "cue": "Use controlled reps and a comfortable range. Keep 2–3 repetitions in reserve; rest 90–120 seconds between sets. An elevated push-up can replace the press."},
+            {"name": "Pallof press", "dose": "2 sets × 8 reps per side", "purpose": "Practice trunk control against a sideways pull.", "cue": "Stand side-on to a cable, press the handle away from the chest and resist turning. Pause briefly with arms extended. Use a light load; rest 60 seconds."}
+          ],
+          "speed": "After warming up and before lifting, hit 3 sets of 3 drivers with fast intent and a balanced finish. Rest 20–30 seconds between swings and 2 minutes between sets. Use the normal driver and a safe hitting bay; no weighted club is required. If speed or contact keeps falling after a rest, end the block. These nine swings replace extra speed work that day.",
+          "progression": "Weeks 1–2: learn the movements and keep the listed volume. If technique and recovery stay good, weeks 3–6 can add a third set to squats and hinges. Increase a lift by the smallest available weight only when every set reaches the top of its rep range with 2–3 reps still available. Keep jumps and throws brief and fast. Have a qualified trainer check unfamiliar lifts; stop for pain rather than working through it.",
+          "review": "Log training loads, recovery and driver speed. For the six-week comparison, repeat the fresh 20-drive test with the same ball and simulator settings. Compare median club speed, ball speed, carry and corridor percentage, including ordinary misses. Speed-session results stay in the history but are not directly equivalent to the 20-shot test; this page does not yet tag session type automatically. If speed improves without carry, reassess contact, launch and spin before adding more gym work.",
+          "sources": [
+            {"title": "TPI: strength, power and recovery", "url": "https://www.mytpi.com/articles/fitness/the-benefits-of-complex-training-for-power-development-in-golfers"},
+            {"title": "TPI: exercise demonstrations and adaptations", "url": "https://www.mytpi.com/articles/fitness/the-home-workout-how-to-keep-your-golf-strength-and-conditioning-on-track"},
+            {"title": "Research review: conditioning and clubhead speed", "url": "https://pubmed.ncbi.nlm.nih.gov/21547836/"}
+          ]
+        },
         "ranges": [
           {"key": "ball_speed", "label": "Ball speed", "unit": "mph", "range": "180–183 mph"},
           {"key": "club_speed", "label": "Club speed", "unit": "mph", "range": "121–123 mph"},
