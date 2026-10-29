@@ -279,6 +279,12 @@ EXPLAIN = {
                     '<b>Best in State</b> is the deep one: a separate ranking inside each state, '
                     'covering close to a thousand courses across the fifty, which is why a course '
                     'can sit high in California and nowhere near the national list.'),
+    'tour': ('What the PGA numbers next to mine are',
+             'TrackMan\u2019s own tour averages, measured on the PGA Tour in 2023 and published by '
+             'them per club. They are a yardstick, not a target: the gap between my carry and a '
+             'tour player\u2019s says more about club speed than about anything I can practise, '
+             'and nothing on this page is scored against them. Tour data stops at the pitching '
+             'wedge, so the 50, 54 and 58 have no mark.'),
     'plans': ('How practice follows from this',
               'The leak table is read straight into my practice sessions: the top leaks become the blocks '
               'I hit, and the session is built around them rather than around whatever I feel like '
@@ -878,6 +884,29 @@ def grade_text(grade):
     return str(grade) if grade else '\u2014'
 
 
+def tour_data():
+    """data/tour.json: PGA and LPGA averages per club, from TrackMan's own figures."""
+    path = os.path.join(ROOT, 'data', 'tour.json')
+    if not os.path.exists(path):
+        return None
+    try:
+        d = json.load(open(path, encoding='utf-8'))
+    except (OSError, ValueError):
+        return None
+    return d if d.get('metrics') else None
+
+
+def tour_mark(metric, club, tour='pga'):
+    """One tour average, or None where they do not publish that club. Wedges past the
+    pitching wedge have no tour number, so nothing is shown rather than invented."""
+    d = tour_data()
+    if not d:
+        return None
+    m = ((d['metrics'].get(metric) or {}).get(tour) or {})
+    v = (m.get('clubs') or {}).get(club)
+    return None if v is None else (v, m.get('unit') or '')
+
+
 def clubs_data():
     """data/clubs.json: the bag as built. Absent means the card does not render."""
     path = os.path.join(ROOT, 'data', 'clubs.json')
@@ -934,12 +963,21 @@ def bag_card():
 def page_trackman_real(tm, stats):
     """The TrackMan tab on real measurements."""
     clubs = [c for c in tm['clubs'] if c.get('carry')]
-    longest = max([c['carry'] for c in clubs] or [1])
-    gap_rows = ''.join(
-        drow(c['club'], rbar(c['carry'] / longest, 'neu'),
-             ('±%s yd' % c['carry_spread']) if c.get('carry_spread') else ('%s shots' % c.get('n', '?')),
-             str(c['carry']), c.get('thin'))
-        for c in clubs)
+    # scale the bars to whichever is longer, his carry or the tour mark, so a tour
+    # tick longer than anything he hits still lands inside the bar
+    marks = [tour_mark('Carry', c['club']) for c in clubs]
+    longest = max([c['carry'] for c in clubs] + [m[0] for m in marks if m] or [1])
+    def gap_row(c):
+        # The tick is the PGA average carry for that club, on the same scale as the
+        # bar, the way the putting page marks a scratch player's make rate.
+        pga = tour_mark('Carry', c['club'])
+        tick = min(pga[0] / longest, 1.0) * 100 if pga else None
+        note = ('±%s yd' % c['carry_spread']) if c.get('carry_spread') else ('%s shots' % c.get('n', '?'))
+        if pga:
+            note += ' · PGA %s' % pga[0]
+        return drow(c['club'], rbar(c['carry'] / longest, 'neu', tick), note, str(c['carry']), c.get('thin'))
+
+    gap_rows = ''.join(gap_row(c) for c in clubs)
 
     withside = [c for c in tm['clubs'] if c.get('side_spread') is not None]
     widest = max([c['side_spread'] for c in withside] or [1]) or 1
@@ -979,10 +1017,19 @@ def page_trackman_real(tm, stats):
 
     strip = statpair('Sessions, 30 days', str(tm.get('sessions_30d', 0)),
                      'Balls, 30 days', str(tm.get('balls_30d', 0)))
+    tour_line = []
+    trim = lambda v: ('%g' % v)
+    for metric, label, suffix in (('Ball Speed', 'ball speed', ' mph'), ('Smash Factor', 'smash', '')):
+        mark = tour_mark(metric, 'Dr')
+        if mark:
+            tour_line.append('%s %s%s' % (label, trim(mark[0]), suffix))
     drv = tm.get('driver') or {}
     if drv.get('ball_speed'):
         strip += '\n    ' + statpair('Driver ball speed', '%s mph' % drv['ball_speed'],
                                      'Smash factor', str(drv.get('smash', '—')))
+        if tour_line:
+            strip += ('\n    <p class="vs-note" style="text-align:left">PGA average driver %s</p>'
+                      % ', '.join(tour_line))
 
     loop = _loop_rows(tm, stats)
     left = (card('', strip, explain=('smash', 'carry'))
@@ -990,8 +1037,9 @@ def page_trackman_real(tm, stats):
     if loop:
         left += card('Practice against play', loop, explain=('practicegrade',))
     mid = card('Gapping: carry per club', '    <ul class="drows">%s</ul>\n'
-                                          '    <p class="vs-note">Median carry · spread across recorded swings</p>' % gap_rows,
-               explain=('gapping', 'carry'))
+                                          '    <p class="vs-note">Median carry · spread across recorded '
+                                          'swings · ▏ marks the PGA average</p>' % gap_rows,
+               explain=('gapping', 'carry', 'tour'))
     right = card('Dispersion: left-right spread', '    <ul class="drows">%s</ul>' % disp_rows,
                  explain=('corridor', 'spread'))
     if tm['wedges']:
