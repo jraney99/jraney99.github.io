@@ -287,7 +287,8 @@
   .sg-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 0.8rem; }
   .gtop { gap: 0.8rem 1.2rem; padding: 0.8rem 1rem; }
   .gnav { margin-left: 0; width: 100%; order: 3; }
-  .gpills { margin-left: auto; }
+  /* under the name, not floating in the middle of the bar */
+  .gpills { margin-left: 0; margin-right: auto; width: 100%; order: 2; }
   .gwrap { padding: 1rem; }
   .num--xl { font-size: 2.8rem; }
   .bands .num--lg { font-size: 1.45rem; }
