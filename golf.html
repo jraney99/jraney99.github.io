@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Road to scratch · Jack Raney</title>
-  <meta name="description" content="Jack Raney’s golf: working toward scratch, every round and practice session measured. Updates itself daily.">
+  <meta name="description" content="Jack Raney’s golf: working toward scratch, with recorded scores, selected sensor rounds and measured practice sessions.">
   <link rel="canonical" href="https://jackraney.com/golf">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Jack Raney">
   <meta property="og:title" content="Road to scratch">
-  <meta property="og:description" content="Jack Raney’s golf: working toward scratch, every round and practice session measured. Updates itself daily.">
+  <meta property="og:description" content="Jack Raney’s golf: working toward scratch, with recorded scores, selected sensor rounds and measured practice sessions.">
   <meta property="og:url" content="https://jackraney.com/golf">
   <meta property="og:image" content="https://jackraney.com/assets/img/og.png">
   <meta property="og:image:width" content="1200">
@@ -24,7 +24,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Besley:wght@400..700&family=Overpass:ital,wght@0,300..900;1,300..900&family=Overpass+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="assets/css/site.css?v=702d7c651f">
-  <link rel="stylesheet" href="assets/css/golf.css?v=8febb2947f">
+  <link rel="stylesheet" href="assets/css/golf.css?v=212a404e18">
 </head>
 <body>
 
@@ -36,7 +36,7 @@
     <span class="chip">Index<b>4.1</b></span>
   </div>
   <nav class="gnav" aria-label="Golf section"><strong>Overview</strong><a href="golf-story.html">My game</a><a href="golf-driving.html">Driving</a><a href="golf-approach.html">Approach</a><a href="golf-short-game.html">Short game</a><a href="golf-putting.html">Putting</a><a href="golf-rounds.html">Rounds</a><a href="golf-courses.html">Courses</a><a href="golf-trackman.html">TrackMan</a></nav>
-  <div class="gpills"><span class="gpill">Goal: Scratch</span><span class="gpill">24 rounds · 12 mo</span>
+  <div class="gpills"><span class="gpill">Goal: Scratch</span><span class="gpill">24 18-hole posts · 12 mo</span>
     <button class="theme-toggle" type="button" aria-label="Switch theme">
       <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
     </button>
@@ -44,29 +44,29 @@
 </header>
 
 <main id="main" class="gwrap">
-<section class="span2" style="margin-bottom:1.3rem"><section>
+<header class="golf-intro"><h1>Road to scratch</h1><p>The goal is a 0.0 Handicap Index. Start with the scoring picture, then follow a goal or a part of the game into the detail.</p><p class="goal-note">GHIN checked 2026-10-29. On-course analysis: 5 rounds / 81 holes, 2026-04-15 to 2026-06-04.</p><details class="reading-guide"><summary>How to read these pages</summary><p><b>Three records:</b> GHIN supplies posted scores and the official Handicap Index; Arccos supplies sensor shots for a local scratch comparison; TrackMan supplies practice measurements.</p><p><b>Strokes gained (SG):</b> +1 means one stroke better than the scratch model; −1 means one worse. Summary rates are per 18 holes unless labeled per shot or actual round. Scratch means a 0.0 handicap.</p><p><b>Median:</b> the middle result. <b>Carry:</b> flight to landing. <b>Total distance:</b> includes roll. <b>Dispersion:</b> how widely shots scatter. Expand the explanations beside a chart for its exact definition.</p><p><b>Evidence:</b> samples are labeled, small groups are flagged, and uncertainty ranges do not account for every model assumption. A daily rebuild does not mean the underlying rounds are recent.</p></details></header><section class="span2" style="margin-bottom:1.3rem"><section>
   <h2 class="gsect">The short version</h2>
   <div class="gcard gcard--hero">
     <div class="hero-score"><span class="num num--xl">10.0</span><span class="vs">strokes from scratch, per 18 holes</span></div>
-    <p class="goal-line">Index 4.1 · scoring average 81.8 · 5 tracked rounds, 81 holes</p>
-    <p class="brief-verdict">Approach play and the short game are measurably worse than scratch. Driving and putting are not callable yet.</p>
-    <ul class="brows"><li><span class="k">Tee penalties<small>10 in 63 tee shots · driver median 303 yd, so it is direction, not distance</small></span><span class="val">2.2<small>/rnd</small></span></li><li><span class="k">Up and down, inside 30 yd<small>9 of 31 · scratch about 54% · 0 of 16 from 30 to 50 yd</small></span><span class="val">29%</span></li><li><span class="k">Three-putts<small>first putts 39 ft, against 19 ft on holes you two-putted</small></span><span class="val">8</span></li><li><span class="k">Greens in regulation<small>scratch about 52%</small></span><span class="val">33%</span></li></ul>
+    <p class="goal-line">Index 4.1 · recent GHIN adjusted-score average 81.8 · 5 tracked rounds, 81 holes</p>
+    <p class="brief-verdict">Approach play and the short game show the clearest losses in this sample. Driving and putting are not callable yet. These are model estimates, not diagnoses.</p>
+    <ul class="brows"><li><span class="k">Tee penalties<small>10 in 63 tee shots · driver median 303 yd including roll; penalty reduction is worth testing</small></span><span class="val">2.2<small>/rnd</small></span></li><li><span class="k">Up and down, inside 30 yd<small>9 of 31 · 0 of 16 from 30 to 50 yd</small></span><span class="val">29%</span></li><li><span class="k">Three-putts<small>first putts 39 ft, against 19 ft on holes you two-putted</small></span><span class="val">8</span></li><li><span class="k">Greens in regulation<small>Reached in par minus two strokes</small></span><span class="val">33%</span></li></ul>
     <p class="lbl" style="margin-top:1.2rem">What to work on · strokes a round</p>
     <ol class="ranks"><li><span class="r">1</span><span class="k">Driving penalties</span><span class="val">2.2</span></li><li><span class="r">2</span><span class="k">0-20 yd short game</span><span class="val">1.9</span></li><li><span class="r">3</span><span class="k">20-35 yd short game</span><span class="val">1.2</span></li></ol>
-    <p class="vs-note" style="text-align:left">Read off the tracked rounds daily. The practice plans follow these three lines.</p>
+    <p class="vs-note" style="text-align:left">The analysis uses the recorded rounds, not every round in my handicap history. Refreshing the page does not add new golf.</p>
   </div>
 </section>
 </section><section class="goal-index" id="golf-goals"><h2 class="gsect">What I’m working on</h2><p class="goal-intro">Each goal has a baseline, a practice experiment and a record of what changes. The details live with that part of my game.</p><div class="goal-index-grid"><a class="goal-index-card" href="golf-driving.html#road-to-315"><span class="lbl">Driving · Baseline recorded</span><h3>Road to 315</h3><p>Carry my driver 315 yards with a repeatable swing and usable dispersion.</p><span class="goal-index-number">298 yd <small>→ 315 yd</small></span><span class="goal-index-label">Median carry · See the plan →</span></a></div></section><div class="ggrid"><div class="gcol"><section>
   <h2 class="gsect">Scoring</h2>
   <div class="gcard gcard--hero">
-    <div class="hero-score"><span class="num num--xl">81.8</span><span class="vs">avg of my last 9 posted rounds</span></div>
-    <p class="goal-line">On the 5 rounds with shot data, which averaged 85.8, I was 10 strokes a round from scratch.</p>
+    <div class="hero-score"><span class="num num--xl">81.8</span><span class="vs">adjusted-score average · 9 recent 18-hole posts</span></div>
+    <p class="goal-line">The complete 18-hole sensor rounds averaged 85.8 raw strokes. Across all 81 tracked holes, the model estimates 10 strokes lost per 18 holes.</p>
     <p class="lbl" style="margin-top:1.2rem">Recent rounds · score and differential</p>
     <ul class="rounds-list"><li><span class="course"><b>Shangri La Resort - Champions/Heritage</b><small>Oct 24 · 18 holes</small></span><span class="score"><span class="num num--md">75</span><span class="num num--md pos">2.6</span></span></li><li><span class="course"><b>Shangri La Resort - Heritage/Legends</b><small>Oct 23 · 18 holes</small></span><span class="score"><span class="num num--md">83</span><span class="num num--md warn">7.9</span></span></li><li><span class="course"><b>Irving Golf Club</b><small>Aug 15 · 18 holes</small></span><span class="score"><span class="num num--md">76</span><span class="num num--md pos">3.7</span></span></li><li><span class="course"><b>San Francisco GC</b><small>Jun 6 · 18 holes</small></span><span class="score"><span class="num num--md">80</span><span class="num num--md warn">7.4</span></span></li><li><span class="course"><b>Castlewood (The Club at) - Hill</b><small>Jun 4 · 18 holes · shots tracked</small></span><span class="score"><span class="num num--md">82</span><span class="num num--md warn">8.6</span></span></li></ul>
-    <p class="vs-note" style="text-align:left">From my GHIN record, every posted round. A differential at or under my index beat my handicap.</p>
+    <p class="vs-note" style="text-align:left">Recent GHIN totals use handicap-adjusted scores. Differentials are compared with my current index; raw sensor scores use a separate sample.</p>
     <div class="ex-row">
-    <details class="ex"><summary>Handicap Index</summary><div><b>What a Handicap Index is.</b> Not an average. Each round becomes a <b>differential</b>, which is the score adjusted for how hard that course plays. The index is the average of the best 8 of the last 20 differentials, so it describes my better days, not my typical ones. That is why my index is lower than my scoring average, and why both are true at once.</div></details>
-    <details class="ex"><summary>Differential</summary><div><b>Differential.</b> One round’s score, adjusted for course difficulty, so a 79 on a hard course can beat a 76 on an easy one. A differential at or under my index means that round beat my handicap.</div></details>
+    <details class="ex"><summary>Handicap Index</summary><div><b>What a Handicap Index is.</b> A measure of scoring potential, not average score. With at least 20 scores, it generally averages the best 8 Score Differentials from the latest 20, with safeguards and adjustments. A differential accounts for course difficulty. Fewer-score records use a different calculation. <a href="https://www.usga.org/content/usga/home-page/handicapping/world-handicap-system/topics/handicap-index-calculation.html">USGA method</a>.</div></details>
+    <details class="ex"><summary>Differential</summary><div><b>Score Differential.</b> A score adjusted for course difficulty and playing conditions. Lower is better. The colors here compare past differentials with my current index, not necessarily the index I held on that date.</div></details>
     </div>
   </div>
 </section>
@@ -77,8 +77,8 @@
     <div class="sg-tiles"><a class="sg-tile" href="golf-driving.html"><span class="lbl">Driving</span><span class="tbar"><i style="width:30%;background:var(--lose)"></i></span><span class="num num--md"><span class="neg">−1.5</span></span><span class="tile-ci">−3.2 to +0.3</span></a><a class="sg-tile" href="golf-approach.html"><span class="lbl">Approach</span><span class="tbar"><i style="width:62%;background:var(--lose)"></i></span><span class="num num--md"><span class="neg">−3.1</span></span><span class="tile-ci">−5.3 to −0.9</span></a><a class="sg-tile focus" href="golf-short-game.html"><span class="focus-chip">Focus</span><span class="lbl">Short</span><span class="tbar"><i style="width:84%;background:var(--lose-hard)"></i></span><span class="num num--md"><span class="neg">−4.2</span></span><span class="tile-ci">−6.2 to −2.1</span></a><a class="sg-tile" href="golf-putting.html"><span class="lbl">Putting</span><span class="tbar"><i style="width:24%;background:var(--lose)"></i></span><span class="num num--md"><span class="neg">−1.2</span></span><span class="tile-ci">−3.3 to +0.8</span></a></div>
     <p class="sg-line"><b>Short</b> is my biggest opportunity.</p>
     <div class="ex-row">
-    <details class="ex"><summary>Strokes gained</summary><div><b>Strokes gained, in one sentence.</b> Take the expected strokes where the ball started, subtract the expected strokes where it ended, subtract 1 for the shot I just played. Positive means I gained ground on scratch; negative means I lost it. A 150 yard approach to 15 feet is 2.9 &minus; 1.8 &minus; 1 = <b>+0.1</b>: slightly better than par for that shot.</div></details>
-    <details class="ex"><summary>The ranges</summary><div><b>Why every number has a range.</b> These come from a handful of rounds, so each figure is an estimate. The range is the band the true number is 95% likely to sit in. When the range crosses zero, I genuinely cannot tell that part of my game apart from scratch yet, no matter what the headline number says. Those get called "not callable", and they never set the practice agenda.</div></details>
+    <details class="ex"><summary>Strokes gained</summary><div><b>Strokes gained.</b> Expected strokes before the shot, minus expected strokes afterward, minus the shot and any penalties. Positive is better than the scratch model; negative is worse. −2.0 per 18 holes means about two strokes lost. Category totals include all shots; the putting distance table covers first putts only.</div></details>
+    <details class="ex"><summary>The ranges</summary><div><b>How to read the uncertainty ranges.</b> These approximate 95% intervals describe sampling uncertainty under the model assumptions. They are not a 95% probability that a fixed true value lies inside the displayed band. A range touching or crossing zero does not clearly distinguish the result from scratch. Just five rounds, correlated shots and the calibrated baseline limit certainty beyond what these ranges capture.</div></details>
     </div>
   </div>
 </section>
@@ -94,9 +94,9 @@
 <section>
   <h2 class="gsect">Where to focus</h2>
   <div class="gcard ">
-    <ol class="leaks"><li><span class="leak__rank">1</span><div><p class="leak__name">Driving penalties</p><p class="leak__gain">Fixing this is worth about 2.2 strokes a round.</p><span class="rbar"><i class="" style="width:41%"></i></span><p class="leak__basis">41% of the focus-area upside · 10 penalty tee shots; each costs about 1.0 strokes against my clean ones</p></div></li><li><span class="leak__rank">2</span><div><p class="leak__name">0-20 yd short game</p><p class="leak__gain">Fixing this is worth about 1.9 strokes a round.</p><span class="rbar"><i class="" style="width:36%"></i></span><p class="leak__basis">36% of the focus-area upside · 34 shots</p></div></li><li><span class="leak__rank">3</span><div><p class="leak__name">20-35 yd short game</p><p class="leak__gain">Fixing this is worth about 1.2 strokes a round.</p><span class="rbar"><i class="" style="width:23%"></i></span><p class="leak__basis">23% of the focus-area upside · 21 shots</p></div></li></ol>
+    <ol class="leaks"><li><span class="leak__rank">1</span><div><p class="leak__name">Driving penalties</p><p class="leak__gain">Estimated loss: 2.2 strokes per 18 holes.</p><span class="rbar"><i class="" style="width:41%"></i></span><p class="leak__basis">41% of the three displayed focus estimates · 10 penalty tee shots; each costs about 1.0 strokes against my clean ones</p></div></li><li><span class="leak__rank">2</span><div><p class="leak__name">0-20 yd short game</p><p class="leak__gain">Estimated loss: 1.9 strokes per 18 holes.</p><span class="rbar"><i class="" style="width:36%"></i></span><p class="leak__basis">36% of the three displayed focus estimates · 34 shots</p></div></li><li><span class="leak__rank">3</span><div><p class="leak__name">20-35 yd short game</p><p class="leak__gain">Estimated loss: 1.2 strokes per 18 holes.</p><span class="rbar"><i class="" style="width:23%"></i></span><p class="leak__basis">23% of the three displayed focus estimates · 21 shots</p></div></li></ol>
     <div class="ex-row">
-    <details class="ex"><summary>Leaks</summary><div><b>What a "leak" is, and what the share means.</b> A bucket of shots that is measurably costing strokes against scratch, priced per round. The share is how much of the total available improvement sits in that one bucket, so a 41% share means fixing it is worth 41% of everything on the table.</div></details>
+    <details class="ex"><summary>Leaks</summary><div><b>What a focus-area share means.</b> A candidate area losing strokes in this sample. The percentage is its share of the three displayed focus estimates, not of all strokes lost. These estimates overlap with category totals and are not guaranteed recoverable strokes or a forecast of a lower handicap.</div></details>
     <details class="ex"><summary>Too few to read</summary><div><b>"Too few to read".</b> A distance bucket with fewer than 8 shots behind it is greyed out and never chosen as a focus area. Three good chips in a row is not evidence. Under 3 shots it is not published at all.</div></details>
     </div>
   </div>
@@ -104,11 +104,11 @@
 </div><section class="span2"><section>
   <h2 class="gsect">Road to scratch</h2>
   <div class="gcard gcard--hero">
-    <div class="statpair" style="grid-template-columns:repeat(4,minmax(0,1fr))"><div><span class="lbl">Today</span><span class="num num--lg">4.1</span></div><div><span class="lbl">Where it started</span><span class="num num--lg">5.7</span></div><div><span class="lbl">Low, 12 months</span><span class="num num--lg">3.9</span></div><div><span class="lbl">Rounds a year</span><span class="num num--lg">24</span></div></div>
+    <div class="statpair" style="grid-template-columns:repeat(4,minmax(0,1fr))"><div><span class="lbl">Today</span><span class="num num--lg">4.1</span></div><div><span class="lbl">Where it started</span><span class="num num--lg">5.7</span></div><div><span class="lbl">Low, 12 months</span><span class="num num--lg">3.9</span></div><div><span class="lbl">18-hole posts, last 12 mo</span><span class="num num--lg">24</span></div></div>
     <p class="story-p">My index was 5.7 when this record starts, on Dec 2025, and it peaked at 8.3 on Feb 2026. It is 4.1 now.</p>
-    <p class="story-p">That is 1.6 strokes in 10 months, about 0.16 a month. Carried on in a straight line that is another 2.1 years, which is not how handicaps move and not a forecast: mine has gone up as well as down inside this same record.</p>
-    <p class="story-p">The other half of the same question: on the 5 rounds with every shot recorded I am <b>10 strokes a round</b> from scratch, and the three leaks below are where 5 of them sit.</p>
-    <details class="ex"><summary>Handicap Index</summary><div><b>What a Handicap Index is.</b> Not an average. Each round becomes a <b>differential</b>, which is the score adjusted for how hard that course plays. The index is the average of the best 8 of the last 20 differentials, so it describes my better days, not my typical ones. That is why my index is lower than my scoring average, and why both are true at once.</div></details>
+    <p class="story-p">The index is 1.6 strokes lower over this record. Progress has not been linear; this is not enough evidence to forecast a date for reaching scratch.</p>
+    <p class="story-p">The other half of the same question: on the 5 rounds with every shot recorded I am <b>10 strokes a round</b> from scratch, and the three leaks shown on the overview total 5 in estimated losses. They are practice priorities, not promised savings.</p>
+    <details class="ex"><summary>Handicap Index</summary><div><b>What a Handicap Index is.</b> A measure of scoring potential, not average score. With at least 20 scores, it generally averages the best 8 Score Differentials from the latest 20, with safeguards and adjustments. A differential accounts for course difficulty. Fewer-score records use a different calculation. <a href="https://www.usga.org/content/usga/home-page/handicapping/world-handicap-system/topics/handicap-index-calculation.html">USGA method</a>.</div></details>
 
   </div>
 </section>
@@ -144,24 +144,24 @@
   <h2 class="gsect">Is it moving?</h2>
   <div class="gcard ">
     <div class="table-wrap"><table class="gtable trend"><thead><tr><th>Sample</th><th>Driving</th><th>Approach</th><th>Short</th><th>Putting</th><th>Total</th><th>Scoring</th></tr></thead><tbody><tr><td><b>4 rounds</b><small>63 holes</small></td><td><span class="neg">−2.2</span></td><td><span class="neg">−2.6</span></td><td><span class="neg">−3.1</span></td><td><span class="neg">−0.5</span></td><td class="tot"><span class="neg">−8.4</span></td><td>84.0</td></tr><tr><td><b>5 rounds</b><small>81 holes</small></td><td><span class="neg">−1.5</span></td><td><span class="neg">−3.1</span></td><td><span class="neg">−4.2</span></td><td><span class="neg">−1.2</span></td><td class="tot"><span class="neg">−10.0</span></td><td>85.8</td></tr></tbody></table></div>
-    <p class="vs-note" style="text-align:left">One row each time the numbers move. Collection started Oct 2026, so there is not enough here to call a direction yet: that needs ten tracked rounds, and I have 5. The first rows share a date because a round was added back by a correction to the maths, not because of golf. Everything after them is play.</p>
+    <p class="vs-note" style="text-align:left">These are snapshots of an accumulating dataset, not independent rounds or equal-length periods. Collection started Oct 2026; there are 5 tracked rounds. More data and consistent methods are needed to judge a trend. The first rows share a date because a round was added back by a correction to the maths, not because of golf. Later changes can also reflect corrections rather than improvement.</p>
   </div>
 </section>
 </section><div class="gcol"><section>
   <h2 class="gsect">Where the strokes go</h2>
   <div class="gcard ">
-    <p style="margin:0 0 0.8rem;font-size:0.92rem">Par 4s cost me the most, about 9 strokes over par on a typical card. Per round, from my whole GHIN record:</p>
+    <p style="margin:0 0 0.8rem;font-size:0.92rem">Par 4s contribute the most in this illustration. GHIN adjusted hole scores are scaled to a hypothetical card with four par 3s, ten par 4s and four par 5s; this is not an actual round average.</p>
     <ul class="drows"><li><span class="from">Par 3s</span><span class="rbar"><i class="" style="width:33%"></i></span><span class="n">89 holes</span><span class="val neg">+3.3</span></li><li><span class="from">Par 4s</span><span class="rbar"><i class="" style="width:93%"></i></span><span class="n">215 holes</span><span class="val neg">+9.3</span></li><li><span class="from">Par 5s</span><span class="rbar"><i class="" style="width:20%"></i></span><span class="n">74 holes</span><span class="val neg">+2.0</span></li></ul>
   </div>
 </section>
 </div><div class="gcol"><section>
   <h2 class="gsect">Highlights</h2>
   <div class="gcard ">
-    <ul class="rounds-list" style="margin-top:0"><li><span class="course"><b>Driver, longest</b></span><span class="score"><span class="num num--md">372 yd</span></span></li><li><span class="course"><b>Driver, median</b></span><span class="score"><span class="num num--md">303 yd</span></span></li><li><span class="course"><b>Greens in regulation</b></span><span class="score"><span class="num num--md">33%</span></span></li><li><span class="course"><b>Putts per round</b></span><span class="score"><span class="num num--md">32.0</span></span></li></ul>
+    <ul class="rounds-list" style="margin-top:0"><li><span class="course"><b>Driver total, longest</b></span><span class="score"><span class="num num--md">372 yd</span></span></li><li><span class="course"><b>Driver total, median</b></span><span class="score"><span class="num num--md">303 yd</span></span></li><li><span class="course"><b>Greens in regulation</b></span><span class="score"><span class="num num--md">33%</span></span></li><li><span class="course"><b>Putts per round</b></span><span class="score"><span class="num num--md">32.0</span></span></li></ul>
   </div>
 </section>
 </div></div>
-<p class="gnote">5 Arccos rounds, Apr 2026 to Jun 2026, 81 holes; strokes gained against a scratch baseline. Lie is not recorded in the shot data, so every shot is scored from a fairway lie, which shifts strokes between the short game and approach. I wear the sensors every round now, so this fills in as I play. Handicap and scoring history come from my GHIN record, updated daily. <a href="index.html">jackraney.com</a> · <a href="about.html">about me</a></p>
+<p class="gnote">5 Arccos rounds, Apr 2026 to Jun 2026, 81 holes; strokes gained against a locally calibrated scratch baseline, not an independent Arccos calculation. Tee and green positions are identified; the first shot after a par-4/5 tee shot uses the fairway flag to infer fairway or rough. Other non-putting lies are assumed fairway. These assumptions affect category estimates. GHIN data checked 2026-10-29; shot analysis built 2026-10-29. <a href="index.html">jackraney.com</a> · <a href="about.html">about me</a></p>
 </main>
 <script src="assets/js/site.js?v=f38dbc4ce4"></script>
 </body>

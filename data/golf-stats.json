@@ -1,6 +1,6 @@
 {
- "updated": "2026-10-28",
- "source": "5 Arccos rounds, Apr 2026 to Jun 2026, 81 holes; strokes gained against a scratch baseline. Lie is not recorded in the shot data, so every shot is scored from a fairway lie, which shifts strokes between the short game and approach.",
+ "updated": "2026-10-29",
+ "source": "5 Arccos rounds, Apr 2026 to Jun 2026, 81 holes; strokes gained against a locally calibrated scratch baseline, not an independent Arccos calculation. Tee and green positions are identified; the first shot after a par-4/5 tee shot uses the fairway flag to infer fairway or rough. Other non-putting lies are assumed fairway. These assumptions affect category estimates.",
  "rounds_n": 5,
  "holes": 81,
  "scoring": {
@@ -92,8 +92,8 @@
      "shots": 27,
      "sg_per_shot": 0.04,
      "ci": [
-      -0.7,
-      1.3
+      -0.124,
+      0.214
      ],
      "penalty_rate": 15,
      "median_yd": 303,
@@ -104,8 +104,8 @@
      "shots": 31,
      "sg_per_shot": -0.09,
      "ci": [
-      -1.7,
-      0.4
+      -0.243,
+      0.055
      ],
      "penalty_rate": 6,
      "median_yd": 255,

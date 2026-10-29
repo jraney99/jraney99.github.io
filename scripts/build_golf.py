@@ -10,7 +10,8 @@ Pages are generated whole. Run from the repo root: python3 scripts/build_golf.py
 import json
 import math
 import os
-from datetime import date
+from html import escape
+from datetime import date, timedelta
 import golf_goals
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -39,7 +40,7 @@ def month(d):
 
 
 def decisive(rng):
-    return bool(rng) and (rng[0] < 0) == (rng[1] < 0)
+    return bool(rng) and (rng[1] < 0 or rng[0] > 0)
 
 
 def rng_text(ci):
@@ -55,16 +56,22 @@ def sg(v, dec=1):
     return f'<span class="{cls}">{txt}</span>' if cls else txt
 
 
+def over_par(v):
+    """Score relative to par: positive is worse, unlike strokes gained."""
+    return f'<span class="{"neg" if v > 0 else "pos" if v < 0 else ""}">{v:+.1f}</span>'
+
+
 def chart(revs, today):
     x0, x1, y0, y1 = 44, 704, 24, 276
     pts = [(date.fromisoformat(r['date']), num(r['index'])) for r in revs]
     start, end = pts[0][0], date.fromisoformat(today)
     span = max((end - start).days, 1)
-    top = math.ceil(max(v for _, v in pts) / 2) * 2
+    top = max(2, math.ceil(max(v for _, v in pts) / 2) * 2)
+    bottom = min(0, math.floor(min(v for _, v in pts) / 2) * 2)
     X = lambda d: x0 + (d - start).days / span * (x1 - x0)
-    Y = lambda v: y1 - v / top * (y1 - y0)
+    Y = lambda v: y1 - (v - bottom) / (top - bottom) * (y1 - y0)
     out = []
-    for g in range(0, top + 1, 2):
+    for g in range(bottom, top + 1, 2):
         out.append(f'<line x1="{x0}" x2="{x1}" y1="{Y(g):.1f}" y2="{Y(g):.1f}" class="g"/>'
                    f'<text x="{x0 - 8}" y="{Y(g) + 4:.1f}" class="yl">{g}</text>')
     out.append(f'<line x1="{x0}" x2="{x1}" y1="{Y(0):.1f}" y2="{Y(0):.1f}" class="inv" stroke-dasharray="6 5"/>'
@@ -153,149 +160,145 @@ def nav_links(current):
     return ''.join(f'<strong>{t}</strong>' if p == current else f'<a href="{p}">{t}</a>' for p, t in PAGES)
 
 
-EXPLAIN = {
-    'index': ('What a Handicap Index is',
-              'Not an average. Each round becomes a <b>differential</b>, which is the score adjusted '
-              'for how hard that course plays. The index is the average of the best 8 of the last 20 '
-              'differentials, so it describes my better days, not my typical ones. That is why my index '
-              'is lower than my scoring average, and why both are true at once.'),
-    'differential': ('Differential',
-                     'One round\u2019s score, adjusted for course difficulty, so a 79 on a hard course can '
-                     'beat a 76 on an easy one. A differential at or under my index means that round beat '
-                     'my handicap.'),
-    'scratch': ('Who "scratch" is here',
-                'A 0.0 handicap player. Every comparison on these pages is against what that player would '
-                'be expected to do from the same place on the course, not against tour professionals.'),
-    'expected': ('Expected strokes, the idea everything else is built on',
-                 'From any spot on a course there is an average number of strokes it takes to hole out. '
-                 'From 150 yards in the fairway a scratch player averages about 2.9. From 15 feet, about '
-                 '1.8. Those averages are the measuring stick: every shot moves me from one expected '
-                 'number to another.'),
-    'sg': ('Strokes gained, in one sentence',
-           'Take the expected strokes where the ball started, subtract the expected strokes where it ended, '
-           'subtract 1 for the shot I just played. Positive means I gained ground on scratch; negative means '
-           'I lost it. A 150 yard approach to 15 feet is 2.9 &minus; 1.8 &minus; 1 = <b>+0.1</b>: slightly '
-           'better than par for that shot.'),
-    'categories': ('Why the four categories add up to the total',
-                   'Every shot belongs to exactly one category, decided by where it was played from: off '
-                   'the tee on a par 4 or 5 is driving, a full shot to the green is approach, anything '
-                   'inside 50 yards that is not a putt is short game, and a putt is putting. Add the four '
-                   'up and you get the whole gap to scratch, which is why they always sum to the total.'),
-    'range': ('Why every number has a range',
-              'These come from a handful of rounds, so each figure is an estimate. The range is the band the '
-              'true number is 95% likely to sit in. When the range crosses zero, I genuinely cannot tell '
-              'that part of my game apart from scratch yet, no matter what the headline number says. Those '
-              'get called "not callable", and they never set the practice agenda.'),
-    'thin': ('"Too few to read"',
-             'A distance bucket with fewer than 8 shots behind it is greyed out and never chosen as a '
-             'focus area. Three good chips in a row is not evidence. Under 3 shots it is not published '
-             'at all.'),
-    'gir': ('Green in regulation',
-            'On the green in two shots fewer than par: one shot on a par 3, two on a par 4, three on a '
-            'par 5. Miss it and I need an up and down to save par.'),
-    'updown': ('Up and down',
-               'Missed the green, then holed out in two more shots: one chip or pitch, one putt. The rate '
-               'here counts only shots from inside 30 yards, which is what a scratch comparison is built '
-               'on. The 30 to 50 yard pitches are reported separately, because mixing them in flatters '
-               'the number.'),
-    'prox': ('Proximity',
-             'How far from the hole an approach finishes, measured as the middle value rather than the '
-             'average so one shank does not move it. Closer means shorter putts, which is most of what '
-             'putting is.'),
-    'dispersion': ('Dispersion and miss tendency',
-                   'Lateral is left and right spread, depth is long and short. Both are standard '
-                   'deviations in yards: roughly two thirds of shots land inside that figure. The '
-                   'tendency is where the middle of the pattern sits, which says more about club '
-                   'selection and aim than any single miss.'),
-    'threeputt': ('Three-putts',
-                  'Three or more putts on one hole. What matters is what preceded them: the length of '
-                  'the first putt. The data records where each putt started but not how far the second '
-                  'one was left, so I can say long first putts come before three-putts, and not whether '
-                  'the lag or the short one was the miss.'),
-    'leak': ('What a "leak" is, and what the share means',
-             'A bucket of shots that is measurably costing strokes against scratch, priced per round. '
-             'The share is how much of the total available improvement sits in that one bucket, so a '
-             '41% share means fixing it is worth 41% of everything on the table.'),
-    'adjusted': ('Raw score and adjusted score',
-                 'GHIN caps every hole at net double bogey before it works out a handicap, so a blow-up '
-                 'hole counts for less than it cost me. The scorecard shows the <b>raw</b> score, what I '
-                 'actually made. The round total beside the course name is the adjusted one GHIN posted, '
-                 'which is why the two can differ.'),
-    'makerate': ('Make rate against scratch',
-                 'The share of putts holed from each distance band, next to what a scratch player holes '
-                 'from the same band. Inside 3 feet everyone makes nearly all of them, so the bands that '
-                 'matter are the ones between 5 and 20 feet, where the gap is real and the sample is '
-                 'small.'),
-    'carry': ('Carry, and why it is not the number on the sign',
-              'Carry is where the ball lands, not where it finishes. On the course it rolls out, '
-              'sometimes a long way, so a 150 yard carry is not a 150 yard club on firm ground. The '
-              'gapping table below uses carry because it is the part a swing controls.'),
-    'smash': ('Ball speed, club speed and smash factor',
-              'Club speed is how fast the head is moving, ball speed is how fast the ball leaves, and '
-              'smash factor is one divided by the other. It is a strike-quality number: about 1.50 off '
-              'a driver is the ceiling, and anything well under it means the ball is not being found '
-              'in the middle.'),
-    'spread': ('Spread, and why it is not the average',
-               'The middle 80% of shots with a club, halved. A 12 yard spread means a typical shot '
-               'lands within 12 yards either side of the usual one. It ignores the two or three worst '
-               'strikes of a session on purpose, because one cold top says nothing about a gap.'),
-    'gapping': ('Gapping',
-                'The carry distance between one club and the next. Even gaps mean every yardage has a '
-                'club; a 25 yard hole between two of them is a shot that has to be hit soft or hard, '
-                'which is where approach misses come from. A gap that is too small means a club is '
-                'doing nothing.'),
-    'corridor': ('The corridor',
-                 'A 36 yard wide strip, 18 either side of the target line, which is roughly a generous '
-                 'fairway. The driver figure is the share of balls that finished inside it, which is '
-                 'the practice version of the penalty problem on the course.'),
-    'swinglen': ('Why swing lengths are "inferred"',
-                 'TrackMan records the ball, not the backswing. The wedge matrix groups each club\u2019s '
-                 'shots by carry and calls the groups short, stock and full, which is a guess from the '
-                 'result. It only appears for a club with enough shots and clear separation between '
-                 'them, and it is never presented as something measured.'),
-    'practicegrade': ('How a session is graded',
-                      'Against the plan it was given, not against a perfect session. Only two things '
-                      'are graded: whether the driver stayed in the corridor and whether the wedges '
-                      'carried consistent distances. Carry accuracy against a target is not graded at '
-                      'all, because the export records no intended target.'),
-    'preview': ('Why these numbers are grey',
-                'They are a worked example, not my practice. The page swaps to real figures the first '
-                'time a TrackMan session is exported and emailed in, and the preview chip disappears '
-                'with them.'),
-    'swingweight': ('Swingweight',
-                    'How heavy a club feels through the swing rather than what it weighs on a scale: '
-                    'the balance between head and grip, written as a letter and a number. C9 is '
-                    'slightly lighter than the D0 to D2 most stock clubs are built to. The gap between '
-                    'C9 and C9+ is about the weight of a dollar bill, which is why the wedges can sit '
-                    'either side of it without feeling different.'),
-    'lie': ('Lie angle, and why it shows up in the dispersion',
-            'The angle between the shaft and the ground at address. Too upright and the face points '
-            'left at impact, too flat and it points right, by a few yards per degree at full-iron '
-            'distance. It is the first thing worth checking against a one-sided miss on the dispersion '
-            'table, before anything in the swing.'),
-    'bestinstate': ('Golf Digest\u2019s rankings, and which is which',
-                    'Three different lists turn up here. <b>America\u2019s 100 Greatest</b> is the '
-                    'national ranking, every course in the country, public and private. '
-                    '<b>100 Greatest Public</b> is the same idea for courses anyone can book. '
-                    '<b>Best in State</b> is the deep one: a separate ranking inside each state, '
-                    'covering close to a thousand courses across the fifty, which is why a course '
-                    'can sit high in California and nowhere near the national list.'),
-    'tour': ('What the PGA numbers next to mine are',
-             'TrackMan\u2019s own tour averages, measured on the PGA Tour in 2023 and published by '
-             'them per club. They are a yardstick, not a target: the gap between my carry and a '
-             'tour player\u2019s says more about club speed than about anything I can practise, '
-             'and nothing on this page is scored against them. Tour data stops at the pitching '
-             'wedge, so the 50, 54 and 58 have no mark.'),
-    'plans': ('How practice follows from this',
-              'The leak table is read straight into my practice sessions: the top leaks become the blocks '
-              'I hit, and the session is built around them rather than around whatever I feel like '
-              'practising. That is also why a bucket with too few shots is never allowed to rank, '
-              'because a fluke would set the agenda for weeks.'),
-    'penalty': ('What a penalty shot costs',
-                'Measured, not assumed: tee shots that took a penalty are compared against my clean tee '
-                'shots on the same holes. The difference is what one costs.'),
-}
-
+EXPLAIN = {'index': ('What a Handicap Index is',
+           'A measure of scoring potential, not average score. With at least 20 scores, it generally '
+           'averages the best 8 Score Differentials from the latest 20, with safeguards and adjustments. A '
+           'differential accounts for course difficulty. Fewer-score records use a different calculation. <a '
+           'href="https://www.usga.org/content/usga/home-page/handicapping/world-handicap-system/topics/handicap-index-calculation.html">USGA '
+           'method</a>.'),
+ 'differential': ('Score Differential',
+                  'A score adjusted for course difficulty and playing conditions. Lower is better. The '
+                  'colors here compare past differentials with my current index, not necessarily the index I '
+                  'held on that date.'),
+ 'scratch': ('What scratch means',
+             'Scratch means a 0.0 Handicap Index. Strokes gained here uses a locally calibrated scratch '
+             'model. PGA Tour comparisons are separate and explicitly labeled; a scratch golfer is not a '
+             'tour professional.'),
+ 'expected': ('Expected strokes',
+              'The model estimates how many shots a scratch player needs to finish from a given position. A '
+              'hypothetical position worth 3.0 expected strokes followed by one worth 1.8 produces 3.0 − 1.8 '
+              '− 1 = +0.2 strokes gained.'),
+ 'sg': ('Strokes gained',
+        'Expected strokes before the shot, minus expected strokes afterward, minus the shot and any '
+        'penalties. Positive is better than the scratch model; negative is worse. −2.0 per 18 holes means '
+        'about two strokes lost. Category totals include all shots; the putting distance table covers first '
+        'putts only.'),
+ 'categories': ('Why the four categories add up to the total',
+                'Every shot belongs to exactly one category, decided by where it was played from: off the '
+                'tee on a par 4 or 5 is driving, a full shot to the green is approach, anything inside 50 '
+                'yards that is not a putt is short game, and a putt is putting. Add the four up and you get '
+                'the whole gap to scratch, which is why they always sum to the total.'),
+ 'range': ('How to read the uncertainty ranges',
+           'These approximate 95% intervals describe sampling uncertainty under the model assumptions. They '
+           'are not a 95% probability that a fixed true value lies inside the displayed band. A range '
+           'touching or crossing zero does not clearly distinguish the result from scratch. Just five '
+           'rounds, correlated shots and the calibrated baseline limit certainty beyond what these ranges '
+           'capture.'),
+ 'thin': ('"Too few to read"',
+          'A distance bucket with fewer than 8 shots behind it is greyed out and never chosen as a focus '
+          'area. Three good chips in a row is not evidence. Under 3 shots it is not published at all.'),
+ 'gir': ('Green in regulation',
+         'On the green in two shots fewer than par: one shot on a par 3, two on a par 4, three on a par 5. '
+         'Miss it and I need an up and down to save par.'),
+ 'updown': ('Up and down',
+            'Here: finish the hole in two strokes or fewer, including penalties, from the first non-putting '
+            'shot inside 30 yards after a missed green. A chip-in counts too. This is not identical to '
+            'scrambling, which asks whether par or better was saved after any missed green. Pitches from 30 '
+            'to 50 yards are shown separately.'),
+ 'prox': ('Proximity',
+          'The median distance from the ball to the hole after an approach: half the measured results finish '
+          'closer, half farther away. The all-approach sample also includes shots that missed the green. '
+          'This affects the next shot, but does not by itself diagnose putting skill.'),
+ 'dispersion': ('Dispersion and miss tendency',
+                'Dispersion describes how widely shots scatter. On the course, lateral and depth figures are '
+                'sample standard deviations in yards, not a guaranteed percentage within a target. The '
+                'tendency uses average left/right and long/short offsets. The TrackMan page uses a different '
+                'spread measure: half the middle 80% range.'),
+ 'threeputt': ('Three-putts',
+               'Three or more putts on one hole. What matters is what preceded them: the length of the first '
+               'putt. The data records where each putt started but not how far the second one was left, so I '
+               'can say long first putts come before three-putts, and not whether the lag or the short one '
+               'was the miss.'),
+ 'leak': ('What a focus-area share means',
+          'A candidate area losing strokes in this sample. The percentage is its share of the three '
+          'displayed focus estimates, not of all strokes lost. These estimates overlap with category totals '
+          'and are not guaranteed recoverable strokes or a forecast of a lower handicap.'),
+ 'adjusted': ('Raw score and adjusted score',
+              'GHIN caps every hole at net double bogey before it works out a handicap, so a blow-up hole '
+              'counts for less than it cost me. The scorecard shows the <b>raw</b> score, what I actually '
+              'made. The round total beside the course name is the adjusted one GHIN posted, which is why '
+              'the two can differ.'),
+ 'makerate': ('First-putt make rate',
+              'The percentage of first putts holed within each distance band. Later putts are excluded from '
+              'this table. The comparison is a broad scratch reference, and the distances and sample mix may '
+              'differ. Differences are percentage points: 33% versus 48% is 15 points lower.'),
+ 'carry': ('Carry, and why it is not the number on the sign',
+           'Carry is where the ball lands, not where it finishes. On the course it rolls out, sometimes a '
+           'long way, so a 150 yard carry is not a 150 yard club on firm ground. The gapping table below '
+           'uses carry because it is the part a swing controls.'),
+ 'smash': ('Ball speed, club speed and smash factor',
+           'Smash factor is ball speed divided by clubhead speed. Around 1.50 is a useful driver reference, '
+           'not a universal hard ceiling. Strike location, delivered loft and measurement conditions all '
+           'matter; a low ratio alone does not prove an off-center strike.'),
+ 'spread': ('How TrackMan spread is calculated',
+            'The spread is half the distance between the 10th and 90th percentiles. It describes the width '
+            'of the middle 80% of recorded shots. It need not be symmetric around the median or target. The '
+            'outer tails remain in the data, but this number does not describe them.'),
+ 'gapping': ('Gapping',
+             'The difference in typical carry between adjacent clubs. Compare measured clubs hit with '
+             'similar intent and conditions. A large gap may need a different club or partial swing; '
+             'overlapping distances may still serve different trajectories or lies. Sample values cannot '
+             'establish my actual gaps.'),
+ 'corridor': ('The practice corridor',
+              'A 36-yard-wide strip, 18 yards either side of the target line. This uses TrackMan lateral '
+              'position at carry, not fairways hit on the course. It is a practice accuracy measure; it does '
+              'not reproduce hazards, slopes or penalty outcomes.'),
+ 'swinglen': ('Why swing lengths are "inferred"',
+              'TrackMan records the ball, not the backswing. The wedge matrix groups each club’s shots by '
+              'carry and calls the groups short, stock and full, which is a guess from the result. It only '
+              'appears for a club with enough shots and clear separation between them, and it is never '
+              'presented as something measured.'),
+ 'practicegrade': ('Session checks',
+                   'Driver corridor percentage and wedge carry consistency are compared with saved '
+                   'thresholds. A partial-bag or measurement session can still show these checks; they do '
+                   'not establish that the original practice plan was completed. No intended carry target is '
+                   'recorded, so target-distance accuracy cannot be graded.'),
+ 'preview': ('Why sample values remain',
+             'Sample values illustrate the layout and are not my measurements. After a partial-bag session, '
+             'unhit clubs keep their clearly labeled samples. Samples never enter my aggregate data, goals '
+             'or session checks.'),
+ 'swingweight': ('Swingweight',
+                 'How heavy a club feels through the swing rather than what it weighs on a scale: the '
+                 'balance between head and grip, written as a letter and a number. C9 is slightly lighter '
+                 'than the D0 to D2 most stock clubs are built to. The gap between C9 and C9+ is about the '
+                 'weight of a dollar bill, which is why the wedges can sit either side of it without feeling '
+                 'different.'),
+ 'lie': ('Lie angle',
+         'The angle between the shaft and the ground when the club is soled as designed. Delivered lie can '
+         'influence face direction, particularly with more loft. A one-sided miss can also come from aim, '
+         'face, path or contact, so dispersion alone cannot diagnose a lie adjustment.'),
+ 'bestinstate': ('Golf Digest’s rankings, and which is which',
+                 'Three different lists turn up here. <b>America’s 100 Greatest</b> is the national ranking, '
+                 'every course in the country, public and private. <b>100 Greatest Public</b> is the same '
+                 'idea for courses anyone can book. <b>Best in State</b> is the deep one: a separate ranking '
+                 'inside each state, covering close to a thousand courses across the fifty, which is why a '
+                 'course can sit high in California and nowhere near the national list.'),
+ 'tour': ('What the tour numbers mean',
+          'These are TrackMan’s published 2023 averages, released in 2024. The men’s sample includes '
+          'PGA Tour and DP World Tour players; the women’s includes LPGA and LET players. Both combine '
+          'competition and range shots. They are a reference, not a personal target or a diagnosis. '
+          'Speed, strike, launch, spin and conditions all affect carry. '
+          '<a href="https://www.trackman.com/blog/introducing-updated-tour-averages">TrackMan source and methods</a>. '
+          'The published club table stops at pitching wedge.'),
+ 'plans': ('How practice follows from this',
+           'The leak table is read straight into my practice sessions: the top leaks become the blocks I '
+           'hit, and the session is built around them rather than around whatever I feel like practising. '
+           'That is also why a bucket with too few shots is never allowed to rank, because a fluke would set '
+           'the agenda for weeks.'),
+ 'penalty': ('What the penalty estimate means',
+             'The model compares my penalty tee shots with my clean tee shots across this sample. They are '
+             'not matched shots on identical holes, so course difficulty and club choice can affect the '
+             'estimate. It is an association worth investigating, not a guaranteed saving.')}
 
 # Short labels for the buttons. The full title still heads the explanation, but a
 # button reads better as a noun than as a sentence, and never in quote marks.
@@ -356,9 +359,6 @@ def rbar(frac, cls='', tick=None):
 # hub cards
 # ---------------------------------------------------------------------------
 
-# Scratch benchmarks used for the plain-English comparisons. Sources on the pages that
-# use them: Shot Scope by-handicap data (GIR, up-and-down) and Arccos (putting).
-SCRATCH = {'gir_pct': 52, 'updown_pct': 54, 'putts': 29.9, 'three_putts': 0.8}
 
 
 def briefing(stats, g):
@@ -381,28 +381,28 @@ def briefing(stats, g):
 
     ci = sg.get('ci') or {}
     names = {'driving': 'driving', 'approach': 'approach play', 'short': 'the short game', 'putting': 'putting'}
-    real = [names[c] for c in ('driving', 'approach', 'short', 'putting') if decisive(ci.get(c))]
+    real = [names[c] for c in ('driving', 'approach', 'short', 'putting') if ci.get(c) and ci[c][1] < 0]
     unsure = [names[c] for c in ('driving', 'approach', 'short', 'putting') if not decisive(ci.get(c))]
     join = lambda xs: xs[0] if len(xs) == 1 else ', '.join(xs[:-1]) + ' and ' + xs[-1]
     if real:
-        verdict = (f'{join(real).capitalize()} {"is" if len(real) == 1 else "are"} measurably worse than scratch'
+        verdict = (f'{join(real).capitalize()} {"shows" if len(real) == 1 else "show"} the clearest losses in this sample'
                    + (f'. {join(unsure).capitalize()} {"is" if len(unsure) == 1 else "are"} not callable yet'
-                      if unsure else '') + '.')
+                      if unsure else '') + '. These are model estimates, not diagnoses.')
     else:
         verdict = f'Nothing clears the bar yet: over {stats["holes"]} holes every range still includes zero.'
 
     rows = [('Tee penalties', f'{d["tee_penalties"]} in {d["tee_shots"]} tee shots \u00b7 driver median '
-             f'{d["driver_median_yd"]} yd, so it is direction, not distance',
+             f'{d["driver_median_yd"]} yd including roll; penalty reduction is worth testing',
              f'{d["tee_penalties"] / rounds18:.1f}<small>/rnd</small>')]
     if gs.get('of'):
-        basis = f'{gs["made"]} of {gs["of"]} \u00b7 scratch about {SCRATCH["updown_pct"]}%'
+        basis = f'{gs["made"]} of {gs["of"]}'
         if pitch.get('of'):
             basis += f' \u00b7 {pitch["made"]} of {pitch["of"]} from 30 to 50 yd'
         rows.append(('Up and down, inside 30 yd', basis, f'{round(gs["made"] / gs["of"] * 100)}%'))
     if p['three_putts']:
         rows.append(('Three-putts', f'first putts {p["three_putt_first_ft"]} ft, against '
                      f'{p["two_putt_first_ft"]} ft on holes you two-putted', p['three_putts']))
-    rows.append(('Greens in regulation', f'scratch about {SCRATCH["gir_pct"]}%', f'{a["gir_pct"]}%'))
+    rows.append(('Greens in regulation', 'Reached in par minus two strokes', f'{a["gir_pct"]}%'))
 
     facts = ''.join(f'<li><span class="k">{k}<small>{n}</small></span><span class="val">{v}</span></li>'
                     for k, n, v in rows)
@@ -413,14 +413,14 @@ def briefing(stats, g):
     head = (f'    <div class="hero-score"><span class="num num--xl">{gap:.1f}</span>'
             f'<span class="vs">strokes from scratch, per 18 holes</span></div>\n'
             f'    <p class="goal-line">Index {idx}'
-            + (f' \u00b7 scoring average {avg:.1f}' if avg else '') +
+            + (f' \u00b7 recent GHIN adjusted-score average {avg:.1f}' if avg else '') +
             f' \u00b7 {stats["rounds_n"]} tracked rounds, {stats["holes"]} holes</p>\n'
             f'    <p class="brief-verdict">{verdict}</p>\n')
     body = f'    <ul class="brows">{facts}</ul>\n'
     todo = ('    <p class="lbl" style="margin-top:1.2rem">What to work on \u00b7 strokes a round</p>\n'
             f'    <ol class="ranks">{ranks}</ol>\n')
-    note = ('    <p class="vs-note" style="text-align:left">Read off the tracked rounds daily. '
-            'The practice plans follow these three lines.</p>')
+    note = ('    <p class="vs-note" style="text-align:left">The analysis uses the recorded rounds, '
+            'not every round in my handicap history. Refreshing the page does not add new golf.</p>')
     return card('The short version', head + body + todo + note, cls='gcard--hero')
 
 
@@ -438,8 +438,7 @@ def road_card(stats, g):
     now, start = num(last['index']), num(first['index'])
     peak = max(num(r['index']) for r in revs)
     peak_date = next(r['date'] for r in revs if num(r['index']) == peak)
-    year_ago = date.fromisoformat(last['date']).replace(
-        year=date.fromisoformat(last['date']).year - 1).isoformat()
+    year_ago = (date.fromisoformat(last['date']) - timedelta(days=365)).isoformat()
     low = min(num(r['index']) for r in revs if r['date'] >= year_ago)
     days = (date.fromisoformat(last['date']) - date.fromisoformat(first['date'])).days or 1
     moved = start - now
@@ -449,20 +448,15 @@ def road_card(stats, g):
             '<div><span class="lbl">Today</span><span class="num num--lg">%s</span></div>'
             '<div><span class="lbl">Where it started</span><span class="num num--lg">%s</span></div>'
             '<div><span class="lbl">Low, 12 months</span><span class="num num--lg">%s</span></div>'
-            '<div><span class="lbl">Rounds a year</span><span class="num num--lg">%s</span></div></div>'
+            '<div><span class="lbl">18-hole posts, last 12 mo</span><span class="num num--lg">%s</span></div></div>'
             % (show(now), show(start), show(low), g.get('rounds_last_12_months', '\u2013')))
 
     out = figs + '\n'
     out += para('My index was %s when this record starts, on %s, and it peaked at %s on %s. It is '
                 '%s now.' % (show(start), month(first['date']), show(peak), month(peak_date), show(now)))
     if moved > 0.05:
-        years = now / per_month / 12 if per_month > 0 else None
-        tail = ('. Carried on in a straight line that is another %s, which is not how handicaps '
-                'move and not a forecast: mine has gone up as well as down inside this same record'
-                % ('%.0f months' % (now / per_month) if years and years < 2
-                   else '%.1f years' % years if years else 'a long time'))
-        out += para('That is %.1f strokes in %d months, about %.2f a month%s.'
-                    % (moved, round(days / 30.44), per_month, tail))
+        out += para('The index is %.1f strokes lower over this record. Progress has not been linear; '
+                    'this is not enough evidence to forecast a date for reaching scratch.' % moved)
     elif moved < -0.05:
         out += para('That is %.1f strokes the wrong way so far. The rate that matters has not '
                     'started yet.' % abs(moved))
@@ -471,7 +465,7 @@ def road_card(stats, g):
     if stats:
         out += para('The other half of the same question: on the %d rounds with every shot '
                     'recorded I am <b>%.0f strokes a round</b> from scratch, and the three leaks '
-                    'below are where %.0f of them sit.'
+                    'shown on the overview total %.0f in estimated losses. They are practice priorities, not promised savings.'
                     % (stats['rounds_n'], abs(stats['sg']['total']),
                        sum(abs(l['per_round']) for l in (stats.get('leaks') or [])[:3])))
     out += '    ' + ex('index') + '\n'
@@ -501,12 +495,12 @@ def trend_card(stats):
     inner = ('    <div class="table-wrap"><table class="gtable trend"><thead><tr><th>Sample</th>%s'
              '<th>Total</th><th>Scoring</th></tr></thead><tbody>%s</tbody></table></div>\n'
              % (head, rows))
-    note = ('One row each time the numbers move. Collection started %s, so there is not enough '
-            'here to call a direction yet: that needs ten tracked rounds, and I have %d.'
+    note = ('These are snapshots of an accumulating dataset, not independent rounds or equal-length periods. '
+            'Collection started %s; there are %d tracked rounds. More data and consistent methods are needed to judge a trend.'
             % (month(snaps[0]['date']), (stats or {}).get('rounds_n', 0)))
     if len({s['date'] for s in snaps}) < len(snaps):
         note += (' The first rows share a date because a round was added back by a correction to '
-                 'the maths, not because of golf. Everything after them is play.')
+                 'the maths, not because of golf. Later changes can also reflect corrections rather than improvement.')
     inner += '    <p class="vs-note" style="text-align:left">%s</p>' % note
     return card('Is it moving?', inner)
 
@@ -531,16 +525,16 @@ def hero_card(stats, g):
         rows.append(f'<li><span class="course"><b>{name}</b><small>{sub}</small></span>'
                     f'<span class="score"><span class="num num--md">{r["score"]}</span>{dtxt}</span></li>')
     avg = sum(r['score'] for r in full18) / max(1, len(full18))
-    gap = (f'On the {stats["rounds_n"]} rounds with shot data, which averaged '
-           f'{stats["scoring"]["avg18"]:.1f}, I was {abs(stats["sg"]["total"]):.0f} strokes a round from scratch.'
+    gap = (f'The complete 18-hole sensor rounds averaged {stats["scoring"]["avg18"]:.1f} raw strokes. '
+           f'Across all {stats["holes"]} tracked holes, the model estimates {abs(stats["sg"]["total"]):.0f} strokes lost per 18 holes.'
            ) if stats else f'Scratch is 0.0. My index is {show(idx)}.'
     inner = (f'    <div class="hero-score"><span class="num num--xl">{avg:.1f}</span>'
-             f'<span class="vs">avg of my last {len(full18)} posted rounds</span></div>\n'
+             f'<span class="vs">adjusted-score average · {len(full18)} recent 18-hole posts</span></div>\n'
              f'    <p class="goal-line">{gap}</p>\n'
              f'    <p class="lbl" style="margin-top:1.2rem">Recent rounds \u00b7 score and differential</p>\n'
              f'    <ul class="rounds-list">{"".join(rows)}</ul>\n'
-             f'    <p class="vs-note" style="text-align:left">From my GHIN record, every posted round. A differential at or '
-             f'under my index beat my handicap.</p>')
+             f'    <p class="vs-note" style="text-align:left">Recent GHIN totals use handicap-adjusted scores. '
+             f'Differentials are compared with my current index; raw sensor scores use a separate sample.</p>')
     return card('Scoring', inner, cls='gcard--hero', explain=('index', 'differential'))
 
 
@@ -581,9 +575,9 @@ def leaks_card(stats):
     rows = []
     for i, l in enumerate(stats['leaks'], 1):
         rows.append(f'<li><span class="leak__rank">{i}</span><div><p class="leak__name">{l["name"]}</p>'
-                    f'<p class="leak__gain">Fixing this is worth about {abs(l["per_round"]):.1f} strokes a round.</p>'
+                    f'<p class="leak__gain">Estimated loss: {abs(l["per_round"]):.1f} strokes per 18 holes.</p>'
                     + rbar(l['share'] / 100)
-                    + f'<p class="leak__basis">{l["share"]}% of the focus-area upside · {l["basis"]}</p></div></li>')
+                    + f'<p class="leak__basis">{l["share"]}% of the three displayed focus estimates · {l["basis"]}</p></div></li>')
     return card('Where to focus', f'    <ol class="leaks">{"".join(rows)}</ol>',
                 explain=('leak', 'thin'))
 
@@ -591,7 +585,7 @@ def leaks_card(stats):
 def handicap_card(g):
     revs, today = g['revisions'], g['updated']
     cur = num(revs[-1]['index'])
-    year_ago = date.fromisoformat(today).replace(year=date.fromisoformat(today).year - 1).isoformat()
+    year_ago = (date.fromisoformat(today) - timedelta(days=365)).isoformat()
     low = min(num(r['index']) for r in revs if r['date'] >= year_ago)
     best = g.get('best_differential')
     minus = '−'
@@ -617,13 +611,14 @@ def bypar_card(g):
                         + f'<span class="n">{par[p]["holes"]} holes</span>'
                         f'<span class="val neg">+{per_round[p]:.1f}</span></li>')
     worst = max(per_round, key=per_round.get)
-    lead = f'Par {worst}s cost me the most, about {per_round[worst]:.0f} strokes over par on a typical card. Per round, from my whole GHIN record:'
+    lead = (f'Par {worst}s contribute the most in this illustration. GHIN adjusted hole scores are scaled to '
+            'a hypothetical card with four par 3s, ten par 4s and four par 5s; this is not an actual round average.')
     return card('Where the strokes go', f'    <p style="margin:0 0 0.8rem;font-size:0.92rem">{lead}</p>\n    <ul class="drows">{"".join(rows)}</ul>')
 
 
 def highlights_card(stats):
     d = stats['driving']
-    items = [('Driver, longest', f'{d["driver_longest_yd"]} yd'), ('Driver, median', f'{d["driver_median_yd"]} yd'),
+    items = [('Driver total, longest', f'{d["driver_longest_yd"]} yd'), ('Driver total, median', f'{d["driver_median_yd"]} yd'),
              ('Greens in regulation', f'{stats["approach"]["gir_pct"]}%'), ('Putts per round', stats['putting']['putts_round'])]
     rows = ''.join(f'<li><span class="course"><b>{n}</b></span><span class="score"><span class="num num--md">{v}</span></span></li>'
                    for n, v in items)
@@ -653,12 +648,12 @@ def page_driving(stats, g):
     leaks_ = stats.get('leaks') or []
     first = bool(leaks_) and leaks_[0] is pen_leak
     focus_line = (f'Penalty balls off the tee cost about {abs(pen_leak["per_round"]):.1f} strokes a round'
-                  + (', the largest single thing in my game right now.' if first else
-                     f', ranked {leaks_.index(pen_leak) + 1} of the things worth fixing.') if pen_leak else
+                  + (', the largest of the displayed focus estimates in this sample.' if first else
+                     f', ranked {leaks_.index(pen_leak) + 1} among the displayed focus estimates.') if pen_leak else
                   'Penalties off the tee are no longer clearing the bar as a measured leak. '
                   'Distance and dispersion are what is left here.')
     left = (focus_card('off the tee', focus_line, sg(d['sg_round']), 'Strokes/rnd')
-            + card('', statpair('Driver, median', f'{d["driver_median_yd"]} yd', 'Longest', f'{d["driver_longest_yd"]} yd'))
+            + card('', statpair('Driver total, median', f'{d["driver_median_yd"]} yd', 'Total, longest', f'{d["driver_longest_yd"]} yd'))
             + card('', statpair('Tee-shot penalties', d['tee_penalties'], 'Fairways', f'{fw["hit"] / fw["of"]:.0%}'),
                    explain=('penalty', 'sg')))
     driver_pct = d['driver_shots'] / d['tee_shots'] if d['tee_shots'] else 0
@@ -672,30 +667,26 @@ def page_driving(stats, g):
                         f'<td>{c["penalty_rate"]}%</td><td>{med}</td></tr>')
         rows = ''.join(rows)
         v = td.get('verdict') or {}
-        if v and v.get('callable'):
-            verdict = (f'<b>{v["better"]} is the better play.</b> It returns {abs(v["gap_per_shot"]):.2f} strokes '
-                       f'more per tee shot than {v["worse"].lower()}, and the ranges do not overlap.')
-        elif v:
-            verdict = (f'<b>Not callable yet.</b> {v["better"]} is ahead by {abs(v["gap_per_shot"]):.2f} strokes a '
-                       f'tee shot and goes {abs(v["yards"])} yd further, but the ranges still overlap, so I cannot '
-                       f'say the trade is paying. More tracked rounds decide it.')
+        if v:
+            verdict = (f'<b>Descriptive comparison, not a club-selection rule.</b> {v["better"]} is ahead by '
+                       f'{abs(v["gap_per_shot"]):.2f} strokes per tee shot in this sample. Clubs were used on '
+                       'different holes and in different situations. The data does not isolate the effect of club choice.')
         else:
             verdict = 'Not enough tee shots yet to compare clubs.'
         tee_card = card('Is the lay-up paying?',
                         '    <div class="table-wrap"><table class="gtable"><thead><tr><th>Club</th><th>Tee shots</th>'
-                        '<th>SG per shot</th><th>Penalty rate</th><th>Median</th></tr></thead><tbody>'
+                        '<th>SG per shot</th><th>Penalty rate</th><th>Median total (yd)</th></tr></thead><tbody>'
                         + rows + '</tbody></table></div>\n'
                         f'    <p style="margin:0.8rem 0 0;font-size:0.92rem">{verdict}</p>')
     right = (tee_card + card('Club off the tee',
                   f'    <p style="margin:0;font-size:0.95rem">Driver on {d["driver_shots"]} of {d["tee_shots"]} tee shots '
                   f'({driver_pct:.0%}); the rest were 3-wood or an iron. The distance numbers above are driver only, '
                   f'measured from shot GPS across {d["driver_measured"]} drives that did not take a penalty. '
-                  f'Blending every club off the tee into one "average drive" reads nearly 40 yd shorter '
-                  f'and means nothing, so it is not on this page.</p>')
+                  f'These are GPS start-to-rest distances including roll, not measured carry. '
+                  f'TrackMan carry is shown separately in Road to 315.</p>')
              + card('What matters off the tee',
                  f'    <p style="margin:0;font-size:0.95rem">I hit {fw["hit"]} of {fw["of"]} fairways ({fw["hit"] / fw["of"]:.0%}). '
-                 'That number barely matters: in Shot Scope’s data, fairway percentage is almost flat from scratch to a '
-                 '20 handicap. What separates handicaps off the tee is the disaster rate, penalty balls and the spots you '
+                 'Fairways alone do not describe the result: a playable rough lie and a penalty are very different misses. '
                  + (f'The penalties alone cost about {abs(pen_leak["per_round"]):.1f} strokes a round.'
                     if pen_leak else 'Penalties are not clearing the bar as a measured leak right now.')
                  + '</p>'))
@@ -719,7 +710,9 @@ def page_approach(stats, g):
                        sg(a['sg_round']), 'Strokes/rnd')
             + card('', statpair('Greens in regulation', f'{a["gir_pct"]}%', 'Shots', sum(v['shots'] for v in a['buckets'].values())))
             + card('', statpair('Proximity, greens hit', f'{a["prox_gir_ft"]} ft', 'Proximity, all', f'{a["prox_all_ft"]} ft')))
-    mid = card('SG by distance (yd)', f'    <ul class="drows">{rows}</ul>')
+    mid = card('Strokes gained by starting distance (yd)', f'    <ul class="drows">{rows}</ul>'
+               '<p class="vs-note">Contribution per 18 holes, not per shot. Negative means strokes lost; '
+               'small samples are marked. Miss-direction counts use eligible approach finishes; GIR is a percentage of holes.</p>', explain=('sg', 'thin'))
     right = card('Where approach shots finish', missgrid, explain=('gir', 'prox', 'dispersion'))
     return (f'<div class="ggrid3"><div class="gcol">{left}</div><div class="gcol">{mid}</div><div class="gcol">{right}</div></div>')
 
@@ -732,21 +725,23 @@ def page_short(stats, g):
     rows = ''.join(drow(f'{b}', rbar(abs(v['sg_round']) / 2.5, 'ok' if v['sg_round'] > 0 else ''),
                         f'{v["shots"]} shots', sg(v['sg_round']), v.get('thin')) for b, v in s['buckets'].items())
     ud_pct = (ud['made'] / ud['of']) if ud.get('of') else 0
-    focus_line = (f'A scratch player gets up and down a little over half the time from inside 30 yards. '
+    focus_line = ('From inside 30 yards, finishing in two strokes or fewer is the measure. '
                   f'I’m at {ud_pct:.0%} ({ud["made"]} of {ud["of"]})'
                   + (f', and {pitch["made"]} of {pitch["of"]} from 30 to 50.' if pitch.get('of') else '.'))
     left = (focus_card('inside 50 yards', focus_line, sg(s['sg_round']), 'Strokes/rnd')
             + card('', statpair('Up and down, inside 30 yd',
                                 f'{(s.get("updown_greenside") or ud)["made"]}/{(s.get("updown_greenside") or ud)["of"]}',
                                 'Usual miss', (disp.get('tendency') or '?').title())))
-    right = card('SG by distance (yd)', f'    <ul class="drows">{rows}</ul>', explain=('updown', 'thin'))
+    right = card('Strokes gained by starting distance (yd)', f'    <ul class="drows">{rows}</ul>'
+                 '<p class="vs-note">Contribution per 18 holes, not per chip. Negative means strokes lost.</p>', explain=('updown', 'thin', 'sg'))
     return (f'<div class="ggrid"><div class="gcol">{left}</div><div class="gcol">{right}</div></div>')
 
 
 def page_putting(stats, g):
     p = stats['putting']
-    solid = {b: v for b, v in p['buckets'].items() if not v.get('thin')} or p['buckets']
-    worst = min(solid, key=lambda b: solid[b]['sg_round'])
+    solid = {b: v for b, v in p['buckets'].items() if not v.get('thin')}
+    supported = {b: v for b, v in solid.items() if v.get('ci') and v['ci'][1] < 0}
+    focus = min(supported, key=lambda b: supported[b]['sg_round']) if supported else None
     sg_rows = ''.join(drow(f"{b}'", rbar(abs(v['sg_round']) / 1.5, 'ok' if v['sg_round'] > 0 else ''),
                            f'{v["n"]} putts', sg(v['sg_round']), v.get('thin')) for b, v in p['buckets'].items())
     make_rows = []
@@ -754,7 +749,7 @@ def page_putting(stats, g):
         delta = v['made_pct'] - (v['scratch_pct'] or 0)
         cls = 'pos' if delta > 0 else 'neg'
         make_rows.append(drow(f"{b}'", rbar(v['made_pct'] / 100, 'ok' if delta >= 0 else '', tick=v['scratch_pct']),
-                              f'{v["n"]} putts', f'<span class="{cls}">{v["made_pct"]}% ({delta:+d}%)</span>',
+                              f'{v["n"]} first putts', f'<span class="{cls}">{v["made_pct"]}% ({delta:+d} pp)</span>',
                               v.get('thin')))
     autopsy = card('Three-putts',
                    f'    <p style="margin:0 0 0.5rem;font-size:0.95rem">{p["three_putts"]} three-putt holes. '
@@ -764,12 +759,18 @@ def page_putting(stats, g):
                    '    <p class="leak__basis">Arccos does not record where the second putt was played from, '
                    'so I cannot say whether these were poor lags or missed short ones. Only the first putt '
                    'is measured.</p>', explain=('threeputt',))
-    left = (focus_card(f'{worst} ft putts', 'Tighten this band first; the rest of my putting holds up against scratch.',
+    left = (focus_card(f'{focus} ft first putts' if focus else 'keep measuring',
+                       'This band shows a loss under the model; treat it as a practice hypothesis.' if focus else
+                       'No distance band has both enough first putts and a loss range entirely below zero. '
+                       'The lowest estimate is not yet a proven weakness.',
                        sg(p['sg_round']), 'Strokes/rnd')
             + card('', statpair('Putts per round', p['putts_round'], '3-putts/rnd', round(p['three_putts'] / (stats['holes'] / 18), 1))))
-    mid = (card('SG by putt distance', f'    <span class="opp-chip">#1 opportunity: {worst} ft</span>\n    <ul class="drows">{sg_rows}</ul>')
-           + card('Make rate by distance', f'    <ul class="drows">{"".join(make_rows)}</ul>\n'
-                  '    <p class="vs-note">▏ marks a scratch player’s make rate (Arccos data)</p>',
+    mid = (card('First-putt strokes gained by distance', f'<ul class="drows">{sg_rows}</ul>'
+                '<p class="vs-note">Contributions per 18 holes from first putts only. Later putts remain in '
+                'the overall putting total, so these rows need not add up to it.</p>', explain=('sg', 'range'))
+           + card('First-putt make rate by distance', f'    <ul class="drows">{"".join(make_rows)}</ul>\n'
+                  '    <p class="vs-note">▏ marks the saved scratch reference. pp = percentage points. '
+                  'These are first putts, not every putt played. The saved benchmark lacks a traceable distance-matched source, so treat its differences as provisional.</p>',
                   explain=('makerate', 'thin')))
     right = autopsy
     return (f'<div class="ggrid3"><div class="gcol">{left}</div><div class="gcol">{mid}</div><div class="gcol">{right}</div></div>')
@@ -838,7 +839,7 @@ def tee_line(r, rows):
     if r.get('tee'):
         bits.append(f'{r["tee"]} tees')
     if r.get('rating') and r.get('slope'):
-        bits.append(f'{r["rating"]} / {r["slope"]}')
+        bits.append(f'course rating {r["rating"]} · slope {r["slope"]}')
     elif r.get('slope'):
         bits.append(f'slope {r["slope"]}')
     yds = sum(h['yds'] for h in rows if h.get('yds') is not None)
@@ -903,8 +904,9 @@ def page_rounds(stats, g):
                      '    </div></details></li>')
     ghin_table = card('Latest posted rounds (GHIN)',
                       f'    <ul class="rnds">{"".join(items)}</ul>\n'
-                      '    <p class="vs-note">Open a round for the scorecard. A differential at or under my '
-                      'index beat my handicap. Rounds without sensor shots count for scoring and handicap, '
+                      '    <p class="vs-note">Open a round for the scorecard. Header numbers are GHIN adjusted score '
+                      'and Score Differential; colors compare the differential with my current index. '
+                      'Rounds without sensor shots count for scoring and handicap, '
                       'but not for the strokes-gained pages.</p>',
                       explain=('adjusted', 'differential', 'index'))
     rows = []
@@ -913,14 +915,16 @@ def page_rounds(stats, g):
         d = date.fromisoformat(r['date']).strftime('%b %d, %Y')
         cells = ''.join(f'<td>{sg(r["sg"].get(k, 0))}</td>' for k, _, _ in CATS)
         rows.append(f'<tr><td>{d}</td><td>{r["course"]}</td><td class="num num--md">{r["score"]}{"" if r["holes"] == 18 else " (9)"}</td>'
-                    f'<td>{sg(r["score"] - r["par"], 0)}</td>{cells}<td>{sg(tot)}</td></tr>')
+                    f'<td>{over_par(r["score"] - r["par"])}</td>{cells}<td>{sg(tot)}</td></tr>')
     table = card('Every sensor-tracked round',
                  '    <div class="table-wrap"><table class="gtable"><thead><tr><th>Date</th><th>Course</th><th>Score</th>'
                  '<th>To par</th><th>Tee</th><th>App</th><th>Short</th><th>Putt</th><th>Total SG</th></tr></thead><tbody>'
-                 + ''.join(rows) + '</tbody></table></div>')
-    bypar = ''.join(drow(f'Par {p}s', rbar(abs(v) / 2), '', sg(-abs(v)) if v > 0 else sg(v))
+                 + ''.join(rows) + '</tbody></table></div>'
+                 '<p class="vs-note">Raw scores and actual-round strokes gained; a nine-hole row is not scaled to 18. '
+                 'To par: positive is over par. Strokes gained: negative is worse than the model.</p>')
+    bypar = ''.join(drow(f'Par {p}s', rbar(abs(v) / 2), '', over_par(v))
                     for p, v in stats['scoring']['by_par'].items())
-    bylen = ''.join(drow(b, rbar(abs(v) / 2), '', sg(-abs(v)) if v > 0 else sg(v))
+    bylen = ''.join(drow(b, rbar(abs(v) / 2), '', over_par(v))
                     for b, v in sorted(stats['scoring']['par4_by_length'].items()))
     small = (f'<div class="ggrid">{card("Average over par, by hole", f"    <ul class=_drows_>{bypar}</ul>".replace("_", chr(34)))}'
              f'{card("Par 4s by length (yd)", f"    <ul class=_drows_>{bylen}</ul>".replace("_", chr(34)))}</div>')
@@ -948,14 +952,13 @@ def _loop_rows(tm, stats):
     a leak with nothing to pair against is left out rather than given a number.
     """
     clubs = {c['club']: c for c in tm['clubs']}
-    wedge_spreads = [c['carry_spread'] for c in tm['clubs']
-                     if c.get('carry_spread') and (c['club'] in ('Pw', 'Gw', 'Sw', 'Lw')
-                                                   or c['club'].endswith('°'))]
     rows, shown = [], set()
     for leak in (stats.get('leaks') or [])[:3]:
         name = leak['name'].lower()
         measured = target = None
-        kind = 'driver' if ('penalt' in name or 'driv' in name or 'tee' in name) else 'wedge'
+        kind = 'driver' if ('penalt' in name or 'driv' in name or 'tee' in name) else None
+        if kind is None:
+            continue  # Full-wedge carries do not measure 0–20 yd chips or putting.
         if kind in shown:
             continue          # one practice figure answers one leak, not three
         if kind == 'driver':
@@ -963,13 +966,8 @@ def _loop_rows(tm, stats):
             if d and d.get('corridor_pct') is not None:
                 measured = '%d%% of drives inside a 36 yd corridor · ±%s yd spread' % (
                     d['corridor_pct'], d.get('side_spread', '?'))
-                target = 'two thirds inside the corridor'
+                target = '65% inside the corridor'
                 frac = d['corridor_pct'] / 100.0
-        elif wedge_spreads:
-            med = sorted(wedge_spreads)[len(wedge_spreads) // 2]
-            measured = '±%s yd carry spread across the wedges' % med
-            target = 'within ±4 yd'
-            frac = max(0.05, min(1.0, 4.0 / med)) if med else 0.05
         if not measured:
             continue
         shown.add(kind)
@@ -982,7 +980,9 @@ def _loop_rows(tm, stats):
                        rbar(frac), measured))
     if not rows:
         return ''
-    return '    <ul class="leaks">%s</ul>' % ''.join(rows)
+    return ('<ul class="leaks">%s</ul><p class="vs-note">Simulator accuracy is a practice proxy, '
+            'not a measure of on-course penalty avoidance. Full-wedge carry tests do not establish '
+            'greenside chipping skill.</p>') % ''.join(rows)
 
 
 def grade_text(grade):
@@ -1095,7 +1095,7 @@ def page_trackman_real(tm, stats):
         # bar, the way the putting page marks a scratch player's make rate.
         pga = tour_mark('Carry', c['club'])
         tick = min(pga[0] / longest, 1.0) * 100 if pga else None
-        note = ('±%s yd' % c['carry_spread']) if c.get('carry_spread') else ('%s shots' % c.get('n', '?'))
+        note = ('±%s yd' % c['carry_spread']) if c.get('carry_spread') is not None else 'spread unavailable'
         if c.get('sample'):
             note = 'Sample · not yet measured · ' + note
         else:
@@ -1144,7 +1144,7 @@ def page_trackman_real(tm, stats):
         for s in tm['sessions'])
 
     u = tm.get('units') or {}
-    note = ('Measured on TrackMan over the last %d days, %d balls across %d session%s. '
+    note = ('Club summaries use the last %d days. The full archive contains %d balls across %d session%s. '
             'Distances read as %s and speeds as %s. Medians, with spread as half the '
             'central 80%% of shots. Clubs under 8 shots are marked and never set a '
             'practice plan.' % (tm.get('window_days', 180), tm.get('balls_total', 0),
@@ -1173,7 +1173,9 @@ def page_trackman_real(tm, stats):
 
     loop = _loop_rows(tm, stats)
     left = (card('', strip, explain=('smash', 'carry'))
-            + card('Session log', '    <ul class="rounds-list" style="margin-top:0">%s</ul>' % sess_rows))
+            + card('Session log', ('<ul class="rounds-list" style="margin-top:0">%s</ul>'
+                   '<p class="vs-note">“Met” counts saved consistency/accuracy checks, not clubs measured '
+                   'or completion of the original plan.</p>') % sess_rows, explain=('practicegrade',)))
     if loop:
         left += card('Practice against play', loop, explain=('practicegrade',))
     mid = card('Gapping: carry per club', '    <ul class="drows">%s</ul>\n'
@@ -1281,11 +1283,13 @@ def plans_cards():
         log.append(f'<li><span class="course"><b>{kind}</b><small>{sub}</small></span>'
                    f'<span class="score"><span class="n">{p.get("status", "planned")}</span></span></li>')
     log = ''.join(log)
-    current = card(f'Current plan \u00b7 {d}',
+    current = card(f'Saved plan \u00b7 {d}',
                    f'    <p style="margin:0 0 0.8rem;font-size:0.92rem">{cur["type"].title()} session{where}{bench}. '
-                   f'Built from the live leak table: {cur.get("focus", "")}.</p>\n'
+                   f'Original focus: {cur.get("focus", "")}.</p>\n'
+                   '<p class="vs-note">This is the plan as issued, not a live description of what remains. '
+                   'The original note below may predate imported measurements.</p><details><summary>Original plan and note</summary>'
                    f'    <ul class="plan">{rows}</ul>\n'
-                   f'    <p class="vs-note">{cur.get("note", "")}</p>')
+                   f'    <p class="vs-note">{cur.get("note", "")}</p></details>')
     loglist = card('Plan log', f'    <ul class="rounds-list" style="margin-top:0">{log}</ul>',
                    explain=('plans', 'practicegrade'))
     return f'<div class="ggrid"><div class="gcol">{current}</div><div class="gcol">{loglist}</div></div>'
@@ -1310,10 +1314,10 @@ def story_where(stats, g):
            f'<span class="vs">Handicap Index</span></div>\n')
     bits = [f'My index is {idx}']
     if avg:
-        bits.append(f'I shoot about {avg:.0f} on the rounds I post')
-    bits.append(f'and on the {stats["rounds_n"]} rounds where every shot was recorded I averaged '
-                f'{sc["avg18"]:.1f}, which is {gap:.0f} strokes a round worse than a scratch player '
-                'would be from the same places')
+        bits.append(f'my recent 18-hole GHIN adjusted scores average {avg:.1f}')
+    bits.append(f'and the complete 18-hole rounds in my sensor sample averaged '
+                f'{sc["avg18"]:.1f} raw strokes. Separately, the model estimates {gap:.0f} strokes lost per 18 holes '
+                f'across all {stats["holes"]} sensor-tracked holes, including the nine-hole round')
     out += para('. '.join(bits[:1]) + ', ' + ', '.join(bits[1:]) + '.')
     out += para('Those three numbers disagree on purpose, and that is the first thing worth '
                 'understanding about my own data.')
@@ -1338,7 +1342,7 @@ def story_chain(stats, g):
              ('Practice', 'the sessions are built from the leak table, in order')]
     items = ''.join(f'<li><span class="step-n">{i}</span><div><b>{n}</b><span>{d}</span></div></li>'
                     for i, (n, d) in enumerate(steps, 1))
-    out = para('Everything on this site comes out of one chain. Each link is simple; the confusion comes '
+    out = para('The on-course analysis follows this chain. Each link is simple; the confusion comes '
                'from meeting them out of order.')
     out += f'    <ol class="chain">{items}</ol>\n'
     out += '    ' + ex('expected') + '\n    ' + ex('sg') + '\n    ' + ex('categories') + '\n'
@@ -1346,7 +1350,7 @@ def story_chain(stats, g):
                 'shots. That is why rounds I played without the sensors still move my index but never '
                 'appear on the strokes gained pages.')
     out += '    ' + ex('differential') + '\n    ' + ex('scratch') + '\n'
-    return card('How one shot becomes a handicap', out)
+    return card('Two records: shot analysis and handicap', out)
 
 
 def story_parts(stats, g):
@@ -1360,7 +1364,7 @@ def story_parts(stats, g):
     def block(key, name, href, lead, extra=''):
         v = sg_pr[key]
         rng = ci.get(key)
-        verdict = ('<span class="tag tag--real">established</span>' if decisive(rng)
+        verdict = ('<span class="tag tag--real">range excludes zero</span>' if decisive(rng)
                    else '<span class="tag">not callable yet</span>')
         return (f'<div class="part"><div class="part-head"><h3><a href="{href}">{name}</a></h3>'
                 f'<span class="num num--md">{sg(v)}</span></div>'
@@ -1374,25 +1378,22 @@ def story_parts(stats, g):
         'driving', 'Driving', 'golf-driving.html',
         ((f'I hit {fw["hit"]} of {fw["of"]} fairways and my driver goes ' if fw.get('of')
           else 'My driver goes ')
-         + f'{d["driver_median_yd"]} yards, which is not the problem. The problem is '
+         + f'{d["driver_median_yd"]} yards including roll. The sample also contains '
            f'{d["tee_penalties"]} penalty balls off the tee in {d["tee_shots"]} tee shots. '
-           'Distance I have; the ball being in play I do not.'),
+           'Keeping more tee shots playable is a practical test; this does not diagnose the swing.'),
         '    ' + ex('penalty')))
     blocks.append(block(
         'approach', 'Approach', 'golf-approach.html',
-        f'I hit {a["gir_pct"]}% of greens against about {SCRATCH["gir_pct"]}% for scratch, and when I do '
+        f'I hit {a["gir_pct"]}% of greens in regulation, and when I do '
         f'hit one I am {a["prox_gir_ft"]} feet away. No single yardage stands out as the villain. What '
-        f'does stand out is the direction: {short_miss} of my {miss_total} misses are <b>short</b>, more '
-        f'than every other miss put together, and the pattern sits {a.get("dispersion", {}).get("tendency", "")}.',
+        f'does stand out is the direction: {short_miss} of my {miss_total} classified misses are <b>short</b>; '
+        f'precisely, {short_miss / miss_total:.0%} of classified misses. The pattern sits {a.get("dispersion", {}).get("tendency", "")}.',
         '    ' + ex('gir') + '\n    ' + ex('prox') + '\n    ' + ex('dispersion')))
-    short_lead = (f'This is the biggest single hole in my game and it follows directly from the one '
-                  f'above. Missing {100 - a["gir_pct"]}% of greens means about '
-                  f'{round((100 - a["gir_pct"]) / 100 * 18)} chances a round to save par with a chip and '
-                  'a putt. ')
+    short_lead = ('Missed greens create recovery work, but not every miss leaves a short chip or a chance '
+                  'to save par. This sample separates the recorded greenside chances from longer pitches. ')
     if gs.get('of'):
         short_lead += (f'I convert {round(gs["made"] / gs["of"] * 100)}% of the ones inside 30 yards, '
-                       f'{gs["made"]} of {gs["of"]}, where scratch converts about '
-                       f'{SCRATCH["updown_pct"]}%.')
+                       f'{gs["made"]} of {gs["of"]}.')
         if pitch.get('of'):
             short_lead += f' From 30 to 50 yards I am {pitch["made"]} of {pitch["of"]}.'
     else:
@@ -1400,13 +1401,13 @@ def story_parts(stats, g):
     blocks.append(block('short', 'Short game', 'golf-short-game.html', short_lead, '    ' + ex('updown')))
     blocks.append(block(
         'putting', 'Putting', 'golf-putting.html',
-        f'I take {p["putts_round"]:.0f} putts a round, which sounds bad until you remember I am putting '
-        f'from further away than a scratch player because of everything above. My {p["three_putts"]} '
+        f'I take {p["putts_round"]:.0f} putts per 18 holes. That total depends on how many greens I hit '
+        f'and where first putts start, as well as putting skill. My {p["three_putts"]} '
         f'three-putts followed first putts averaging {p["three_putt_first_ft"]} feet, against '
         f'{p["two_putt_first_ft"]} feet on the holes I two-putted.',
         '    ' + ex('threeputt')))
-    out = para('Four parts, in the order the shots happen. Two of them are established findings and two '
-               'are not yet, which matters more than the headline numbers.')
+    out = para('Four parts, in the order the shots happen. Read the estimates alongside their ranges; '
+               'even a range that excludes zero depends on the model and this small sample.')
     out += '    ' + ex('range') + '\n'
     out += f'    <div class="parts">{"".join(blocks)}</div>\n'
     return card('The four parts, and how they feed each other', out)
@@ -1420,7 +1421,7 @@ def story_leaks(stats):
                'priced per round.')
     rows = ''.join(f'<li><span class="leak__rank">{i}</span><div><p class="leak__name">{l["name"]}</p>'
                    f'<p class="leak__gain">About <b>{abs(l["per_round"]):.1f} strokes a round</b>, '
-                   f'{l["share"]}% of everything available. {l["basis"]}.</p>'
+                   f'{l["share"]}% of the three displayed estimates. {l["basis"]}.</p>'
                    + rbar(l['share'] / 100) + '</div></li>'
                    for i, l in enumerate(leaks, 1))
     out += f'    <ol class="leaks">{rows}</ol>\n'
@@ -1429,55 +1430,29 @@ def story_leaks(stats):
 
 
 def story_plan(stats, g):
-    leaks = stats.get('leaks') or []
     d, a, sh = stats['driving'], stats['approach'], stats['short']
     gs = sh.get('updown_greenside') or sh['updown']
-    rounds18 = stats['holes'] / 18
-    out = para('Three things, in this order, because this is the order the data puts them in. Each one '
-               'has a number attached, so it is possible to be wrong about it later.')
-    goals, gained = [], 0.0
-    pens = d['tee_penalties']
-    if pens:
-        half = pens / 2.0
-        goals.append(('Put the tee ball in play',
-                      f'{pens} penalty tee shots in {d["tee_shots"]} swings is {pens / rounds18:.1f} a '
-                      f'round. Halving that to {half:.0f} is worth about '
-                      f'{(pens - half) / rounds18:.1f} strokes a round on its own.',
-                      f'{pens / d["tee_shots"]:.0%} of tee shots \u2192 {pens / d["tee_shots"] / 2:.0%}'))
-        gained += (pens - half) / rounds18
-    if gs.get('of'):
-        now = gs['made'] / gs['of']
-        target = min(0.45, now + 0.12)
-        extra = (target - now) * gs['of']
-        goals.append(('Get up and down from inside 30 yards',
-                      f'{round(now * 100)}% now against about {SCRATCH["updown_pct"]}% for scratch. '
-                      f'Getting to {round(target * 100)}% would have saved {extra:.0f} shots over these '
-                      f'rounds, about {extra / rounds18:.1f} a round.',
-                      f'{round(now * 100)}% \u2192 {round(target * 100)}%'))
-        gained += extra / rounds18
     miss = a.get('miss_dir') or {}
-    shorts = miss.get('short', 0)
-    if shorts and shorts >= max([v for k, v in miss.items() if k != 'short'] or [0]):
-        goals.append(('Take enough club',
-                      f'{shorts} of {sum(miss.values())} approach misses are short. That is a club '
-                      'selection habit, not a swing fault, and it is the cheapest thing on this list to '
-                      f'change. It also feeds the item above: short misses leave the longest chips.',
-                      'one more club'))
-    items = ''.join(f'<li><span class="step-n">{i}</span><div><b>{t}</b><span>{why}</span>'
-                    f'<span class="goal-move">{mv}</span></div></li>'
-                    for i, (t, why, mv) in enumerate(goals, 1))
-    out += f'    <ol class="chain chain--goals">{items}</ol>\n'
-    if gained:
-        avg = stats['scoring']['avg18']
-        out += para(f'The two I can put a number on are worth about {gained:.1f} strokes a round between '
-                    f'them, which turns the {avg:.0f} I average with shots tracked into '
-                    f'{an(avg - gained)}.'
-                    + (f' Closing those buckets all the way to scratch would be '
-                       f'{sum(abs(l["per_round"]) for l in leaks[:3]):.1f}, but that is the ceiling rather '
-                       'than a plan.' if leaks else ''))
-    out += para('Nothing here says swing differently. Everything here says play differently and practise '
-                'the two shots that keep costing me, which is what the practice plans are built from.')
-    return card('What I am working on, and why', out)
+    goals = [
+        ('Keep tee shots playable',
+         f"The sample contains {d['tee_penalties']} tee penalty strokes in {d['tee_shots']} tee shots. "
+         'Track penalty frequency alongside distance, and choose targets with room for the usual miss.'),
+        ('Practise greenside finishes',
+         f"From inside 30 yards, I finished in two strokes or fewer {gs['made']} times in {gs['of']} chances. "
+         'Practise chips from different lies followed by the putt, and record the combined outcome.'),
+        ('Test approach club selection',
+         f"{miss.get('short', 0)} of {sum(miss.values())} classified approach misses finished short. "
+         'Check measured carry, strike, wind and elevation before choosing more club. The pattern alone '
+         'does not prove a club-selection habit or a swing fault.'),
+    ]
+    items = ''.join(f'<li><span class="step-n">{i}</span><div><b>{title}</b><span>{text}</span></div></li>'
+                    for i, (title, text) in enumerate(goals, 1))
+    return card('What I am testing next',
+                para('These are practice hypotheses based on the current sample. They are not promises of '
+                     'recoverable strokes; improvements can overlap, and the next rounds may change the priorities.')
+                + f'<ol class="chain chain--goals">{items}</ol>'
+                + para('Driver carry is a separate goal: <a href="golf-driving.html#road-to-315">Road to 315</a> '
+                       'tracks launch-monitor carry, while this section tracks scoring on the course.'))
 
 
 def story_limits(stats, g):
@@ -1486,23 +1461,23 @@ def story_limits(stats, g):
                'be useful and not enough to be certain, and the honest version of this page says which is '
                'which.')
     limits = [
-        ('Two of the four parts are not callable yet',
-         'Driving and putting both have ranges that still cross zero. They may be fine, they may be bad, '
-         'and more rounds will say.'),
-        ('Every lie is assumed',
-         'The data records where the ball was, not what it was sitting on. A chip from thick rough and a '
-         'chip from the fairway are scored the same, so my short game number is probably a little harsher '
-         'than the truth.'),
-        ('Distances are raw GPS',
-         'Mine are measured from where the ball started to where it stopped, so they include roll. The '
-         'figures inside the Arccos app are modelled and run longer.'),
-        ('Some rounds are missing',
-         'Only the rounds where I wore the sensors are here. Rounds without them still move my handicap '
-         'and still appear on the rounds page, but they cannot be broken down.'),
-        ('The scratch baseline is calibrated, not published',
-         'The expected-strokes table behind all of this was assembled from public sources and tuned to '
-         'agree with Arccos on these same rounds, so it is a reasonable standard rather than an '
-         'independent one.'),
+        ('A small and selected sample',
+         'Only sensor-recorded rounds can supply shot analysis. This sample may not represent my recent form '
+         'or all the conditions I play in. An interval crossing zero means the result is inconclusive.'),
+        ('Some lies are inferred',
+         'Tee and putter positions are recognized. The first shot after a par-4/5 tee shot uses the fairway '
+         'flag to infer fairway or rough; other non-putting lies are assumed fairway. Sand and recovery '
+         'situations are not reliably distinguished, which can move strokes between categories.'),
+        ('Distances answer different questions',
+         'On-course driver distances include roll and omit penalty drives. TrackMan carry is distance to '
+         'landing. Neither should be substituted for the other.'),
+        ('First-putt data is limited',
+         'Distance-band tables use first putts. Later-putt positions are not reliable enough to diagnose '
+         'lag leaves, even though later strokes contribute to overall putting totals.'),
+        ('The scratch model was calibrated on this sample',
+         'Expected-strokes tables were assembled locally and tuned to match the Arccos category dashboard '
+         'on the first five rounds. Matching those totals is not independent validation of each bucket, '
+         'causal explanation or confidence interval.'),
     ]
     if q.get('excluded_rounds'):
         limits.append(('A round was thrown out',
@@ -1510,7 +1485,7 @@ def story_limits(stats, g):
                        'so it is excluded from every number here.'))
     out += '    <dl class="limits">' + ''.join(f'<dt>{t}</dt><dd>{b}</dd>' for t, b in limits) + '</dl>\n'
     out += para('When any of that changes, these pages change with it. They rebuild from the data every '
-                'morning, so nothing here is a claim I wrote once and left standing.')
+                'morning when the pipeline runs. Rebuilding does not make old rounds current; coaching and goals need review.')
     return card('What this data cannot tell me', out)
 
 
@@ -1555,16 +1530,15 @@ def story_tour(stats, g):
             'Par or better after missing the green, counted the way the tour counts it: '
             '%d of %d.' % (len(saved), len(missed)))
     row('Putts per round', pt.get('putts_round'), t.get('putts_per_round'), '%.1f',
-        'Fewer greens should mean fewer putts, because a missed green usually becomes a chip '
-        'and one putt. Taking more of them while hitting half as many greens is the part worth '
-        'looking at.')
+        'A descriptive total, affected by greens hit, chipping and first-putt distances. '
+        'It cannot isolate putting skill on its own.')
     if avg:
         row('Scoring average', avg, t.get('scoring_average'), '%.1f',
-            'Mine is every posted 18-hole round. Theirs is competition, on harder setups.')
+            'Mine is the adjusted-score average of recent 18-hole GHIN posts. The tour scoring statistic uses its own adjustment and competition sample; these are not directly comparable.')
 
     cells = ''
     for r in rows:
-        cls = 'tour-row tour-row--level' if r['level'] else 'tour-row'
+        cls = 'tour-row'
         sign = '+' if r['gap'] > 0 else '\u2212'
         cells += ('<li class="%s"><span class="k">%s%s</span>'
                   '<span class="mine">%s</span><span class="sep">vs</span>'
@@ -1572,16 +1546,11 @@ def story_tour(stats, g):
                   % (cls, r['label'],
                      '<small>%s</small>' % r['note'] if r['note'] else '',
                      r['mine'], r['theirs']))
-    out = para('One place I am already there, and a lot of places I am not. The tour figures are '
-               'this season to date; mine are measured the same way where that is possible.')
+    out = para('A reference comparison, not a claim of tour-level skill. These are stored tour figures from '
+               'the date below; the samples, courses and some measurement definitions differ. The on-course tour snapshot could not be independently rechecked in this audit; it is not a live feed.')
     out += '    <ul class="tourlist">%s</ul>\n' % cells
-    level = [r['label'].lower() for r in rows if r['level']]
-    if level:
-        out += para('The only number that is level is <b>%s</b>. Everything that happens after the '
-                    'tee shot is roughly half of what a tour player does: they hit twice the greens '
-                    'and save par from a miss more than twice as often.' % level[0])
     out += ('    <p class="vs-note" style="text-align:left">%s, read %s. Different courses, '
-            'different setups, and 5 tracked rounds against a season, so this is a yardstick '
+            f'different setups, and {stats["rounds_n"]} tracked rounds against a tour sample, so this is a yardstick '
             'rather than a verdict.</p>' % (tour.get('source', ''), tour.get('read', '')))
     return card('Against the tour', out)
 
@@ -1694,7 +1663,7 @@ def page_courses(stats, g):
             '</div>' % (len(cs), len(states), len(ranked)))
     mp = us_map(cs)
     top = card('The life list', figs + '\n' + mp + '    <p class="vs-note" style="text-align:left">'
-               'Every course I have played, kept since 2015. Pins sit on the town, not the '
+               'My recorded list of courses played. Pins sit on the town, not the '
                'clubhouse, and a bigger pin is more courses in one place. Gold means Golf Digest '
                'ranks it. Dates exist only where I recorded them at the time.</p>')
 
@@ -1708,7 +1677,7 @@ def page_courses(stats, g):
             badges += '%s<span class="rk">#%d</span><small>%s</small>' % (sep, c['state_rank'], c.get('state_list') or '')
         rows += ('<tr><td><b>%s</b><small>%s</small></td><td>%s</td><td>%s</td></tr>'
                  % (c['name'], ', '.join(x for x in (c.get('city'), c.get('state')) if x),
-                    badges, played_on(c) or '\u2013'))
+                    badges + ('<br><small><a href="%s">Ranking source</a></small>' % escape(c['rank_source'], quote=True) if c.get('rank_source') else ''), played_on(c) or '\u2013'))
     ranked_card = card('The ranked ones',
                        '    <div class="table-wrap"><table class="gtable ranked"><thead><tr>'
                        '<th>Course</th><th>Ranking</th><th>Played</th></tr></thead><tbody>%s</tbody>'
@@ -1748,17 +1717,43 @@ SUBPAGES = {
 
 def write_page(fname, title, ogtitle, desc, content, g, stats):
     index = g['revisions'][-1]['index']
-    note = (f'{stats["source"]} I wear the sensors every round now, so this fills in as I play. ' if stats else '')
+    note = (f'{stats["source"]} ' if stats else '')
     excluded = ((stats or {}).get('quality') or {}).get('excluded_rounds') or []
     if excluded:
         note += (f'{len(excluded)} round{"" if len(excluded) == 1 else "s"} '
                  f'({", ".join(excluded)}) {"is" if len(excluded) == 1 else "are"} left out because the '
                  f'shot data does not match the scorecard. ')
-    note += (f'Handicap and scoring history come from my GHIN record, updated daily. '
+    note += (f'GHIN data checked {g["updated"]}; shot analysis built {(stats or {}).get("updated", "unknown")}. '
              f'<a href="index.html">jackraney.com</a> · <a href="about.html">about me</a>')
+    introductions = {
+        'golf.html': ('Road to scratch', 'The goal is a 0.0 Handicap Index. Start with the scoring picture, then follow a goal or a part of the game into the detail.'),
+        'golf-story.html': ('My game, explained', 'How the measurements fit together, what they suggest, and what I am testing next.'),
+        'golf-driving.html': ('Driving', 'Two different questions: how far my driver carries in practice, and how well tee shots help me score on the course.'),
+        'golf-approach.html': ('Approach play', 'Shots toward the green from more than 50 yards, including par-3 tee shots. Start with greens hit, then examine distance bands and misses.'),
+        'golf-short-game.html': ('Short game', 'Non-putting shots from 50 yards or closer. The aim is to finish the hole efficiently, not simply to hit a good-looking chip.'),
+        'golf-putting.html': ('Putting', 'Overall putting includes every putt. The distance tables below use first putts only, because later-putt positions are less reliable.'),
+        'golf-rounds.html': ('Rounds and scoring', 'GHIN totals are handicap-adjusted; sensor scorecards show raw strokes. The two can differ without either record being wrong.'),
+        'golf-courses.html': ('Courses played', 'A personal course log, separate from the smaller set of rounds with scores or sensor data. Ranking lists and editions are labeled.'),
+        'golf-trackman.html': ('TrackMan practice', 'Carry means distance to landing. Read measured clubs first; values marked Sample are illustrations, not my yardages.'),
+    }
+    heading, intro = introductions[fname]
+    dates = sorted(r['date'] for r in (stats or {}).get('rounds', []))
+    sample = (f'On-course analysis: {stats["rounds_n"]} rounds / {stats["holes"]} holes, '
+              f'{dates[0]} to {dates[-1]}.' if dates else 'No sensor-round sample available.')
+    guide = ('<details class="reading-guide"><summary>How to read these pages</summary>'
+             '<p><b>Three records:</b> GHIN supplies posted scores and the official Handicap Index; '
+             'Arccos supplies sensor shots for a local scratch comparison; TrackMan supplies practice measurements.</p>'
+             '<p><b>Strokes gained (SG):</b> +1 means one stroke better than the scratch model; −1 means one worse. '
+             'Summary rates are per 18 holes unless labeled per shot or actual round. Scratch means a 0.0 handicap.</p>'
+             '<p><b>Median:</b> the middle result. <b>Carry:</b> flight to landing. <b>Total distance:</b> includes roll. '
+             '<b>Dispersion:</b> how widely shots scatter. Expand the explanations beside a chart for its exact definition.</p>'
+             '<p><b>Evidence:</b> samples are labeled, small groups are flagged, and uncertainty ranges do not account '
+             'for every model assumption. A daily rebuild does not mean the underlying rounds are recent.</p></details>')
+    content = (f'<header class="golf-intro"><h1>{heading}</h1><p>{intro}</p>'
+               f'<p class="goal-note">GHIN checked {g["updated"]}. {sample}</p>{guide}</header>') + content
     html = SHELL.format(title=title, ogtitle=ogtitle, desc=desc, slug=fname.replace('.html', ''),
                         index=index, nav=nav_links(fname),
-                        rounds_pill=f'{g["rounds_last_12_months"]} rounds \u00b7 12 mo',
+                        rounds_pill=f'{g["rounds_last_12_months"]} 18-hole posts \u00b7 12 mo',
                         content=content, note=note)
     path = os.path.join(ROOT, fname)
     old = open(path, encoding='utf-8').read() if os.path.exists(path) else ''
@@ -1792,7 +1787,7 @@ def main():
     else:
         hub = f'<div class="ggrid"><section class="span2">{handicap_card(g)}</section><div class="gcol">{bypar_card(g)}</div></div>'
     write_page('golf.html', 'Road to scratch · Jack Raney', 'Road to scratch',
-               'Jack Raney’s golf: working toward scratch, every round and practice session measured. Updates itself daily.',
+               'Jack Raney’s golf: working toward scratch, with recorded scores, selected sensor rounds and measured practice sessions.',
                hub, g, stats)
     if stats:
         for fname, (title, desc, render) in SUBPAGES.items():

@@ -553,6 +553,12 @@
 .trend .tot { font-weight: 700; }
 
 /* Goal index and the shared goal / experiment / progress layout. */
+.golf-intro { margin: 0 0 1.8rem; max-width: 78ch; }
+.golf-intro h1 { font-family: var(--serif); font-size: clamp(2rem, 5vw, 3rem); margin: 0 0 0.6rem; }
+.golf-intro > p { line-height: 1.65; }
+.reading-guide { border-top: 1px solid var(--rule); padding-top: 0.8rem; font-size: 0.9rem; }
+.reading-guide summary { cursor: pointer; color: var(--accent); font-weight: 700; }
+.reading-guide p { line-height: 1.65; }
 .goal-index { margin: 0 0 1.6rem; scroll-margin-top: 1rem; }
 .goal-intro { margin: 0 0 1rem; color: var(--muted); font-size: 0.9rem; }
 .goal-index-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 1rem; }

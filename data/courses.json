@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-28",
+ "updated": "2026-10-29",
  "courses": [
   {
    "name": "Alondra Park Golf Course",
@@ -237,9 +237,7 @@
    "name": "PGA West - Nicklaus Tournament Course",
    "city": "La Quinta",
    "state": "CA",
-   "times": 1,
-   "rank": 42,
-   "list": "America's 100 Greatest Public (2025-26)"
+   "times": 1
   },
   {
    "name": "Palos Verdes Golf Club",
@@ -436,20 +434,18 @@
    "city": "San Diego",
    "state": "CA",
    "times": 1,
-   "rank": 49,
-   "list": "America's 100 Greatest Public (2025-26)",
    "state_rank": 49,
-   "state_list": "Best in California (2025-26)"
+   "state_list": "Best in California (2025-26)",
+   "rank_source": "https://www.golfdigest.com/courses/ca/torrey-pines-golf-course-north"
   },
   {
    "name": "Trump National Golf Club Los Angeles",
    "city": "Rancho Palos Verdes",
    "state": "CA",
    "times": 1,
-   "rank": 58,
-   "list": "America's 100 Greatest Public (2025-26)",
    "state_rank": 58,
-   "state_list": "Best in California (2025-26)"
+   "state_list": "Best in California (2025-26)",
+   "rank_source": "https://www.golfdigest.com/courses/ca/trump-national-golf-club-los-angeles-trump-national"
   },
   {
    "name": "Virginia Country Club",
@@ -507,7 +503,10 @@
    "state": "HI",
    "times": 1,
    "state_rank": 5,
-   "state_list": "Best in Hawaii (2025-26)"
+   "state_list": "Best in Hawaii (2025-26)",
+   "rank": 43,
+   "list": "America's 100 Greatest Public (2025-26)",
+   "rank_source": "https://www.golfdigest.com/courses/hi/mauna-kea-golf-course-mauna-kea"
   },
   {
    "name": "Mauna Lani Resort - North",
