@@ -296,11 +296,27 @@ EXPLAIN = {
 }
 
 
+# Short labels for the buttons. The full title still heads the explanation, but a
+# button reads better as a noun than as a sentence, and never in quote marks.
+EX_LABEL = {
+    'index': 'Handicap Index', 'differential': 'Differential', 'scratch': 'Scratch',
+    'expected': 'Expected strokes', 'sg': 'Strokes gained', 'categories': 'Why they add up',
+    'range': 'The ranges', 'thin': 'Too few to read', 'gir': 'Greens in regulation',
+    'updown': 'Up and down', 'prox': 'Proximity', 'dispersion': 'Dispersion',
+    'threeputt': 'Three-putts', 'leak': 'Leaks', 'penalty': 'Penalty cost',
+    'plans': 'How practice follows', 'adjusted': 'Raw and adjusted', 'makerate': 'Make rate',
+    'swingweight': 'Swingweight', 'lie': 'Lie angle', 'carry': 'Carry', 'smash': 'Ball speed',
+    'spread': 'Spread', 'gapping': 'Gapping', 'corridor': 'The corridor',
+    'swinglen': 'Inferred swing lengths', 'practicegrade': 'How it is graded',
+    'preview': 'Why these are grey', 'tour': 'The PGA numbers', 'bestinstate': 'The rankings',
+}
+
+
 def ex(key):
     """One optional explanation, closed. The summary is kept short enough to read as a
     button; the full title and the explanation are inside."""
     title, body = EXPLAIN[key]
-    label = title.split(',')[0]
+    label = EX_LABEL.get(key) or title.split(',')[0]
     return (f'<details class="ex"><summary>{label}</summary>'
             f'<div><b>{title}.</b> {body}</div></details>')
 
