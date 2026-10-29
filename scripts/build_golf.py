@@ -1067,6 +1067,8 @@ def bag_card():
     if d.get('ball'):
         src = 'Ball: %s. %s' % (d['ball'], src)
     inner += '    <p class="vs-note" style="text-align:left">%s</p>' % src.strip()
+    if d.get('fitting_note'):
+        inner += '\n    <p class="vs-note" style="text-align:left">%s</p>' % d['fitting_note']
     return card('What is in the bag', inner, explain=('swingweight', 'lie'))
 
 
