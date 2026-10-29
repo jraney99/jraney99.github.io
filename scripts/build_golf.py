@@ -1237,7 +1237,7 @@ def plans_cards():
     d = date.fromisoformat(cur['date']).strftime('%A, %b %-d')
     where = f' at {cur["location"]}' if cur.get('location') else ''
     bench = ' \u00b7 benchmark session' if cur.get('benchmark') else ''
-    rows = ''.join(f'<li><span class="balls">{b["balls"]}</span><span class="body"><b>{b["title"]}.</b> {b["detail"]}'
+    rows = ''.join(f'<li><span class="balls">{b["balls"]}</span><span class="body"><b>{b["title"]}.</b> {b.get("detail", "")}'
                    + (f'<span class="tgt">Target: {b["target"]}</span>' if b.get('target') else '')
                    + '</span></li>' for b in cur['blocks'])
     log = []
