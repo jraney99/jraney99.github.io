@@ -209,7 +209,7 @@ def section(goal, tm):
             '<h3>Progress by session</h3>' + chart(goal, rows) + f'<p class="goal-note">{trend_note}</p>' + history(goal, rows) +
             '<details class="goal-ranges"><summary>Working ranges · provisional</summary>'
             '<p>Starting estimates to test, not requirements or guarantees. The current measurements update; these ranges stay dated until reviewed.</p>'
-            '<div class="table-wrap"><table class="gtable"><thead><tr><th>Metric</th><th>Latest session</th><th>Working range</th></tr></thead>'
+            '<div class="table-wrap"><table class="gtable goal-range-table"><thead><tr><th scope="col">Metric</th><th scope="col">Latest session</th><th scope="col">Working range</th></tr></thead>'
             f'<tbody>{ranges}</tbody></table></div></details><div class="ex-row">{explainers}</div>'
             f'<p class="goal-note">Analysis reviewed {esc(a["reviewed"])} · {links}</p>'
             '<a class="goal-back" href="golf.html#golf-goals">← All golf goals</a></section>')
