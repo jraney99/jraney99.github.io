@@ -9,18 +9,6 @@
   "blocks": [
    {
     "balls": 8,
-    "title": "50"
-   },
-   {
-    "balls": 8,
-    "title": "54"
-   },
-   {
-    "balls": 8,
-    "title": "58"
-   },
-   {
-    "balls": 8,
     "title": "6i"
    },
    {
@@ -40,7 +28,7 @@
     "title": "2i"
    }
   ],
-  "note": "A measurement session, not a practice one: 8 clubs never measured. Full swings at one target, same ball, and read the median rather than your best. 64 balls, scoring clubs first, so the clubs that set your approach yardages are done even if you stop early. What comes out of it is a carry table you can trust on the course. Already measured: 50°, 54°, 58°, 7i, 8i, 9i, Dr, Pw.",
+  "note": "A measurement session, not a practice one: 5 clubs never measured. Full swings at one target, same ball, and read the median rather than your best. 40 balls, scoring clubs first, so the clubs that set your approach yardages are done even if you stop early. What comes out of it is a carry table you can trust on the course. Already measured: 50°, 54°, 58°, 7i, 8i, 9i, Dr, Pw.",
   "status": "planned"
  },
  {
