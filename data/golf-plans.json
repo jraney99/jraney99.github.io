@@ -1,5 +1,49 @@
 [
  {
+  "date": "2026-10-30",
+  "time": "",
+  "type": "gapping",
+  "location": "The Reserve Indoor Golf Club",
+  "benchmark": false,
+  "focus": "Measure the bag",
+  "blocks": [
+   {
+    "balls": 8,
+    "title": "50"
+   },
+   {
+    "balls": 8,
+    "title": "54"
+   },
+   {
+    "balls": 8,
+    "title": "58"
+   },
+   {
+    "balls": 8,
+    "title": "6i"
+   },
+   {
+    "balls": 8,
+    "title": "5i"
+   },
+   {
+    "balls": 8,
+    "title": "4i"
+   },
+   {
+    "balls": 8,
+    "title": "3w"
+   },
+   {
+    "balls": 8,
+    "title": "2i"
+   }
+  ],
+  "note": "A measurement session, not a practice one: 8 clubs never measured. Full swings at one target, same ball, and read the median rather than your best. 64 balls, scoring clubs first, so the clubs that set your approach yardages are done even if you stop early. What comes out of it is a carry table you can trust on the course. Already measured: 50°, 54°, 58°, 7i, 8i, 9i, Dr, Pw.",
+  "status": "planned"
+ },
+ {
   "date": "2026-10-29",
   "time": "",
   "type": "gapping",
