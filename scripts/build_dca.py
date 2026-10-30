@@ -33,7 +33,10 @@ UA = {'User-Agent': 'Mozilla/5.0 (jackraney.com DCA page)'}
 
 
 def load(path):
-    return json.load(open(path, encoding='utf-8')) if os.path.exists(path) else {}
+    if not os.path.exists(path):
+        return {}
+    with open(path, encoding='utf-8') as source:
+        return json.load(source)
 
 
 def save(path, data):
@@ -251,13 +254,25 @@ def main():
     if new != page:
         open(PAGE, 'w', encoding='utf-8').write(new)
         print('bitcoin-dca.html updated')
-    for path, pat in ((os.path.join(ROOT, 'index.html'), r'(<a class="memo-card memo-card--stack" href="bitcoin-dca.html">[\s\S]*?<p class="memo-card__dek">)[^<]*'),
-                      (os.path.join(ROOT, 'data', 'writing.json'), r'("url": "bitcoin-dca.html"[^\n]*"dek": ")[^"]*')):
+    update_writing_blurb(os.path.join(ROOT, 'data', 'writing.json'), blurb)
+    for path, pat in ((os.path.join(ROOT, 'index.html'), r'(<a class="memo-card memo-card--stack" href="bitcoin-dca.html">[\s\S]*?<p class="memo-card__dek">)[^<]*'),):
         s = open(path, encoding='utf-8').read()
         t = re.sub(pat, lambda m: m.group(1) + blurb, s, count=1)
         if t != s:
             open(path, 'w', encoding='utf-8').write(t)
     print(f'DCA through {d}: {money(value)} ({value / put:.1f}x)')
+
+
+def update_writing_blurb(path, blurb):
+    """Update structured data regardless of its whitespace or key order."""
+    data = load(path)
+    items = [item for item in data['items'] if item['url'] == 'bitcoin-dca.html']
+    if len(items) != 1:
+        raise ValueError('Expected exactly one bitcoin-dca.html writing entry')
+    if items[0]['dek'] != blurb:
+        items[0]['dek'] = blurb
+        with open(path, 'w', encoding='utf-8') as out:
+            out.write(json.dumps(data, indent=1, ensure_ascii=False) + '\n')
 
 
 if __name__ == '__main__':

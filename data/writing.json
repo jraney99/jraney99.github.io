@@ -16,6 +16,14 @@
    "dek": "I went looking for mistakes in my own golf numbers and found four in an afternoon. None of them looked like errors."
   },
   {
+   "url": "archibald-app.html",
+   "kind": "Case study",
+   "topic": "ai",
+   "date": "2026-10-27",
+   "title": "Archibald on a phone",
+   "dek": "The iPhone app I built for my personal agent: one queue of decisions, seven dashboards and the same chat."
+  },
+  {
    "url": "how-i-use-ai.html",
    "kind": "Essay",
    "topic": "ai",
@@ -45,7 +53,7 @@
    "topic": "ai",
    "date": "2026-10-21",
    "title": "Why I built my own AI agent",
-   "dek": "I built it to run my own admin and to learn the skill I think every company will need. What I\u2019d tell a leader starting out."
+   "dek": "I built it to run my own admin and to learn the skill I think every company will need. What I’d tell a leader starting out."
   },
   {
    "url": "power-bill.html",
@@ -53,7 +61,7 @@
    "topic": "energy",
    "date": "2026-10-16",
    "title": "The $1.8M power bill",
-   "dek": "Three sets of numbers that should have matched, and another customer\u2019s charges on our power bill."
+   "dek": "Three sets of numbers that should have matched, and another customer’s charges on our power bill."
   },
   {
    "url": "cost-model.html",
@@ -117,7 +125,7 @@
    "topic": "energy",
    "date": "2026-10-16",
    "title": "ERCOT power cost calculator",
-   "dek": "Pick a site size and a shut-off price, then replay every hour of 2025 at a Texas trading hub."
+   "dek": "Pick a site size and a shut-off price, then replay the latest full year of hourly prices at a Texas trading hub."
   },
   {
    "url": "power-hedge.html",
@@ -141,14 +149,14 @@
    "topic": "bitcoin",
    "date": "2026-10-16",
    "title": "$10 a day in bitcoin, since 2017",
-   "dek": "$35,850 in, about $303,000 out, and two drops of more than 75% along the way."
+   "dek": "$35,880 in, about $308,000 out, and two drops of more than 75% along the way."
   },
   {
    "url": "bitcoin-rules.html",
    "kind": "Explainer",
    "topic": "bitcoin",
    "date": "2026-10-16",
-   "title": "What bitcoin\u2019s rules promise, and what they don\u2019t",
+   "title": "What bitcoin’s rules promise, and what they don’t",
    "dek": "A fixed supply, a ledger that is expensive to fake and no one in charge. And what none of that guarantees."
   },
   {

@@ -1708,13 +1708,13 @@ def page_courses(stats, g):
 
 SUBPAGES = {
     'golf-story.html': ('My game', 'The whole picture in plain language: what every number means, what connects to what, and what I am working on.', page_story),
-    'golf-courses.html': ('Courses', 'Every course I have played, and the ones Golf Digest ranks.', page_courses),
+    'golf-courses.html': ('Courses', 'Selected courses I have played, including Golf Digest-ranked courses.', page_courses),
     'golf-driving.html': ('Driving', 'Off the tee: distance, penalties and the misses that cost strokes.', page_driving),
     'golf-approach.html': ('Approach', 'Approach play by distance: strokes gained, proximity and greens hit, against scratch.', page_approach),
     'golf-short-game.html': ('Short game', 'Inside 50 yards: up and down rate and where strokes leak around the green.', page_short),
     'golf-putting.html': ('Putting', 'Make rates by distance against a scratch player, and what precedes a three-putt.', page_putting),
-    'golf-rounds.html': ('Rounds & scoring', 'Every sensor-tracked round, and scoring by hole type and length.', page_rounds),
-    'golf-trackman.html': ('TrackMan', 'Every practice session on TrackMan: speeds, carries, gapping and dispersion per club.', page_practice),
+    'golf-rounds.html': ('Rounds & scoring', 'Recorded sensor rounds, and scoring by hole type and length.', page_rounds),
+    'golf-trackman.html': ('TrackMan', 'Imported TrackMan sessions: speeds, carries, gapping and dispersion per club.', page_practice),
 }
 
 

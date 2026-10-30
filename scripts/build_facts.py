@@ -39,7 +39,8 @@ def derived_facts():
         pass
     gloss = os.path.join(ROOT, 'bitcoin-glossary.html')
     if os.path.exists(gloss):
-        n = len(re.findall(r'<dt>', open(gloss, encoding='utf-8').read()))
+        with open(gloss, encoding='utf-8') as source:
+            n = len(re.findall(r'<dt>', source.read()))
         if n:
             out['glossary.terms'] = str(n)
     return out

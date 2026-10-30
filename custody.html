@@ -92,12 +92,12 @@
         <p><strong>The common mistake.</strong> Photographing the seed phrase, or keeping more in the app than you would carry in a wallet.</p>
         <h2>3. A hardware wallet</h2>
         <p>A small dedicated device creates and stores the keys and signs transactions inside itself. When you send bitcoin, your computer prepares the transaction, the device signs it, and the key never leaves the device. Many use a tamper-resistant secure chip.</p>
-        <p><strong>What it solves.</strong> Your computer can be infected and your bitcoin is still safe, because the computer never sees the key. Many hardware wallets also work with independent software such as Sparrow or Electrum, so the manufacturer doesn’t need your name or email.</p>
+        <p><strong>What it solves.</strong> The device keeps the signing key separate from your computer. Malware can still replace a payment address or trick you into approving the wrong transaction, so check the address and amount on the device before signing. Many hardware wallets also work with independent software such as Sparrow or Electrum, so the manufacturer doesn’t need your name or email.</p>
         <p><strong>The risk.</strong> The risks become physical: a device tampered with before it reaches you (buy only from the maker), losing the device and the backup together, and the fact that owning one can mark you as a target.</p>
         <p><strong>The common mistake.</strong> Thinking the bitcoin is inside the device. It is on the ledger. If the device breaks, the seed phrase restores everything on a new one. If the seed phrase is lost, the device is the only copy.</p>
         <h2>4. Air-gapped cold storage</h2>
-        <p>A signing device that never connects to anything by cable, Bluetooth or Wi-Fi. Transactions move in and out by scanning QR codes or swapping a microSD card, so the only path to the key is physical.</p>
-        <p><strong>What it solves.</strong> It closes the last digital door: a flaw in how a device talks to a computer can’t be used if it never talks to one. The slow, manual process also makes hasty mistakes less likely.</p>
+        <p>A signing device that never connects to anything by cable, Bluetooth or Wi-Fi. Transactions move in and out by scanning QR codes or swapping a microSD card, which reduces direct connections but still passes data into the device.</p>
+        <p><strong>What it solves.</strong> It reduces the ways another device can communicate with the signer. It does not remove software flaws, malicious transaction data or the risk of approving the wrong payment. The slow, manual process also makes hasty mistakes less likely.</p>
         <p><strong>The risk.</strong> Because you rarely touch it, you can forget the PIN or the steps. Devices also age. The seed phrase should be stamped in metal rather than written on paper, and it is worth practicing a recovery once in a while to prove it still works.</p>
         <p><strong>The common mistake.</strong> Building a setup so complicated, or hiding it so well, that you or your family can’t use it years later.</p>
         <h2>5. Multisignature (“multisig”)</h2>
@@ -112,7 +112,7 @@
         <p><strong>The common mistake.</strong> Assuming the family will figure it out. Whatever the setup, write down what exists, where the pieces are and who to call, in instructions someone non-technical can follow.</p>
         <h2>How people usually combine them</h2>
         <p>Many owners don’t pick just one. They keep a small amount in an app for spending, savings on a hardware wallet or in cold storage, and, as the amount grows, move the core holding into multisig. Whatever the mix, the test is the same: if you were gone tomorrow, could the right person recover it, and could the wrong person not?</p>
-        <p class="memo__source">Adapted from my six-part custody series in Kingdom Bitcoin’s Kingdom Voices section (February 2026), rewritten here as a plain guide. Product names are examples, not endorsements. Nothing here is investment, legal or tax advice.</p>
+        <p class="memo__source">Adapted from my six-part custody series in Kingdom Bitcoin’s Kingdom Voices section (February 2026), rewritten here as a plain guide. Security references: <a href="https://trezor.io/learn/security-privacy/personal-security-standards/security-threats-to-crypto-wallets-and-how-trezor-defends-against-them">Trezor’s threat guide</a> and <a href="https://support.airgap.it/airgap-vault/security/considerations/">AirGap’s security considerations</a>. Product names are examples, not endorsements. Nothing here is investment, legal or tax advice.</p>
       </div>
       <a class="next-link" href="bitcoin-reading.html">
         <span class="next-link__label">Next</span>

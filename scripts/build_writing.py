@@ -201,7 +201,7 @@ def feed(items):
                     f'<pubDate>{rfc822(i["date"])}</pubDate><description>{html.escape(i["dek"])}</description></item>\n')
     return ('<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel>\n'
             f'  <title>Jack Raney: writing</title><link>{SITE}/writing</link>\n'
-            '  <description>Case studies, memos, essays and weekly notes by Jack Raney.</description>\n'
+            '  <description>Case studies, memos, essays and tools by Jack Raney.</description>\n'
             f'{entries}</channel></rss>\n')
 
 
