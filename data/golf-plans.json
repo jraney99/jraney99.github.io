@@ -1,5 +1,47 @@
 [
  {
+  "date": "2026-10-31",
+  "time": "",
+  "type": "sim",
+  "location": "The Reserve Indoor Golf Club",
+  "benchmark": false,
+  "focus": "Driving penalties, 0-20 yd short game, 20-35 yd short game",
+  "blocks": [
+   {
+    "balls": 10,
+    "title": "Warmup",
+    "detail": "9-iron, loose. No targets.",
+    "target": null
+   },
+   {
+    "balls": 23,
+    "title": "Driver corridor (leak 1)",
+    "detail": "36 yd fairway on screen. Full routine every ball. This is the shot that costs you most, so it gets the most balls.",
+    "target": "65% inside the corridor"
+   },
+   {
+    "balls": 21,
+    "title": "Pitches 5 to 20 yd (leak 2)",
+    "detail": "Rotate 5, 12 and 20 yd, three balls at each number, then move on. Land number first, run second.",
+    "target": "carry within ±4 yd on 70%"
+   },
+   {
+    "balls": 21,
+    "title": "Pitches 20 to 35 yd (leak 3)",
+    "detail": "Rotate 20, 27 and 35 yd, three balls at each number, then move on. Land number first, run second.",
+    "target": "carry within ±4 yd on 70%"
+   },
+   {
+    "balls": 15,
+    "title": "Pressure test",
+    "detail": "Random distances 60–180, one ball each, full routine. Miss the target and the last three repeat.",
+    "target": "graded on proximity"
+   }
+  ],
+  "note": "Export the CSV when you leave and send it to me. Don’t count or judge anything mid-session.",
+  "status": "planned"
+ },
+ {
   "date": "2026-10-30",
   "time": "",
   "type": "gapping",
