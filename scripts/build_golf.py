@@ -1278,13 +1278,28 @@ def plans_cards():
     rows = ''.join(f'<li><span class="balls">{b["balls"]}</span><span class="body"><b>{b["title"]}.</b> {b.get("detail", "")}'
                    + (f'<span class="tgt">Target: {b["target"]}</span>' if b.get('target') else '')
                    + '</span></li>' for b in cur['blocks'])
+    # Status is derived from the TrackMan sessions, not read from the plan file: the
+    # file says "planned" forever because nothing writes back to it, and a plan that
+    # was hit the same evening showed as planned all night (2026-10-30).
+    tm = trackman_data(include_history=True) or {}
+    hit = {}
+    for s in tm.get('sessions') or []:
+        g = s.get('grade') if isinstance(s.get('grade'), dict) else {}
+        hit.setdefault(str(g.get('plan_date') or s.get('date')), s)
     log = []
     for p in plans[:6]:
         dot = ' \u00b7 '
         kind = p['type'].title() + (dot + 'benchmark' if p.get('benchmark') else '')
         sub = date.fromisoformat(p['date']).strftime('%b %-d') + (dot + p['location'] if p.get('location') else '')
+        s = hit.get(str(p['date']))
+        if s:
+            status = f'done{dot}{s.get("balls")} balls' if s.get('balls') is not None else 'done'
+        elif date.fromisoformat(p['date']) < date.today():
+            status = 'no session'
+        else:
+            status = 'planned'
         log.append(f'<li><span class="course"><b>{kind}</b><small>{sub}</small></span>'
-                   f'<span class="score"><span class="n">{p.get("status", "planned")}</span></span></li>')
+                   f'<span class="score"><span class="n">{status}</span></span></li>')
     log = ''.join(log)
     current = card(f'Saved plan \u00b7 {d}',
                    f'    <p style="margin:0 0 0.8rem;font-size:0.92rem">{cur["type"].title()} session{where}{bench}. '
