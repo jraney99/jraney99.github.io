@@ -1,19 +1,17 @@
 {
-  "generated": "2026-10-29",
+  "generated": "2026-10-30",
   "window_days": 180,
   "units": {
     "dist": "yd",
     "speed": "mph"
   },
   "unit_evidence": [
-    "declared in the header: dist=yd, speed=mph",
-    "driver ball speed median 171 fits only mph",
-    "carry/ball-speed 1.74 fits mph with distances in yd"
+    "declared in the header: dist=yd, speed=mph"
   ],
-  "sessions_n": 1,
-  "sessions_30d": 1,
-  "balls_30d": 81,
-  "balls_total": 81,
+  "sessions_n": 2,
+  "sessions_30d": 2,
+  "balls_30d": 131,
+  "balls_total": 131,
   "clubs": [
     {
       "club": "Dr",
@@ -36,6 +34,26 @@
       "path": -3.4
     },
     {
+      "club": "3w",
+      "order": 13,
+      "n": 10,
+      "carry": 256,
+      "carry_spread": 13.6,
+      "carry_best": 269.1,
+      "total": 282,
+      "side_spread": 19.2,
+      "side_bias": "left",
+      "thin": false,
+      "corridor_pct": 60,
+      "ball_speed": 162.4,
+      "club_speed": 112.3,
+      "smash": 1.45,
+      "launch": 6.8,
+      "spin": 3217,
+      "attack": -1.6,
+      "path": -2.3
+    },
+    {
       "club": "9i",
       "order": 31,
       "n": 11,
@@ -54,6 +72,26 @@
       "spin": 8438,
       "attack": -6.8,
       "path": 1.9
+    },
+    {
+      "club": "2i",
+      "order": 32,
+      "n": 10,
+      "carry": 234,
+      "carry_spread": 6.1,
+      "carry_best": 246.2,
+      "total": 264,
+      "side_spread": 13.3,
+      "side_bias": "straight",
+      "thin": false,
+      "corridor_pct": 90,
+      "ball_speed": 151.1,
+      "club_speed": 102.1,
+      "smash": 1.48,
+      "launch": 8.3,
+      "spin": 3030,
+      "attack": -4.6,
+      "path": -1.7
     },
     {
       "club": "8i",
@@ -94,6 +132,66 @@
       "spin": 6285,
       "attack": -6.7,
       "path": 1.8
+    },
+    {
+      "club": "4i",
+      "order": 34,
+      "n": 10,
+      "carry": 221,
+      "carry_spread": 8.7,
+      "carry_best": 232.8,
+      "total": 233,
+      "side_spread": 11.7,
+      "side_bias": "straight",
+      "thin": false,
+      "corridor_pct": 90,
+      "ball_speed": 144.9,
+      "club_speed": 102.6,
+      "smash": 1.41,
+      "launch": 11.1,
+      "spin": 4283,
+      "attack": -4.8,
+      "path": -1.5
+    },
+    {
+      "club": "5i",
+      "order": 35,
+      "n": 10,
+      "carry": 202,
+      "carry_spread": 10.0,
+      "carry_best": 222.7,
+      "total": 215,
+      "side_spread": 17.7,
+      "side_bias": "straight",
+      "thin": false,
+      "corridor_pct": 60,
+      "ball_speed": 136.3,
+      "club_speed": 99.3,
+      "smash": 1.38,
+      "launch": 11.1,
+      "spin": 4439,
+      "attack": -6.9,
+      "path": -0.4
+    },
+    {
+      "club": "6i",
+      "order": 36,
+      "n": 10,
+      "carry": 194,
+      "carry_spread": 7.1,
+      "carry_best": 199.5,
+      "total": 197,
+      "side_spread": 16.3,
+      "side_bias": "straight",
+      "thin": false,
+      "corridor_pct": 80,
+      "ball_speed": 134.0,
+      "club_speed": 98.2,
+      "smash": 1.36,
+      "launch": 14.2,
+      "spin": 5721,
+      "attack": -6.4,
+      "path": -0.8
     },
     {
       "club": "Pw",
@@ -342,6 +440,112 @@
           "path": 2.2
         }
       ]
+    },
+    {
+      "id": "3212e5c1be09",
+      "date": "2026-10-30",
+      "clubs": [
+        {
+          "club": "3w",
+          "order": 13,
+          "n": 10,
+          "carry": 256,
+          "carry_spread": 13.6,
+          "carry_best": 269.1,
+          "total": 282,
+          "side_spread": 19.2,
+          "side_bias": "left",
+          "thin": false,
+          "corridor_pct": 60,
+          "ball_speed": 162.4,
+          "club_speed": 112.3,
+          "smash": 1.45,
+          "launch": 6.8,
+          "spin": 3217,
+          "attack": -1.6,
+          "path": -2.3
+        },
+        {
+          "club": "2i",
+          "order": 32,
+          "n": 10,
+          "carry": 234,
+          "carry_spread": 6.1,
+          "carry_best": 246.2,
+          "total": 264,
+          "side_spread": 13.3,
+          "side_bias": "straight",
+          "thin": false,
+          "corridor_pct": 90,
+          "ball_speed": 151.1,
+          "club_speed": 102.1,
+          "smash": 1.48,
+          "launch": 8.3,
+          "spin": 3030,
+          "attack": -4.6,
+          "path": -1.7
+        },
+        {
+          "club": "4i",
+          "order": 34,
+          "n": 10,
+          "carry": 221,
+          "carry_spread": 8.7,
+          "carry_best": 232.8,
+          "total": 233,
+          "side_spread": 11.7,
+          "side_bias": "straight",
+          "thin": false,
+          "corridor_pct": 90,
+          "ball_speed": 144.9,
+          "club_speed": 102.6,
+          "smash": 1.41,
+          "launch": 11.1,
+          "spin": 4283,
+          "attack": -4.8,
+          "path": -1.5
+        },
+        {
+          "club": "5i",
+          "order": 35,
+          "n": 10,
+          "carry": 202,
+          "carry_spread": 10.0,
+          "carry_best": 222.7,
+          "total": 215,
+          "side_spread": 17.7,
+          "side_bias": "straight",
+          "thin": false,
+          "corridor_pct": 60,
+          "ball_speed": 136.3,
+          "club_speed": 99.3,
+          "smash": 1.38,
+          "launch": 11.1,
+          "spin": 4439,
+          "attack": -6.9,
+          "path": -0.4
+        },
+        {
+          "club": "6i",
+          "order": 36,
+          "n": 10,
+          "carry": 194,
+          "carry_spread": 7.1,
+          "carry_best": 199.5,
+          "total": 197,
+          "side_spread": 16.3,
+          "side_bias": "straight",
+          "thin": false,
+          "corridor_pct": 80,
+          "ball_speed": 134.0,
+          "club_speed": 98.2,
+          "smash": 1.36,
+          "launch": 14.2,
+          "spin": 5721,
+          "attack": -6.4,
+          "path": -0.8
+        }
+      ]
     }
   ],
   "wedges": [
@@ -367,6 +571,22 @@
     }
   ],
   "sessions": [
+    {
+      "id": "3212e5c1be09",
+      "date": "2026-10-30",
+      "balls": 50,
+      "label": "Gapping 10-30",
+      "grade": {
+        "summary": "not gradeable",
+        "results": [],
+        "ungraded": [
+          "driver corridor: no drives in this session had a side offset recorded",
+          "carry accuracy against the prescribed number: the export records no intended target, so only consistency can be measured, not accuracy"
+        ],
+        "plan_date": "2026-10-30",
+        "plan_type": "gapping"
+      }
+    },
     {
       "id": "4d21f33bd5f6",
       "date": "2026-10-29",
