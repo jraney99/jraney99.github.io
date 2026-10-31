@@ -1189,8 +1189,17 @@ def page_trackman_real(tm, stats):
                  explain=('corridor', 'spread'))
     if tm['wedges']:
         right += card('Wedge matrix' if inferred else 'Wedge carries', wedge, explain=('swinglen',))
-    coverage = ('<p><span class="sample-chip">Real measurements for %d clubs. '
-                'Clubs not yet hit retain their labeled sample values.</span></p>' % len(measured))
+    # Say which clubs are still samples, by name, or say plainly that none are. "Clubs not yet
+    # hit retain their labeled sample values" on a page where every club had been hit read as a
+    # warning about nothing (Jack, 2026-10-30: "I'm unclear as to what this means").
+    samples = sorted({club for club, _, _ in SAMPLE_GAPPING} | {club for club, _, _ in SAMPLE_DISPERSION}) 
+    samples = [c for c in samples if c not in measured]
+    if samples:
+        coverage = ('<p><span class="sample-chip">Real measurements for %d clubs. Not hit yet, so still '
+                    'showing sample numbers: %s.</span></p>' % (len(measured), ', '.join(samples)))
+    else:
+        coverage = ('<p><span class="sample-chip">Real measurements for all %d clubs. '
+                    'No sample numbers remain on this page.</span></p>' % len(measured))
     return (plans_cards()
             + coverage
             + '<div class="ggrid3"><div class="gcol">%s</div><div class="gcol">%s</div>'
@@ -1304,8 +1313,8 @@ def plans_cards():
     current = card(f'Saved plan \u00b7 {d}',
                    f'    <p style="margin:0 0 0.8rem;font-size:0.92rem">{cur["type"].title()} session{where}{bench}. '
                    f'Original focus: {cur.get("focus", "")}.</p>\n'
-                   '<p class="vs-note">This is the plan as issued, not a live description of what remains. '
-                   'The original note below may predate imported measurements.</p><details><summary>Original plan and note</summary>'
+                   '<p class="vs-note">The plan exactly as it was issued that morning. Whether it was hit is in '
+                   'the log on the right, from the TrackMan session.</p><details><summary>Original plan and note</summary>'
                    f'    <ul class="plan">{rows}</ul>\n'
                    f'    <p class="vs-note">{cur.get("note", "")}</p></details>')
     loglist = card('Plan log', f'    <ul class="rounds-list" style="margin-top:0">{log}</ul>',
