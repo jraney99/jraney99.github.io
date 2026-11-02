@@ -1,31 +1,66 @@
 """Add newly finished Goodreads books to data/books.json.
 
-Reads the public RSS feeds for the "read" and "currently-reading" shelves.
+Goodreads stopped serving its RSS feeds in October 2026, so this reads the public widgets for the
+"read" and "currently-reading" shelves, which need no key.
 Needs GOODREADS_USER_ID (the number in goodreads.com/user/show/<id>-name).
 Existing entries, including hidden ones, are never changed or duplicated.
-A finished book with no "date read" on Goodreads is kept undated rather than guessed.
+The widgets give no finish date, so a new book is dated the day it first appears here.
+An answer that is not a widget, or an empty read shelf, changes nothing and is recorded as a failure.
 """
 import hashlib
+import html
 import json
 import os
 import re
 import sys
 import urllib.request
+from datetime import date
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sync_status import record  # noqa: E402
-import xml.etree.ElementTree as ET
-from email.utils import parsedate_to_datetime
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, 'data', 'books.json')
-FEED = 'https://www.goodreads.com/review/list_rss/{uid}?shelf={shelf}&per_page=200'
+GRID = ('https://www.goodreads.com/review/grid_widget/{uid}?cover_size=medium&num_books=200'
+        '&order=d&shelf={shelf}&sort=date_read')
+# Five books at a time and it ignores the shelf, so it only ever supplies authors.
+AUTHORS = ('https://www.goodreads.com/review/custom_widget/{uid}.Read?cover_position=left&cover_size=small'
+           '&num_books=20&order=d&shelf=read&show_author=1&show_cover=0&show_rating=0&show_review=0'
+           '&show_tags=0&show_title=1&sort={sort}&widget_id=1')
 
 
-def fetch(uid, shelf):
-    req = urllib.request.Request(FEED.format(uid=uid, shelf=shelf), headers={'User-Agent': 'jackraney.com reading sync'})
+def fetch(url):
+    req = urllib.request.Request(url, headers={'User-Agent': 'jackraney.com reading sync'})
     with urllib.request.urlopen(req, timeout=30) as r:
-        return [(i.findtext('title') or '').strip() and i for i in ET.fromstring(r.read()).iter('item')]
+        return r.read().decode('utf-8', 'replace')
+
+
+def widget(text, marker):
+    if 'widget_code' not in text or marker not in text:
+        raise ValueError('Goodreads did not answer with its widget')
+    return text.replace('\\"', '"').replace('\\/', '/').replace('\\n', '\n').replace("\\'", "'")
+
+
+def parse_grid(text):
+    """[(review id, title)] for one shelf."""
+    rows = re.findall(r'<a title="([^"]+)"[^>]*href="[^"]*/review/show/(\d+)', widget(text, 'gr_grid_container'))
+    return [(review, re.sub(r'\s+', ' ', html.unescape(title)).strip()) for title, review in rows]
+
+
+def parse_authors(text):
+    """{review id: author}."""
+    authors = {}
+    for row in widget(text, 'gr_custom_container').split('gr_custom_each_container')[1:]:
+        review = re.search(r'/review/show/(\d+)', row)
+        author = re.search(r'gr_custom_author[^>]*>\s*by\s*<a[^>]*>(.*?)</a>', row, re.S)
+        if review and author:
+            authors[review[1]] = html.unescape(author[1]).strip()
+    return authors
+
+
+def shelf(uid, name, authors):
+    return [{'title': title, 'author': authors.get(review, '')}
+            for review, title in parse_grid(fetch(GRID.format(uid=uid, shelf=name)))]
 
 
 def norm(title):
@@ -37,21 +72,19 @@ def short(title):
     return title.split(':')[0].split(' (')[0].strip()
 
 
-def read_date(item):
-    try:
-        return parsedate_to_datetime(item.findtext('user_read_at')).date().isoformat()
-    except (TypeError, ValueError):
-        return ''
-
-
 def main():
     uid = os.environ.get('GOODREADS_USER_ID', '').strip()
     if not uid:
         print('GOODREADS_USER_ID not set; skipping Goodreads')
         return
     try:
-        read_items = [i for i in fetch(uid, 'read') if i is not None and i != '']
-        now_items = [i for i in fetch(uid, 'currently-reading') if i is not None and i != '']
+        authors = {}
+        for sort in ('date_read', 'date_added'):
+            authors.update(parse_authors(fetch(AUTHORS.format(uid=uid, sort=sort))))
+        read_items = shelf(uid, 'read', authors)
+        now_items = shelf(uid, 'currently-reading', authors)
+        if not read_items:
+            raise ValueError('the read shelf came back empty')
     except Exception as e:
         print(f'Goodreads feed failed, nothing changed: {e}', file=sys.stderr)
         record('goodreads', False, 'The Goodreads feed could not be read.')
@@ -65,26 +98,27 @@ def main():
     added = 0
 
     # Finished books: promote a reading-now entry, or add if not already listed.
+    today = date.today().isoformat()
     for item in read_items:
-        if skip(item.findtext('title')):
+        if skip(item['title']):
             continue
-        key = norm(item.findtext('title'))
+        key = norm(item['title'])
         reading = next((b for b in books if b.get('status') == 'reading' and norm(b['title']) == key), None)
         if reading:
-            reading['status'], reading['finished'] = 'read', read_date(item)
+            reading['status'], reading['finished'] = 'read', today
             continue
         if any(norm(b['title']) == key for b in books):
             continue
-        books.append({'title': short(item.findtext('title')), 'author': (item.findtext('author_name') or '').strip(),
-                      'genre': '', 'finished': read_date(item), 'hidden': False, 'source': 'goodreads'})
+        books.append({'title': short(item['title']), 'author': item['author'],
+                      'genre': '', 'finished': today, 'hidden': False, 'source': 'goodreads'})
         added += 1
 
     # Reading now mirrors the shelf exactly.
-    on_shelf = {norm(i.findtext('title')): i for i in now_items if not skip(i.findtext('title'))}
+    on_shelf = {norm(i['title']): i for i in now_items if not skip(i['title'])}
     books[:] = [b for b in books if b.get('status') != 'reading' or norm(b['title']) in on_shelf]
     for key, item in on_shelf.items():
         if not any(norm(b['title']) == key for b in books):
-            books.append({'title': short(item.findtext('title')), 'author': (item.findtext('author_name') or '').strip(),
+            books.append({'title': short(item['title']), 'author': item['author'],
                           'genre': '', 'finished': '', 'status': 'reading', 'hidden': False, 'source': 'goodreads'})
 
     json.dump(data, open(DATA, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
