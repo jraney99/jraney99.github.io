@@ -255,7 +255,7 @@
 
     // Repaint when the theme changes, since the colors come from it.
     new MutationObserver(function () { readColors(); paint(); })
-      .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+      .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'data-palette'] });
 
     if (!reduced) {
       if ('IntersectionObserver' in window) {

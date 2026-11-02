@@ -1,4 +1,5 @@
-// Light and dark theme. The site is light unless the visitor picks dark;
+// Three themes: light, dark, and Graphite & Gold, which is dark with its own
+// colors (data-palette). The site is light unless the visitor picks another;
 // the choice is saved for their next visit. A small inline script in each
 // page's <head> applies a saved choice before the first paint, so the page
 // never flashes the wrong theme.
@@ -7,15 +8,21 @@
   var button = document.querySelector('.theme-toggle');
   if (!button) return;
 
-  var PAPER = { light: '#f4f1e8', dark: '#0f1612' };
+  var PAPER = { light: '#f4f1e8', dark: '#0f1612', gold: '#272525' };
+  var ORDER = ['light', 'dark', 'gold'];
   var bar = document.querySelector('meta[name="theme-color"]');
 
   function current() {
+    if (root.getAttribute('data-palette') === 'gold') return 'gold';
     return root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
   }
 
+  function following() {
+    return ORDER[(ORDER.indexOf(current()) + 1) % ORDER.length];
+  }
+
   function sync() {
-    var next = current() === 'dark' ? 'light' : 'dark';
+    var next = following();
     button.setAttribute('aria-label', 'Switch to ' + next + ' theme');
     button.setAttribute('title', 'Switch to ' + next + ' theme');
     // A phone's browser bar takes its color from this tag.
@@ -23,8 +30,10 @@
   }
 
   button.addEventListener('click', function () {
-    var next = current() === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', next);
+    var next = following();
+    root.setAttribute('data-theme', next === 'light' ? 'light' : 'dark');
+    if (next === 'gold') root.setAttribute('data-palette', 'gold');
+    else root.removeAttribute('data-palette');
     try { localStorage.setItem('theme', next); } catch (e) {}
     sync();
   });

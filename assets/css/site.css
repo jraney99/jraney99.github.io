@@ -1,11 +1,11 @@
 /* ------------------------------------------------------------------
    Jack Raney
    Texas infrastructure finance: ledger paper, guide-sign green, and
-   warning-sign yellow for the hours worth switching off. Besley, a
-   revival of the 1845 Clarendon, sets the headlines and big numbers.
+   warning-sign yellow for the hours worth switching off. The system
+   sans sets the headlines and big numbers, tight, to match the app.
    Overpass, an open-source family based on the U.S. highway sign
    alphabet, sets everything else. Light is the default; the switch in
-   the corner saves a dark page.
+   the corner cycles to dark and to Graphite & Gold, and saves the choice.
    ------------------------------------------------------------------ */
 
 /* Overpass, as Google Fonts serves it, gives the middle dot no width, so
@@ -48,7 +48,9 @@
   --h-off-0: #f7cf4f;
   --h-off-1: #a66500;
 
-  --serif: "Besley", "Century Schoolbook", Georgia, serif;
+  /* The system face first, so a heading here is the same San Francisco as the app on an iPhone
+     or a Mac. Inter is what mara.com sets, and the nearest thing everywhere else. */
+  --head:  -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   --sans:  "Overpass Dot", "Overpass", "Helvetica Neue", Arial, sans-serif;
   --mono:  "Overpass Dot", "Overpass Mono", ui-monospace, Menlo, monospace;
 
@@ -96,6 +98,28 @@
   --h-off-1: #ffe38f;
 
   color-scheme: dark;
+}
+
+/* Graphite & Gold, the third theme and the same colors as the app's. Dark in every other way, so
+   whatever is written for dark still applies and only the colors change. */
+:root[data-palette="gold"] {
+  --paper:   #272525;
+  --paper-2: #222020;
+  --paper-3: #302e2e;
+  --card:    #302e2e;
+  --ink:     #eeece8;
+  --ink-2:   #dad8d5;
+  --muted:   #aba8a4;
+  --rule:    rgba(238, 236, 232, 0.14);
+  --rule-2:  rgba(238, 236, 232, 0.28);
+  --accent:  #f2a900;
+  --accent-2: #f5ba33;
+  --link-line: rgba(242, 169, 0, 0.45);
+  --signal:  #f2c14e;
+  --signal-fill: #f2a900;
+  --signal-soft: rgba(242, 169, 0, 0.2);
+  --mark:    #f2a900;
+  --grid:    rgba(238, 236, 232, 0.07);
 }
 
 /* ---------- base ---------- */
@@ -213,11 +237,11 @@ a:hover { color: var(--accent-2); }
 
 .wordmark {
   grid-area: mark;
-  font-family: var(--serif);
+  font-family: var(--head);
   font-weight: 600;
   font-size: 1.4rem;
   line-height: 1;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   color: var(--ink);
   text-decoration: none;
   white-space: nowrap;
@@ -289,11 +313,11 @@ a:hover { color: var(--accent-2); }
 
 .display {
   margin: 0;
-  font-family: var(--serif);
-  font-weight: 400;
+  font-family: var(--head);
+  font-weight: 500;
   font-size: var(--fs-display);
   line-height: 1.1;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   max-width: 30ch;
   color: var(--ink);
 }
@@ -439,11 +463,11 @@ a:hover { color: var(--accent-2); }
 
 .band__title {
   margin: 0;
-  font-family: var(--serif);
-  font-weight: 400;
+  font-family: var(--head);
+  font-weight: 500;
   font-size: var(--fs-h2);
   line-height: 1.08;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.02em;
 }
 
 .band__dek {
@@ -518,8 +542,8 @@ a:hover { color: var(--accent-2); }
 
 .tally dd {
   margin: 0.15rem 0 0;
-  font-family: var(--serif);
-  font-weight: 400;
+  font-family: var(--head);
+  font-weight: 500;
   font-size: clamp(1.5rem, 1.25rem + 0.9vw, 2.1rem);
   line-height: 1.1;
   font-variant-numeric: lining-nums tabular-nums;
@@ -663,11 +687,11 @@ a:hover { color: var(--accent-2); }
 
 .card__title {
   margin: 0;
-  font-family: var(--serif);
-  font-weight: 400;
+  font-family: var(--head);
+  font-weight: 500;
   font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
   line-height: 1.14;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   color: var(--ink);
 }
 
@@ -724,8 +748,8 @@ a:hover { color: var(--accent-2); }
   left: 7cqw;
   top: 6.5cqw;
   margin: 0;
-  font-family: var(--serif);
-  font-weight: 400;
+  font-family: var(--head);
+  font-weight: 500;
   font-size: 16cqw;
   line-height: 1;
   letter-spacing: -0.025em;
@@ -1119,10 +1143,10 @@ a:hover { color: var(--accent-2); }
 .memo-card__head .re dt { padding-top: 0.75rem; }
 
 .memo-card__head .re dd {
-  font-family: var(--serif);
+  font-family: var(--head);
   font-size: clamp(1.3rem, 1.1rem + 0.7vw, 1.6rem);
   line-height: 1.15;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   color: var(--ink);
 }
 
@@ -1241,11 +1265,11 @@ a:hover { color: var(--accent-2); }
 
 .doc-head h1 {
   margin: 0;
-  font-family: var(--serif);
-  font-weight: 400;
+  font-family: var(--head);
+  font-weight: 500;
   font-size: var(--fs-h1);
   line-height: 1.1;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   max-width: 30ch;
 }
 
@@ -1300,11 +1324,11 @@ a:hover { color: var(--accent-2); }
 .prose h2 {
   max-width: 40rem;
   margin: 2.75rem 0 0.7rem;
-  font-family: var(--serif);
+  font-family: var(--head);
   font-weight: 500;
   font-size: clamp(1.2rem, 1.1rem + 0.4vw, 1.4rem);
   line-height: 1.2;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   color: var(--ink);
 }
 
@@ -1350,11 +1374,11 @@ a:hover { color: var(--accent-2); }
   color: var(--muted);
 }
 .next-link .title {
-  font-family: var(--serif);
-  font-weight: 400;
+  font-family: var(--head);
+  font-weight: 500;
   font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.6rem);
   line-height: 1.15;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   color: var(--ink);
 }
 .next-link:hover .title { color: var(--accent); }
@@ -1409,8 +1433,8 @@ a:hover { color: var(--accent-2); }
 .figures dd {
   margin: 0;
   align-self: start;
-  font-family: var(--serif);
-  font-weight: 400;
+  font-family: var(--head);
+  font-weight: 500;
   font-size: clamp(1.6rem, 1.35rem + 0.9vw, 2.25rem);
   line-height: 1.12;
   color: var(--ink);
@@ -1818,7 +1842,7 @@ table.data--text th, table.data--text td { text-align: left; white-space: normal
 
 .site-foot__name {
   margin: 0 0 0.3rem;
-  font-family: var(--serif);
+  font-family: var(--head);
   font-weight: 600;
   font-size: 1.15rem;
   color: var(--ink);
@@ -1937,7 +1961,7 @@ input[type="range"]:active { cursor: grabbing; }
 .gloss__count { min-height: 1.2em; font-size: 0.85rem; color: var(--muted); margin: 0.4rem 0 0.6rem; }
 .gloss__nav { display: flex; flex-wrap: wrap; gap: 0.15rem 0.6rem; font-weight: 700; font-size: 0.9rem; }
 .gloss__group { max-width: 40rem; scroll-margin-top: 5rem; }
-.gloss__group h2 { font-family: var(--serif); font-weight: 400; font-size: var(--fs-h2); margin: 2rem 0 0.5rem; border-bottom: 2px solid var(--ink); padding-bottom: 0.3rem; }
+.gloss__group h2 { font-family: var(--head); font-weight: 500; font-size: var(--fs-h2); margin: 2rem 0 0.5rem; border-bottom: 2px solid var(--ink); padding-bottom: 0.3rem; }
 .gloss { margin: 0; }
 .gloss > div { padding: 0.75rem 0; border-bottom: 1px solid var(--rule); scroll-margin-top: 5rem; }
 .gloss dt { font-weight: 800; }
