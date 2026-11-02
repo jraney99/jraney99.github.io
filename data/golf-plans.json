@@ -1,5 +1,53 @@
 [
  {
+  "date": "2026-11-02",
+  "time": "",
+  "type": "sim",
+  "location": "The Reserve Indoor Golf Club",
+  "benchmark": true,
+  "focus": "Driving penalties, 0-20 yd short game, 20-35 yd short game",
+  "blocks": [
+   {
+    "balls": 10,
+    "title": "Warmup",
+    "detail": "9-iron, loose. No targets.",
+    "target": null
+   },
+   {
+    "balls": 35,
+    "title": "Technical: Pause at the top (Harmon)",
+    "detail": "8-iron only. Swing to the top, stop, then hit the shot. Every ball.",
+    "target": null
+   },
+   {
+    "balls": 10,
+    "title": "Benchmark: driver",
+    "detail": "36 yd fairway on screen, full routine every ball.",
+    "target": "65% inside"
+   },
+   {
+    "balls": 15,
+    "title": "Benchmark: wedges",
+    "detail": "70 / 90 / 110 yd, five each, in that order.",
+    "target": "carry within ±4 yd on 70%"
+   },
+   {
+    "balls": 10,
+    "title": "Benchmark: random test",
+    "detail": "One ball per number: 60, 140, 85, 120, 75, 180, 95, 155, 65, 110.",
+    "target": "graded on proximity"
+   },
+   {
+    "balls": 20,
+    "title": "Benchmark: long clubs",
+    "detail": "Hybrid, 5-iron, 6-iron, 7-iron: five balls each, full routine, carry only.",
+    "target": "carry recorded for all four"
+   }
+  ],
+  "note": "Benchmark session: the first 35 graded balls are the same battery every time, so progress is measured, not felt.",
+  "status": "planned"
+ },
+ {
   "date": "2026-10-31",
   "time": "",
   "type": "sim",
