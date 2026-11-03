@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-29",
+ "updated": "2026-11-02",
  "source": "5 Arccos rounds, Apr 2026 to Jun 2026, 81 holes; strokes gained against a locally calibrated scratch baseline, not an independent Arccos calculation. Tee and green positions are identified; the first shot after a par-4/5 tee shot uses the fairway flag to infer fairway or rough. Other non-putting lies are assumed fairway. These assumptions affect category estimates.",
  "rounds_n": 5,
  "holes": 81,
@@ -54,22 +54,22 @@
  },
  "leaks": [
   {
+   "name": "0-50 yd short game",
+   "per_round": -4.2,
+   "share": 46,
+   "basis": "67 shots"
+  },
+  {
+   "name": "Approach 75-150 yd",
+   "per_round": -2.8,
+   "share": 31,
+   "basis": "41 shots"
+  },
+  {
    "name": "Driving penalties",
    "per_round": -2.2,
-   "share": 41,
+   "share": 24,
    "basis": "10 penalty tee shots; each costs about 1.0 strokes against my clean ones"
-  },
-  {
-   "name": "0-20 yd short game",
-   "per_round": -1.9,
-   "share": 36,
-   "basis": "34 shots"
-  },
-  {
-   "name": "20-35 yd short game",
-   "per_round": -1.2,
-   "share": 23,
-   "basis": "21 shots"
   }
  ],
  "driving": {
