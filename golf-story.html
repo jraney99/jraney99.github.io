@@ -24,7 +24,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Overpass:ital,wght@0,300..900;1,300..900&family=Overpass+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="assets/css/site.css?v=8d9a8b17c5">
-  <link rel="stylesheet" href="assets/css/golf.css?v=0ab30c3e68">
+  <link rel="stylesheet" href="assets/css/golf.css?v=84eeccc377">
 </head>
 <body>
 
@@ -56,8 +56,8 @@
   </div>
 </section>
 <section>
-  <h2 class="gsect">Two records: shot analysis and handicap</h2>
-  <div class="gcard ">
+  <details class="gfold"><summary><h2 class="gsect">Two records: shot analysis and handicap</h2></summary>
+  <div class="gcard">
     <p class="story-p">The on-course analysis follows this chain. Each link is simple; the confusion comes from meeting them out of order.</p>
     <ol class="chain"><li><span class="step-n">1</span><div><b>Every shot</b><span>start and end position, recorded by the sensors in my grips</span></div></li><li><span class="step-n">2</span><div><b>Expected strokes</b><span>what a scratch player would need from each of those positions</span></div></li><li><span class="step-n">3</span><div><b>Strokes gained, per shot</b><span>the difference the shot made, against that standard</span></div></li><li><span class="step-n">4</span><div><b>Four categories</b><span>driving, approach, short game, putting: every shot lands in one</span></div></li><li><span class="step-n">5</span><div><b>The gap</b><span>10 strokes a round, which is the four added up</span></div></li><li><span class="step-n">6</span><div><b>Leaks</b><span>the distance buckets inside those categories that are actually losing strokes</span></div></li><li><span class="step-n">7</span><div><b>Practice</b><span>the sessions are built from the leak table, in order</span></div></li></ol>
     <details class="ex"><summary>Expected strokes</summary><div><b>Expected strokes.</b> The model estimates how many shots a scratch player needs to finish from a given position. A hypothetical position worth 3.0 expected strokes followed by one worth 1.8 produces 3.0 − 1.8 − 1 = +0.2 strokes gained.</div></details>
@@ -68,6 +68,7 @@
     <details class="ex"><summary>Scratch</summary><div><b>What scratch means.</b> Scratch means a 0.0 Handicap Index. Strokes gained here uses a locally calibrated scratch model. PGA Tour comparisons are separate and explicitly labeled; a scratch golfer is not a tour professional.</div></details>
 
   </div>
+  </details>
 </section>
 <section>
   <h2 class="gsect">The four parts, and how they feed each other</h2>
@@ -92,12 +93,13 @@
   </div>
 </section>
 <section>
-  <h2 class="gsect">Against the tour</h2>
-  <div class="gcard ">
+  <details class="gfold"><summary><h2 class="gsect">Against the tour</h2></summary>
+  <div class="gcard">
     <p class="story-p">A reference comparison, not a claim of tour-level skill. These are stored tour figures from the date below; the samples, courses and some measurement definitions differ. The on-course tour snapshot could not be independently rechecked in this audit; it is not a live feed.</p>
     <ul class="tourlist"><li class="tour-row"><span class="k">Driver, off the tee<small>Mine is the median of my measured drives, start to rest. The tour stat is two holes a round with whatever club, in all weather, so this is close but not identical.</small></span><span class="mine">303 yd</span><span class="sep">vs</span><span class="theirs">306 yd</span></li><li class="tour-row"><span class="k">Fairways hit</span><span class="mine">41%</span><span class="sep">vs</span><span class="theirs">62%</span></li><li class="tour-row"><span class="k">Greens in regulation</span><span class="mine">33%</span><span class="sep">vs</span><span class="theirs">67%</span></li><li class="tour-row"><span class="k">Scrambling<small>Par or better after missing the green, counted the way the tour counts it: 13 of 54.</small></span><span class="mine">24%</span><span class="sep">vs</span><span class="theirs">59%</span></li><li class="tour-row"><span class="k">Putts per round<small>A descriptive total, affected by greens hit, chipping and first-putt distances. It cannot isolate putting skill on its own.</small></span><span class="mine">32.0</span><span class="sep">vs</span><span class="theirs">29.0</span></li><li class="tour-row"><span class="k">Scoring average<small>Mine is the adjusted-score average of recent 18-hole GHIN posts. The tour scoring statistic uses its own adjustment and competition sample; these are not directly comparable.</small></span><span class="mine">81.8</span><span class="sep">vs</span><span class="theirs">70.9</span></li></ul>
     <p class="vs-note" style="text-align:left">PGA Tour season statistics, pgatour.com, Butterfield Bermuda Championship, Oct 25, read 2026-11-01. Different courses, different setups, and 5 tracked rounds against a tour sample, so this is a yardstick rather than a verdict.</p>
   </div>
+  </details>
 </section>
 <section>
   <h2 class="gsect">What I am testing next</h2>
@@ -108,13 +110,14 @@
   </div>
 </section>
 <section>
-  <h2 class="gsect">What this data cannot tell me</h2>
-  <div class="gcard ">
+  <details class="gfold"><summary><h2 class="gsect">What this data cannot tell me</h2></summary>
+  <div class="gcard">
     <p class="story-p">This is built on 5 rounds and 81 holes. That is enough to be useful and not enough to be certain, and the honest version of this page says which is which.</p>
     <dl class="limits"><dt>A small and selected sample</dt><dd>Only sensor-recorded rounds can supply shot analysis. This sample may not represent my recent form or all the conditions I play in. An interval crossing zero means the result is inconclusive.</dd><dt>Some lies are inferred</dt><dd>Tee and putter positions are recognized. The first shot after a par-4/5 tee shot uses the fairway flag to infer fairway or rough; other non-putting lies are assumed fairway. Sand and recovery situations are not reliably distinguished, which can move strokes between categories.</dd><dt>Distances answer different questions</dt><dd>On-course driver distances include roll and omit penalty drives. TrackMan carry is distance to landing. Neither should be substituted for the other.</dd><dt>First-putt data is limited</dt><dd>Distance-band tables use first putts. Later-putt positions are not reliable enough to diagnose lag leaves, even though later strokes contribute to overall putting totals.</dd><dt>The scratch model was calibrated on this sample</dt><dd>Expected-strokes tables were assembled locally and tuned to match the Arccos category dashboard on the first five rounds. Matching those totals is not independent validation of each bucket, causal explanation or confidence interval.</dd></dl>
     <p class="story-p">When any of that changes, these pages change with it. They rebuild from the data every morning when the pipeline runs. Rebuilding does not make old rounds current; coaching and goals need review.</p>
 
   </div>
+  </details>
 </section>
 
 <p class="gnote">On-course analysis: 5 rounds / 81 holes, 2026-04-15 to 2026-06-04. 5 Arccos rounds, Apr 2026 to Jun 2026, 81 holes; strokes gained against a locally calibrated scratch baseline, not an independent Arccos calculation. Tee and green positions are identified; the first shot after a par-4/5 tee shot uses the fairway flag to infer fairway or rough. Other non-putting lies are assumed fairway. These assumptions affect category estimates. GHIN data checked 2026-11-02; shot analysis built 2026-11-02. <a href="index.html">jackraney.com</a> · <a href="about.html">about me</a></p>
