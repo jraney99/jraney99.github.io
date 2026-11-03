@@ -793,13 +793,18 @@
         "name": "Pause at the top (Harmon)"
       },
       "grade": {
+        "grader": 2,
         "plan_date": "2026-11-02",
         "plan_type": "sim",
         "results": [],
         "summary": "not gradeable",
         "ungraded": [
+          "Warmup: warm-up, no target",
+          "Technical: Pause at the top (Harmon): a drill: its balls count as hit, and nothing about them is graded",
+          "Benchmark: wedges: several distances, and the export does not say which ball was aimed at which",
+          "Benchmark: random test: graded on proximity, which the export does not record",
+          "Benchmark: long clubs: a carry record for four clubs, not a pass or fail",
           "driver corridor: no drives in this session had a side offset recorded",
-          "58\u00b0 consistency: only 6 shots, 8 needed",
           "carry accuracy against the prescribed number: the export records no intended target, so only consistency can be measured, not accuracy"
         ]
       },
@@ -810,6 +815,7 @@
       "balls": 36,
       "date": "2026-11-02",
       "grade": {
+        "grader": 2,
         "plan_date": "2026-11-02",
         "plan_type": "sim",
         "results": [
@@ -826,20 +832,15 @@
             "pass": false,
             "target": "315 yd",
             "what": "Driver carry"
-          },
-          {
-            "measured": "\u00b113 yd carry spread",
-            "n": 15,
-            "pass": false,
-            "target": "\u00b14 yd",
-            "what": "58\u00b0 consistency"
           }
         ],
-        "summary": "missed all 3",
+        "summary": "missed all 2",
         "ungraded": [
-          "50\u00b0 consistency: only 1 shots, 8 needed",
-          "54\u00b0 consistency: only 6 shots, 8 needed",
-          "Pw consistency: only 1 shots, 8 needed",
+          "Warmup: warm-up, no target",
+          "Technical: Pause at the top (Harmon): a drill: its balls count as hit, and nothing about them is graded",
+          "Benchmark: wedges: several distances, and the export does not say which ball was aimed at which",
+          "Benchmark: random test: graded on proximity, which the export does not record",
+          "Benchmark: long clubs: a carry record for four clubs, not a pass or fail",
           "carry accuracy against the prescribed number: the export records no intended target, so only consistency can be measured, not accuracy"
         ]
       },
@@ -855,6 +856,7 @@
         "name": "Pause at the top (Harmon)"
       },
       "grade": {
+        "grader": 2,
         "plan_date": "2026-10-31",
         "plan_type": "sim",
         "results": [
@@ -871,18 +873,14 @@
             "pass": false,
             "target": "315 yd",
             "what": "Driver carry"
-          },
-          {
-            "measured": "\u00b18.4 yd carry spread",
-            "n": 21,
-            "pass": false,
-            "target": "\u00b14 yd",
-            "what": "54\u00b0 consistency"
           }
         ],
-        "summary": "missed all 3",
+        "summary": "missed all 2",
         "ungraded": [
-          "58\u00b0 consistency: only 7 shots, 8 needed",
+          "Warmup: warm-up, no target",
+          "Pitches 5 to 20 yd (leak 2): several distances, and the export does not say which ball was aimed at which",
+          "Pitches 20 to 35 yd (leak 3): several distances, and the export does not say which ball was aimed at which",
+          "Pressure test: graded on proximity, which the export does not record",
           "carry accuracy against the prescribed number: the export records no intended target, so only consistency can be measured, not accuracy"
         ]
       },
@@ -893,6 +891,7 @@
       "balls": 50,
       "date": "2026-10-30",
       "grade": {
+        "grader": 2,
         "plan_date": "2026-10-30",
         "plan_type": "gapping",
         "results": [],
@@ -909,6 +908,7 @@
       "balls": 81,
       "date": "2026-10-29",
       "grade": {
+        "grader": 2,
         "plan_date": "2026-10-29",
         "plan_type": "gapping",
         "results": [
@@ -918,6 +918,13 @@
             "pass": false,
             "target": "65%",
             "what": "Driver corridor"
+          },
+          {
+            "measured": "median 298 yd, best 303, 116.1 mph club",
+            "n": 10,
+            "pass": false,
+            "target": "315 yd",
+            "what": "Driver carry"
           },
           {
             "measured": "\u00b14 yd carry spread",
@@ -948,7 +955,7 @@
             "what": "Pw consistency"
           }
         ],
-        "summary": "met 2 of 5",
+        "summary": "met 2 of 6",
         "ungraded": [
           "carry accuracy against the prescribed number: the export records no intended target, so only consistency can be measured, not accuracy"
         ]
