@@ -1079,6 +1079,32 @@ SAMPLE_DISPERSION = [('Dr', 24, 'right'), ('3w', 19, 'right'), ('5i', 13, 'strai
                      ('7i', 9, 'straight'), ('Pw', 6, 'left'), ('58°', 4, 'straight')]
 
 
+def why_cards(tm):
+    """Why a number moved, from trackman.json's `explain`. Jack, 2026-11-02: "this type of
+    explanation is what i want to see more of on my site". What the ball did, beside the day it
+    is compared with; never how to swing."""
+    why = tm.get('explain') or {}
+    found = ([why['driver']] if why.get('driver') else []) + list(why.get('clubs') or [])
+    def show(v, unit):
+        # Degrees to a tenth, everything else whole: 293 yd, 171 mph, 2,596 rpm, 11.6°.
+        return ('%.1f°' % v) if unit == '°' else '{:,.0f} {}'.format(v, escape(unit))
+    out = ''
+    for e in found:
+        then = 'Measured' if 'measuring' in e.get('then_label', '') else escape(e.get('then_label', ''))
+        rows = ''.join('<tr><td>%s</td><td class="num">%s</td><td class="num num--md">%s</td></tr>'
+                       % (escape(r['label']), show(r['then'], r['unit']), show(r['now'], r['unit']))
+                       for r in e.get('rows') or [])
+        body = ('    <p>%s</p>\n    <div class="table-wrap"><table class="gtable"><thead><tr><th></th>'
+                '<th>%s</th><th>%s</th></tr></thead><tbody>%s</tbody></table></div>\n'
+                % (escape(e['sentence']), then, escape(e.get('now_label', '')), rows))
+        if e.get('short'):
+            body += '    <p class="vs-note" style="text-align:left">%s</p>\n' % escape(e['short'])
+        body += ('    <p class="vs-note" style="text-align:left">Carry comes from ball speed, launch and spin. '
+                 'This says what the ball did, not how to swing.</p>\n')
+        out += card('Why it moved: %s' % escape(e['club']), body, explain=('carry',))
+    return out
+
+
 def page_trackman_real(tm, stats):
     """The TrackMan tab on real measurements."""
     clubs = [c for c in tm['clubs'] if c.get('carry')]
@@ -1175,7 +1201,8 @@ def page_trackman_real(tm, stats):
                       % ', '.join(tour_line))
 
     loop = _loop_rows(tm, stats)
-    left = (card('', strip, explain=('smash', 'carry'))
+    left = (why_cards(tm)
+            + card('', strip, explain=('smash', 'carry'))
             + card('Session log', ('<ul class="rounds-list" style="margin-top:0">%s</ul>'
                    '<p class="vs-note">“Met” counts saved consistency/accuracy checks, not clubs measured '
                    'or completion of the original plan.</p>') % sess_rows, explain=('practicegrade',)))
