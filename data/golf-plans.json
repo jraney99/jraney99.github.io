@@ -1,5 +1,48 @@
 [
  {
+  "date": "2026-11-03",
+  "time": "18:30",
+  "type": "sim",
+  "location": "The Reserve Indoor Golf Club",
+  "benchmark": false,
+  "focus": "0-50 yd short game, Approach 75-150 yd, Driving penalties",
+  "blocks": [
+   {
+    "balls": 5,
+    "title": "Warmup",
+    "detail": "9-iron, loose. No targets.",
+    "target": null
+   },
+   {
+    "balls": 35,
+    "title": "Technical: Pause at the top (Harmon)",
+    "club": "8i",
+    "detail": "8-iron only. Swing to the top, stop, then hit the shot. Every ball.",
+    "target": null
+   },
+   {
+    "balls": 10,
+    "title": "Driver corridor (leak 1)",
+    "detail": "36 yd fairway on screen. Full routine every ball. This is the shot that costs you most.",
+    "target": "65% inside the corridor"
+   },
+   {
+    "balls": 10,
+    "title": "Approach 75 to 150 yd (leak 2)",
+    "detail": "Alternate 75, 112 and 150 yd to a green-sized target. Change club every ball; never hit the same number twice running.",
+    "target": "45% on the target"
+   },
+   {
+    "balls": 15,
+    "title": "Pressure test",
+    "detail": "Random distances 60–180, one ball each, full routine. Miss the target and the last three repeat.",
+    "target": "graded on proximity"
+   }
+  ],
+  "note": "Synced TrackMan sessions import within the hour after you finish. Keep a bay CSV only as a fallback if the session does not sync. Don’t count or judge anything mid-session.",
+  "status": "planned"
+ },
+ {
   "date": "2026-11-02",
   "time": "",
   "type": "sim",

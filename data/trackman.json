@@ -49,16 +49,16 @@
       "ball_speed": 116.1,
       "carry": 151,
       "carry_best": 163.9,
-      "carry_spread": 8.3,
+      "carry_spread": 7.4,
       "club": "9i",
       "club_speed": 93.5,
       "corridor_pct": 100,
       "last": "2026-10-29",
       "launch": 20.0,
-      "n": 11,
+      "n": 10,
       "order": 31,
       "path": 1.9,
-      "side_bias": "straight",
+      "side_bias": "right",
       "side_spread": 12.4,
       "smash": 1.25,
       "spin": 8438,
@@ -280,7 +280,9 @@
     "ball_speed": 171.3,
     "carry": 289,
     "club_speed": 116.7,
+    "corridor_pct": 55,
     "n": 20,
+    "side_spread": 24.7,
     "smash": 1.47
   },
   "explain": {
@@ -320,7 +322,7 @@
       "title": "Driver: Nov 2 against your measuring day (Oct 29)"
     }
   },
-  "generated": "2026-11-02",
+  "generated": "2026-11-03",
   "problems": [],
   "session_stats": [
     {
@@ -351,16 +353,16 @@
           "ball_speed": 116.1,
           "carry": 151,
           "carry_best": 163.9,
-          "carry_spread": 8.3,
+          "carry_spread": 7.4,
           "club": "9i",
           "club_speed": 93.5,
           "corridor_pct": 100,
           "last": "2026-10-29",
           "launch": 20.0,
-          "n": 11,
+          "n": 10,
           "order": 31,
           "path": 1.9,
-          "side_bias": "straight",
+          "side_bias": "right",
           "side_spread": 12.4,
           "smash": 1.25,
           "spin": 8438,
@@ -976,26 +978,23 @@
   "wedges": [
     {
       "club": "Pw",
-      "full": 141,
-      "n": 11
+      "full": 142,
+      "n": 10
     },
     {
       "club": "50\u00b0",
-      "full": 125,
-      "n": 11
+      "full": 126,
+      "n": 10
     },
     {
       "club": "54\u00b0",
-      "full": 112,
-      "n": 37
+      "full": 115,
+      "n": 10
     },
     {
       "club": "58\u00b0",
       "full": 100,
-      "half": 67,
-      "inferred": true,
-      "n": 38,
-      "three_q": 87
+      "n": 10
     }
   ],
   "window_days": 180

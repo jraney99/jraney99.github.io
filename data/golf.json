@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-02",
+ "updated": "2026-11-03",
  "revisions": [
   {
    "date": "2025-12-27",
@@ -837,7 +837,8 @@
    "course": "Sherrill Park Golf Course - Course #2",
    "score": 39,
    "raw": 39,
-   "differential": 2.6,
+   "differential": 6.6,
+   "differential_9": 2.6,
    "card": [
     {
      "h": 1,
@@ -1601,7 +1602,7 @@
    105
   ]
  },
- "courses_played": 86,
+ "courses_played": 82,
  "arccos": {
   "rounds": 5,
   "last_round": "2026-06-04",
