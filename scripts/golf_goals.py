@@ -7,6 +7,7 @@ rolling aggregates misrepresented as individual sessions.
 """
 import json
 import math
+import re
 from datetime import date
 from html import escape
 from pathlib import Path
@@ -56,6 +57,40 @@ def observations(goal, tm):
     return sorted(out, key=lambda r: (r['date'], r['session_id']))
 
 
+def short_day(iso):
+    d = date.fromisoformat(iso)
+    return d.strftime('%b ') + str(d.day)
+
+
+def bounds(text):
+    """'2,000–2,400 rpm' -> (2000.0, 2400.0); None when the range is not two numbers."""
+    nums = [float(x.replace(',', '')) for x in re.findall(r'\d[\d,]*(?:\.\d+)?', str(text))]
+    return (nums[0], nums[1]) if len(nums) >= 2 else None
+
+
+def standing(goal, latest):
+    """Where the latest qualifying session sits against each working range, as story beats.
+
+    This replaced the dated "initial read" (Jack, 2026-11-02: the data should tell the story and
+    explain the numbers). It describes the ball, never the swing."""
+    rows = []
+    for r in goal['analysis'].get('ranges') or []:
+        v, b = latest.get(r['key']), bounds(r['range'])
+        if not number(v) or not b:
+            continue
+        where = 'Inside' if b[0] <= v <= b[1] else 'Under' if v < b[0] else 'Over'
+        shown = f'{v:,.0f} rpm' if r['unit'] == 'rpm' else fmt(v, r['unit'])
+        rows.append((f'{esc(r["label"])} {shown}.', f'{where} the working range of {esc(r["range"])}.', where))
+    if not rows:
+        return ''
+    inside = sum(1 for _, _, w in rows if w == 'Inside')
+    head = (f'{inside} of {len(rows)} launch numbers sit inside the working range for {fmt(goal["target"], goal["unit"])}.',
+            f'From {short_day(latest["date"])}. The ranges are starting estimates from {short_day(goal["analysis"]["reviewed"])}, '
+            'to be tested, not requirements. Carry comes from ball speed, launch and spin together.')
+    items = ''.join(f'<li><b>{lead}</b> {detail}</li>' for lead, detail in [head] + [r[:2] for r in rows])
+    return f'<ol class="beats">{items}</ol>'
+
+
 def eligible(goal, rows):
     return [r for r in rows if r.get('n', 0) >= goal.get('min_shots', 8)]
 
@@ -84,11 +119,14 @@ def index(goals, tm):
         rows = observations(g, tm)
         good = eligible(g, rows)
         current = fmt(good[-1][g['metric']], g['unit']) if good else 'Awaiting data'
+        # Say which number this is: the driver has a carry from the latest session, one from a
+        # measuring day and a total from the course, and the overview showed one unlabeled.
+        when = f', {short_day(good[-1]["date"])}' if good else ''
         cards.append(f'<a class="goal-index-card" href="{goal_link(g)}">'
                      f'<span class="lbl">{esc(g["category"])} · {esc(state(g, rows))}</span>'
                      f'<h3>{esc(g["title"])}</h3><p>{esc(g["description"])}</p>'
                      f'<span class="goal-index-number">{current} <small>→ {fmt(g["target"], g["unit"])}</small></span>'
-                     f'<span class="goal-index-label">{esc(g["metric_label"])} · See the plan →</span></a>')
+                     f'<span class="goal-index-label">{esc(g["metric_label"])}{when} · See the plan →</span></a>')
     return ('<section class="goal-index" id="golf-goals"><h2 class="gsect">What I’m working on</h2>'
             '<p class="goal-intro">Each goal has a baseline, a practice experiment and a record of what changes. '
             'The details live with that part of my game.</p>'
@@ -189,7 +227,8 @@ def section(goal, tm):
         trend_note = 'Small samples remain visible in the table but do not establish progress.'
     if good and gap == 0:
         trend_note += ' Reaching the target in one session does not yet establish repeatability.'
-    priorities = ''.join(f'<li><b>{esc(p["title"])}</b><p>{esc(p["text"])}</p></li>' for p in a['priorities'])
+    corridor = (f'{fmt(latest["corridor_pct"], "%")} of drives inside the corridor' if number(latest.get('corridor_pct'))
+                else 'Corridor not measured yet')
     ranges = ''.join(f'<tr><th scope="row">{esc(r["label"])}</th><td>{fmt(latest.get(r["key"]), r["unit"])}</td>'
                      f'<td>{esc(r["range"])}</td></tr>' for r in a['ranges'])
     explainers = ''.join(f'<details class="ex"><summary>{esc(e["title"])}</summary><div>{esc(e["text"])}</div></details>'
@@ -200,12 +239,12 @@ def section(goal, tm):
             f'<h2 id="{esc(goal["id"])}-title">{esc(goal["title"])}</h2><p>{esc(goal["description"])}</p></div>'
             f'<span class="goal-status">{esc(state(goal, rows))}</span></div>'
             f'<div class="goal-metrics">{metric_html}</div><p class="goal-note">{latest_note}</p>'
-            '<div class="goal-columns"><div><h3>The initial read</h3>'
-            f'<p>{esc(a["summary"])}</p><p class="goal-note">{esc(a["basis"])}</p>'
-            f'<ol class="goal-priorities">{priorities}</ol></div>'
-            f'<div class="goal-experiment"><span class="lbl">Next practice experiment</span><h3>{esc(a["experiment"]["title"])}</h3>'
-            f'<p>{esc(a["experiment"]["text"])}</p><p>{esc(a["experiment"]["review"])}</p>'
-            f'<p class="goal-note">{esc(goal["guardrail"])}</p></div></div>' + training_section(goal) +
+            '<div class="goal-columns"><div><h3>Where it stands</h3>'
+            + (standing(goal, latest) or '<p class="goal-note">Waiting for a qualifying session.</p>') + '</div>'
+            f'<div class="goal-experiment"><span class="lbl">Accuracy alongside distance</span>'
+            f'<h3>{corridor}</h3><p class="goal-note">{esc(goal["guardrail"])}</p></div></div>'
+            + (f'<details class="goal-ranges"><summary>Training for more speed · plan from {esc(a["reviewed"])}</summary>'
+               + training_section(goal) + '</details>' if a.get('training') else '') +
             '<h3>Progress by session</h3>' + chart(goal, rows) + f'<p class="goal-note">{trend_note}</p>' + history(goal, rows) +
             '<details class="goal-ranges"><summary>Working ranges · provisional</summary>'
             '<p>Starting estimates to test, not requirements or guarantees. The current measurements update; these ranges stay dated until reviewed.</p>'

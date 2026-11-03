@@ -307,13 +307,17 @@
 }
 
 /* On a phone the nine tabs are twice the width of the screen, and a sideways scroll
-   with no edge to grab hid Courses and TrackMan completely (found 2026-10-29). Wrap
-   them instead: every tab visible, two or three short lines. */
+   with no edge to grab hid Courses and TrackMan completely (found 2026-10-29). Every tab
+   stays visible, now in a tidy three-by-three block rather than ragged wrapped lines, and
+   the two pills give their row back (the index is already beside the name) (2026-11-02). */
 @media (max-width: 620px) {
   .gnav {
-    flex-wrap: wrap; overflow-x: visible; gap: 0.45rem 1rem; padding-top: 0.2rem;
+    display: grid; grid-template-columns: repeat(3, max-content); justify-content: space-between;
+    overflow-x: visible; gap: 0.55rem 1rem; padding-top: 0.2rem;
   }
   .gnav a, .gnav strong { font-size: 0.68rem; letter-spacing: 0.08em; padding-bottom: 0.15rem; }
+  .gpill { display: none; }
+  .gpills { width: auto; order: 1; margin-left: auto; margin-right: 0; }
 }
 
 /* trackman: neutral metric bars (no gained/lost meaning) */
@@ -654,3 +658,16 @@
   .goal-range-table th:last-child, .goal-range-table td:last-child { padding-right: 0; }
   .goal-range-table thead th { font-size: 0.6rem; letter-spacing: 0.04em; }
 }
+
+/* What the numbers say: each page's story, a few claims each carrying its number, then the
+   evidence (golf_story.py, 2026-11-02). */
+.beats { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+.beats li { padding-left: 0.95rem; border-left: 3px solid var(--rule); color: var(--ink-2);
+  font-size: 0.93rem; line-height: 1.6; max-width: 72ch; }
+.beats li:first-child { border-left-color: var(--accent); }
+.beats li b { display: block; color: var(--ink); font-size: 1.02rem; line-height: 1.45; margin-bottom: 0.2rem; }
+.gcard--hero .beats { margin-top: 1.4rem; }
+.goal-columns .beats { margin-top: 0.8rem; }
+.reading-link { margin: 0.2rem 0 0; font-size: 0.88rem; }
+.reading-link a { color: var(--accent); font-weight: 700; text-decoration: none; }
+.reading-link a:hover { text-decoration: underline; }

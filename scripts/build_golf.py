@@ -14,6 +14,7 @@ from html import escape
 from datetime import date, timedelta
 import golf_goals
 import golf_privacy
+import golf_story
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAR_HOLES = {'3': 4, '4': 10, '5': 4}  # a typical 18-hole card
@@ -340,10 +341,29 @@ def explainers(*keys):
 
 def card(section, inner, cls='', icon='', explain=()):
     head = f'  <h2 class="gsect">{section}</h2>\n' if section else ''
-    notes = ''.join('\n    ' + ex(k) for k in explain)
+    notes = ''
+    if len(explain) == 1:
+        notes = '\n    ' + ex(explain[0])
+    elif explain:
+        # One fold per card, named for what is inside it. Three or four buttons under every
+        # card was most of the clutter Jack saw on 2026-11-02 (15 on the TrackMan page alone).
+        label = ', '.join(EX_LABEL.get(k) or EXPLAIN[k][0].split(',')[0] for k in explain)
+        body = ''.join(f'<p><b>{EXPLAIN[k][0]}.</b> {EXPLAIN[k][1]}</p>' for k in explain)
+        notes = f'\n    <details class="ex"><summary>{label}</summary><div>{body}</div></details>'
     if notes:
         notes = f'\n    <div class="ex-row">{notes}\n    </div>'
     return f'<section>\n{head}  <div class="gcard {cls}">\n{inner}{notes}\n  </div>\n</section>\n'
+
+
+def beats_list(beats):
+    """A page's story: each beat a short claim with its number, then the evidence (golf_story)."""
+    items = ''.join(f'<li><b>{lead}</b> {detail}</li>' for lead, detail in beats if lead)
+    return f'    <ol class="beats">{items}</ol>\n' if items else ''
+
+
+def story_card(beats):
+    body = beats_list(beats)
+    return card('What the numbers say', body, cls='gcard--story') if body else ''
 
 
 def statpair(a_lbl, a_val, b_lbl, b_val):
@@ -380,18 +400,6 @@ def briefing(stats, g):
     gs = sh.get('updown_greenside') or sh['updown']
     pitch = sh.get('updown_pitch') or {}
 
-    ci = sg.get('ci') or {}
-    names = {'driving': 'driving', 'approach': 'approach play', 'short': 'the short game', 'putting': 'putting'}
-    real = [names[c] for c in ('driving', 'approach', 'short', 'putting') if ci.get(c) and ci[c][1] < 0]
-    unsure = [names[c] for c in ('driving', 'approach', 'short', 'putting') if not decisive(ci.get(c))]
-    join = lambda xs: xs[0] if len(xs) == 1 else ', '.join(xs[:-1]) + ' and ' + xs[-1]
-    if real:
-        verdict = (f'{join(real).capitalize()} {"shows" if len(real) == 1 else "show"} the clearest losses in this sample'
-                   + (f'. {join(unsure).capitalize()} {"is" if len(unsure) == 1 else "are"} not callable yet'
-                      if unsure else '') + '. These are model estimates, not diagnoses.')
-    else:
-        verdict = f'Nothing clears the bar yet: over {stats["holes"]} holes every range still includes zero.'
-
     rows = [('Tee penalties', f'{d["tee_penalties"]} in {d["tee_shots"]} tee shots \u00b7 driver median '
              f'{d["driver_median_yd"]} yd including roll; penalty reduction is worth testing',
              f'{d["tee_penalties"] / rounds18:.1f}<small>/rnd</small>')]
@@ -415,14 +423,12 @@ def briefing(stats, g):
             f'<span class="vs">strokes from scratch, per 18 holes</span></div>\n'
             f'    <p class="goal-line">Index {idx}'
             + (f' \u00b7 recent GHIN adjusted-score average {avg:.1f}' if avg else '') +
-            f' \u00b7 {stats["rounds_n"]} tracked rounds, {stats["holes"]} holes</p>\n'
-            f'    <p class="brief-verdict">{verdict}</p>\n')
-    body = f'    <ul class="brows">{facts}</ul>\n'
+            f' \u00b7 {stats["rounds_n"]} tracked rounds, {stats["holes"]} holes</p>\n')
+    story = beats_list(golf_story.overview(stats, g))
+    body = f'    <ul class="brows" style="margin-top:1.6rem">{facts}</ul>\n'
     todo = ('    <p class="lbl" style="margin-top:1.2rem">What to work on \u00b7 strokes a round</p>\n'
             f'    <ol class="ranks">{ranks}</ol>\n')
-    note = ('    <p class="vs-note" style="text-align:left">The analysis uses the recorded rounds, '
-            'not every round in my handicap history. Refreshing the page does not add new golf.</p>')
-    return card('The short version', head + body + todo + note, cls='gcard--hero')
+    return card('The short version', head + story + body + todo, cls='gcard--hero')
 
 
 def road_card(stats, g):
@@ -572,15 +578,6 @@ def sg_card(stats):
     return card('Strokes gained breakdown', inner, explain=('sg', 'range'))
 
 
-def leaks_card(stats):
-    rows = []
-    for i, l in enumerate(stats['leaks'], 1):
-        rows.append(f'<li><span class="leak__rank">{i}</span><div><p class="leak__name">{l["name"]}</p>'
-                    f'<p class="leak__gain">Estimated loss: {abs(l["per_round"]):.1f} strokes per 18 holes.</p>'
-                    + rbar(l['share'] / 100)
-                    + f'<p class="leak__basis">{l["share"]}% of the three displayed focus estimates · {l["basis"]}</p></div></li>')
-    return card('Where to focus', f'    <ol class="leaks">{"".join(rows)}</ol>',
-                explain=('leak', 'thin'))
 
 
 def handicap_card(g):
@@ -617,13 +614,6 @@ def bypar_card(g):
     return card('Where the strokes go', f'    <p style="margin:0 0 0.8rem;font-size:0.92rem">{lead}</p>\n    <ul class="drows">{"".join(rows)}</ul>')
 
 
-def highlights_card(stats):
-    d = stats['driving']
-    items = [('Driver total, longest', f'{d["driver_longest_yd"]} yd'), ('Driver total, median', f'{d["driver_median_yd"]} yd'),
-             ('Greens in regulation', f'{stats["approach"]["gir_pct"]}%'), ('Putts per round', stats['putting']['putts_round'])]
-    rows = ''.join(f'<li><span class="course"><b>{n}</b></span><span class="score"><span class="num num--md">{v}</span></span></li>'
-                   for n, v in items)
-    return card('Highlights', f'    <ul class="rounds-list" style="margin-top:0">{rows}</ul>')
 
 
 # ---------------------------------------------------------------------------
@@ -645,19 +635,9 @@ def drow(frm, bar, n, val, thin=False):
 def page_driving(stats, g):
     d = stats['driving']
     fw = d['fairways']
-    pen_leak = next((l for l in stats.get('leaks', []) if 'penalt' in l['name'].lower()), None)
-    leaks_ = stats.get('leaks') or []
-    first = bool(leaks_) and leaks_[0] is pen_leak
-    focus_line = (f'Penalty balls off the tee cost about {abs(pen_leak["per_round"]):.1f} strokes a round'
-                  + (', the largest of the displayed focus estimates in this sample.' if first else
-                     f', ranked {leaks_.index(pen_leak) + 1} among the displayed focus estimates.') if pen_leak else
-                  'Penalties off the tee are no longer clearing the bar as a measured leak. '
-                  'Distance and dispersion are what is left here.')
-    left = (focus_card('off the tee', focus_line, sg(d['sg_round']), 'Strokes/rnd')
-            + card('', statpair('Driver total, median', f'{d["driver_median_yd"]} yd', 'Total, longest', f'{d["driver_longest_yd"]} yd'))
+    left = (card('', statpair('Driver total, median', f'{d["driver_median_yd"]} yd', 'Total, longest', f'{d["driver_longest_yd"]} yd'))
             + card('', statpair('Tee-shot penalties', d['tee_penalties'], 'Fairways', f'{fw["hit"] / fw["of"]:.0%}'),
                    explain=('penalty', 'sg')))
-    driver_pct = d['driver_shots'] / d['tee_shots'] if d['tee_shots'] else 0
     td = d.get('tee_decision') or {}
     tee_card = ''
     if td.get('clubs'):
@@ -679,18 +659,7 @@ def page_driving(stats, g):
                         '<th>SG per shot</th><th>Penalty rate</th><th>Median total (yd)</th></tr></thead><tbody>'
                         + rows + '</tbody></table></div>\n'
                         f'    <p style="margin:0.8rem 0 0;font-size:0.92rem">{verdict}</p>')
-    right = (tee_card + card('Club off the tee',
-                  f'    <p style="margin:0;font-size:0.95rem">Driver on {d["driver_shots"]} of {d["tee_shots"]} tee shots '
-                  f'({driver_pct:.0%}); the rest were 3-wood or an iron. The distance numbers above are driver only, '
-                  f'measured from shot GPS across {d["driver_measured"]} drives that did not take a penalty. '
-                  f'These are GPS start-to-rest distances including roll, not measured carry. '
-                  f'TrackMan carry is shown separately in Road to 315.</p>')
-             + card('What matters off the tee',
-                 f'    <p style="margin:0;font-size:0.95rem">I hit {fw["hit"]} of {fw["of"]} fairways ({fw["hit"] / fw["of"]:.0%}). '
-                 'Fairways alone do not describe the result: a playable rough lie and a penalty are very different misses. '
-                 + (f'The penalties alone cost about {abs(pen_leak["per_round"]):.1f} strokes a round.'
-                    if pen_leak else 'Penalties are not clearing the bar as a measured leak right now.')
-                 + '</p>'))
+    right = tee_card
     return (f'<div class="ggrid"><div class="gcol">{left}</div><div class="gcol">{right}</div></div>')
 
 
@@ -707,9 +676,7 @@ def page_approach(stats, g):
                 f'<span class="miss miss--short">Short<b>{m["short"]}</b></span></div>\n'
                 f'    <p class="vs-note" style="text-align:center">Typical spread ±{disp.get("lateral_sd", "?")} yd across, '
                 f'±{disp.get("depth_sd", "?")} yd deep · usual miss: {disp.get("tendency", "?")}</p>')
-    left = (focus_card('Approach', 'I’m losing strokes on approach, spread across the distances rather than one band.',
-                       sg(a['sg_round']), 'Strokes/rnd')
-            + card('', statpair('Greens in regulation', f'{a["gir_pct"]}%', 'Shots', sum(v['shots'] for v in a['buckets'].values())))
+    left = (card('', statpair('Greens in regulation', f'{a["gir_pct"]}%', 'Shots', sum(v['shots'] for v in a['buckets'].values())))
             + card('', statpair('Proximity, greens hit', f'{a["prox_gir_ft"]} ft', 'Proximity, all', f'{a["prox_all_ft"]} ft')))
     mid = card('Strokes gained by starting distance (yd)', f'    <ul class="drows">{rows}</ul>'
                '<p class="vs-note">Contribution per 18 holes, not per shot. Negative means strokes lost; '
@@ -721,16 +688,10 @@ def page_approach(stats, g):
 def page_short(stats, g):
     s = stats['short']
     ud = s.get('updown_greenside') or s['updown']
-    pitch = s.get('updown_pitch') or {}
     disp = s.get('dispersion') or {}
     rows = ''.join(drow(f'{b}', rbar(abs(v['sg_round']) / 2.5, 'ok' if v['sg_round'] > 0 else ''),
                         f'{v["shots"]} shots', sg(v['sg_round']), v.get('thin')) for b, v in s['buckets'].items())
-    ud_pct = (ud['made'] / ud['of']) if ud.get('of') else 0
-    focus_line = ('From inside 30 yards, finishing in two strokes or fewer is the measure. '
-                  f'I’m at {ud_pct:.0%} ({ud["made"]} of {ud["of"]})'
-                  + (f', and {pitch["made"]} of {pitch["of"]} from 30 to 50.' if pitch.get('of') else '.'))
-    left = (focus_card('inside 50 yards', focus_line, sg(s['sg_round']), 'Strokes/rnd')
-            + card('', statpair('Up and down, inside 30 yd',
+    left = (card('', statpair('Up and down, inside 30 yd',
                                 f'{(s.get("updown_greenside") or ud)["made"]}/{(s.get("updown_greenside") or ud)["of"]}',
                                 'Usual miss', (disp.get('tendency') or '?').title())))
     right = card('Strokes gained by starting distance (yd)', f'    <ul class="drows">{rows}</ul>'
@@ -752,14 +713,6 @@ def page_putting(stats, g):
         make_rows.append(drow(f"{b}'", rbar(v['made_pct'] / 100, 'ok' if delta >= 0 else '', tick=v['scratch_pct']),
                               f'{v["n"]} first putts', f'<span class="{cls}">{v["made_pct"]}% ({delta:+d} pp)</span>',
                               v.get('thin')))
-    autopsy = card('Three-putts',
-                   f'    <p style="margin:0 0 0.5rem;font-size:0.95rem">{p["three_putts"]} three-putt holes. '
-                   f'On them my first putt averaged {p["three_putt_first_ft"]} ft, against '
-                   f'{p["two_putt_first_ft"]} ft on holes I two-putted. Long first putts are what precedes '
-                   f'them.</p>'
-                   '    <p class="leak__basis">Arccos does not record where the second putt was played from, '
-                   'so I cannot say whether these were poor lags or missed short ones. Only the first putt '
-                   'is measured.</p>', explain=('threeputt',))
     left = (focus_card(f'{focus} ft first putts' if focus else 'keep measuring',
                        'This band shows a loss under the model; treat it as a practice hypothesis.' if focus else
                        'No distance band has both enough first putts and a loss range entirely below zero. '
@@ -773,8 +726,7 @@ def page_putting(stats, g):
                   '    <p class="vs-note">▏ marks the saved scratch reference. pp = percentage points. '
                   'These are first putts, not every putt played. The saved benchmark lacks a traceable distance-matched source, so treat its differences as provisional.</p>',
                   explain=('makerate', 'thin')))
-    right = autopsy
-    return (f'<div class="ggrid3"><div class="gcol">{left}</div><div class="gcol">{mid}</div><div class="gcol">{right}</div></div>')
+    return (f'<div class="ggrid"><div class="gcol">{left}</div><div class="gcol">{mid}</div></div>')
 
 
 def band_for(over):
@@ -1165,13 +1117,6 @@ def page_trackman_real(tm, stats):
                  '<p class="vs-note">Median carry in yards. Swing lengths were not recorded; '
                  'half- and three-quarter-swing distances are not measured yet.</p>' % wrows)
 
-    sess_rows = ''.join(
-        '<li><span class="course"><b>%s</b><small>%s · %d balls</small></span>'
-        '<span class="score"><span class="n">%s</span></span></li>'
-        % (s['label'], s['date'], s['balls'],
-           grade_text(s.get('grade')))
-        for s in tm['sessions'])
-
     u = tm.get('units') or {}
     note = ('Club summaries use the last %d days. The full archive contains %d balls across %d session%s. '
             'Distances read as %s and speeds as %s. Medians, with spread as half the '
@@ -1184,8 +1129,7 @@ def page_trackman_real(tm, stats):
     if probs:
         note += ' Flagged on import: ' + '; '.join(probs[:3]) + '.'
 
-    strip = statpair('Sessions, 30 days', str(tm.get('sessions_30d', 0)),
-                     'Balls, 30 days', str(tm.get('balls_30d', 0)))
+    strip = ''  # sessions and balls in 30 days open the page's story
     tour_line = []
     trim = lambda v: ('%g' % v)
     for metric, label, suffix in (('Ball Speed', 'ball speed', ' mph'), ('Smash Factor', 'smash', '')):
@@ -1194,22 +1138,19 @@ def page_trackman_real(tm, stats):
             tour_line.append('%s %s%s' % (label, trim(mark[0]), suffix))
     drv = tm.get('driver') or {}
     if drv.get('ball_speed'):
-        strip += '\n    ' + statpair('Driver ball speed', '%s mph' % drv['ball_speed'],
-                                     'Smash factor', str(drv.get('smash', '—')))
+        strip += '    ' + statpair('Driver ball speed', '%s mph' % drv['ball_speed'],
+                                   'Smash factor', str(drv.get('smash', '—')))
         if tour_line:
             strip += ('\n    <p class="vs-note" style="text-align:left">PGA average driver %s</p>'
                       % ', '.join(tour_line))
 
     loop = _loop_rows(tm, stats)
-    left = (card('', strip, explain=('smash', 'carry'))
-            + card('Session log', ('<ul class="rounds-list" style="margin-top:0">%s</ul>'
-                   '<p class="vs-note">“Met” counts saved consistency/accuracy checks, not clubs measured '
-                   'or completion of the original plan.</p>') % sess_rows, explain=('practicegrade',)))
+    left = card('', strip, explain=('smash', 'carry')) if strip else ''
     if loop:
         left += card('Practice against play', loop, explain=('practicegrade',))
     mid = card('Gapping: carry per club', '    <ul class="drows">%s</ul>\n'
-                                          '    <p class="vs-note">Median carry · spread across recorded '
-                                          'swings · ▏ marks the PGA average</p>' % gap_rows,
+                                          '    <p class="vs-note">Median carry on measuring days · '
+                                          '▏ marks the PGA average</p>' % gap_rows,
                explain=('gapping', 'carry', 'tour'))
     right = card('Dispersion: left-right spread', '    <ul class="drows">%s</ul>' % disp_rows,
                  explain=('corridor', 'spread'))
@@ -1224,8 +1165,7 @@ def page_trackman_real(tm, stats):
         coverage = ('<p><span class="sample-chip">Real measurements for %d clubs. Not hit yet, so still '
                     'showing sample numbers: %s.</span></p>' % (len(measured), ', '.join(samples)))
     else:
-        coverage = ('<p><span class="sample-chip">Real measurements for all %d clubs. '
-                    'No sample numbers remain on this page.</span></p>' % len(measured))
+        coverage = ''  # nothing to warn about once every club is real
     # Full width above the three columns: a third of the page squeezed the factor table into
     # wrapped labels ("Ball / speed", "2,248 / rpm").
     return (plans_cards()
@@ -1320,33 +1260,43 @@ def plans_cards():
     # file says "planned" forever because nothing writes back to it, and a plan that
     # was hit the same evening showed as planned all night (2026-10-30).
     tm = trackman_data(include_history=True) or {}
-    hit = {}
+    nights = {}
     for s in tm.get('sessions') or []:
         g = s.get('grade') if isinstance(s.get('grade'), dict) else {}
-        hit.setdefault(str(g.get('plan_date') or s.get('date')), s)
+        nights.setdefault(str(g.get('plan_date') or s.get('date')), []).append(s)
+    # One row per day: the plan it answered, every session that night added together, and how
+    # each was graded. A Plan log and a Session log listed the same nights twice, and the plan
+    # row matched only one of two sessions: Nov 2 read 41 balls when he hit 77.
+    dot = ' \u00b7 '
+    by_plan = {str(p['date']): p for p in reversed(plans)}  # the newest plan for a date wins
+    days = sorted(set(nights) | set(sorted(by_plan, reverse=True)[:6]), reverse=True)[:6]
     log = []
-    for p in plans[:6]:
-        dot = ' \u00b7 '
-        kind = p['type'].title() + (dot + 'benchmark' if p.get('benchmark') else '')
-        sub = date.fromisoformat(p['date']).strftime('%b %-d') + (dot + p['location'] if p.get('location') else '')
-        s = hit.get(str(p['date']))
-        if s:
-            status = f'done{dot}{s.get("balls")} balls' if s.get('balls') is not None else 'done'
-        elif date.fromisoformat(p['date']) < date.today():
+    for day_ in days:
+        p, ran = by_plan.get(day_), nights.get(day_, [])
+        kind = (p['type'].title() + (dot + 'benchmark' if p.get('benchmark') else '')) if p else \
+            ' + '.join(escape(str(x.get('label') or 'Session')) for x in ran)
+        sub = [date.fromisoformat(day_).strftime('%b %-d')]
+        if p and ran:
+            sub.append(' + '.join(escape(str(x.get('label') or 'Session')) for x in ran))
+        balls = sum(x.get('balls') or 0 for x in ran)
+        drill = sum(((x.get('drill') or {}).get('balls') or 0) for x in ran if isinstance(x.get('drill'), dict))
+        if ran:
+            sub.append(f'{balls} balls' + (f', {drill} of them drill' if drill else ''))
+            status = dot.join(dict.fromkeys(grade_text(x.get('grade')) for x in ran))
+        elif date.fromisoformat(day_) < date.today():
             status = 'no session'
         else:
             status = 'planned'
-        log.append(f'<li><span class="course"><b>{kind}</b><small>{sub}</small></span>'
+        log.append(f'<li><span class="course"><b>{kind}</b><small>{dot.join(sub)}</small></span>'
                    f'<span class="score"><span class="n">{status}</span></span></li>')
     log = ''.join(log)
     current = card(f'Saved plan \u00b7 {d}',
                    f'    <p style="margin:0 0 0.8rem;font-size:0.92rem">{cur["type"].title()} session{where}{bench}. '
                    f'Original focus: {cur.get("focus", "")}.</p>\n'
-                   '<p class="vs-note">The plan exactly as it was issued that morning. Whether it was hit is in '
-                   'the log on the right, from the TrackMan session.</p><details><summary>Original plan and note</summary>'
+                   '<details><summary>Original plan and note</summary>'
                    f'    <ul class="plan">{rows}</ul>\n'
                    f'    <p class="vs-note">{cur.get("note", "")}</p></details>')
-    loglist = card('Plan log', f'    <ul class="rounds-list" style="margin-top:0">{log}</ul>',
+    loglist = card('Sessions', f'    <ul class="rounds-list" style="margin-top:0">{log}</ul>',
                    explain=('plans', 'practicegrade'))
     return f'<div class="ggrid"><div class="gcol">{current}</div><div class="gcol">{loglist}</div></div>'
 
@@ -1441,9 +1391,9 @@ def story_parts(stats, g):
     blocks.append(block(
         'approach', 'Approach', 'golf-approach.html',
         f'I hit {a["gir_pct"]}% of greens in regulation, and when I do '
-        f'hit one I am {a["prox_gir_ft"]} feet away. No single yardage stands out as the villain. What '
-        f'does stand out is the direction: {short_miss} of my {miss_total} classified misses are <b>short</b>; '
-        f'precisely, {short_miss / miss_total:.0%} of classified misses. The pattern sits {a.get("dispersion", {}).get("tendency", "")}.',
+        f'hit one I am {a["prox_gir_ft"]} feet away. {" ".join(golf_story.approach_band_beat(stats))} '
+        f'By direction, {short_miss} of my {miss_total} classified misses are <b>short</b> '
+        f'({short_miss / miss_total:.0%}).',
         '    ' + ex('gir') + '\n    ' + ex('prox') + '\n    ' + ex('dispersion')))
     short_lead = ('Missed greens create recovery work, but not every miss leaves a short chip or a chance '
                   'to save par. This sample separates the recorded greenside chances from longer pitches. ')
@@ -1779,6 +1729,10 @@ def write_page(fname, title, ogtitle, desc, content, g, stats):
         note += (f'{len(excluded)} round{"" if len(excluded) == 1 else "s"} '
                  f'({", ".join(excluded)}) {"is" if len(excluded) == 1 else "are"} left out because the '
                  f'shot data does not match the scorecard. ')
+    dates = sorted(r['date'] for r in (stats or {}).get('rounds', []))
+    sample = (f'On-course analysis: {stats["rounds_n"]} rounds / {stats["holes"]} holes, '
+              f'{dates[0]} to {dates[-1]}. ' if dates else 'No sensor-round sample available. ')
+    note = sample + note
     note += (f'GHIN data checked {g["updated"]}; shot analysis built {(stats or {}).get("updated", "unknown")}. '
              f'<a href="index.html">jackraney.com</a> · <a href="about.html">about me</a>')
     introductions = {
@@ -1790,13 +1744,12 @@ def write_page(fname, title, ogtitle, desc, content, g, stats):
         'golf-putting.html': ('Putting', 'Overall putting includes every putt. The distance tables below use first putts only, because later-putt positions are less reliable.'),
         'golf-rounds.html': ('Rounds and scoring', 'GHIN totals are handicap-adjusted; sensor scorecards show raw strokes. The two can differ without either record being wrong.'),
         'golf-courses.html': ('Courses played', 'A personal course log, separate from the smaller set of rounds with scores or sensor data. Ranking lists and editions are labeled.'),
-        'golf-trackman.html': ('TrackMan practice', 'Carry means distance to landing. Read measured clubs first; values marked Sample are illustrations, not my yardages.'),
+        'golf-trackman.html': ('TrackMan practice', 'Carry means distance to landing. Yardages come from measuring days; practice nights add balls hit, not yardages.'),
     }
     heading, intro = introductions[fname]
-    dates = sorted(r['date'] for r in (stats or {}).get('rounds', []))
-    sample = (f'On-course analysis: {stats["rounds_n"]} rounds / {stats["holes"]} holes, '
-              f'{dates[0]} to {dates[-1]}.' if dates else 'No sensor-round sample available.')
-    guide = ('<details class="reading-guide"><summary>How to read these pages</summary>'
+    # The full guide lives on the overview; every other page links to it. The same four
+    # paragraphs folded at the top of all nine pages were clutter (Jack, 2026-11-02).
+    guide = ('<details class="reading-guide" id="reading-guide"><summary>How to read these pages</summary>'
              '<p><b>Three records:</b> GHIN supplies posted scores and the official Handicap Index; '
              'Arccos supplies sensor shots for a local scratch comparison; TrackMan supplies practice measurements.</p>'
              '<p><b>Strokes gained (SG):</b> +1 means one stroke better than the scratch model; −1 means one worse. '
@@ -1805,8 +1758,9 @@ def write_page(fname, title, ogtitle, desc, content, g, stats):
              '<b>Dispersion:</b> how widely shots scatter. Expand the explanations beside a chart for its exact definition.</p>'
              '<p><b>Evidence:</b> samples are labeled, small groups are flagged, and uncertainty ranges do not account '
              'for every model assumption. A daily rebuild does not mean the underlying rounds are recent.</p></details>')
-    content = (f'<header class="golf-intro"><h1>{heading}</h1><p>{intro}</p>'
-               f'<p class="goal-note">GHIN checked {g["updated"]}. {sample}</p>{guide}</header>') + content
+    if fname != 'golf.html':
+        guide = '<p class="reading-link"><a href="golf.html#reading-guide">How to read these pages</a></p>'
+    content = f'<header class="golf-intro"><h1>{heading}</h1><p>{intro}</p>{guide}</header>' + content
     html = SHELL.format(title=title, ogtitle=ogtitle, desc=desc, slug=fname.replace('.html', ''),
                         index=index, nav=nav_links(fname),
                         rounds_pill=f'{g["rounds_last_12_months"]} 18-hole posts \u00b7 12 mo',
@@ -1833,13 +1787,11 @@ def main():
         hub = (f'<section class="span2" style="margin-bottom:1.3rem">{briefing(stats, g)}</section>'
                + golf_goals.index(goals, tm)
                + f'<div class="ggrid">'
-               f'<div class="gcol">{hero_card(stats, g)}{sg_card(stats)}</div>'
-               f'<div class="gcol">{scoring_card(stats)}{leaks_card(stats)}</div>'
+               f'<div class="gcol">{hero_card(stats, g)}{bypar_card(g)}</div>'
+               f'<div class="gcol">{sg_card(stats)}{scoring_card(stats)}</div>'
                f'<section class="span2">{road_card(stats, g)}</section>'
                f'<section class="span2">{handicap_card(g)}</section>'
                f'<section class="span2">{trend_card(stats)}</section>'
-               f'<div class="gcol">{bypar_card(g)}</div>'
-               f'<div class="gcol">{highlights_card(stats)}</div>'
                f'</div>')
     else:
         hub = f'<div class="ggrid"><section class="span2">{handicap_card(g)}</section><div class="gcol">{bypar_card(g)}</div></div>'
@@ -1847,11 +1799,23 @@ def main():
                'Jack Raney’s golf: working toward scratch, with recorded scores, selected sensor rounds and measured practice sessions.',
                hub, g, stats)
     if stats:
+        tour = tour_data()
+        stories = {
+            'golf-driving.html': lambda: golf_story.driving(stats, tm),
+            'golf-approach.html': lambda: golf_story.approach(stats),
+            'golf-short-game.html': lambda: golf_story.short_game(stats, tour),
+            'golf-putting.html': lambda: golf_story.putting(stats),
+            'golf-rounds.html': lambda: golf_story.rounds(stats, g),
+            'golf-courses.html': lambda: golf_story.courses(courses_data()),
+            'golf-trackman.html': lambda: golf_story.trackman(tm, tour, [c for c, _, _ in SAMPLE_GAPPING]),
+        }
         for fname, (title, desc, render) in SUBPAGES.items():
             content = render(stats, g)
             goal_content = golf_goals.for_page(fname, goals, tm)
             if goal_content:
                 content = goal_content + '<h2 class="gsect">On the course · Arccos</h2>' + content
+            if fname in stories:
+                content = story_card(stories[fname]()) + content
             if fname == 'golf-trackman.html':
                 content = golf_goals.related(goals) + content
             write_page(fname, f'{title} · Road to scratch · Jack Raney', title, desc, content, g, stats)
