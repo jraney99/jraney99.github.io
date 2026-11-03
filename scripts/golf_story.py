@@ -9,11 +9,14 @@ Beats describe what happened and never say how to swing; what to change belongs 
 A beat whose data is missing is left out rather than guessed. A beat is (lead, detail), both
 already HTML-safe.
 """
+import re
 from collections import Counter
 from datetime import date, timedelta
 from html import escape
 
 NAMES = {'driving': 'driving', 'approach': 'approach', 'short': 'short game', 'putting': 'putting'}
+# The bag, longest first: how gaps are read down it. build_golf's sample table uses the same order.
+BAG_ORDER = ('Dr', '3w', '2i', '4i', '5i', '6i', '7i', '8i', '9i', 'Pw', '50\u00b0', '54\u00b0', '58\u00b0')
 CLUB_NAMES = {'Dr': 'Driver', '3w': '3-wood', '5w': '5-wood', '2i': '2-iron', '3i': '3-iron',
               '4i': '4-iron', '5i': '5-iron', '6i': '6-iron', '7i': '7-iron', '8i': '8-iron',
               '9i': '9-iron', 'Pw': 'Pitching wedge'}
@@ -285,15 +288,15 @@ def driving(stats, tm=None):
         detail += (f'Per tee shot the driver was {abs(gap):.2f} strokes {"better" if gap > 0 else "worse"}'
                    + ('.' if verdict.get('callable') else ', a gap this sample cannot yet call.'))
         out.append((f'Driver on {dr["shots"]} tee shots, {escape(other["club"])} on {other["shots"]}.', detail))
-    drive = latest_driver(tm)
+    form = driver_form(tm)
     if d.get('driver_median_yd'):
         lead = f'Driver: {d["driver_median_yd"]} yd on the course' + (
-            f', {drive["carry"]:.0f} yd carry in practice.' if drive else '.')
+            f', {form["carry"]:.0f} yd carry in practice.' if form else '.')
         detail = (f'{d["driver_median_yd"]} is start to rest across {d.get("driver_measured", "the")} measured '
                   'drives, so it includes roll.')
-        if drive:
-            detail += (f' {drive["carry"]:.0f} is carry before roll: the median of {drive["n"]} drives on '
-                       f'{day(drive["date"])}, from TrackMan.')
+        if form:
+            detail += (f' {form["carry"]:.0f} is carry before roll: the median of my last {form["n"]} drives '
+                       'on TrackMan.')
         out.append((lead, detail))
     return [b for b in out if b]
 
@@ -452,6 +455,14 @@ def courses(d):
 # TrackMan
 # ---------------------------------------------------------------------------
 
+def driver_form(tm, min_shots=8):
+    """The driver's current carry: the median of the last 20 drives in any session (trackman.json
+    `driver`). Road to 315 heads with this one (Jack, 2026-11-02): a single session's median moved
+    298, 287, 293 on 9 to 11 drives."""
+    d = (tm or {}).get('driver') or {}
+    return d if isinstance(d.get('carry'), (int, float)) and (d.get('n') or 0) >= min_shots else None
+
+
 def latest_driver(tm, min_shots=8):
     """The latest TrackMan session with enough drives to read, as Road to 315 reads it."""
     for s in sorted((tm or {}).get('session_stats') or [], key=lambda s: str(s.get('date')), reverse=True):
@@ -461,7 +472,7 @@ def latest_driver(tm, min_shots=8):
     return None
 
 
-def trackman(tm, tour=None, bag_order=(), today=None):
+def trackman(tm, tour=None, bag_order=BAG_ORDER, today=None):
     tm = tm or {}
     today = today or date.today()
     out = []
@@ -517,3 +528,39 @@ def trackman(tm, tour=None, bag_order=(), today=None):
                         f'Then {next_two}; the other {len(rest)} stay within '
                         f'±{max(c["side_spread"] for c in rest):.0f} yd.'))
     return out
+
+
+# ---------------------------------------------------------------------------
+# practice grades, in words
+# ---------------------------------------------------------------------------
+
+def grade_lines(grade):
+    """What a session was checked on and how it did, one plain line per check (Jack, 2026-11-02:
+    "missed all 2" did not say what was missed). Reads the grader's own results; a grade written
+    before results existed is shown as its summary."""
+    if not isinstance(grade, dict):
+        return [str(grade)] if grade else []
+    lines = []
+    for r in grade.get('results') or []:
+        what, measured, target, n = r.get('what') or 'Check', str(r.get('measured') or ''), r.get('target'), r.get('n')
+        inside = re.match(r'(\d+)% inside (.+)$', measured)
+        if inside and n:
+            pct = int(inside.group(1))
+            said = f'{what}: {round(pct * n / 100)} of {n} inside {inside.group(2)} ({pct}%)'
+        else:
+            said = f'{what}: {measured}' + (f', {n} shots' if n else '')
+        if target:
+            said += f'; needs {target}'
+        lines.append(said + ('. Met.' if r.get('pass') else '. Not met.'))
+    if not lines:
+        lines.append('Nothing graded: no part of this session has a target the export can check.'
+                     if grade.get('ungraded') else (grade.get('summary') or 'Not graded.'))
+    return lines
+
+
+def grade_tally(grade):
+    """'1 of 2 met', or 'not graded' when nothing had a checkable target."""
+    results = (grade or {}).get('results') if isinstance(grade, dict) else None
+    if not results:
+        return 'not graded' if isinstance(grade, dict) else (str(grade) if grade else '\u2014')
+    return f'{sum(1 for r in results if r.get("pass"))} of {len(results)} met'

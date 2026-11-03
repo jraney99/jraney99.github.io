@@ -91,6 +91,16 @@ def standing(goal, latest):
     return f'<ol class="beats">{items}</ol>'
 
 
+def form(goal, tm):
+    """The driver's last 20 drives from any session (trackman.json `driver`), when the goal is driver
+    carry and enough drives exist. Jack chose it as the headline on 2026-11-02: one session's median
+    moved 298, 287, 293 on 9 to 11 drives. None means the headline stays with the latest session."""
+    d = (tm or {}).get('driver') or {}
+    if goal['club'] != 'Dr' or not number(d.get(goal['metric'])) or (d.get('n') or 0) < goal.get('min_shots', 8):
+        return None
+    return d
+
+
 def eligible(goal, rows):
     return [r for r in rows if r.get('n', 0) >= goal.get('min_shots', 8)]
 
@@ -122,6 +132,9 @@ def index(goals, tm):
         # Say which number this is: the driver has a carry from the latest session, one from a
         # measuring day and a total from the course, and the overview showed one unlabeled.
         when = f', {short_day(good[-1]["date"])}' if good else ''
+        f = form(g, tm)
+        if f:
+            current, when = fmt(f[g['metric']], g['unit']), f', last {f["n"]} drives'
         cards.append(f'<a class="goal-index-card" href="{goal_link(g)}">'
                      f'<span class="lbl">{esc(g["category"])} · {esc(state(g, rows))}</span>'
                      f'<h3>{esc(g["title"])}</h3><p>{esc(g["description"])}</p>'
@@ -207,15 +220,25 @@ def section(goal, tm):
     rows = observations(goal, tm)
     good = eligible(goal, rows)
     latest = good[-1] if good else {}
-    current = latest.get(goal['metric'])
+    f = form(goal, tm)
+    current = f[goal['metric']] if f else latest.get(goal['metric'])
     gap = max(0, goal['target'] - current if goal['direction'] == 'higher' else current - goal['target']) if number(current) else None
     a = goal['analysis']
-    metrics = [(goal['metric_label'], fmt(current, goal['unit'])),
-               ('Best carry · same session', fmt(latest.get('carry_best'), 'yd')),
-               ('Goal', fmt(goal['target'], goal['unit'])), ('Gap to goal', fmt(gap, goal['unit']))]
+    if f:
+        metrics = [(f'{goal["metric_label"]} · last {f["n"]} drives', fmt(current, goal['unit'])),
+                   (f'Latest session · {short_day(latest["date"])}' if latest else 'Latest session',
+                    fmt(latest.get(goal['metric']), goal['unit'])),
+                   ('Goal', fmt(goal['target'], goal['unit'])), ('Gap to goal', fmt(gap, goal['unit']))]
+    else:
+        metrics = [(goal['metric_label'], fmt(current, goal['unit'])),
+                   ('Best carry · same session', fmt(latest.get('carry_best'), 'yd')),
+                   ('Goal', fmt(goal['target'], goal['unit'])), ('Gap to goal', fmt(gap, goal['unit']))]
     metric_html = ''.join(f'<div><span class="lbl">{esc(label)}</span><strong>{value}</strong></div>' for label, value in metrics)
     latest_note = (f'Latest qualifying session: {esc(latest["date"])} · {latest["n"]} {esc(goal.get("club_label", goal["club"]))} shots. '
                    'Carry is measured before roll.') if latest else f'At least {goal.get("min_shots", 8)} measured shots are needed for a baseline.'
+    if f:
+        latest_note = (f'The headline is the median of my last {f["n"]} drives, whatever session they came from, '
+                       'so one session cannot swing it. ' + latest_note)
     if rows and rows[-1] is not latest and rows[-1].get('n', 0) < goal.get('min_shots', 8):
         latest_note += ' A newer small sample is listed below; the headline stays with the last qualifying session.'
     if len(good) == 1:

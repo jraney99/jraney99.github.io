@@ -938,12 +938,6 @@ def _loop_rows(tm, stats):
             'greenside chipping skill.</p>') % ''.join(rows)
 
 
-def grade_text(grade):
-    """A session's grade against its plan. The skill publishes the whole grading dict, but the
-    same field is a plain summary string elsewhere in that pipeline, so accept either."""
-    if isinstance(grade, dict):
-        return grade.get('summary') or '\u2014'
-    return str(grade) if grade else '\u2014'
 
 
 def tour_data():
@@ -1280,14 +1274,22 @@ def plans_cards():
             sub.append(' + '.join(escape(str(x.get('label') or 'Session')) for x in ran))
         balls = sum(x.get('balls') or 0 for x in ran)
         drill = sum(((x.get('drill') or {}).get('balls') or 0) for x in ran if isinstance(x.get('drill'), dict))
+        checks = ''
         if ran:
             sub.append(f'{balls} balls' + (f', {drill} of them drill' if drill else ''))
-            status = dot.join(dict.fromkeys(grade_text(x.get('grade')) for x in ran))
+            tallies = list(dict.fromkeys(golf_story.grade_tally(x.get('grade')) for x in ran))
+            if len(tallies) > 1 and 'not graded' in tallies:
+                tallies.remove('not graded')  # the night was graded; its drill session alone was not
+            status = dot.join(tallies)
+            # What each check was and how it did, in words (2026-11-02: "missed all 2" said neither).
+            lines = list(dict.fromkeys(l for x in ran for l in golf_story.grade_lines(x.get('grade'))))
+            graded = [l for l in lines if not l.startswith('Nothing graded')]
+            checks = ''.join(f'<small class="gline">{escape(l)}</small>' for l in (graded or lines))
         elif date.fromisoformat(day_) < date.today():
             status = 'no session'
         else:
             status = 'planned'
-        log.append(f'<li><span class="course"><b>{kind}</b><small>{dot.join(sub)}</small></span>'
+        log.append(f'<li><span class="course"><b>{kind}</b><small>{dot.join(sub)}</small>{checks}</span>'
                    f'<span class="score"><span class="n">{status}</span></span></li>')
     log = ''.join(log)
     current = card(f'Saved plan \u00b7 {d}',
@@ -1305,6 +1307,13 @@ def plans_cards():
 # ---------------------------------------------------------------------------
 # the story page: what the numbers mean, what connects to what, what to do
 # ---------------------------------------------------------------------------
+
+def fold_card(section, inner):
+    """A card closed by default: background a reader can open. The My game page ran to 2,300
+    words with everything open (Jack, 2026-11-02)."""
+    return (f'<section>\n  <details class="gfold"><summary><h2 class="gsect">{section}</h2></summary>\n'
+            f'  <div class="gcard">\n{inner}\n  </div>\n  </details>\n</section>\n')
+
 
 def para(text):
     return f'    <p class="story-p">{text}</p>\n'
@@ -1356,7 +1365,7 @@ def story_chain(stats, g):
                 'shots. That is why rounds I played without the sensors still move my index but never '
                 'appear on the strokes gained pages.')
     out += '    ' + ex('differential') + '\n    ' + ex('scratch') + '\n'
-    return card('Two records: shot analysis and handicap', out)
+    return fold_card('Two records: shot analysis and handicap', out)
 
 
 def story_parts(stats, g):
@@ -1492,7 +1501,7 @@ def story_limits(stats, g):
     out += '    <dl class="limits">' + ''.join(f'<dt>{t}</dt><dd>{b}</dd>' for t, b in limits) + '</dl>\n'
     out += para('When any of that changes, these pages change with it. They rebuild from the data every '
                 'morning when the pipeline runs. Rebuilding does not make old rounds current; coaching and goals need review.')
-    return card('What this data cannot tell me', out)
+    return fold_card('What this data cannot tell me', out)
 
 
 def story_tour(stats, g):
@@ -1558,7 +1567,7 @@ def story_tour(stats, g):
     out += ('    <p class="vs-note" style="text-align:left">%s, read %s. Different courses, '
             f'different setups, and {stats["rounds_n"]} tracked rounds against a tour sample, so this is a yardstick '
             'rather than a verdict.</p>' % (tour.get('source', ''), tour.get('read', '')))
-    return card('Against the tour', out)
+    return fold_card('Against the tour', out)
 
 
 def page_story(stats, g):

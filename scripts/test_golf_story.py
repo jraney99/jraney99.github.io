@@ -138,5 +138,53 @@ class GoalStanding(unittest.TestCase):
         self.assertEqual(golf_goals.standing(self.GOAL, {}), '')
 
 
+class GradeWords(unittest.TestCase):
+    GRADE = {'grader': 2, 'summary': 'missed all 2', 'ungraded': ['Warmup: warm-up, no target'], 'results': [
+        {'what': 'Driver corridor', 'measured': '55% inside \u00b118 yd', 'n': 11, 'pass': False, 'target': '65%'},
+        {'what': 'Driver carry', 'measured': 'median 293 yd, best 299, 116.9 mph club', 'n': 11, 'pass': False,
+         'target': '315 yd'}]}
+
+    def test_each_check_says_what_was_measured_and_what_it_needed(self):
+        self.assertEqual(story.grade_lines(self.GRADE), [
+            'Driver corridor: 6 of 11 inside \u00b118 yd (55%); needs 65%. Not met.',
+            'Driver carry: median 293 yd, best 299, 116.9 mph club, 11 shots; needs 315 yd. Not met.'])
+        self.assertEqual(story.grade_tally(self.GRADE), '0 of 2 met')
+
+    def test_a_session_with_nothing_checkable_says_so(self):
+        g = {'results': [], 'summary': 'not gradeable', 'ungraded': ['Technical: a drill']}
+        self.assertEqual(story.grade_tally(g), 'not graded')
+        self.assertTrue(story.grade_lines(g)[0].startswith('Nothing graded'))
+
+    def test_an_old_string_grade_still_reads(self):
+        self.assertEqual(story.grade_lines('met 2 of 5'), ['met 2 of 5'])
+
+
+class DriverHeadline(unittest.TestCase):
+    """Road to 315 heads with the last 20 drives (Jack, 2026-11-02), not one session's median."""
+
+    def goal(self):
+        return golf_goals.load_goals(ROOT)[0]
+
+    def tm(self, form_n=20):
+        return {'driver': {'carry': 289, 'n': form_n, 'ball_speed': 171.3},
+                'session_stats': [{'id': 'a', 'date': '2026-11-02', 'clubs': [
+                    {'club': 'Dr', 'carry': 293, 'carry_best': 299.7, 'n': 11, 'ball_speed': 171.2}]}]}
+
+    def test_the_headline_and_the_gap_use_the_last_20_drives(self):
+        html = golf_goals.section(self.goal(), self.tm())
+        self.assertIn('Median carry · last 20 drives</span><strong>289 yd</strong>', html)
+        self.assertIn('Latest session · Nov 2</span><strong>293 yd</strong>', html)
+        self.assertIn('Gap to goal</span><strong>26 yd</strong>', html)
+        self.assertIn('289 yd <small>', golf_goals.index([self.goal()], self.tm()))
+
+    def test_too_few_drives_falls_back_to_the_session(self):
+        html = golf_goals.section(self.goal(), self.tm(form_n=5))
+        self.assertIn('<strong>293 yd</strong>', html)
+        self.assertNotIn('last 5 drives', html)
+
+    def test_the_driving_story_quotes_the_same_number(self):
+        self.assertIn('289 yd carry in practice', text(story.driving(STATS, self.tm())))
+
+
 if __name__ == '__main__':
     unittest.main()

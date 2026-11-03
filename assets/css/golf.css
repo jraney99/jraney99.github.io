@@ -671,3 +671,13 @@
 .reading-link { margin: 0.2rem 0 0; font-size: 0.88rem; }
 .reading-link a { color: var(--accent); font-weight: 700; text-decoration: none; }
 .reading-link a:hover { text-decoration: underline; }
+
+/* A practice session's checks, one plain line each (2026-11-02). */
+.rounds-list .course small.gline { display: block; margin-top: 0.2rem; color: var(--ink-2); }
+/* Closed background cards on the My game page; the heading is the button (2026-11-02). */
+.gfold > summary { list-style: none; cursor: pointer; }
+.gfold > summary::-webkit-details-marker { display: none; }
+.gfold > summary .gsect { display: inline-block; }
+.gfold > summary .gsect::after { content: " \25B8"; color: var(--accent); }
+.gfold[open] > summary .gsect::after { content: " \25BE"; }
+.gfold > summary:hover .gsect { color: var(--accent); }
