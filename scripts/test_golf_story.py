@@ -157,6 +157,8 @@ class GradeWords(unittest.TestCase):
 
     def test_an_old_string_grade_still_reads(self):
         self.assertEqual(story.grade_lines('met 2 of 5'), ['met 2 of 5'])
+        old = {'summary': 'missed all 3'}  # written before the grader kept its results
+        self.assertEqual((story.grade_lines(old), story.grade_tally(old)), (['missed all 3'], 'missed all 3'))
 
 
 class DriverHeadline(unittest.TestCase):

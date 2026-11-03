@@ -559,8 +559,11 @@ def grade_lines(grade):
 
 
 def grade_tally(grade):
-    """'1 of 2 met', or 'not graded' when nothing had a checkable target."""
-    results = (grade or {}).get('results') if isinstance(grade, dict) else None
-    if not results:
-        return 'not graded' if isinstance(grade, dict) else (str(grade) if grade else '\u2014')
-    return f'{sum(1 for r in results if r.get("pass"))} of {len(results)} met'
+    """'1 of 2 met'; 'not graded' when the grader looked and nothing had a checkable target; an older
+    grade that kept only its summary is shown as that summary."""
+    if not isinstance(grade, dict):
+        return str(grade) if grade else '\u2014'
+    results = grade.get('results')
+    if results:
+        return f'{sum(1 for r in results if r.get("pass"))} of {len(results)} met'
+    return 'not graded' if 'results' in grade else (grade.get('summary') or '\u2014')
