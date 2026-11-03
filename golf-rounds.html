@@ -24,7 +24,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Overpass:ital,wght@0,300..900;1,300..900&family=Overpass+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="assets/css/site.css?v=8d9a8b17c5">
-  <link rel="stylesheet" href="assets/css/golf.css?v=741d8a857e">
+  <link rel="stylesheet" href="assets/css/golf.css?v=0ab30c3e68">
 </head>
 <body>
 
@@ -44,7 +44,14 @@
 </header>
 
 <main id="main" class="gwrap">
-<header class="golf-intro"><h1>Rounds and scoring</h1><p>GHIN totals are handicap-adjusted; sensor scorecards show raw strokes. The two can differ without either record being wrong.</p><p class="goal-note">GHIN checked 2026-11-02. On-course analysis: 5 rounds / 81 holes, 2026-04-15 to 2026-06-04.</p><details class="reading-guide"><summary>How to read these pages</summary><p><b>Three records:</b> GHIN supplies posted scores and the official Handicap Index; Arccos supplies sensor shots for a local scratch comparison; TrackMan supplies practice measurements.</p><p><b>Strokes gained (SG):</b> +1 means one stroke better than the scratch model; −1 means one worse. Summary rates are per 18 holes unless labeled per shot or actual round. Scratch means a 0.0 handicap.</p><p><b>Median:</b> the middle result. <b>Carry:</b> flight to landing. <b>Total distance:</b> includes roll. <b>Dispersion:</b> how widely shots scatter. Expand the explanations beside a chart for its exact definition.</p><p><b>Evidence:</b> samples are labeled, small groups are flagged, and uncertainty ranges do not account for every model assumption. A daily rebuild does not mean the underlying rounds are recent.</p></details></header><section>
+<header class="golf-intro"><h1>Rounds and scoring</h1><p>GHIN totals are handicap-adjusted; sensor scorecards show raw strokes. The two can differ without either record being wrong.</p><p class="reading-link"><a href="golf.html#reading-guide">How to read these pages</a></p></header><section>
+  <h2 class="gsect">What the numbers say</h2>
+  <div class="gcard gcard--story">
+    <ol class="beats"><li><b>4 tracked 18-hole rounds, from 82 to 91.</b> Raw strokes with every shot recorded, Apr to Jun 2026, plus a 39 for nine. The newest is from Jun 4; rounds posted since count for the index but have no shot data.</li><li><b>The short game is most of the gap between my best and worst 18.</b> 82 at Castlewood CC - Hill and 91 at Texas Rangers GC: the short game lost 0.6 in the 82 and lost 7.9 in the 91. The other three parts net 0.5 between the two rounds.</li><li><b>Par 4s over 420 yd average +1.7 over par a hole.</b> 350–420 yd +1.0; under 350 yd +0.4. By par: 3s +0.7, 4s +1.0, 5s +0.2 a hole.</li></ol>
+
+  </div>
+</section>
+<section>
   <h2 class="gsect">Latest posted rounds (GHIN)</h2>
   <div class="gcard ">
     <ul class="rnds"><li class="rnd rnd--flat"><span class="c"><b>Shangri La Resort - Champions/Heritage</b><small>Oct 24, 2026 · 18 holes</small><small class="muted-tag">posted as a total, no hole detail</small></span><span class="sc num num--md">75</span><span class="df pos">2.6</span><span class="chev chev--none"></span></li><li><details class="rnd"><summary><span class="c"><b>Shangri La Resort - Heritage/Legends</b><small>Oct 23, 2026 · 18 holes</small></span><span class="sc num num--md">83</span><span class="df warn">7.9</span><span class="chev"></span></summary><div class="scard-body">
@@ -89,9 +96,7 @@
     </div></details></li></ul>
     <p class="vs-note">Open a round for the scorecard. Header numbers are GHIN adjusted score and Score Differential; colors compare the differential with my current index. Rounds without sensor shots count for scoring and handicap, but not for the strokes-gained pages.</p>
     <div class="ex-row">
-    <details class="ex"><summary>Raw and adjusted</summary><div><b>Raw score and adjusted score.</b> GHIN caps every hole at net double bogey before it works out a handicap, so a blow-up hole counts for less than it cost me. The scorecard shows the <b>raw</b> score, what I actually made. The round total beside the course name is the adjusted one GHIN posted, which is why the two can differ.</div></details>
-    <details class="ex"><summary>Differential</summary><div><b>Score Differential.</b> A score adjusted for course difficulty and playing conditions. Lower is better. The colors here compare past differentials with my current index, not necessarily the index I held on that date.</div></details>
-    <details class="ex"><summary>Handicap Index</summary><div><b>What a Handicap Index is.</b> A measure of scoring potential, not average score. With at least 20 scores, it generally averages the best 8 Score Differentials from the latest 20, with safeguards and adjustments. A differential accounts for course difficulty. Fewer-score records use a different calculation. <a href="https://www.usga.org/content/usga/home-page/handicapping/world-handicap-system/topics/handicap-index-calculation.html">USGA method</a>.</div></details>
+    <details class="ex"><summary>Raw and adjusted, Differential, Handicap Index</summary><div><p><b>Raw score and adjusted score.</b> GHIN caps every hole at net double bogey before it works out a handicap, so a blow-up hole counts for less than it cost me. The scorecard shows the <b>raw</b> score, what I actually made. The round total beside the course name is the adjusted one GHIN posted, which is why the two can differ.</p><p><b>Score Differential.</b> A score adjusted for course difficulty and playing conditions. Lower is better. The colors here compare past differentials with my current index, not necessarily the index I held on that date.</p><p><b>What a Handicap Index is.</b> A measure of scoring potential, not average score. With at least 20 scores, it generally averages the best 8 Score Differentials from the latest 20, with safeguards and adjustments. A differential accounts for course difficulty. Fewer-score records use a different calculation. <a href="https://www.usga.org/content/usga/home-page/handicapping/world-handicap-system/topics/handicap-index-calculation.html">USGA method</a>.</p></div></details>
     </div>
   </div>
 </section>
@@ -114,7 +119,7 @@
   </div>
 </section>
 </div>
-<p class="gnote">5 Arccos rounds, Apr 2026 to Jun 2026, 81 holes; strokes gained against a locally calibrated scratch baseline, not an independent Arccos calculation. Tee and green positions are identified; the first shot after a par-4/5 tee shot uses the fairway flag to infer fairway or rough. Other non-putting lies are assumed fairway. These assumptions affect category estimates. GHIN data checked 2026-11-02; shot analysis built 2026-10-29. <a href="index.html">jackraney.com</a> · <a href="about.html">about me</a></p>
+<p class="gnote">On-course analysis: 5 rounds / 81 holes, 2026-04-15 to 2026-06-04. 5 Arccos rounds, Apr 2026 to Jun 2026, 81 holes; strokes gained against a locally calibrated scratch baseline, not an independent Arccos calculation. Tee and green positions are identified; the first shot after a par-4/5 tee shot uses the fairway flag to infer fairway or rough. Other non-putting lies are assumed fairway. These assumptions affect category estimates. GHIN data checked 2026-11-02; shot analysis built 2026-10-29. <a href="index.html">jackraney.com</a> · <a href="about.html">about me</a></p>
 </main>
 <script src="assets/js/site.js?v=c69d813bf5"></script>
 </body>
