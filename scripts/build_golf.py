@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Render the golf section: golf.html (hub) plus the deep pages, from data/golf.json
 (written daily by Archibald's ghin-handicap skill) and data/golf-stats.json (computed
-from sensor-tracked rounds; strokes gained vs a scratch baseline calibrated to Arccos).
+from Arccos-tracked rounds; strokes gained vs a scratch baseline calibrated to Arccos).
 
 The section has its own skin (assets/css/golf.css), copied from the look of Arccos's
 web dashboard at Jack's request: black canvas, dark cards, green gained / red lost.
@@ -389,7 +389,7 @@ def briefing(stats, g):
     if not leaks:
         return card('The short version',
                     '    <p style="margin:0;font-size:0.95rem">Not enough tracked rounds yet to say where '
-                    'the strokes go. Play a few with the sensors on and this fills in.</p>')
+                    'the strokes go. Play a few with Arccos running and this fills in.</p>')
     gap = abs(sg['total'])
     idx = g['revisions'][-1]['index']
     r18 = [r for r in (g.get('recent_rounds') or []) if r.get('holes') == 18 and r.get('score')]
@@ -532,7 +532,7 @@ def hero_card(stats, g):
         rows.append(f'<li><span class="course"><b>{name}</b><small>{sub}</small></span>'
                     f'<span class="score"><span class="num num--md">{r["score"]}</span>{dtxt}</span></li>')
     avg = sum(r['score'] for r in full18) / max(1, len(full18))
-    gap = (f'The complete 18-hole sensor rounds averaged {stats["scoring"]["avg18"]:.1f} raw strokes. '
+    gap = (f'The complete 18-hole Arccos rounds averaged {stats["scoring"]["avg18"]:.1f} raw strokes. '
            f'Across all {stats["holes"]} tracked holes, the model estimates {abs(stats["sg"]["total"]):.0f} strokes lost per 18 holes.'
            ) if stats else f'Scratch is 0.0. My index is {show(idx)}.'
     inner = (f'    <div class="hero-score"><span class="num num--xl">{avg:.1f}</span>'
@@ -541,7 +541,7 @@ def hero_card(stats, g):
              f'    <p class="lbl" style="margin-top:1.2rem">Recent rounds \u00b7 score and differential</p>\n'
              f'    <ul class="rounds-list">{"".join(rows)}</ul>\n'
              f'    <p class="vs-note" style="text-align:left">Recent GHIN totals use handicap-adjusted scores. '
-             f'Differentials are compared with my current index; raw sensor scores use a separate sample.</p>')
+             f'Differentials are compared with my current index; raw Arccos scores use a separate sample.</p>')
     return card('Scoring', inner, cls='gcard--hero', explain=('index', 'differential'))
 
 
@@ -554,7 +554,7 @@ def scoring_card(stats):
                     f'<small>{v / total:.0%}</small></div>' for k, v in b.items())
     inner = (statpair('Rounds', stats['rounds_n'], 'Holes', stats['holes'])
              + f'\n    <div class="bandbar">{segs}</div>\n    <div class="bands">{cells}</div>'
-             + '\n    <p class="vs-note">Sensor-tracked rounds only</p>')
+             + '\n    <p class="vs-note">Arccos-tracked rounds only</p>')
     return card('Scoring bands', inner)
 
 
@@ -739,8 +739,8 @@ def band_for(over):
 def merge_card(ghin, sensor):
     """One hole-by-hole card from whichever sources exist.
 
-    GHIN is the posted card and wins on par, score and putts; the sensors add strokes
-    gained, and stand alone when GHIN holds no hole detail. A hole the sensors missed
+    GHIN is the posted card and wins on par, score and putts; the Arccos round adds strokes
+    gained, and stands alone when GHIN holds no hole detail. A hole Arccos missed
     simply has no strokes-gained figure rather than a zero."""
     holes = {}
     for h in (ghin or []):
@@ -859,7 +859,7 @@ def page_rounds(stats, g):
                       f'    <ul class="rnds">{"".join(items)}</ul>\n'
                       '    <p class="vs-note">Open a round for the scorecard. Header numbers are GHIN adjusted score '
                       'and Score Differential; colors compare the differential with my current index. '
-                      'Rounds without sensor shots count for scoring and handicap, '
+                      'Rounds without Arccos shot data count for scoring and handicap, '
                       'but not for the strokes-gained pages.</p>',
                       explain=('adjusted', 'differential', 'index'))
     rows = []
@@ -869,7 +869,7 @@ def page_rounds(stats, g):
         cells = ''.join(f'<td>{sg(r["sg"].get(k, 0))}</td>' for k, _, _ in CATS)
         rows.append(f'<tr><td>{d}</td><td>{r["course"]}</td><td class="num num--md">{r["score"]}{"" if r["holes"] == 18 else " (9)"}</td>'
                     f'<td>{over_par(r["score"] - r["par"])}</td>{cells}<td>{sg(tot)}</td></tr>')
-    table = card('Every sensor-tracked round',
+    table = card('Every Arccos-tracked round',
                  '    <div class="table-wrap"><table class="gtable"><thead><tr><th>Date</th><th>Course</th><th>Score</th>'
                  '<th>To par</th><th>Tee</th><th>App</th><th>Short</th><th>Putt</th><th>Total SG</th></tr></thead><tbody>'
                  + ''.join(rows) + '</tbody></table></div>'
@@ -1330,9 +1330,9 @@ def story_where(stats, g):
     bits = [f'My index is {idx}']
     if avg:
         bits.append(f'my recent 18-hole GHIN adjusted scores average {avg:.1f}')
-    bits.append(f'and the complete 18-hole rounds in my sensor sample averaged '
+    bits.append(f'and the complete 18-hole rounds in my Arccos sample averaged '
                 f'{sc["avg18"]:.1f} raw strokes. Separately, the model estimates {gap:.0f} strokes lost per 18 holes '
-                f'across all {stats["holes"]} sensor-tracked holes, including the nine-hole round')
+                f'across all {stats["holes"]} Arccos-tracked holes, including the nine-hole round')
     out += para('. '.join(bits[:1]) + ', ' + ', '.join(bits[1:]) + '.')
     out += para('Those three numbers disagree on purpose, and that is the first thing worth '
                 'understanding about my own data.')
@@ -1348,7 +1348,7 @@ def story_where(stats, g):
 
 
 def story_chain(stats, g):
-    steps = [('Every shot', 'start and end position, recorded by the sensors in my grips'),
+    steps = [('Every shot', 'start and end position, recorded by Arccos'),
              ('Expected strokes', 'what a scratch player would need from each of those positions'),
              ('Strokes gained, per shot', 'the difference the shot made, against that standard'),
              ('Four categories', 'driving, approach, short game, putting: every shot lands in one'),
@@ -1362,7 +1362,7 @@ def story_chain(stats, g):
     out += f'    <ol class="chain">{items}</ol>\n'
     out += '    ' + ex('expected') + '\n    ' + ex('sg') + '\n    ' + ex('categories') + '\n'
     out += para('The handicap is a separate chain that runs alongside it, built from scores rather than '
-                'shots. That is why rounds I played without the sensors still move my index but never '
+                'shots. That is why rounds I played without Arccos still move my index but never '
                 'appear on the strokes gained pages.')
     out += '    ' + ex('differential') + '\n    ' + ex('scratch') + '\n'
     return fold_card('Two records: shot analysis and handicap', out)
@@ -1477,7 +1477,7 @@ def story_limits(stats, g):
                'which.')
     limits = [
         ('A small and selected sample',
-         'Only sensor-recorded rounds can supply shot analysis. This sample may not represent my recent form '
+         'Only rounds recorded in Arccos can supply shot analysis. This sample may not represent my recent form '
          'or all the conditions I play in. An interval crossing zero means the result is inconclusive.'),
         ('Some lies are inferred',
          'Tee and putter positions are recognized. The first shot after a par-4/5 tee shot uses the fairway '
@@ -1725,7 +1725,7 @@ SUBPAGES = {
     'golf-approach.html': ('Approach', 'Approach play by distance: strokes gained, proximity and greens hit, against scratch.', page_approach),
     'golf-short-game.html': ('Short game', 'Inside 50 yards: up and down rate and where strokes leak around the green.', page_short),
     'golf-putting.html': ('Putting', 'Make rates by distance against a scratch player, and what precedes a three-putt.', page_putting),
-    'golf-rounds.html': ('Rounds & scoring', 'Recorded sensor rounds, and scoring by hole type and length.', page_rounds),
+    'golf-rounds.html': ('Rounds & scoring', 'Arccos-recorded rounds, and scoring by hole type and length.', page_rounds),
     'golf-trackman.html': ('TrackMan', 'Imported TrackMan sessions: speeds, carries, gapping and dispersion per club.', page_practice),
 }
 
@@ -1740,7 +1740,7 @@ def write_page(fname, title, ogtitle, desc, content, g, stats):
                  f'shot data does not match the scorecard. ')
     dates = sorted(r['date'] for r in (stats or {}).get('rounds', []))
     sample = (f'On-course analysis: {stats["rounds_n"]} rounds / {stats["holes"]} holes, '
-              f'{dates[0]} to {dates[-1]}. ' if dates else 'No sensor-round sample available. ')
+              f'{dates[0]} to {dates[-1]}. ' if dates else 'No Arccos round sample available. ')
     note = sample + note
     note += (f'GHIN data checked {g["updated"]}; shot analysis built {(stats or {}).get("updated", "unknown")}. '
              f'<a href="index.html">jackraney.com</a> · <a href="about.html">about me</a>')
@@ -1751,8 +1751,8 @@ def write_page(fname, title, ogtitle, desc, content, g, stats):
         'golf-approach.html': ('Approach play', 'Shots toward the green from more than 50 yards, including par-3 tee shots. Start with greens hit, then examine distance bands and misses.'),
         'golf-short-game.html': ('Short game', 'Non-putting shots from 50 yards or closer. The aim is to finish the hole efficiently, not simply to hit a good-looking chip.'),
         'golf-putting.html': ('Putting', 'Overall putting includes every putt. The distance tables below use first putts only, because later-putt positions are less reliable.'),
-        'golf-rounds.html': ('Rounds and scoring', 'GHIN totals are handicap-adjusted; sensor scorecards show raw strokes. The two can differ without either record being wrong.'),
-        'golf-courses.html': ('Courses played', 'A personal course log, separate from the smaller set of rounds with scores or sensor data. Ranking lists and editions are labeled.'),
+        'golf-rounds.html': ('Rounds and scoring', 'GHIN totals are handicap-adjusted; Arccos scorecards show raw strokes. The two can differ without either record being wrong.'),
+        'golf-courses.html': ('Courses played', 'A personal course log, separate from the smaller set of rounds with scores or Arccos data. Ranking lists and editions are labeled.'),
         'golf-trackman.html': ('TrackMan practice', 'Carry means distance to landing. Yardages come from measuring days; practice nights add balls hit, not yardages.'),
     }
     heading, intro = introductions[fname]
@@ -1760,7 +1760,7 @@ def write_page(fname, title, ogtitle, desc, content, g, stats):
     # paragraphs folded at the top of all nine pages were clutter (Jack, 2026-11-02).
     guide = ('<details class="reading-guide" id="reading-guide"><summary>How to read these pages</summary>'
              '<p><b>Three records:</b> GHIN supplies posted scores and the official Handicap Index; '
-             'Arccos supplies sensor shots for a local scratch comparison; TrackMan supplies practice measurements.</p>'
+             'Arccos supplies shot data for a local scratch comparison; TrackMan supplies practice measurements.</p>'
              '<p><b>Strokes gained (SG):</b> +1 means one stroke better than the scratch model; −1 means one worse. '
              'Summary rates are per 18 holes unless labeled per shot or actual round. Scratch means a 0.0 handicap.</p>'
              '<p><b>Median:</b> the middle result. <b>Carry:</b> flight to landing. <b>Total distance:</b> includes roll. '
@@ -1805,7 +1805,7 @@ def main():
     else:
         hub = f'<div class="ggrid"><section class="span2">{handicap_card(g)}</section><div class="gcol">{bypar_card(g)}</div></div>'
     write_page('golf.html', 'Road to scratch · Jack Raney', 'Road to scratch',
-               'Jack Raney’s golf: working toward scratch, with recorded scores, selected sensor rounds and measured practice sessions.',
+               'Jack Raney’s golf: working toward scratch, with recorded scores, selected Arccos rounds and measured practice sessions.',
                hub, g, stats)
     if stats:
         tour = tour_data()
