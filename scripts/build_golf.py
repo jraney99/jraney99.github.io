@@ -1094,7 +1094,7 @@ def why_cards(tm):
         rows = ''.join('<tr><td>%s</td><td class="num">%s</td><td class="num num--md">%s</td></tr>'
                        % (escape(r['label']), show(r['then'], r['unit']), show(r['now'], r['unit']))
                        for r in e.get('rows') or [])
-        body = ('    <p>%s</p>\n    <div class="table-wrap"><table class="gtable"><thead><tr><th></th>'
+        body = ('    <p style="max-width:62ch">%s</p>\n    <div class="table-wrap" style="max-width:560px"><table class="gtable"><thead><tr><th></th>'
                 '<th>%s</th><th>%s</th></tr></thead><tbody>%s</tbody></table></div>\n'
                 % (escape(e['sentence']), then, escape(e.get('now_label', '')), rows))
         if e.get('short'):
@@ -1201,8 +1201,7 @@ def page_trackman_real(tm, stats):
                       % ', '.join(tour_line))
 
     loop = _loop_rows(tm, stats)
-    left = (why_cards(tm)
-            + card('', strip, explain=('smash', 'carry'))
+    left = (card('', strip, explain=('smash', 'carry'))
             + card('Session log', ('<ul class="rounds-list" style="margin-top:0">%s</ul>'
                    '<p class="vs-note">“Met” counts saved consistency/accuracy checks, not clubs measured '
                    'or completion of the original plan.</p>') % sess_rows, explain=('practicegrade',)))
@@ -1227,8 +1226,11 @@ def page_trackman_real(tm, stats):
     else:
         coverage = ('<p><span class="sample-chip">Real measurements for all %d clubs. '
                     'No sample numbers remain on this page.</span></p>' % len(measured))
+    # Full width above the three columns: a third of the page squeezed the factor table into
+    # wrapped labels ("Ball / speed", "2,248 / rpm").
     return (plans_cards()
             + coverage
+            + why_cards(tm)
             + '<div class="ggrid3"><div class="gcol">%s</div><div class="gcol">%s</div>'
               '<div class="gcol">%s</div></div>' % (left, mid, right)
             + '<section><p class="vs-note">%s</p></section>' % note
