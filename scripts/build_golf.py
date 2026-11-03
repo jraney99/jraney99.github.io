@@ -805,7 +805,7 @@ def tee_line(r, rows):
     return f'    <p class="scard-tees">{line}</p>\n' if bits else ''
 
 
-def scorecard(rows, source, holes):
+def scorecard(rows, source, holes, sg_total=None):
     if not rows:
         return ''
     show_sg = any(r.get('sg') is not None for r in rows)
@@ -818,7 +818,10 @@ def scorecard(rows, source, holes):
     if putts:
         bits.append(f'{sum(putts)} putts')
     if show_sg:
-        bits.append(f'{sg(round(sum(r["sg"] for r in rows if r.get("sg") is not None), 1))} strokes gained')
+        # The round's own total when it is known, so the card and the table below say the same
+        # number: summing 18 rounded holes gave −9.9 where the table's four categories gave −10.0.
+        total_sg = sg_total if sg_total is not None else sum(r['sg'] for r in rows if r.get('sg') is not None)
+        bits.append(f'{sg(round(total_sg, 1))} strokes gained')
     line = ' \u00b7 '.join(bits)
     short = (f' Only {len(rows)} of the {holes} holes have shot data, so this card is '
              'the part that was recorded.') if holes and len(rows) < holes else ''
@@ -853,7 +856,8 @@ def page_rounds(stats, g):
                   if r.get('card') and tracked else 'From my GHIN card, hole by hole.'
                   if r.get('card') else 'From the shot data, hole by hole.')
         items.append(f'<li><details class="rnd"><summary>{head}<span class="chev"></span></summary>'
-                     f'<div class="scard-body">\n{tee_line(r, rows)}{scorecard(rows, source, r["holes"])}'
+                     f'<div class="scard-body">\n{tee_line(r, rows)}'
+                     f'{scorecard(rows, source, r["holes"], sum(tracked["sg"].values()) if tracked else None)}'
                      '    </div></details></li>')
     ghin_table = card('Latest posted rounds (GHIN)',
                       f'    <ul class="rnds">{"".join(items)}</ul>\n'
@@ -879,7 +883,9 @@ def page_rounds(stats, g):
                     for p, v in stats['scoring']['by_par'].items())
     bylen = ''.join(drow(b, rbar(abs(v) / 2), '', over_par(v))
                     for b, v in sorted(stats['scoring']['par4_by_length'].items()))
-    small = (f'<div class="ggrid">{card("Average over par, by hole", f"    <ul class=_drows_>{bypar}</ul>".replace("_", chr(34)))}'
+    # Labelled with its sample: the overview's by-par card is GHIN's 21 rounds, this one Arccos's.
+    bypar_title = 'Average over par, by hole \u00b7 %d Arccos rounds' % stats['rounds_n']
+    small = (f'<div class="ggrid">{card(bypar_title, f"    <ul class=_drows_>{bypar}</ul>".replace("_", chr(34)))}'
              f'{card("Par 4s by length (yd)", f"    <ul class=_drows_>{bylen}</ul>".replace("_", chr(34)))}</div>')
     return ghin_table + table + small
 
@@ -915,10 +921,15 @@ def _loop_rows(tm, stats):
         if kind in shown:
             continue          # one practice figure answers one leak, not three
         if kind == 'driver':
-            d = clubs.get('Dr')
+            # The last 20 drives from any session, so practice can move it. The measuring-day row
+            # in `clubs` only changes on a measuring day: it sat at 60% while practice nights read
+            # 56% and 55% (audit 2026-11-03).
+            form = tm.get('driver') or {}
+            d = form if form.get('corridor_pct') is not None else clubs.get('Dr')
             if d and d.get('corridor_pct') is not None:
-                measured = '%d%% of drives inside a 36 yd corridor · ±%s yd spread' % (
-                    d['corridor_pct'], d.get('side_spread', '?'))
+                drives = ('my last %d drives' % form['n']) if d is form and form.get('n') else 'drives'
+                measured = '%d%% of %s inside a 36 yd corridor · ±%s yd spread' % (
+                    d['corridor_pct'], drives, d.get('side_spread', '?'))
                 target = '65% inside the corridor'
                 frac = d['corridor_pct'] / 100.0
         if not measured:

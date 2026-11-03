@@ -268,7 +268,11 @@ def driving(stats, tm=None):
         each = abs(leak['per_round']) / (pens / (stats['holes'] / 18))
         detail = (f'One tee shot in {round(tees / pens)} took a penalty, and each cost about {each:.1f} '
                   'strokes against a clean tee shot.')
-        clean = (v or 0) - leak['per_round']
+        # The penalty estimate is each penalty shot against the clean average, so the total less
+        # that estimate is every tee shot at the clean average; the clean shots are their share of
+        # it. Reported as the whole difference it said 0.7 where the clean shots sum to 0.6
+        # (audit 2026-11-03).
+        clean = ((v or 0) - leak['per_round']) * (tees - pens) / tees
         if v is not None and clean > 0:
             detail += (f' The clean ones gained about {clean:.1f} a round on scratch, so the penalties are '
                        'more than the whole loss.')

@@ -47,6 +47,13 @@ class EveryPage(unittest.TestCase):
         self.assertIn('Only the first putt is measured', words)
 
 
+class CleanTeeShots(unittest.TestCase):
+    def test_the_clean_shots_are_their_share_not_the_whole_difference(self):
+        # −1.5 a round off the tee, penalties −2.2 against clean shots, 10 penalties in 63: the
+        # clean 53 gained 0.7 x 53/63 = 0.59. The story said 0.7 (audit 2026-11-03).
+        self.assertIn('The clean ones gained about 0.6 a round', text(story.driving(STATS)))
+
+
 class Ranges(unittest.TestCase):
     def test_a_range_that_includes_zero_is_not_settled(self):
         self.assertIn('not settled', story.settled([-3.2, 0.3]))
