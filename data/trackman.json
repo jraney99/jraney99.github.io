@@ -1,6 +1,6 @@
 {
-  "balls_30d": 281,
-  "balls_total": 281,
+  "balls_30d": 345,
+  "balls_total": 345,
   "clubs": [
     {
       "attack": 5.0,
@@ -277,49 +277,49 @@
     }
   ],
   "driver": {
-    "ball_speed": 171.3,
-    "carry": 289,
-    "club_speed": 116.7,
-    "corridor_pct": 55,
+    "ball_speed": 170.6,
+    "carry": 290,
+    "club_speed": 116.2,
+    "corridor_pct": 60,
     "n": 20,
-    "side_spread": 24.7,
+    "side_spread": 25.8,
     "smash": 1.47
   },
   "explain": {
     "clubs": [],
     "driver": {
       "club": "Driver",
-      "now_label": "Nov 2",
+      "now_label": "Nov 3",
       "rows": [
         {
           "label": "Carry",
-          "now": 293.2,
+          "now": 283.1,
           "then": 297.9,
           "unit": "yd"
         },
         {
           "label": "Ball speed",
-          "now": 171.2,
+          "now": 169.8,
           "then": 171.1,
           "unit": "mph"
         },
         {
           "label": "Launch",
-          "now": 11.6,
+          "now": 12.2,
           "then": 13.5,
           "unit": "\u00b0"
         },
         {
           "label": "Spin",
-          "now": 2595.8,
+          "now": 2221.3,
           "then": 2247.8,
           "unit": "rpm"
         }
       ],
-      "sentence": "Same 171 mph ball speed as your measuring day (Oct 29); launched 1.9\u00b0 lower with 350 rpm more spin, and carried 5 yd less.",
-      "short": "Your 3 shortest drives (261, 274, 276 yd) all launched at 6.0 to 7.4\u00b0, against 11.6\u00b0 for the session.",
+      "sentence": "Same 170 mph ball speed as your measuring day (Oct 29); launched 1.3\u00b0 lower, and carried 15 yd less.",
+      "short": "Your 3 shortest drives (275, 276, 277 yd) all spun 2,639 to 3,408rpm, against 2,221rpm for the session.",
       "then_label": "your measuring day (Oct 29)",
-      "title": "Driver: Nov 2 against your measuring day (Oct 29)"
+      "title": "Driver: Nov 3 against your measuring day (Oct 29)"
     }
   },
   "generated": "2026-11-03",
@@ -783,9 +783,123 @@
       ],
       "date": "2026-11-02",
       "id": "ecd29bfad02e"
+    },
+    {
+      "clubs": [
+        {
+          "attack": 4.5,
+          "ball_speed": 169.8,
+          "carry": 283,
+          "carry_best": 299.4,
+          "carry_spread": 10.2,
+          "club": "Dr",
+          "club_speed": 115.3,
+          "corridor_pct": 70,
+          "last": "2026-11-03",
+          "launch": 12.2,
+          "n": 10,
+          "order": 0,
+          "path": -2.8,
+          "side_bias": "straight",
+          "side_spread": 19.3,
+          "smash": 1.46,
+          "spin": 2221,
+          "thin": false,
+          "total": 311
+        },
+        {
+          "attack": -7.2,
+          "ball_speed": 113.3,
+          "carry": 151,
+          "carry_best": 159.3,
+          "carry_spread": 4.6,
+          "club": "9i",
+          "club_speed": 92.9,
+          "corridor_pct": 100,
+          "last": "2026-11-03",
+          "launch": 20.1,
+          "n": 3,
+          "order": 39,
+          "path": 1.0,
+          "side_bias": "right",
+          "side_spread": 2.5,
+          "smash": 1.27,
+          "spin": 7859,
+          "thin": true,
+          "total": 158
+        },
+        {
+          "attack": -7.8,
+          "ball_speed": 79.9,
+          "carry": 93,
+          "carry_best": 119.8,
+          "carry_spread": 13.3,
+          "club": "58\u00b0",
+          "club_speed": 81.4,
+          "corridor_pct": 100,
+          "last": "2026-11-03",
+          "launch": 27.3,
+          "n": 14,
+          "order": 62,
+          "path": 1.7,
+          "side_bias": "right",
+          "side_spread": 2.9,
+          "smash": 0.99,
+          "spin": 10545,
+          "thin": false,
+          "total": 94
+        }
+      ],
+      "date": "2026-11-03",
+      "drill": {
+        "balls": 35,
+        "club": "8i",
+        "name": "Pause at the top (Harmon)"
+      },
+      "id": "d33d5e473a82"
     }
   ],
   "sessions": [
+    {
+      "balls": 64,
+      "date": "2026-11-03",
+      "drill": {
+        "balls": 35,
+        "club": "8i",
+        "name": "Pause at the top (Harmon)"
+      },
+      "grade": {
+        "grader": 2,
+        "plan_date": "2026-11-03",
+        "plan_type": "sim",
+        "results": [
+          {
+            "measured": "70% inside \u00b118 yd",
+            "n": 10,
+            "pass": true,
+            "target": "65%",
+            "what": "Driver corridor"
+          },
+          {
+            "measured": "median 283 yd, best 299, 115.3 mph club",
+            "n": 10,
+            "pass": false,
+            "target": "315 yd",
+            "what": "Driver carry"
+          }
+        ],
+        "summary": "met 1 of 2",
+        "ungraded": [
+          "Warmup: warm-up, no target",
+          "Technical: Pause at the top (Harmon): a drill: its balls count as hit, and nothing about them is graded",
+          "Approach 75 to 150 yd (leak 2): several distances, and the export does not say which ball was aimed at which",
+          "Pressure test: graded on proximity, which the export does not record",
+          "carry accuracy against the prescribed number: the export records no intended target, so only consistency can be measured, not accuracy"
+        ]
+      },
+      "id": "d33d5e473a82",
+      "label": "Mixed session"
+    },
     {
       "balls": 41,
       "date": "2026-11-02",
@@ -966,8 +1080,8 @@
       "label": "Partial-bag baseline"
     }
   ],
-  "sessions_30d": 5,
-  "sessions_n": 5,
+  "sessions_30d": 6,
+  "sessions_n": 6,
   "unit_evidence": [
     "Stored shots normalized by trackman_parse to yards and mph; source units retained separately."
   ],
