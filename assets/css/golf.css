@@ -741,12 +741,12 @@
 .tm-note { text-align: left; }
 @media (max-width: 640px) { .tm-clubs .tm-barcol { display: none; } }
 
-.gwrap > section.tm-fold + section.tm-fold { margin-top: 0.6rem; }
-.tm-fold .gfold { background: var(--card); border: 1px solid var(--rule-2); border-radius: var(--gcard-r); }
-.tm-fold .gfold > summary { display: flex; justify-content: space-between; align-items: baseline; gap: 0.4rem 1rem; flex-wrap: wrap; padding: 0.95rem 1.3rem; }
-.tm-fold .gfold > summary .gsect { margin: 0; }
-.tm-fold .gfold > summary small { color: var(--muted); font-size: 0.8rem; }
-.tm-fold .gfold > .gcard { border: 0; background: none; padding-top: 0; }
+.gwrap > section.fold-row + section.fold-row { margin-top: 0.6rem; }
+.fold-row .gfold { background: var(--card); border: 1px solid var(--rule-2); border-radius: var(--gcard-r); }
+.fold-row .gfold > summary { display: flex; justify-content: space-between; align-items: baseline; gap: 0.4rem 1rem; flex-wrap: wrap; padding: 0.95rem 1.3rem; }
+.fold-row .gfold > summary .gsect { margin: 0; }
+.fold-row .gfold > summary small { color: var(--muted); font-size: 0.8rem; }
+.fold-row .gfold > .gcard { border: 0; background: none; padding-top: 0; }
 .tm-gloss { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 0.2rem 1.6rem; font-size: 0.88rem; line-height: 1.55; }
 .tm-gloss p { margin: 0.35rem 0; }
-.tm-fold .bag + .tm-gloss, .tm-fold .vs-note + .tm-gloss { margin-top: 1rem; border-top: 1px solid var(--rule); padding-top: 0.6rem; }
+.fold-row .bag + .tm-gloss, .fold-row .vs-note + .tm-gloss { margin-top: 1rem; border-top: 1px solid var(--rule); padding-top: 0.6rem; }

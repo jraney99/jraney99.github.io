@@ -318,13 +318,20 @@ EX_LABEL = {
 }
 
 
+# The terms the page being built uses, in first-use order. Every page ends with one fold that
+# defines each of them once (Jack, 2026-11-06: buttons under every card defined Carry three
+# times on one page; 30 of them across the golf tabs). terms_fold empties it.
+PAGE_TERMS = []
+
+
 def ex(key):
-    """One optional explanation, closed. The summary is kept short enough to read as a
-    button; the full title and the explanation are inside."""
-    title, body = EXPLAIN[key]
-    label = EX_LABEL.get(key) or title.split(',')[0]
-    return (f'<details class="ex"><summary>{label}</summary>'
-            f'<div><b>{title}.</b> {body}</div></details>')
+    """Note that the page uses a term. Its definition goes in the page's one definitions fold,
+    not beside the text, so this returns nothing to place."""
+    if key not in EXPLAIN:
+        raise KeyError(key)
+    if key not in PAGE_TERMS:
+        PAGE_TERMS.append(key)
+    return ''
 
 
 def an(score):
@@ -333,26 +340,17 @@ def an(score):
 
 
 def explainers(*keys):
-    """The same dropdowns the story page uses, put at the foot of the page whose numbers
-    they explain. Closed by default, so the page reads exactly as it did without them."""
-    body = '\n'.join('    ' + ex(k) for k in keys)
-    return card('What these numbers mean', body)
+    """Terms the page's numbers need: they go in its definitions fold."""
+    for k in keys:
+        ex(k)
+    return ''
 
 
 def card(section, inner, cls='', icon='', explain=()):
     head = f'  <h2 class="gsect">{section}</h2>\n' if section else ''
-    notes = ''
-    if len(explain) == 1:
-        notes = '\n    ' + ex(explain[0])
-    elif explain:
-        # One fold per card, named for what is inside it. Three or four buttons under every
-        # card was most of the clutter Jack saw on 2026-11-02 (15 on the TrackMan page alone).
-        label = ', '.join(EX_LABEL.get(k) or EXPLAIN[k][0].split(',')[0] for k in explain)
-        body = ''.join(f'<p><b>{EXPLAIN[k][0]}.</b> {EXPLAIN[k][1]}</p>' for k in explain)
-        notes = f'\n    <details class="ex"><summary>{label}</summary><div>{body}</div></details>'
-    if notes:
-        notes = f'\n    <div class="ex-row">{notes}\n    </div>'
-    return f'<section>\n{head}  <div class="gcard {cls}">\n{inner}{notes}\n  </div>\n</section>\n'
+    for k in explain:
+        ex(k)
+    return f'<section>\n{head}  <div class="gcard {cls}">\n{inner}\n  </div>\n</section>\n'
 
 
 def beats_list(beats):
@@ -469,13 +467,7 @@ def road_card(stats, g):
                     'started yet.' % abs(moved))
     else:
         out += para('Which is level, so far.')
-    if stats:
-        out += para('The other half of the same question: on the %d rounds with every shot '
-                    'recorded I am <b>%.0f strokes a round</b> from scratch, and the three leaks '
-                    'shown on the overview total %.0f in estimated losses. They are practice priorities, not promised savings.'
-                    % (stats['rounds_n'], abs(stats['sg']['total']),
-                       sum(abs(l['per_round']) for l in (stats.get('leaks') or [])[:3])))
-    out += '    ' + ex('index') + '\n'
+    ex('index')
     return card('Road to scratch', out, cls='gcard--hero')
 
 
@@ -509,7 +501,7 @@ def trend_card(stats):
         note += (' The first rows share a date because a round was added back by a correction to '
                  'the maths, not because of golf. Later changes can also reflect corrections rather than improvement.')
     inner += '    <p class="vs-note" style="text-align:left">%s</p>' % note
-    return card('Is it moving?', inner)
+    return fold_section('Is it moving?', '%d snapshots of the tracked rounds' % len(snaps), inner)
 
 
 def sg_fmt(v):
@@ -1010,14 +1002,28 @@ CORRIDOR_TARGET = 65   # % of drives inside it
 
 def fold_section(title, sub, inner):
     """A section closed by default, its title and a one-line summary of what is inside."""
-    return (f'<section class="tm-fold">\n  <details class="gfold"><summary><h2 class="gsect">{title}</h2>'
+    return (f'<section class="fold-row">\n  <details class="gfold"><summary><h2 class="gsect">{title}</h2>'
             f'<small>{sub}</small></summary>\n  <div class="gcard">\n{inner}\n  </div>\n  </details>\n</section>\n')
 
 
-def glossary(*keys):
-    """Definitions written out once each, for a fold (the same EXPLAIN text as the buttons)."""
+def glossary(*keys, extra=()):
+    """Definitions written out once each, for a fold. `extra` adds (title, text) pairs that are
+    not in EXPLAIN, such as a goal's own notes."""
+    items = [(EXPLAIN[k][0], EXPLAIN[k][1]) for k in keys] + list(extra)
     return ('<div class="tm-gloss">%s</div>'
-            % ''.join(f'<p><b>{EXPLAIN[k][0]}.</b> {EXPLAIN[k][1]}</p>' for k in keys))
+            % ''.join(f'<p><b>{t}.</b> {x}</p>' for t, x in items))
+
+
+def terms_fold(extra=()):
+    """The page's one definitions fold: every term it used, once. Empties PAGE_TERMS."""
+    keys = list(PAGE_TERMS)
+    PAGE_TERMS.clear()
+    if not keys and not extra:
+        return ''
+    labels = [EX_LABEL.get(k) or EXPLAIN[k][0].split(',')[0] for k in keys] + [t for t, _ in extra]
+    sub = ' \u00b7 '.join(labels) if len(labels) <= 6 else '%d terms, from %s to %s' % (
+        len(labels), labels[0], labels[-1])
+    return fold_section('How these numbers work', sub, glossary(*keys, extra=extra))
 
 
 def tm_figures(tm, clubs_by):
@@ -1237,11 +1243,9 @@ def page_trackman_real(tm, stats):
                             % ''.join(session_row(d) for d in older))
     out += wedge_fold(tm)
     out += bag_card(fold=True)
-    keys = ['carry', 'gapping', 'spread', 'corridor', 'smash', 'tour', 'practicegrade', 'plans']
-    if any(w.get('inferred') for w in tm.get('wedges') or []):
-        keys.append('swinglen')
-    out += fold_section('How these numbers work',
-                        ' · '.join(EX_LABEL.get(k, k) for k in keys), glossary(*keys))
+    for k in ['carry', 'gapping', 'spread', 'corridor', 'smash', 'tour', 'practicegrade', 'plans'] + (
+            ['swinglen'] if any(w.get('inferred') for w in tm.get('wedges') or []) else []):
+        ex(k)
     return out
 
 
@@ -1806,8 +1810,11 @@ def page_courses(stats, g):
             items += ('<li><span class="c"><b>%s</b><small>%s</small>%s</span>'
                       '<span class="marks">%s</span></li>'
                       % (c['name'], c.get('city') or '', times, marks))
-        blocks += card('%s \u00b7 %d' % (st or 'Elsewhere', len(here)),
-                       '    <ul class="courselist">%s</ul>' % items)
+        ranked_here = sum(1 for c in here if c.get('rank') or c.get('state_rank'))
+        blocks += fold_section(st or 'Elsewhere',
+                               '%d course%s%s' % (len(here), '' if len(here) == 1 else 's',
+                                                  ' \u00b7 %d ranked' % ranked_here if ranked_here else ''),
+                               '    <ul class="courselist">%s</ul>' % items)
     return top + ranked_card + blocks
 
 
@@ -1823,7 +1830,7 @@ SUBPAGES = {
 }
 
 
-def write_page(fname, title, ogtitle, desc, content, g, stats):
+def write_page(fname, title, ogtitle, desc, content, g, stats, extra_terms=()):
     index = g['revisions'][-1]['index']
     note = (f'{stats["source"]} ' if stats else '')
     excluded = ((stats or {}).get('quality') or {}).get('excluded_rounds') or []
@@ -1857,12 +1864,13 @@ def write_page(fname, title, ogtitle, desc, content, g, stats):
              '<p><b>Strokes gained (SG):</b> +1 means one stroke better than the scratch model; −1 means one worse. '
              'Summary rates are per 18 holes unless labeled per shot or actual round. Scratch means a 0.0 handicap.</p>'
              '<p><b>Median:</b> the middle result. <b>Carry:</b> flight to landing. <b>Total distance:</b> includes roll. '
-             '<b>Dispersion:</b> how widely shots scatter. Expand the explanations beside a chart for its exact definition.</p>'
+             '<b>Dispersion:</b> how widely shots scatter. Each page ends with the exact definition of every term it uses.</p>'
              '<p><b>Evidence:</b> samples are labeled, small groups are flagged, and uncertainty ranges do not account '
              'for every model assumption. A daily rebuild does not mean the underlying rounds are recent.</p></details>')
     if fname != 'golf.html':
         guide = '<p class="reading-link"><a href="golf.html#reading-guide">How to read these pages</a></p>'
-    content = f'<header class="golf-intro"><h1>{heading}</h1><p>{intro}</p>{guide}</header>' + content
+    content = (f'<header class="golf-intro"><h1>{heading}</h1><p>{intro}</p>{guide}</header>' + content
+               + terms_fold(extra_terms))
     html = SHELL.format(title=title, ogtitle=ogtitle, desc=desc, slug=fname.replace('.html', ''),
                         index=index, nav=nav_links(fname),
                         rounds_pill=f'{g["rounds_last_12_months"]} 18-hole posts \u00b7 12 mo',
@@ -1919,7 +1927,8 @@ def main():
                 content = story_card(stories[fname]()) + content
             if fname == 'golf-trackman.html':
                 content = golf_goals.related(goals) + content
-            write_page(fname, f'{title} · Road to scratch · Jack Raney', title, desc, content, g, stats)
+            write_page(fname, f'{title} · Road to scratch · Jack Raney', title, desc, content, g, stats,
+                       golf_goals.terms(fname, goals))
 
 
 if __name__ == '__main__':

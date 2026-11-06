@@ -252,10 +252,9 @@ def section(goal, tm):
         trend_note += ' Reaching the target in one session does not yet establish repeatability.'
     corridor = (f'{fmt(latest["corridor_pct"], "%")} of drives inside the corridor' if number(latest.get('corridor_pct'))
                 else 'Corridor not measured yet')
-    ranges = ''.join(f'<tr><th scope="row">{esc(r["label"])}</th><td>{fmt(latest.get(r["key"]), r["unit"])}</td>'
-                     f'<td>{esc(r["range"])}</td></tr>' for r in a['ranges'])
-    explainers = ''.join(f'<details class="ex"><summary>{esc(e["title"])}</summary><div>{esc(e["text"])}</div></details>'
-                        for e in a['explainers'])
+    # "Where it stands" already places each latest number against its working range, so the
+    # page no longer repeats them in a second table (Jack, 2026-11-06), and the goal's notes go
+    # in the page's one definitions fold (terms()).
     links = ' · '.join(f'<a href="{esc(s["url"])}">{esc(s["title"])}</a>' for s in a['sources'])
     return (f'<section class="golf-goal" id="{esc(goal["id"])}" aria-labelledby="{esc(goal["id"])}-title">'
             f'<div class="goal-heading"><div><span class="lbl">{esc(goal["category"])} · Goal</span>'
@@ -268,13 +267,17 @@ def section(goal, tm):
             f'<h3>{corridor}</h3><p class="goal-note">{esc(goal["guardrail"])}</p></div></div>'
             + (f'<details class="goal-ranges"><summary>Training for more speed · plan from {esc(a["reviewed"])}</summary>'
                + training_section(goal) + '</details>' if a.get('training') else '') +
-            '<h3>Progress by session</h3>' + chart(goal, rows) + f'<p class="goal-note">{trend_note}</p>' + history(goal, rows) +
-            '<details class="goal-ranges"><summary>Working ranges · provisional</summary>'
-            '<p>Starting estimates to test, not requirements or guarantees. The current measurements update; these ranges stay dated until reviewed.</p>'
-            '<div class="table-wrap"><table class="gtable goal-range-table"><thead><tr><th scope="col">Metric</th><th scope="col">Latest session</th><th scope="col">Working range</th></tr></thead>'
-            f'<tbody>{ranges}</tbody></table></div></details><div class="ex-row">{explainers}</div>'
+            '<h3>Progress by session</h3>' + chart(goal, rows) + f'<p class="goal-note">{trend_note}</p>'
+            + (f'<details class="goal-ranges"><summary>Every session · {len(rows)}</summary>{history(goal, rows)}</details>'
+               if rows else history(goal, rows)) +
             f'<p class="goal-note">Analysis reviewed {esc(a["reviewed"])} · {links}</p>'
             '<a class="goal-back" href="golf.html#golf-goals">← All golf goals</a></section>')
+
+
+def terms(page, goals):
+    """The notes of the active goals on a page, as (title, text) for its definitions fold."""
+    return [(esc(e['title']), esc(e['text'])) for g in goals if g['page'] == page and g['status'] == 'active'
+            for e in (g.get('analysis') or {}).get('explainers') or []]
 
 
 def for_page(page, goals, tm):

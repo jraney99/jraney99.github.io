@@ -24,7 +24,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Overpass:ital,wght@0,300..900;1,300..900&family=Overpass+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="assets/css/site.css?v=8d9a8b17c5">
-  <link rel="stylesheet" href="assets/css/golf.css?v=c65a7186f1">
+  <link rel="stylesheet" href="assets/css/golf.css?v=53ac187bc1">
 </head>
 <body>
 
@@ -65,9 +65,6 @@
   <h2 class="gsect">First-putt strokes gained by distance</h2>
   <div class="gcard ">
 <ul class="drows"><li><span class="from">0-3'</span><span class="rbar"><i class="" style="width:7%"></i></span><span class="n">10 putts</span><span class="val"><span class="neg">−0.1</span></span></li><li class="thin"><span class="from">3-5'</span><span class="rbar"><i class="" style="width:20%"></i></span><span class="n">3 putts · too few to read</span><span class="val"><span class="neg">−0.3</span></span></li><li><span class="from">5-10'</span><span class="rbar"><i class="" style="width:40%"></i></span><span class="n">15 putts</span><span class="val"><span class="neg">−0.6</span></span></li><li><span class="from">10-15'</span><span class="rbar"><i class="" style="width:33%"></i></span><span class="n">14 putts</span><span class="val"><span class="neg">−0.5</span></span></li><li><span class="from">15-25'</span><span class="rbar"><i class="ok" style="width:33%"></i></span><span class="n">17 putts</span><span class="val"><span class="pos">+0.5</span></span></li><li><span class="from">25-40'</span><span class="rbar"><i class="ok" style="width:20%"></i></span><span class="n">13 putts</span><span class="val"><span class="pos">+0.3</span></span></li><li><span class="from">40+'</span><span class="rbar"><i class="" style="width:27%"></i></span><span class="n">8 putts</span><span class="val"><span class="neg">−0.4</span></span></li></ul><p class="vs-note">Contributions per 18 holes from first putts only. Later putts remain in the overall putting total, so these rows need not add up to it.</p>
-    <div class="ex-row">
-    <details class="ex"><summary>Strokes gained, The ranges</summary><div><p><b>Strokes gained.</b> Expected strokes before the shot, minus expected strokes afterward, minus the shot and any penalties. Positive is better than the scratch model; negative is worse. −2.0 per 18 holes means about two strokes lost. Category totals include all shots; the putting distance table covers first putts only.</p><p><b>How to read the uncertainty ranges.</b> These approximate 95% intervals describe sampling uncertainty under the model assumptions. They are not a 95% probability that a fixed true value lies inside the displayed band. A range touching or crossing zero does not clearly distinguish the result from scratch. Just five rounds, correlated shots and the calibrated baseline limit certainty beyond what these ranges capture.</p></div></details>
-    </div>
   </div>
 </section>
 <section>
@@ -75,12 +72,16 @@
   <div class="gcard ">
     <ul class="drows"><li><span class="from">0-3'</span><span class="rbar"><i class="" style="width:90%"></i><span class="tick" style="left:96%"></span></span><span class="n">10 first putts</span><span class="val"><span class="neg">90% (-6 pp)</span></span></li><li class="thin"><span class="from">3-5'</span><span class="rbar"><i class="" style="width:33%"></i><span class="tick" style="left:76%"></span></span><span class="n">3 first putts · too few to read</span><span class="val"><span class="neg">33% (-43 pp)</span></span></li><li><span class="from">5-10'</span><span class="rbar"><i class="" style="width:33%"></i><span class="tick" style="left:48%"></span></span><span class="n">15 first putts</span><span class="val"><span class="neg">33% (-15 pp)</span></span></li><li><span class="from">10-15'</span><span class="rbar"><i class="" style="width:14%"></i><span class="tick" style="left:23%"></span></span><span class="n">14 first putts</span><span class="val"><span class="neg">14% (-9 pp)</span></span></li><li><span class="from">15-25'</span><span class="rbar"><i class="ok" style="width:24%"></i><span class="tick" style="left:12%"></span></span><span class="n">17 first putts</span><span class="val"><span class="pos">24% (+12 pp)</span></span></li><li><span class="from">25-40'</span><span class="rbar"><i class="ok" style="width:15%"></i><span class="tick" style="left:6%"></span></span><span class="n">13 first putts</span><span class="val"><span class="pos">15% (+9 pp)</span></span></li><li><span class="from">40+'</span><span class="rbar"><i class="" style="width:3%"></i><span class="tick" style="left:3%"></span></span><span class="n">8 first putts</span><span class="val"><span class="neg">0% (-3 pp)</span></span></li></ul>
     <p class="vs-note">▏ marks the saved scratch reference. pp = percentage points. These are first putts, not every putt played. The saved benchmark lacks a traceable distance-matched source, so treat its differences as provisional.</p>
-    <div class="ex-row">
-    <details class="ex"><summary>Make rate, Too few to read</summary><div><p><b>First-putt make rate.</b> The percentage of first putts holed within each distance band. Later putts are excluded from this table. The comparison is a broad scratch reference, and the distances and sample mix may differ. Differences are percentage points: 33% versus 48% is 15 points lower.</p><p><b>"Too few to read".</b> A distance bucket with fewer than 8 shots behind it is greyed out and never chosen as a focus area. Three good chips in a row is not evidence. Under 3 shots it is not published at all.</p></div></details>
-    </div>
   </div>
 </section>
-</div></div>
+</div></div><section class="fold-row">
+  <details class="gfold"><summary><h2 class="gsect">How these numbers work</h2><small>Strokes gained · The ranges · Make rate · Too few to read</small></summary>
+  <div class="gcard">
+<div class="tm-gloss"><p><b>Strokes gained.</b> Expected strokes before the shot, minus expected strokes afterward, minus the shot and any penalties. Positive is better than the scratch model; negative is worse. −2.0 per 18 holes means about two strokes lost. Category totals include all shots; the putting distance table covers first putts only.</p><p><b>How to read the uncertainty ranges.</b> These approximate 95% intervals describe sampling uncertainty under the model assumptions. They are not a 95% probability that a fixed true value lies inside the displayed band. A range touching or crossing zero does not clearly distinguish the result from scratch. Just five rounds, correlated shots and the calibrated baseline limit certainty beyond what these ranges capture.</p><p><b>First-putt make rate.</b> The percentage of first putts holed within each distance band. Later putts are excluded from this table. The comparison is a broad scratch reference, and the distances and sample mix may differ. Differences are percentage points: 33% versus 48% is 15 points lower.</p><p><b>"Too few to read".</b> A distance bucket with fewer than 8 shots behind it is greyed out and never chosen as a focus area. Three good chips in a row is not evidence. Under 3 shots it is not published at all.</p></div>
+  </div>
+  </details>
+</section>
+
 <p class="gnote">On-course analysis: 5 rounds / 81 holes, 2026-04-15 to 2026-06-04. 5 Arccos rounds, Apr 2026 to Jun 2026, 81 holes; strokes gained against a locally calibrated scratch baseline, not an independent Arccos calculation. Tee and green positions are identified; the first shot after a par-4/5 tee shot uses the fairway flag to infer fairway or rough. Other non-putting lies are assumed fairway. These assumptions affect category estimates. GHIN data checked 2026-11-06; shot analysis built 2026-11-02. <a href="index.html">jackraney.com</a> · <a href="about.html">about me</a></p>
 </main>
 <script src="assets/js/site.js?v=c69d813bf5"></script>
