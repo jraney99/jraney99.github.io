@@ -124,6 +124,19 @@ class TrackMan(unittest.TestCase):
         self.assertIn('Widest gap: Driver to 5-iron, 108 yd.', words)
         self.assertIn('The 6-iron carries 4 yd past the 5-iron.', words)
 
+    def beats(self):
+        return story.trackman(self.TM, None, ['Dr', '5i', '6i', '7i'], today=date(2026, 11, 3))
+
+    def test_phone_board_beats_keep_their_wording(self):
+        words = text(self.beats())
+        self.assertIn('35 of them were drill swings: Pause at the top.', words)
+        self.assertIn('Gaps between clubs run -4 to 108 yd.', words)
+        self.assertIn('Widest: Driver to 5-iron, 108 yd. The 6-iron carries 4 yd past the 5-iron.', words)
+        self.assertIn('Driver spreads widest', words)
+
+    def test_without_tour_numbers_the_driver_comparison_is_left_out(self):
+        self.assertNotIn('PGA', text(self.beats()))
+
     def test_one_club_has_no_gaps(self):
         self.assertEqual(story.gap_line(self.TM['clubs'][:1]), '')
 
