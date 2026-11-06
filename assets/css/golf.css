@@ -681,3 +681,72 @@
 .gfold > summary .gsect::after { content: " \25B8"; color: var(--accent); }
 .gfold[open] > summary .gsect::after { content: " \25BE"; }
 .gfold > summary:hover .gsect { color: var(--accent); }
+
+/* ---------- TrackMan tab (2026-11-06): four numbers, latest session, one table by club ---------- */
+.tm-top { display: grid; gap: 1rem; }
+.tm-figs dd small { font-size: 0.78rem; }
+
+/* "Moved": the pill and the sentence are the summary's only two children, so the sentence wraps
+   as one block beside the pill instead of every text run becoming its own spaced item. */
+.tm-moved { background: var(--card); border: 1px solid var(--rule-2); border-radius: var(--gcard-r); }
+.tm-moved > summary {
+  list-style: none; cursor: pointer; padding: 0.85rem 1.1rem;
+  display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 0.75rem; align-items: baseline;
+  font-size: 0.95rem; line-height: 1.5;
+}
+.tm-moved > summary::-webkit-details-marker { display: none; }
+.tm-pill {
+  display: inline-block; font-family: var(--head); font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; line-height: 1; white-space: nowrap;
+  color: var(--accent); border: 1px solid currentColor; border-radius: 999px; padding: 0.28rem 0.6rem;
+}
+.tm-moved__body { padding: 0 1.1rem 1rem; }
+.tm-moved__body .vs-note { text-align: left; }
+.tm-cmp { max-width: 520px; }
+.tm-cmp .num { font-size: 1.05rem; }
+.tm-cmp th, .tm-cmp td { padding-top: 0.4rem; padding-bottom: 0.4rem; }
+.tm-cmp td { white-space: nowrap; }
+@media (max-width: 560px) {
+  .tm-moved > summary { grid-template-columns: minmax(0, 1fr); row-gap: 0.45rem; }
+  .tm-pill { justify-self: start; }
+}
+
+.tm-latest__head { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; flex-wrap: wrap; }
+.tm-latest__head b { font-size: 1rem; }
+.tm-latest__head small { display: block; color: var(--muted); font-size: 0.84rem; margin-top: 0.15rem; }
+.tm-score { font-family: var(--head); font-weight: 600; font-size: 1.2rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tm-checks { list-style: none; margin: 1rem 0 0; padding: 0; }
+.tm-checks li {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; column-gap: 0.7rem; align-items: start;
+  padding: 0.6rem 0; border-top: 1px solid var(--rule); font-size: 0.92rem; line-height: 1.45;
+}
+.tm-dot { width: 9px; height: 9px; margin-top: 0.42em; border-radius: 50%; background: var(--paper-3); }
+.tm-checks li.tm-met .tm-dot { background: var(--gain); }
+.tm-checks li.tm-unmet .tm-dot { background: var(--signal-fill); }
+.tm-res { font-weight: 700; font-size: 0.82rem; white-space: nowrap; }
+.tm-checks li.tm-met .tm-res { color: var(--gain); }
+.tm-checks li.tm-unmet .tm-res { color: var(--signal); }
+.tm-why, .tm-next { margin: 0.8rem 0 0; font-size: 0.88rem; color: var(--muted); }
+.tm-next { margin-top: 0.35rem; }
+.tm-latest .ex-row { margin-top: 0.9rem; }
+
+.tm-clubs th, .tm-clubs td { white-space: nowrap; }
+.tm-clubs .r { text-align: right; font-variant-numeric: tabular-nums; }
+.tm-clubs td.num { font-size: 1.05rem; }
+.tm-clubs .rbar i.neu { background: color-mix(in srgb, var(--accent) 55%, var(--paper-3)); }
+.tm-clubs .tm-barcol { width: 30%; min-width: 110px; }
+.tm-clubs td small { color: var(--muted); font-size: 0.74rem; margin-left: 0.25rem; }
+.tm-clubs .tm-sample td { color: var(--muted); }
+.tm-flag { color: var(--signal); font-weight: 700; }
+.tm-note { text-align: left; }
+@media (max-width: 640px) { .tm-clubs .tm-barcol { display: none; } }
+
+.gwrap > section.tm-fold + section.tm-fold { margin-top: 0.6rem; }
+.tm-fold .gfold { background: var(--card); border: 1px solid var(--rule-2); border-radius: var(--gcard-r); }
+.tm-fold .gfold > summary { display: flex; justify-content: space-between; align-items: baseline; gap: 0.4rem 1rem; flex-wrap: wrap; padding: 0.95rem 1.3rem; }
+.tm-fold .gfold > summary .gsect { margin: 0; }
+.tm-fold .gfold > summary small { color: var(--muted); font-size: 0.8rem; }
+.tm-fold .gfold > .gcard { border: 0; background: none; padding-top: 0; }
+.tm-gloss { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 0.2rem 1.6rem; font-size: 0.88rem; line-height: 1.55; }
+.tm-gloss p { margin: 0.35rem 0; }
+.tm-fold .bag + .tm-gloss, .tm-fold .vs-note + .tm-gloss { margin-top: 1rem; border-top: 1px solid var(--rule); padding-top: 0.6rem; }

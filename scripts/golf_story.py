@@ -476,62 +476,34 @@ def latest_driver(tm, min_shots=8):
     return None
 
 
-def trackman(tm, tour=None, bag_order=BAG_ORDER, today=None):
-    tm = tm or {}
+def drill_balls(tm, today=None):
+    """Drill swings in the last 30 days, and the drill's name: (balls, name). They count as
+    balls hit and never as a yardage, so the TrackMan page shows them beside the ball count."""
     today = today or date.today()
-    out = []
-    if tm.get('sessions_30d') is not None:
-        cutoff = (today - timedelta(days=30)).isoformat()
-        drills = [s['drill'] for s in tm.get('sessions') or [] if isinstance(s.get('drill'), dict)
-                  and str(s.get('date')) >= cutoff and s['drill'].get('balls')]
-        detail = ''
-        if drills:
-            name = escape(drills[0].get('name') or 'the drill')
-            detail = (f'{sum(d["balls"] for d in drills)} of them were drill swings: {name}. They count as '
-                      'balls hit and never as a yardage.')
-        out.append((f'{tm["sessions_30d"]} sessions and {tm.get("balls_30d", 0)} balls in the last 30 days.',
-                    detail or 'Every ball counts toward practice volume.'))
-    clubs = [c for c in tm.get('clubs') or [] if c.get('carry')]
-    if clubs:
-        lasts = sorted(str(c['last']) for c in clubs if c.get('last'))
-        when = (f', last measured between {day(lasts[0])} and {day(lasts[-1])}' if lasts and lasts[0] != lasts[-1]
-                else f', last measured {day(lasts[0])}' if lasts else '')
-        out.append((f'{len(clubs)} clubs measured.',
-                    'Each yardage is the median of up to that club’s latest 20 swings on a measuring '
-                    f'day{when}. Practice-night swings never change them.'))
-        rank = {k: i for i, k in enumerate(bag_order)}
-        seq = sorted(clubs, key=lambda c: (rank.get(c['club'], 99), -c['carry']))
-        gaps = [(a['club'], b['club'], round(a['carry'] - b['carry'])) for a, b in zip(seq, seq[1:])]
-        if gaps:
-            tight, wide = min(gaps, key=lambda x: x[2]), max(gaps, key=lambda x: x[2])
-            detail = (f'Tightest: {club_name(tight[0])} to {club_name(tight[1])}, {tight[2]} yd. '
-                      f'Widest: {club_name(wide[0])} to {club_name(wide[1])}, {wide[2]} yd.')
-            overlap = [x for x in gaps if x[2] <= 0]
-            if overlap:
-                a, b, gap = overlap[0]
-                detail += f' The {club_name(b)} carries {abs(gap)} yd past the {club_name(a)}.'
-            out.append((f'Gaps between clubs run {tight[2]} to {wide[2]} yd.', detail))
-        dr = next((c for c in clubs if c['club'] == 'Dr'), None)
-        pga = (((tour or {}).get('metrics') or {}))
-        mark = lambda m: ((pga.get(m) or {}).get('pga') or {}).get('clubs', {}).get('Dr')
-        bs, carry, launch, spin = mark('Ball Speed'), mark('Carry'), mark('Launch Angle'), mark('Spin Rate')
-        if dr and dr.get('ball_speed') and bs and carry:
-            same = abs(dr['ball_speed'] - bs) < 1.5
-            lead = (f'Driver ball speed {dr["ball_speed"]:.0f} mph, '
-                    + ('the same as the PGA Tour average.' if same else f'against a PGA Tour average of {bs:.0f}.'))
-            detail = f'On a measuring day my driver carried {dr["carry"]:.0f} yd against their {carry:.0f}'
-            if dr.get('launch') is not None and launch is not None and dr.get('spin') and spin:
-                detail += (f', launching at {dr["launch"]:.1f}° against {launch:.1f}° with '
-                           f'{dr["spin"]:,.0f} rpm against {spin:,.0f}')
-            out.append((lead, detail + '. Carry comes from ball speed, launch and spin together.'))
-        sides = sorted((c for c in clubs if c.get('side_spread') is not None), key=lambda c: -c['side_spread'])
-        if len(sides) >= 4:
-            top, rest = sides[:3], sides[3:]
-            next_two = and_join('%s ±%.0f' % (club_name(c['club']).lower(), c['side_spread']) for c in top[1:])
-            out.append((f'{club_name(top[0]["club"])} spreads widest: ±{top[0]["side_spread"]:.0f} yd left to right.',
-                        f'Then {next_two}; the other {len(rest)} stay within '
-                        f'±{max(c["side_spread"] for c in rest):.0f} yd.'))
-    return out
+    cutoff = (today - timedelta(days=30)).isoformat()
+    drills = [s['drill'] for s in (tm or {}).get('sessions') or [] if isinstance(s.get('drill'), dict)
+              and str(s.get('date')) >= cutoff and s['drill'].get('balls')]
+    if not drills:
+        return 0, ''
+    return sum(d['balls'] for d in drills), escape(drills[0].get('name') or 'the drill')
+
+
+def gap_line(clubs, bag_order=BAG_ORDER):
+    """The gaps read down the bag, as one sentence: tightest, widest, and the first overlap by
+    name. Measured clubs only; '' when fewer than two clubs have a carry."""
+    rank = {k: i for i, k in enumerate(bag_order)}
+    seq = sorted((c for c in clubs if c.get('carry')), key=lambda c: (rank.get(c['club'], 99), -c['carry']))
+    gaps = [(a['club'], b['club'], round(a['carry'] - b['carry'])) for a, b in zip(seq, seq[1:])]
+    if not gaps:
+        return ''
+    tight, wide = min(gaps, key=lambda x: x[2]), max(gaps, key=lambda x: x[2])
+    line = (f'Widest gap: {club_name(wide[0])} to {club_name(wide[1])}, {wide[2]} yd. '
+            f'Tightest: {club_name(tight[0])} to {club_name(tight[1])}, {tight[2]} yd.')
+    overlap = [x for x in gaps if x[2] <= 0]
+    if overlap:
+        a, b, gap = overlap[0]
+        line += f' The {club_name(b)} carries {abs(gap)} yd past the {club_name(a)}.'
+    return line
 
 
 # ---------------------------------------------------------------------------

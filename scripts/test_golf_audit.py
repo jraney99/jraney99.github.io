@@ -40,8 +40,8 @@ class GolfAudit(unittest.TestCase):
         self.assertIn('Later putts remain', html)
 
     def test_full_wedge_carry_does_not_grade_short_chips(self):
-        tm = {'clubs': [{'club': '58°', 'carry_spread': 3}]}
-        self.assertFalse(golf._loop_rows(tm, {'leaks': [{'name': '0-20 yd short game', 'per_round': -2}]}))
+        self.assertEqual(golf._driver_leak({'leaks': [{'name': '0-20 yd short game', 'per_round': -2}]}),
+                         (None, False))
 
     def test_scorecard_totals_reconcile(self):
         stats = self.stats

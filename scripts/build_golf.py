@@ -236,8 +236,8 @@ EXPLAIN = {'index': ('What a Handicap Index is',
               'differ. Differences are percentage points: 33% versus 48% is 15 points lower.'),
  'carry': ('Carry, and why it is not the number on the sign',
            'Carry is where the ball lands, not where it finishes. On the course it rolls out, sometimes a '
-           'long way, so a 150 yard carry is not a 150 yard club on firm ground. The gapping table below '
-           'uses carry because it is the part a swing controls.'),
+           'long way, so a 150 yard carry is not a 150 yard club on firm ground. The club yardages '
+           'use carry because it is the part a swing controls.'),
  'smash': ('Ball speed, club speed and smash factor',
            'Smash factor is ball speed divided by clubhead speed. Around 1.50 is a useful driver reference, '
            'not a universal hard ceiling. Strike location, delivered loft and measurement conditions all '
@@ -904,53 +904,6 @@ def trackman_data(include_history=False):
     return tm if tm.get('clubs') or (include_history and tm.get('session_stats')) else None
 
 
-def _loop_rows(tm, stats):
-    """Pair each on-course leak with what the sim says about the club it needs.
-
-    One row per leak, and only when there is a measurement on the practice side:
-    a leak with nothing to pair against is left out rather than given a number.
-    """
-    clubs = {c['club']: c for c in tm['clubs']}
-    rows, shown = [], set()
-    for leak in (stats.get('leaks') or [])[:3]:
-        name = leak['name'].lower()
-        measured = target = None
-        kind = 'driver' if ('penalt' in name or 'driv' in name or 'tee' in name) else None
-        if kind is None:
-            continue  # Full-wedge carries do not measure 0–20 yd chips or putting.
-        if kind in shown:
-            continue          # one practice figure answers one leak, not three
-        if kind == 'driver':
-            # The last 20 drives from any session, so practice can move it. The measuring-day row
-            # in `clubs` only changes on a measuring day: it sat at 60% while practice nights read
-            # 56% and 55% (audit 2026-11-03).
-            form = tm.get('driver') or {}
-            d = form if form.get('corridor_pct') is not None else clubs.get('Dr')
-            if d and d.get('corridor_pct') is not None:
-                drives = ('my last %d drives' % form['n']) if d is form and form.get('n') else 'drives'
-                measured = '%d%% of %s inside a 36 yd corridor · ±%s yd spread' % (
-                    d['corridor_pct'], drives, d.get('side_spread', '?'))
-                target = '65% inside the corridor'
-                frac = d['corridor_pct'] / 100.0
-        if not measured:
-            continue
-        shown.add(kind)
-        rows.append('<li><span class="leak__rank">%d</span><div>'
-                    '<p class="leak__name">%s</p>'
-                    '<p class="leak__gain">On the course: <b>%.1f strokes a round</b>. '
-                    'Practice target: %s.</p>%s'
-                    '<p class="leak__basis">Measured in the bay: %s</p></div></li>'
-                    % (len(rows) + 1, leak['name'], abs(leak['per_round']), target,
-                       rbar(frac), measured))
-    if not rows:
-        return ''
-    return ('<ul class="leaks">%s</ul><p class="vs-note">Simulator accuracy is a practice proxy, '
-            'not a measure of on-course penalty avoidance. Full-wedge carry tests do not establish '
-            'greenside chipping skill.</p>') % ''.join(rows)
-
-
-
-
 def tour_data():
     """data/tour.json: PGA and LPGA averages per club, from TrackMan's own figures."""
     path = os.path.join(ROOT, 'data', 'tour.json')
@@ -986,8 +939,8 @@ def clubs_data():
     return d if d.get('clubs') else None
 
 
-def bag_card():
-    """What is in the bag, as built. Every column that is blank for every club is dropped,
+def bag_card(fold=False):
+    """What is in the bag, as built. fold=True closes it at the foot of the TrackMan page. Every column that is blank for every club is dropped,
     so the table fills out as the specs arrive rather than showing a grid of dashes."""
     d = clubs_data()
     if not d:
@@ -998,13 +951,25 @@ def bag_card():
             ('grip', 'Grip'), ('swingweight', 'Swing wt')]
     used = [(k, label) for k, label in cols if any(str(c.get(k) or '').strip() for c in clubs)]
     head = ''.join('<th>%s</th>' % label for _, label in used)
-    rows = ''
+    # Clubs built identically in every column (the 4-iron to pitching wedge) share one row,
+    # named for the first and last, so the table shows each build once.
+    spec = lambda c: tuple(str(c.get(k) or '').strip() for k, _ in used if k != 'club') + (c.get('make'),)
+    runs = []
     for c in clubs:
+        if runs and spec(runs[-1][-1]) == spec(c):
+            runs[-1].append(c)
+        else:
+            runs.append([c])
+    rows = ''
+    for run in runs:
+        c = run[0]
         cells = ''
         for k, _ in used:
             v = str(c.get(k) or '').strip()
-            if k == 'club' and c.get('make') and str(c.get('make')).strip():
-                v = '%s <small>%s</small>' % (v, c['make'])
+            if k == 'club':
+                v = v if len(run) == 1 else '%s to %s' % (v, str(run[-1]['club']).lower())
+                if c.get('make') and str(c.get('make')).strip():
+                    v = '%s <small>%s</small>' % (v, c['make'])
             cells += '<td>%s</td>' % (v or '\u2013')
         rows += '<tr>%s</tr>' % cells
     blank = lambda c, k: not str(c.get(k) or '').strip()
@@ -1026,6 +991,9 @@ def bag_card():
     inner += '    <p class="vs-note" style="text-align:left">%s</p>' % src.strip()
     if d.get('fitting_note'):
         inner += '\n    <p class="vs-note" style="text-align:left">%s</p>' % d['fitting_note']
+    if fold:
+        return fold_section('What is in the bag', '%d clubs, as built' % len(clubs),
+                            inner + '\n    ' + glossary('swingweight', 'lie'))
     return card('What is in the bag', inner, explain=('swingweight', 'lie'))
 
 
@@ -1036,10 +1004,61 @@ SAMPLE_DISPERSION = [('Dr', 24, 'right'), ('3w', 19, 'right'), ('5i', 13, 'strai
                      ('7i', 9, 'straight'), ('Pw', 6, 'left'), ('58°', 4, 'straight')]
 
 
-def why_cards(tm):
+CORRIDOR_HALF = 18     # the practice corridor is 36 yd wide, 18 either side of the line
+CORRIDOR_TARGET = 65   # % of drives inside it
+
+
+def fold_section(title, sub, inner):
+    """A section closed by default, its title and a one-line summary of what is inside."""
+    return (f'<section class="tm-fold">\n  <details class="gfold"><summary><h2 class="gsect">{title}</h2>'
+            f'<small>{sub}</small></summary>\n  <div class="gcard">\n{inner}\n  </div>\n  </details>\n</section>\n')
+
+
+def glossary(*keys):
+    """Definitions written out once each, for a fold (the same EXPLAIN text as the buttons)."""
+    return ('<div class="tm-gloss">%s</div>'
+            % ''.join(f'<p><b>{EXPLAIN[k][0]}.</b> {EXPLAIN[k][1]}</p>' for k in keys))
+
+
+def tm_figures(tm, clubs_by):
+    """The four headline numbers. Driver figures read the last 20 drives, as Road to 315 does,
+    falling back to the measuring day when there are too few."""
+    form = golf_story.driver_form(tm)
+    dr = clubs_by.get('Dr') or {}
+    d = form or dr
+    basis = ('last %d drives' % form['n']) if form else 'measuring day'
+    goal = next((x for x in golf_goals.load_goals(ROOT) if x.get('club') == 'Dr' and x.get('target')), None)
+    figs = []
+    if d.get('carry'):
+        pga = tour_mark('Carry', 'Dr')
+        bits = [basis] + (['PGA %g' % pga[0]] if pga else []) + (['goal %s' % goal['target']] if goal else [])
+        figs.append(('Driver carry', '%.0f yd' % d['carry'], bits, False))
+    if d.get('ball_speed'):
+        bs = tour_mark('Ball Speed', 'Dr')
+        bits = (['PGA %g' % bs[0]] if bs else []) + (['smash %s' % d['smash']] if d.get('smash') else [])
+        figs.append(('Driver ball speed', '%g mph' % d['ball_speed'], bits, False))
+    if d.get('corridor_pct') is not None:
+        pct = d['corridor_pct']
+        figs.append(('Drives inside the corridor', '%d%%' % pct,
+                     [basis, 'target %d%%' % CORRIDOR_TARGET], pct < CORRIDOR_TARGET))
+    if tm.get('balls_30d') is not None:
+        drill, _ = golf_story.drill_balls(tm)
+        n = tm.get('sessions_30d') or 0
+        bits = ['%d session%s' % (n, '' if n == 1 else 's')] + (['%d drill' % drill] if drill else [])
+        figs.append(('Last 30 days', '{:,} balls'.format(tm['balls_30d']), bits, False))
+    if not figs:
+        return ''
+    mod = {3: ' figures--3', 4: ' figures--4'}.get(len(figs), '')
+    cells = ''.join('<div><dt>%s</dt><dd%s>%s<small>%s</small></dd></div>'
+                    % (lbl, ' class="is-signal"' if flag else '', val, ' · '.join(bits))
+                    for lbl, val, bits, flag in figs)
+    return f'<dl class="figures{mod} tm-figs">{cells}</dl>\n'
+
+
+def moved_notes(tm):
     """Why a number moved, from trackman.json's `explain`. Jack, 2026-11-02: "this type of
     explanation is what i want to see more of on my site". What the ball did, beside the day it
-    is compared with; never how to swing."""
+    is compared with; never how to swing. The sentence stays visible; the numbers sit under it."""
     why = tm.get('explain') or {}
     found = ([why['driver']] if why.get('driver') else []) + list(why.get('clubs') or [])
     def show(v, unit):
@@ -1047,139 +1066,183 @@ def why_cards(tm):
         return ('%.1f°' % v) if unit == '°' else '{:,.0f} {}'.format(v, escape(unit))
     out = ''
     for e in found:
-        then = 'Measured' if 'measuring' in e.get('then_label', '') else escape(e.get('then_label', ''))
-        rows = ''.join('<tr><td>%s</td><td class="num">%s</td><td class="num num--md">%s</td></tr>'
+        then = escape(e.get('then_label', '')).replace('your ', '')
+        then = then[:1].upper() + then[1:]
+        rows = ''.join('<tr><td>%s</td><td class="num">%s</td><td class="num">%s</td></tr>'
                        % (escape(r['label']), show(r['then'], r['unit']), show(r['now'], r['unit']))
                        for r in e.get('rows') or [])
-        body = ('    <p style="max-width:62ch">%s</p>\n    <div class="table-wrap" style="max-width:560px"><table class="gtable"><thead><tr><th></th>'
+        when = escape(e.get('now_label', ''))
+        out += ('<details class="tm-moved" open><summary><span class="tm-pill">Moved</span>'
+                '<span class="tm-moved__text"><b>%s%s.</b> %s</span></summary>\n'
+                '  <div class="tm-moved__body"><div class="table-wrap"><table class="gtable tm-cmp"><thead><tr><th></th>'
                 '<th>%s</th><th>%s</th></tr></thead><tbody>%s</tbody></table></div>\n'
-                % (escape(e['sentence']), then, escape(e.get('now_label', '')), rows))
-        if e.get('short'):
-            body += '    <p class="vs-note" style="text-align:left">%s</p>\n' % escape(e['short'])
-        body += ('    <p class="vs-note" style="text-align:left">Carry comes from ball speed, launch and spin. '
-                 'This says what the ball did, not how to swing.</p>\n')
-        out += card('Why it moved: %s' % escape(e['club']), body, explain=('carry',))
+                '  <p class="vs-note">%sCarry comes from ball speed, launch and spin. '
+                'This says what the ball did, not how to swing.</p></div></details>\n'
+                % (escape(e['club']), (', ' + when) if when else '', escape(e['sentence']), then, when, rows,
+                   (escape(e['short']) + ' ') if e.get('short') else ''))
     return out
 
 
-def page_trackman_real(tm, stats):
-    """The TrackMan tab on real measurements."""
-    clubs = [c for c in tm['clubs'] if c.get('carry')]
-    measured = {c['club'] for c in tm['clubs']}
-    # Keep the existing preview values for clubs not yet measured. They remain
-    # presentation-only samples: never add them to the ledger or practice grades.
-    clubs += [{'club': club, 'carry': carry, 'carry_spread': spread, 'sample': True}
-              for club, carry, spread in SAMPLE_GAPPING if club not in measured]
-    bag_order = {club: i for i, (club, _, _) in enumerate(SAMPLE_GAPPING)}
-    clubs.sort(key=lambda c: (bag_order.get(c['club'], 99), -c['carry']))
-    # scale the bars to whichever is longer, his carry or the tour mark, so a tour
-    # tick longer than anything he hits still lands inside the bar
-    marks = [tour_mark('Carry', c['club']) for c in clubs]
-    longest = max([c['carry'] for c in clubs] + [m[0] for m in marks if m] or [1])
-    def gap_row(c):
-        # The tick is the PGA average carry for that club, on the same scale as the
-        # bar, the way the putting page marks a scratch player's make rate.
-        pga = tour_mark('Carry', c['club'])
-        tick = min(pga[0] / longest, 1.0) * 100 if pga else None
-        note = ('±%s yd' % c['carry_spread']) if c.get('carry_spread') is not None else 'spread unavailable'
-        if c.get('sample'):
-            note = 'Sample · not yet measured · ' + note
+def _driver_leak(stats):
+    """The on-course leak the driver corridor answers, and whether it is the biggest one."""
+    for i, leak in enumerate(((stats or {}).get('leaks') or [])[:3]):
+        name = leak['name'].lower()
+        if 'penalt' in name or 'driv' in name or 'tee' in name:
+            return leak, i == 0
+    return None, False
+
+
+def latest_session(stats, days, plans):
+    """The newest practice night: each check and whether it was met, the plan it answered, why
+    the corridor matters on the course, and what is planned next."""
+    ran = [d for d in days if d['ran']]
+    if not ran:
+        return ''
+    last = ran[0]
+    checks = ''
+    for line in last['lines']:
+        res = 'Met' if line.endswith('. Met.') else 'Not met' if line.endswith('. Not met.') else ''
+        text = line[:-len(' %s.' % res)] if res else line
+        what, _, rest = text.partition(': ')
+        body = f'<b>{escape(what)}</b> {escape(rest)}' if rest else escape(text)
+        cls = {'Met': 'tm-met', 'Not met': 'tm-unmet'}.get(res, 'tm-info')
+        checks += (f'<li class="{cls}"><span class="tm-dot" aria-hidden="true"></span><span>{body}</span>'
+                   f'<span class="tm-res">{res}</span></li>')
+    inner = (f'    <div class="tm-latest__head"><div><b>{last["kind"]}</b><small>{last["sub"]}</small></div>'
+             f'<span class="tm-score">{last["status"]}</span></div>\n')
+    if checks:
+        inner += f'    <ul class="tm-checks">{checks}</ul>\n'
+    leak, top = _driver_leak(stats)
+    if leak and any(l.startswith('Driver corridor') for l in last['lines']):
+        inner += ('    <p class="tm-why">The corridor matters because %s cost <b>%.1f strokes a round</b> on '
+                  'the course%s.</p>\n' % (escape(leak['name'].lower()), abs(leak['per_round']),
+                                           ', my biggest leak' if top else ''))
+    nxt = plans[0] if plans and str(plans[0]['date']) > last['day'] else None
+    if nxt:
+        when = date.fromisoformat(str(nxt['date']))
+        where = f' at {nxt["location"]}' if nxt.get('location') else ''
+        if when >= date.today():
+            inner += (f'    <p class="tm-next">Next: {nxt["type"].title()} session '
+                      f'{when.strftime("%A, %b %-d")}{where}.</p>\n')
         else:
-            note += ' · %s shots' % c.get('n', '?')
-        if pga:
-            note += ' · PGA %s' % pga[0]
-        return drow(c['club'], rbar(c['carry'] / longest, 'neu', tick), note, str(c['carry']), c.get('thin'))
+            inner += f'    <p class="tm-next">Planned for {when.strftime("%b %-d")}{where}. No session recorded.</p>\n'
+    if last['plan']:
+        inner += ('    <div class="ex-row"><details class="ex"><summary>The plan for this session</summary>'
+                  f'<div>{plan_list(last["plan"])}</div></details></div>\n')
+    return card('Latest session', inner, cls='tm-latest')
 
-    gap_rows = ''.join(gap_row(c) for c in clubs)
 
-    withside = [c for c in tm['clubs'] if c.get('side_spread') is not None]
-    withside += [{'club': club, 'side_spread': spread, 'side_bias': bias, 'sample': True}
-                 for club, spread, bias in SAMPLE_DISPERSION if club not in measured]
-    withside.sort(key=lambda c: bag_order.get(c['club'], 99))
-    widest = max([c['side_spread'] for c in withside] or [1]) or 1
-    disp_rows = ''.join(
-        drow(c['club'], rbar(c['side_spread'] / widest, '' if c['side_spread'] > 15 else 'ok'),
-             ('Sample · not yet measured' if c.get('sample') else
-              ('balanced left/right' if c.get('side_bias') == 'straight' else
-               'misses %s' % c.get('side_bias', '?'))), '±%s' % c['side_spread'], c.get('thin'))
-        for c in withside)
-
-    wrows = ''.join(
-        '<tr><td>%s</td><td>%s</td><td>%s</td><td class="num num--md">%s</td></tr>'
-        % (w['club'], w.get('half', '—'), w.get('three_q', '—'), w.get('full', '—'))
-        for w in tm['wedges'])
-    inferred = any(w.get('inferred') for w in tm['wedges'])
-    wedge = ('    <div class="table-wrap"><table class="gtable"><thead><tr><th>Club</th>'
-             '<th>1/2</th><th>3/4</th><th>Full</th></tr></thead><tbody>%s</tbody></table></div>\n'
-             '    <p class="vs-note">Carries in yards.%s</p>'
-             % (wrows, ' Swing lengths inferred from carry clusters: the export records '
-                       'no swing length, so this is a reading of the numbers.' if inferred else ''))
-    if not inferred:
-        wrows = ''.join('<tr><td>%s</td><td class="num num--md">%s</td><td>%s</td></tr>'
-                        % (w['club'], w.get('full', '—'), w['n']) for w in tm['wedges'])
-        wedge = ('<div class="table-wrap"><table class="gtable"><thead><tr><th>Club</th>'
-                 '<th>Carry</th><th>Shots</th></tr></thead><tbody>%s</tbody></table></div>'
-                 '<p class="vs-note">Median carry in yards. Swing lengths were not recorded; '
-                 'half- and three-quarter-swing distances are not measured yet.</p>' % wrows)
-
+def club_table(tm):
+    """Carry, gapping and left-right spread for every club in one table: the Gapping, Dispersion
+    and Wedge carries cards listed the same 13 clubs three times (Jack, 2026-11-06)."""
+    measured = {c['club'] for c in tm['clubs']}
+    real = [c for c in tm['clubs'] if c.get('carry')]
+    # Clubs not yet measured keep their labeled sample values. They are presentation-only:
+    # never added to the ledger or to practice grades, and a measured club never borrows one.
+    side_sample = {club: (spread, bias) for club, spread, bias in SAMPLE_DISPERSION}
+    rows_src = [dict(c) for c in real]
+    rows_src += [{'club': club, 'carry': carry, 'carry_spread': spread, 'sample': True,
+                  'side_spread': side_sample.get(club, (None,))[0],
+                  'side_bias': side_sample.get(club, (None, None))[1]}
+                 for club, carry, spread in SAMPLE_GAPPING if club not in measured]
+    order = {club: i for i, (club, _, _) in enumerate(SAMPLE_GAPPING)}
+    rows_src.sort(key=lambda c: (order.get(c['club'], 99), -c['carry']))
+    marks = [tour_mark('Carry', c['club']) for c in rows_src]
+    longest = max([c['carry'] for c in rows_src] + [m[0] for m in marks if m] or [1])
+    dash = '–'
+    rows = ''
+    for i, (c, pga) in enumerate(zip(rows_src, marks)):
+        nxt = rows_src[i + 1] if i + 1 < len(rows_src) else None
+        gap = round(c['carry'] - nxt['carry']) if nxt else None
+        tick = min(pga[0] / longest, 1.0) * 100 if pga else None
+        name = golf_story.club_name(c['club'])
+        if c.get('sample'):
+            name += ' <small>sample</small>'
+        elif c.get('thin'):
+            name += ' <small>too few to read</small>'
+        side = c.get('side_spread')
+        bias = c.get('side_bias')
+        rows += ('<tr%s><td>%s</td><td class="tm-barcol">%s</td><td class="r num">%s</td><td class="r">%s</td>'
+                 '<td class="r">%s</td><td class="r">%s</td><td class="r">%s</td><td class="r%s">%s</td><td>%s</td></tr>'
+                 % (' class="tm-sample"' if c.get('sample') else '', name,
+                    rbar(c['carry'] / longest, 'neu', tick), c['carry'],
+                    c['total'] if c.get('total') else dash, pga[0] if pga else dash, gap if gap is not None else dash,
+                    c['carry_spread'] if c.get('carry_spread') is not None else dash,
+                    ' tm-flag' if side is not None and side > CORRIDOR_HALF else '',
+                    side if side is not None else dash,
+                    bias if bias in ('left', 'right') else dash))
+    table = ('    <div class="table-wrap"><table class="gtable tm-clubs"><thead><tr><th>Club</th>'
+             '<th class="tm-barcol">Carry</th><th class="r">Carry</th><th class="r">Total</th><th class="r">PGA</th>'
+             '<th class="r">Gap to next</th><th class="r">Carry ±</th><th class="r">Left/right ±</th>'
+             '<th>Miss</th></tr></thead><tbody>%s</tbody></table></div>\n' % rows)
+    lasts = sorted({str(c['last']) for c in real if c.get('last')})
+    shots = sorted({c['n'] for c in real if c.get('n')})
+    note = ['Yards. Median of each club’s latest swings on measuring days'
+            + (' (%s)' % golf_story.and_join(golf_story.day(x) for x in lasts) if lasts else '')
+            + (', %d shots per club' % shots[0] if len(shots) == 1 else
+               ', %d to %d shots per club' % (shots[0], shots[-1]) if shots else '') + '.',
+            'Total adds TrackMan\u2019s estimate of roll on its default fairway; on the course roll depends on '
+            'how firm the ground is.',
+            'The tick on each bar is the PGA Tour average carry, published only through pitching wedge.',
+            'Gold: wider than the ±%d yd practice corridor.' % CORRIDOR_HALF,
+            golf_story.gap_line(real)]
+    if tm.get('wedges') and not any(w.get('inferred') for w in tm['wedges']):
+        note.append('Half- and three-quarter wedge distances are not measured yet.')
     u = tm.get('units') or {}
-    note = ('Club summaries use the last %d days. The full archive contains %d balls across %d session%s. '
-            'Distances read as %s and speeds as %s. Medians, with spread as half the '
-            'central 80%% of shots. Clubs under 8 shots are marked and never set a '
-            'practice plan.' % (tm.get('window_days', 180), tm.get('balls_total', 0),
-                               tm.get('sessions_n', 0), '' if tm.get('sessions_n') == 1 else 's',
-                               u.get('dist', 'unknown'),
-                               u.get('speed', 'unknown')))
+    if (u.get('dist'), u.get('speed')) != ('yd', 'mph'):
+        note.append('Distances read as %s and speeds as %s.' % (u.get('dist', 'unknown'), u.get('speed', 'unknown')))
+    note.append('Club summaries use the last %d days. Clubs under 8 shots are marked and never set a '
+                'practice plan.' % tm.get('window_days', 180))
     probs = tm.get('problems') or []
     if probs:
-        note += ' Flagged on import: ' + '; '.join(probs[:3]) + '.'
+        note.append('Flagged on import: ' + '; '.join(probs[:3]) + '.')
+    samples = [club for club, _, _ in SAMPLE_GAPPING if club not in measured]
+    chip = ('<p><span class="sample-chip">Real measurements for %d clubs. Not hit yet, so still showing '
+            'sample numbers: %s.</span></p>\n' % (len(measured), ', '.join(samples))) if samples else ''
+    return card('By club', chip + table + '    <p class="vs-note tm-note">%s</p>' % ' '.join(n for n in note if n))
 
-    strip = ''  # sessions and balls in 30 days open the page's story
-    tour_line = []
-    trim = lambda v: ('%g' % v)
-    for metric, label, suffix in (('Ball Speed', 'ball speed', ' mph'), ('Smash Factor', 'smash', '')):
-        mark = tour_mark(metric, 'Dr')
-        if mark:
-            tour_line.append('%s %s%s' % (label, trim(mark[0]), suffix))
-    drv = tm.get('driver') or {}
-    if drv.get('ball_speed'):
-        strip += '    ' + statpair('Driver ball speed', '%s mph' % drv['ball_speed'],
-                                   'Smash factor', str(drv.get('smash', '—')))
-        if tour_line:
-            strip += ('\n    <p class="vs-note" style="text-align:left">PGA average driver %s</p>'
-                      % ', '.join(tour_line))
 
-    loop = _loop_rows(tm, stats)
-    left = card('', strip, explain=('smash', 'carry')) if strip else ''
-    if loop:
-        left += card('Practice against play', loop, explain=('practicegrade',))
-    mid = card('Gapping: carry per club', '    <ul class="drows">%s</ul>\n'
-                                          '    <p class="vs-note">Median carry on measuring days · '
-                                          '▏ marks the PGA average</p>' % gap_rows,
-               explain=('gapping', 'carry', 'tour'))
-    right = card('Dispersion: left-right spread', '    <ul class="drows">%s</ul>' % disp_rows,
-                 explain=('corridor', 'spread'))
-    if tm['wedges']:
-        right += card('Wedge matrix' if inferred else 'Wedge carries', wedge, explain=('swinglen',))
-    # Say which clubs are still samples, by name, or say plainly that none are. "Clubs not yet
-    # hit retain their labeled sample values" on a page where every club had been hit read as a
-    # warning about nothing (Jack, 2026-10-30: "I'm unclear as to what this means").
-    samples = sorted({club for club, _, _ in SAMPLE_GAPPING} | {club for club, _, _ in SAMPLE_DISPERSION}) 
-    samples = [c for c in samples if c not in measured]
-    if samples:
-        coverage = ('<p><span class="sample-chip">Real measurements for %d clubs. Not hit yet, so still '
-                    'showing sample numbers: %s.</span></p>' % (len(measured), ', '.join(samples)))
-    else:
-        coverage = ''  # nothing to warn about once every club is real
-    # Full width above the three columns: a third of the page squeezed the factor table into
-    # wrapped labels ("Ball / speed", "2,248 / rpm").
-    return (plans_cards()
-            + coverage
-            + why_cards(tm)
-            + '<div class="ggrid3"><div class="gcol">%s</div><div class="gcol">%s</div>'
-              '<div class="gcol">%s</div></div>' % (left, mid, right)
-            + '<section><p class="vs-note">%s</p></section>' % note
-            + bag_card())
+def wedge_fold(tm):
+    """The inferred half / three-quarter / full matrix, when the importer could read one."""
+    wedges = tm.get('wedges') or []
+    if not any(w.get('inferred') for w in wedges):
+        return ''
+    rows = ''.join('<tr><td>%s</td><td>%s</td><td>%s</td><td class="num num--md">%s</td></tr>'
+                   % (w['club'], w.get('half', '—'), w.get('three_q', '—'), w.get('full', '—'))
+                   for w in wedges)
+    inner = ('    <div class="table-wrap"><table class="gtable"><thead><tr><th>Club</th><th>1/2</th><th>3/4</th>'
+             '<th>Full</th></tr></thead><tbody>%s</tbody></table></div>\n    <p class="vs-note">Carries in yards. '
+             'Swing lengths inferred from carry clusters: the export records no swing length, so this is a '
+             'reading of the numbers.</p>' % rows)
+    return fold_section('Wedge swing lengths', '%d wedges, inferred' % len(wedges), inner)
+
+
+def page_trackman_real(tm, stats):
+    """The TrackMan tab on real measurements: four numbers, what moved, the latest session, one
+    table by club, and everything else folded. Jack, 2026-11-06: the old tab was "busy and not
+    ergonomic"; the driver appeared seven times and carry was defined three times."""
+    clubs_by = {c['club']: c for c in tm['clubs']}
+    plans = plans_data()
+    days = session_days(plans, limit=7)
+    ran = [d for d in days if d['ran']]
+    older = [d for d in days if d is not (ran[0] if ran else None)]
+    out = '<section class="tm-top">\n' + tm_figures(tm, clubs_by) + moved_notes(tm) + '</section>\n'
+    out += latest_session(stats, days, plans)
+    out += club_table(tm)
+    if older:
+        balls = sum(x.get('balls') or 0 for d in older for x in d['ran'])
+        sub = '%d earlier day%s' % (len(older), '' if len(older) == 1 else 's') + (
+            ' · {:,} balls'.format(balls) if balls else '')
+        out += fold_section('Session history', sub, '    <ul class="rounds-list" style="margin-top:0">%s</ul>'
+                            % ''.join(session_row(d) for d in older))
+    out += wedge_fold(tm)
+    out += bag_card(fold=True)
+    keys = ['carry', 'gapping', 'spread', 'corridor', 'smash', 'tour', 'practicegrade', 'plans']
+    if any(w.get('inferred') for w in tm.get('wedges') or []):
+        keys.append('swinglen')
+    out += fold_section('How these numbers work',
+                        ' · '.join(EX_LABEL.get(k, k) for k in keys), glossary(*keys))
+    return out
 
 
 def page_practice(stats, g):
@@ -1246,69 +1309,88 @@ def page_practice(stats, g):
             + bag_card())
 
 
-def plans_cards():
-    """The issued practice plans (data/golf-plans.json, from Archibald's practice-plan skill)."""
+def plans_data():
+    """data/golf-plans.json, newest first (Archibald's practice-plan skill). [] when absent."""
     path = os.path.join(ROOT, 'data', 'golf-plans.json')
     if not os.path.exists(path):
-        return ''
-    plans = json.load(open(path, encoding='utf-8'))
-    if not plans:
-        return ''
-    cur = plans[0]
-    d = date.fromisoformat(cur['date']).strftime('%A, %b %-d')
-    where = f' at {cur["location"]}' if cur.get('location') else ''
-    bench = ' \u00b7 benchmark session' if cur.get('benchmark') else ''
-    rows = ''.join(f'<li><span class="balls">{b["balls"]}</span><span class="body"><b>{b["title"]}.</b> {b.get("detail", "")}'
-                   + (f'<span class="tgt">Target: {b["target"]}</span>' if b.get('target') else '')
-                   + '</span></li>' for b in cur['blocks'])
-    # Status is derived from the TrackMan sessions, not read from the plan file: the
-    # file says "planned" forever because nothing writes back to it, and a plan that
-    # was hit the same evening showed as planned all night (2026-10-30).
+        return []
+    return json.load(open(path, encoding='utf-8')) or []
+
+
+def session_days(plans, limit=6):
+    """One entry per practice day, newest first: the plan it answered, every session that night
+    added together, and how each was graded.
+
+    Status is derived from the TrackMan sessions, not read from the plan file: the file says
+    "planned" forever because nothing writes back to it, and a plan that was hit the same evening
+    showed as planned all night (2026-10-30). A Plan log and a Session log listed the same nights
+    twice, and the plan row matched only one of two sessions: Nov 2 read 41 balls when he hit 77.
+    """
     tm = trackman_data(include_history=True) or {}
     nights = {}
     for s in tm.get('sessions') or []:
         g = s.get('grade') if isinstance(s.get('grade'), dict) else {}
         nights.setdefault(str(g.get('plan_date') or s.get('date')), []).append(s)
-    # One row per day: the plan it answered, every session that night added together, and how
-    # each was graded. A Plan log and a Session log listed the same nights twice, and the plan
-    # row matched only one of two sessions: Nov 2 read 41 balls when he hit 77.
     dot = ' \u00b7 '
     by_plan = {str(p['date']): p for p in reversed(plans)}  # the newest plan for a date wins
-    days = sorted(set(nights) | set(sorted(by_plan, reverse=True)[:6]), reverse=True)[:6]
-    log = []
+    days = sorted(set(nights) | set(sorted(by_plan, reverse=True)[:limit]), reverse=True)[:limit]
+    out = []
     for day_ in days:
         p, ran = by_plan.get(day_), nights.get(day_, [])
-        kind = (p['type'].title() + (dot + 'benchmark' if p.get('benchmark') else '')) if p else \
-            ' + '.join(escape(str(x.get('label') or 'Session')) for x in ran)
+        labels = ' + '.join(escape(str(x.get('label') or 'Session')) for x in ran)
+        kind = (p['type'].title() + (dot + 'benchmark' if p.get('benchmark') else '')) if p else labels
         sub = [date.fromisoformat(day_).strftime('%b %-d')]
         if p and ran:
-            sub.append(' + '.join(escape(str(x.get('label') or 'Session')) for x in ran))
-        balls = sum(x.get('balls') or 0 for x in ran)
-        drill = sum(((x.get('drill') or {}).get('balls') or 0) for x in ran if isinstance(x.get('drill'), dict))
-        checks = ''
+            sub.append(labels)
+        lines = []
         if ran:
+            balls = sum(x.get('balls') or 0 for x in ran)
+            drill = sum(((x.get('drill') or {}).get('balls') or 0) for x in ran if isinstance(x.get('drill'), dict))
             sub.append(f'{balls} balls' + (f', {drill} of them drill' if drill else ''))
             tallies = list(dict.fromkeys(golf_story.grade_tally(x.get('grade')) for x in ran))
             if len(tallies) > 1 and 'not graded' in tallies:
                 tallies.remove('not graded')  # the night was graded; its drill session alone was not
             status = dot.join(tallies)
             # What each check was and how it did, in words (2026-11-02: "missed all 2" said neither).
-            lines = list(dict.fromkeys(l for x in ran for l in golf_story.grade_lines(x.get('grade'))))
-            graded = [l for l in lines if not l.startswith('Nothing graded')]
-            checks = ''.join(f'<small class="gline">{escape(l)}</small>' for l in (graded or lines))
+            every = list(dict.fromkeys(l for x in ran for l in golf_story.grade_lines(x.get('grade'))))
+            lines = [l for l in every if not l.startswith('Nothing graded')] or every
         elif date.fromisoformat(day_) < date.today():
             status = 'no session'
         else:
             status = 'planned'
-        log.append(f'<li><span class="course"><b>{kind}</b><small>{dot.join(sub)}</small>{checks}</span>'
-                   f'<span class="score"><span class="n">{status}</span></span></li>')
-    log = ''.join(log)
+        out.append({'day': day_, 'kind': kind, 'sub': dot.join(sub), 'status': status,
+                    'lines': lines, 'plan': p, 'ran': ran})
+    return out
+
+
+def session_row(d):
+    checks = ''.join(f'<small class="gline">{escape(l)}</small>' for l in d['lines'])
+    return (f'<li><span class="course"><b>{d["kind"]}</b><small>{d["sub"]}</small>{checks}</span>'
+            f'<span class="score"><span class="n">{d["status"]}</span></span></li>')
+
+
+def plan_list(p):
+    rows = ''.join(f'<li><span class="balls">{b["balls"]}</span><span class="body"><b>{b["title"]}.</b> {b.get("detail", "")}'
+                   + (f'<span class="tgt">Target: {b["target"]}</span>' if b.get('target') else '')
+                   + '</span></li>' for b in p['blocks'])
+    return f'<ul class="plan">{rows}</ul>' + (f'<p class="vs-note">{p["note"]}</p>' if p.get('note') else '')
+
+
+def plans_cards():
+    """The saved plan beside the session log. Used by the sample preview only; the TrackMan page
+    on real data shows the latest session instead (Jack, 2026-11-06)."""
+    plans = plans_data()
+    if not plans:
+        return ''
+    cur = plans[0]
+    d = date.fromisoformat(cur['date']).strftime('%A, %b %-d')
+    where = f' at {cur["location"]}' if cur.get('location') else ''
+    bench = ' \u00b7 benchmark session' if cur.get('benchmark') else ''
+    log = ''.join(session_row(x) for x in session_days(plans))
     current = card(f'Saved plan \u00b7 {d}',
                    f'    <p style="margin:0 0 0.8rem;font-size:0.92rem">{cur["type"].title()} session{where}{bench}. '
                    f'Original focus: {cur.get("focus", "")}.</p>\n'
-                   '<details><summary>Original plan and note</summary>'
-                   f'    <ul class="plan">{rows}</ul>\n'
-                   f'    <p class="vs-note">{cur.get("note", "")}</p></details>')
+                   f'<details><summary>Original plan and note</summary>    {plan_list(cur)}</details>')
     loglist = card('Sessions', f'    <ul class="rounds-list" style="margin-top:0">{log}</ul>',
                    explain=('plans', 'practicegrade'))
     return f'<div class="ggrid"><div class="gcol">{current}</div><div class="gcol">{loglist}</div></div>'
@@ -1827,7 +1909,6 @@ def main():
             'golf-putting.html': lambda: golf_story.putting(stats),
             'golf-rounds.html': lambda: golf_story.rounds(stats, g),
             'golf-courses.html': lambda: golf_story.courses(courses_data()),
-            'golf-trackman.html': lambda: golf_story.trackman(tm, tour, [c for c, _, _ in SAMPLE_GAPPING]),
         }
         for fname, (title, desc, render) in SUBPAGES.items():
             content = render(stats, g)

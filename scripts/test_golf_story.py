@@ -112,19 +112,20 @@ class TrackMan(unittest.TestCase):
                     {'club': '6i', 'carry': 194, 'last': '2026-10-30', 'side_spread': 16.3},
                     {'club': '5i', 'carry': 190, 'last': '2026-10-30', 'side_spread': 17.7}]}
 
-    def beats(self):
-        return story.trackman(self.TM, None, ['Dr', '5i', '6i', '7i'], today=date(2026, 11, 3))
-
     def test_only_drill_swings_inside_30_days_are_counted(self):
-        self.assertIn('35 of them were drill swings', text(self.beats()))
+        self.assertEqual(story.drill_balls(self.TM, today=date(2026, 11, 3)), (35, 'Pause at the top'))
+
+    def test_no_drill_no_count(self):
+        self.assertEqual(story.drill_balls({'sessions': [{'date': '2026-11-02'}]}, today=date(2026, 11, 3)),
+                         (0, ''))
 
     def test_gaps_are_read_down_the_bag_and_an_overlap_is_named(self):
-        words = text(self.beats())
-        self.assertIn('Widest: Driver to 5-iron, 108 yd.', words)
+        words = story.gap_line(self.TM['clubs'], ['Dr', '5i', '6i', '7i'])
+        self.assertIn('Widest gap: Driver to 5-iron, 108 yd.', words)
         self.assertIn('The 6-iron carries 4 yd past the 5-iron.', words)
 
-    def test_without_tour_numbers_the_driver_comparison_is_left_out(self):
-        self.assertNotIn('PGA', text(self.beats()))
+    def test_one_club_has_no_gaps(self):
+        self.assertEqual(story.gap_line(self.TM['clubs'][:1]), '')
 
 
 class GoalStanding(unittest.TestCase):
