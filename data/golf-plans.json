@@ -1,5 +1,38 @@
 [
  {
+  "date": "2026-11-08",
+  "time": "17:00",
+  "type": "wedge",
+  "location": "The Reserve Indoor Golf Club",
+  "benchmark": false,
+  "focus": "Wedge session",
+  "blocks": [
+   {
+    "balls": 10,
+    "title": "Warm-up",
+    "detail": "Easy swings, 58° and 54°. No score."
+   },
+   {
+    "balls": 24,
+    "title": "Chart",
+    "detail": "Half, three-quarter and full, 4 balls each, with the 54° and the 58°."
+   },
+   {
+    "balls": 21,
+    "title": "Ladder",
+    "detail": "40 to 130 yards in 10-yard steps, 2 balls each, choosing the club yourself, plus 1 more at your worst distance. Don't move the green: read the carry against your number."
+   },
+   {
+    "balls": 20,
+    "title": "Test",
+    "detail": "Test Center, 40 to 135 yards in 5-yard steps, one ball each, random order if offered, full routine.",
+    "target": "graded on proximity"
+   }
+  ],
+  "note": "Sunday wedges. Block 4 is the number to track. Take a photo of the final score screen and send it to me: I cannot yet confirm that score reaches me on its own. The first 4 Sundays set your baseline.",
+  "status": "planned"
+ },
+ {
   "date": "2026-11-06",
   "time": "12:00",
   "type": "sim",
