@@ -93,12 +93,18 @@ jobs:
           node scripts/test_calculator.cjs
 
       - name: Commit changes
+        env:
+          SITE_PRIVACY_RULES: ${{ secrets.SITE_PRIVACY_RULES }}
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             git config user.name "site-bot"
             git config user.email "site-bot@users.noreply.github.com"
             git add -A
             git commit -m "Update generated content"
+            # Privacy check on exactly what this run is about to publish (Jack, 2026-11-09). Fails closed:
+            # a private word, or a missing word list, stops the push and the deploy. Names the kind of hit
+            # and the file, never the word.
+            python scripts/site_privacy.py --scan-range HEAD~1 HEAD
             git push
           fi
 
