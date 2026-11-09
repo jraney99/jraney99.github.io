@@ -1,5 +1,48 @@
 [
  {
+  "date": "2026-11-09",
+  "time": "18:30",
+  "type": "sim",
+  "location": "The Reserve Indoor Golf Club",
+  "benchmark": true,
+  "focus": "0-50 yd short game, Approach 75-150 yd, Driving penalties",
+  "blocks": [
+   {
+    "balls": 5,
+    "title": "Warmup",
+    "detail": "9-iron, loose. No targets.",
+    "target": null
+   },
+   {
+    "balls": 35,
+    "title": "Technical: Pause at the top (Harmon)",
+    "club": "8i",
+    "detail": "8-iron only. Swing to the top, stop, then hit the shot. Every ball.",
+    "target": null
+   },
+   {
+    "balls": 10,
+    "title": "Benchmark: driver",
+    "detail": "36 yd fairway on screen, full routine every ball.",
+    "target": "75% inside"
+   },
+   {
+    "balls": 15,
+    "title": "Benchmark: wedges",
+    "detail": "70 / 90 / 110 yd, five each, in that order. Don't move the green: read the carry against your number.",
+    "target": "carry within ±4 yd on 70%"
+   },
+   {
+    "balls": 10,
+    "title": "Benchmark: random test",
+    "detail": "One ball per number, changing club in your hand and on TrackMan: 60 (58°) · 140 (Pw) · 85 (58°) · 120 (50°) · 75 (58°) · 180 (7i) · 95 (58°) · 155 (8i) · 65 (58°) · 110 (54°). Don't move the green: read the carry.",
+    "target": "graded on proximity"
+   }
+  ],
+  "note": "Benchmark session: the first 35 graded balls are the same battery every time, so progress is measured, not felt.",
+  "status": "planned"
+ },
+ {
   "date": "2026-11-08",
   "time": "17:00",
   "type": "wedge",
