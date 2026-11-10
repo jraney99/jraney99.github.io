@@ -17,6 +17,12 @@ def rows_of(html):
     return re.findall(r'<tr\b.*?</tr>', body.split('<tbody>', 1)[1], flags=re.S)
 
 
+def more_rows_of(html):
+    """The tap-to-open table under By club: tour carry, spreads and miss side (2026-11-09)."""
+    body = html.split('tm-clubs--more', 1)[1].split('</tbody>', 1)[0]
+    return re.findall(r'<tr\b.*?</tr>', body.split('<tbody>', 1)[1], flags=re.S)
+
+
 def row_for(rows, name):
     return next(r for r in rows if re.search(r'<td>%s( <small>|</td>)' % re.escape(name), r))
 
@@ -59,7 +65,8 @@ class PartialBag(unittest.TestCase):
             self.assertIn('<small>sample</small>', row)
 
     def test_real_club_without_side_data_does_not_inherit_sample_dispersion(self):
-        rows = rows_of(self.render([{'club': 'Dr', 'carry': 298, 'n': 10}]))
+        # Was rows_of(...): the spreads moved to the tap-to-open table (2026-11-09); same checks.
+        rows = more_rows_of(self.render([{'club': 'Dr', 'carry': 298, 'n': 10}]))
         driver = row_for(rows, 'Driver')
         cells = re.findall(r'<td[^>]*>(.*?)</td>', driver)
         self.assertEqual(cells[-2:], ['–', '–'])          # no left/right spread, no miss side
@@ -69,7 +76,8 @@ class PartialBag(unittest.TestCase):
     def test_gap_to_next_club_is_read_down_the_bag(self):
         rows = rows_of(self.render([{'club': 'Dr', 'carry': 298, 'n': 10}, {'club': '3w', 'carry': 256, 'n': 10}]))
         cells = re.findall(r'<td[^>]*>(.*?)</td>', row_for(rows, 'Driver'))
-        self.assertEqual(cells[5], '42')
+        # Was cells[5]: PGA left the main table (2026-11-09), so the gap is the fifth cell.
+        self.assertEqual(cells[4], '42')
 
     def test_total_sits_beside_carry_and_a_club_without_one_shows_a_dash(self):
         rows = rows_of(self.render([{'club': 'Dr', 'carry': 298, 'total': 314, 'n': 10},
@@ -78,7 +86,8 @@ class PartialBag(unittest.TestCase):
         self.assertEqual(re.findall(r'<td[^>]*>(.*?)</td>', row_for(rows, '3-wood'))[3], '\u2013')
 
     def test_spread_wider_than_the_corridor_is_flagged(self):
-        rows = rows_of(self.render([{'club': 'Dr', 'carry': 298, 'side_spread': 22.1, 'side_bias': 'straight'},
+        # Was rows_of(...): left/right spread and miss side are in the tap-to-open table (2026-11-09).
+        rows = more_rows_of(self.render([{'club': 'Dr', 'carry': 298, 'side_spread': 22.1, 'side_bias': 'straight'},
                                     {'club': '7i', 'carry': 184, 'side_spread': 7.1, 'side_bias': 'left'}]))
         self.assertIn('tm-flag">22.1<', row_for(rows, 'Driver'))
         self.assertNotIn('tm-flag', row_for(rows, '7-iron'))
@@ -95,10 +104,12 @@ class PartialBag(unittest.TestCase):
     def test_corridor_below_target_is_the_only_gold_figure(self):
         form = {'carry': 288, 'n': 20, 'ball_speed': 170.8, 'smash': 1.48, 'corridor_pct': 55}
         html = self.render([{'club': 'Dr', 'carry': 298, 'n': 10}], driver=form, balls_30d=473, sessions_30d=8)
-        strip = html.split('tm-figs', 1)[1].split('</dl>', 1)[0]
+        # Was: split('tm-figs')...split('</dl>') and '288 yd<small>last 20 drives'. The four numbers
+        # are now the shared dashboard strip (2026-11-09); the same three checks read it.
+        strip = html.split('aria-label="TrackMan numbers"', 1)[1].split('</section>', 1)[0]
         self.assertEqual(strip.count('is-signal'), 1)
         self.assertIn('is-signal">55%', strip)
-        self.assertIn('288 yd<small>last 20 drives', strip)
+        self.assertIn('288 yd</span><small>last 20 drives', strip)
         self.assertIn('473 balls', strip)
 
     def test_moved_sentence_is_one_text_span_beside_the_pill(self):

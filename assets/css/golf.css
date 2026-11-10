@@ -750,3 +750,90 @@
 .tm-gloss { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 0.2rem 1.6rem; font-size: 0.88rem; line-height: 1.55; }
 .tm-gloss p { margin: 0.35rem 0; }
 .fold-row .bag + .tm-gloss, .fold-row .vs-note + .tm-gloss { margin-top: 1rem; border-top: 1px solid var(--rule); padding-top: 0.6rem; }
+
+/* ---------- overview dashboard (Jack, 2026-11-09: "more of a dashboard type feel") ----------
+   Numbers strip, index chart full width, then pairs of equal-height cards. */
+.dash { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.6rem; }
+.gwrap .dash > section, .dash-row > section { margin: 0; }
+.kpis {
+  display: grid; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); gap: 1px;
+  background: var(--rule-2); border: 1px solid var(--rule-2); border-radius: var(--gcard-r); overflow: hidden;
+}
+.kpi { background: var(--card); padding: 1.15rem 1.4rem 1.2rem; min-width: 0; }
+.kpi .lbl { margin-bottom: 0.55rem; }
+.kpi-num { display: block; font-size: 2.7rem; margin-bottom: 0.5rem; }
+.kpi small { display: block; color: var(--muted); font-size: 0.8rem; line-height: 1.4; font-family: var(--sans); }
+.kpis--sm .kpi-num { font-size: 1.75rem; }
+.dash-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.3rem; align-items: stretch; }
+.dash-row--one { grid-template-columns: minmax(0, 1fr); }
+.dash-row > section { display: flex; flex-direction: column; min-width: 0; }
+.dash-row > section > .gcard, .dash-row .goal-index-grid { flex: 1; }
+.dash-row .goal-index-grid { grid-template-columns: minmax(0, 1fr); }
+.card-sub { margin: 0 0 0.9rem; color: var(--muted); font-size: 0.85rem; font-family: var(--sans); }
+.gcard > .card-sub + .rounds-list { margin-top: 0; }
+
+.chart-meta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.8rem 1rem; margin: 0 0 1rem; }
+.chart-meta > div + div { border-left: 1px solid var(--rule); padding-left: 1rem; }
+.chart-meta dt { margin-bottom: 0.3rem; }
+.chart-meta dd { margin: 0; font-family: var(--head); font-weight: 600; font-size: 1.3rem; font-variant-numeric: tabular-nums; }
+.chart-meta dd small { font-family: var(--sans); font-weight: 400; font-size: 0.78rem; color: var(--muted); }
+
+.worklist { list-style: none; margin: 0; padding: 0; }
+.worklist li + li { border-top: 1px solid var(--rule); }
+.worklist a {
+  display: grid; grid-template-columns: 1.4rem minmax(0, 1fr) auto; grid-template-areas: "r k val" ". bar bar";
+  gap: 0.5rem 0.8rem; align-items: baseline; padding: 0.95rem 0; color: inherit; text-decoration: none;
+}
+.worklist li:first-child a { padding-top: 0.2rem; }
+.worklist .r { grid-area: r; font-family: var(--head); font-weight: 700; color: var(--lose-hard); }
+.worklist .k { grid-area: k; font-weight: 700; font-size: 0.95rem; min-width: 0; }
+.worklist .k small { display: block; margin-top: 0.2rem; font-weight: 400; color: var(--muted); font-size: 0.78rem; font-family: var(--sans); }
+.worklist .val { grid-area: val; font-family: var(--head); font-weight: 600; font-size: 1.45rem; color: var(--lose-hard); font-variant-numeric: tabular-nums; }
+.worklist .rbar { grid-area: bar; }
+.worklist a:hover .k, .worklist a:focus-visible .k { text-decoration: underline; }
+
+.lately { list-style: none; margin: 0; padding: 0; }
+.lately li + li { border-top: 1px solid var(--rule); }
+.lately summary { display: flex; justify-content: space-between; gap: 1rem; padding: 0.8rem 0; cursor: pointer; list-style: none; font-weight: 700; font-size: 0.93rem; }
+.lately li:first-child summary { padding-top: 0.2rem; }
+.lately summary::-webkit-details-marker { display: none; }
+.lately summary::after { content: "+"; color: var(--muted); font-weight: 400; }
+.lately details[open] summary::after { content: "\2212"; }
+.lately details p { margin: 0 0 0.9rem; color: var(--ink-2); font-size: 0.88rem; line-height: 1.55; }
+
+@media (max-width: 920px) {
+  .dash-row { grid-template-columns: minmax(0, 1fr); }
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 620px) {
+  .kpi { padding: 0.95rem 1rem; }
+  .kpi-num { font-size: 2.1rem; }
+  .kpis--sm .kpi-num { font-size: 1.5rem; }
+  .chart-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .chart-meta > div:nth-child(3) { border-left: 0; padding-left: 0; }
+}
+/* the strokes-gained tiles grow to fill the card when its row partner is taller */
+.dash-row .gcard--sg { display: flex; flex-direction: column; }
+.dash-row .gcard--sg .sg-tiles { flex: 1; }
+.dash-row .gcard--sg .sg-tile { display: flex; flex-direction: column; justify-content: center; }
+.dash-row .gcard--sg .sg-line { margin-bottom: 0; }
+
+/* ---------- every golf tab in the overview's dashboard pattern (Jack, 2026-11-09) ---------- */
+.kpi-num--text { font-size: 1.6rem; line-height: 1.15; }
+.kpis--sm .kpi-num--text { font-size: 1.3rem; }
+.kpi-num.is-signal { color: var(--signal); }
+.dash-row .gcard--center { display: flex; flex-direction: column; justify-content: center; }
+.dash-row > .tm-moved-col { gap: 1rem; }
+.dash-row > .tm-moved-col > .gsect { margin-bottom: -0.3rem; }
+.dash-row > .tm-moved-col > .tm-moved:last-child { flex: 1; }
+.gcard--center > .miss-grid { width: 100%; }
+.dash-row .tm-cmp { width: 100%; }
+.gwrap .dash + .dash { margin-top: 1.6rem; }
+@media (max-width: 620px) { .kpi-num--text { font-size: 1.3rem; } }
+.lately li:last-child summary { padding-bottom: 0.1rem; }
+.lately li:last-child details[open] p { margin-bottom: 0; }
+/* By club: three columns shown, the spreads behind a tap (Jack, 2026-11-09) */
+.tm-more { margin-top: 0.9rem; border-top: 1px solid var(--rule); padding-top: 0.8rem; }
+.tm-more > summary { cursor: pointer; color: var(--accent); font-weight: 700; font-size: 0.9rem; }
+.tm-more[open] > summary { margin-bottom: 0.6rem; }
+.tm-clubs--more { max-width: 44rem; }

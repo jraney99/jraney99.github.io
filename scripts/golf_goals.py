@@ -120,7 +120,7 @@ def goal_link(goal):
     return esc(goal['page'] + '#' + goal['id'])
 
 
-def index(goals, tm):
+def index(goals, tm, intro=True):
     active = [g for g in goals if g['status'] == 'active']
     if not active:
         return ''
@@ -140,10 +140,10 @@ def index(goals, tm):
                      f'<h3>{esc(g["title"])}</h3><p>{esc(g["description"])}</p>'
                      f'<span class="goal-index-number">{current} <small>→ {fmt(g["target"], g["unit"])}</small></span>'
                      f'<span class="goal-index-label">{esc(g["metric_label"])}{when} · See the plan →</span></a>')
+    lead = ('<p class="goal-intro">Each goal has a baseline, a practice experiment and a record of what changes. '
+            'The details live with that part of my game.</p>') if intro else ''
     return ('<section class="goal-index" id="golf-goals"><h2 class="gsect">What I’m working on</h2>'
-            '<p class="goal-intro">Each goal has a baseline, a practice experiment and a record of what changes. '
-            'The details live with that part of my game.</p>'
-            '<div class="goal-index-grid">' + ''.join(cards) + '</div></section>')
+            + lead + '<div class="goal-index-grid">' + ''.join(cards) + '</div></section>')
 
 
 def related(goals):

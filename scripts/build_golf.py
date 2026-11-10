@@ -360,8 +360,22 @@ def beats_list(beats):
 
 
 def story_card(beats):
-    body = beats_list(beats)
-    return card('What the numbers say', body, cls='gcard--story') if body else ''
+    """A page's story, one line each; the evidence opens on tap (Jack, 2026-11-09: the
+    paragraphs became one line each on every tab, as on the overview)."""
+    items = ''.join(f'<li><details><summary>{lead}</summary><p>{detail}</p></details></li>'
+                    for lead, detail in beats if lead)
+    return card('What the numbers say', f'    <ul class="lately">{items}</ul>', cls='gcard--story') if items else ''
+
+
+def dash(inner):
+    """A dashboard page body: full-width strips and equal-height pairs, one gap between them."""
+    return f'<div class="dash">{inner}</div>\n'
+
+
+def pair(a, b):
+    """Two cards side by side at the same height; one alone takes the full width."""
+    both = a and b
+    return f'<div class="dash-row{"" if both else " dash-row--one"}">{a}{b}</div>' if (a or b) else ''
 
 
 def statpair(a_lbl, a_val, b_lbl, b_val):
@@ -380,95 +394,93 @@ def rbar(frac, cls='', tick=None):
 
 
 
-def briefing(stats, g):
-    """The whole game in one short card: the gap, one line on what is established, the four
-    numbers behind it, the three jobs. Every value is read off the data, so it cannot go stale."""
-    sg, leaks = stats['sg'], (stats.get('leaks') or [])
-    if not leaks:
-        return card('The short version',
-                    '    <p style="margin:0;font-size:0.95rem">Not enough tracked rounds yet to say where '
-                    'the strokes go. Play a few with Arccos running and this fills in.</p>')
-    gap = abs(sg['total'])
-    idx = g['revisions'][-1]['index']
-    r18 = [r for r in (g.get('recent_rounds') or []) if r.get('holes') == 18 and r.get('score')]
-    avg = sum(r['score'] for r in r18) / len(r18) if r18 else None
+# The overview is a dashboard (Jack, 2026-11-09: "not very readable... not symmetrical... needs
+# more of a dashboard type feel"): a strip of headline numbers, the index chart full width, then
+# pairs of equal-height cards. The four story paragraphs became one line each that opens on tap.
 
+LEAK_PAGES = (('short', 'golf-short-game.html'), ('approach', 'golf-approach.html'),
+              ('putt', 'golf-putting.html'), ('driv', 'golf-driving.html'), ('tee', 'golf-driving.html'))
+
+
+def leak_href(name):
+    low = name.lower()
+    return next((h for k, h in LEAK_PAGES if k in low), 'golf-story.html')
+
+
+def kpi(label, value, sub, text=False, flag=False):
+    cls = ' kpi-num--text' if text else ''
+    cls += ' is-signal' if flag else ''
+    return (f'<div class="kpi"><span class="lbl">{label}</span>'
+            f'<span class="num kpi-num{cls}">{value}</span><small>{sub}</small></div>')
+
+
+def kpi_row(tiles, label, cls=''):
+    return (f'<section class="kpis{" " + cls if cls else ""}" style="--n:{len(tiles)}" aria-label="{label}">'
+            + ''.join(tiles) + '</section>\n')
+
+
+def kpi_strip(stats, g):
+    """The headline numbers: where the index is, how far from scratch the shot data puts me,
+    what I shoot, and the year's best index. Every value is read off the data."""
+    revs = g['revisions']
+    now = num(revs[-1]['index'])
+    when = date.fromisoformat(revs[-1]['date']).strftime('%b %-d')
+    moved = num(revs[-2]['index']) - now if len(revs) > 1 else 0   # positive: the index went down
+    arrow, cls = ('\u2193', 'pos') if moved > 0 else ('\u2191', 'neg')   # 3.9: no backslash in f-string {}
+    sub = (f'<span class="{cls}">{arrow} {abs(moved):.1f}</span> on {when}'
+           if abs(moved) >= 0.05 else f'Updated {when}')
+    year_ago = (date.fromisoformat(revs[-1]['date']) - timedelta(days=365)).isoformat()
+    low = min(num(r['index']) for r in revs if r['date'] >= year_ago)
+    r18 = [r for r in (g.get('recent_rounds') or []) if r.get('holes') == 18 and r.get('score')]
+    tiles = [kpi('Handicap Index', show(now), sub)]
+    if stats:
+        tiles.append(kpi('Strokes from scratch', f'{abs(stats["sg"]["total"]):.1f}',
+                         f'per 18 holes \u00b7 {stats["rounds_n"]} tracked rounds'))
+    if r18:
+        tiles.append(kpi('Average score', f'{sum(r["score"] for r in r18) / len(r18):.1f}',
+                         f'adjusted \u00b7 last {len(r18)} 18-hole posts'))
+    tiles.append(kpi('Low, 12 months', show(low),
+                     f'started at {show(num(revs[0]["index"]))} in {month(revs[0]["date"])}'))
+    ex('index')
+    return kpi_row(tiles, 'Headline numbers')
+
+
+def stat_strip(stats):
+    """The four box-score numbers behind the strokes lost."""
     d, a, sh, p = stats['driving'], stats['approach'], stats['short'], stats['putting']
     rounds18 = stats['holes'] / 18
     gs = sh.get('updown_greenside') or sh['updown']
-    pitch = sh.get('updown_pitch') or {}
-
-    rows = [('Tee penalties', f'{d["tee_penalties"]} in {d["tee_shots"]} tee shots \u00b7 driver median '
-             f'{d["driver_median_yd"]} yd including roll; penalty reduction is worth testing',
-             f'{d["tee_penalties"] / rounds18:.1f}<small>/rnd</small>')]
+    tiles = [kpi('Tee penalties', f'{d["tee_penalties"] / rounds18:.1f}',
+                 f'a round \u00b7 {d["tee_penalties"]} in {d["tee_shots"]} tee shots')]
     if gs.get('of'):
-        basis = f'{gs["made"]} of {gs["of"]}'
-        if pitch.get('of'):
-            basis += f' \u00b7 {pitch["made"]} of {pitch["of"]} from 30 to 50 yd'
-        rows.append(('Up and down, inside 30 yd', basis, f'{round(gs["made"] / gs["of"] * 100)}%'))
+        tiles.append(kpi('Up and down, inside 30 yd', f'{round(gs["made"] / gs["of"] * 100)}%',
+                         f'{gs["made"]} of {gs["of"]} chances'))
     if p['three_putts']:
-        rows.append(('Three-putts', f'first putts {p["three_putt_first_ft"]} ft, against '
-                     f'{p["two_putt_first_ft"]} ft on holes you two-putted', p['three_putts']))
-    rows.append(('Greens in regulation', 'Reached in par minus two strokes', f'{a["gir_pct"]}%'))
-
-    facts = ''.join(f'<li><span class="k">{k}<small>{n}</small></span><span class="val">{v}</span></li>'
-                    for k, n, v in rows)
-    ranks = ''.join(f'<li><span class="r">{i}</span><span class="k">{l["name"]}</span>'
-                    f'<span class="val">{abs(l["per_round"]):.1f}</span></li>'
-                    for i, l in enumerate(leaks[:3], 1))
-
-    head = (f'    <div class="hero-score"><span class="num num--xl">{gap:.1f}</span>'
-            f'<span class="vs">strokes from scratch, per 18 holes</span></div>\n'
-            f'    <p class="goal-line">Index {idx}'
-            + (f' \u00b7 recent GHIN adjusted-score average {avg:.1f}' if avg else '') +
-            f' \u00b7 {stats["rounds_n"]} tracked rounds, {stats["holes"]} holes</p>\n')
-    story = beats_list(golf_story.overview(stats, g))
-    body = f'    <ul class="brows" style="margin-top:1.6rem">{facts}</ul>\n'
-    todo = ('    <p class="lbl" style="margin-top:1.2rem">What to work on \u00b7 strokes a round</p>\n'
-            f'    <ol class="ranks">{ranks}</ol>\n')
-    return card('The short version', head + story + body + todo, cls='gcard--hero')
+        tiles.append(kpi('Three-putts', p['three_putts'],
+                         f'in {stats["rounds_n"]} rounds \u00b7 first putts {p["three_putt_first_ft"]} ft, '
+                         f'{p["two_putt_first_ft"]} ft on two-putts'))
+    tiles.append(kpi('Greens in regulation', f'{a["gir_pct"]}%', 'on in par minus two strokes'))
+    return kpi_row(tiles, 'Key stats', 'kpis--sm')
 
 
-def road_card(stats, g):
-    """The one thing the section is named after: distance to scratch, and the rate.
+def work_card(stats):
+    """The three biggest leaks, ranked, each linking to its page."""
+    leaks = (stats.get('leaks') or [])[:3]
+    if not leaks:
+        return card('What to work on', '    <p class="card-sub">Not enough tracked rounds yet to say where '
+                    'the strokes go. Play a few with Arccos running and this fills in.</p>')
+    top = max(abs(l['per_round']) for l in leaks) or 1
+    rows = ''.join(f'<li><a href="{leak_href(l["name"])}"><span class="r">{i}</span>'
+                   f'<span class="k">{escape(l["name"])}<small>{escape(l.get("basis") or "")}</small></span>'
+                   f'<span class="val">\u2212{abs(l["per_round"]):.1f}</span>{rbar(abs(l["per_round"]) / top)}</a></li>'
+                   for i, l in enumerate(leaks, 1))
+    return card('What to work on', '    <p class="card-sub">Strokes lost a round, biggest first</p>\n'
+                f'    <ol class="worklist">{rows}</ol>')
 
-    The rate is measured from the first index on record to the current one, and the
-    projection it implies is stated as the naive arithmetic it is. Handicaps do not
-    fall in a straight line and this one has already gone up as well as down.
-    """
-    revs = g.get('revisions') or []
-    if len(revs) < 2:
-        return ''
-    first, last = revs[0], revs[-1]
-    now, start = num(last['index']), num(first['index'])
-    peak = max(num(r['index']) for r in revs)
-    peak_date = next(r['date'] for r in revs if num(r['index']) == peak)
-    year_ago = (date.fromisoformat(last['date']) - timedelta(days=365)).isoformat()
-    low = min(num(r['index']) for r in revs if r['date'] >= year_ago)
-    days = (date.fromisoformat(last['date']) - date.fromisoformat(first['date'])).days or 1
-    moved = start - now
-    per_month = moved / (days / 30.44)
 
-    figs = ('    <div class="statpair" style="grid-template-columns:repeat(4,minmax(0,1fr))">'
-            '<div><span class="lbl">Today</span><span class="num num--lg">%s</span></div>'
-            '<div><span class="lbl">Where it started</span><span class="num num--lg">%s</span></div>'
-            '<div><span class="lbl">Low, 12 months</span><span class="num num--lg">%s</span></div>'
-            '<div><span class="lbl">18-hole posts, last 12 mo</span><span class="num num--lg">%s</span></div></div>'
-            % (show(now), show(start), show(low), g.get('rounds_last_12_months', '\u2013')))
-
-    out = figs + '\n'
-    out += para('My index was %s when this record starts, on %s, and it peaked at %s on %s. It is '
-                '%s now.' % (show(start), month(first['date']), show(peak), month(peak_date), show(now)))
-    if moved > 0.05:
-        out += para('The index is %.1f strokes lower over this record. Progress has not been linear; '
-                    'this is not enough evidence to forecast a date for reaching scratch.' % moved)
-    elif moved < -0.05:
-        out += para('That is %.1f strokes the wrong way so far. The rate that matters has not '
-                    'started yet.' % abs(moved))
-    else:
-        out += para('Which is level, so far.')
-    ex('index')
-    return card('Road to scratch', out, cls='gcard--hero')
+def story_lines(stats, g):
+    """The overview's story, one line each; the evidence opens on tap."""
+    return story_card(golf_story.overview(stats, g))
 
 
 def trend_card(stats):
@@ -508,9 +520,8 @@ def sg_fmt(v):
     return sg(v) if isinstance(v, (int, float)) else '\u2013'
 
 
-def hero_card(stats, g):
+def rounds_card(stats, g):
     recent = [r for r in (g.get('recent_rounds') or []) if r.get('score')]
-    full18 = [r for r in recent if r.get('holes') == 18]
     idx = num(g['revisions'][-1]['index'])
     tracked_dates = {r['date'] for r in stats['rounds']} if stats else set()
     rows = []
@@ -523,31 +534,31 @@ def hero_card(stats, g):
         dtxt = f'<span class="num num--md {dcls}">{diff:.1f}</span>' if diff is not None else ''
         rows.append(f'<li><span class="course"><b>{name}</b><small>{sub}</small></span>'
                     f'<span class="score"><span class="num num--md">{r["score"]}</span>{dtxt}</span></li>')
-    avg = sum(r['score'] for r in full18) / max(1, len(full18))
-    gap = (f'The complete 18-hole Arccos rounds averaged {stats["scoring"]["avg18"]:.1f} raw strokes. '
-           f'Across all {stats["holes"]} tracked holes, the model estimates {abs(stats["sg"]["total"]):.0f} strokes lost per 18 holes.'
-           ) if stats else f'Scratch is 0.0. My index is {show(idx)}.'
-    inner = (f'    <div class="hero-score"><span class="num num--xl">{avg:.1f}</span>'
-             f'<span class="vs">adjusted-score average · {len(full18)} recent 18-hole posts</span></div>\n'
-             f'    <p class="goal-line">{gap}</p>\n'
-             f'    <p class="lbl" style="margin-top:1.2rem">Recent rounds \u00b7 score and differential</p>\n'
+    inner = (f'    <p class="card-sub">Score and differential \u00b7 green is at or better than my index</p>\n'
              f'    <ul class="rounds-list">{"".join(rows)}</ul>\n'
-             f'    <p class="vs-note" style="text-align:left">Recent GHIN totals use handicap-adjusted scores. '
-             f'Differentials are compared with my current index; raw Arccos scores use a separate sample.</p>')
-    return card('Scoring', inner, cls='gcard--hero', explain=('index', 'differential'))
+             f'    <p class="vs-note" style="text-align:left">GHIN totals are handicap-adjusted scores. '
+             f'Raw Arccos scores are a separate sample.</p>')
+    return card('Recent rounds', inner, explain=('index', 'differential'))
 
 
-def scoring_card(stats):
+def holes_card(stats, g):
+    """Scoring bands (Arccos) and over-par by par type (GHIN) in one card: how holes turn out."""
     b = stats['scoring']['bands']
     total = sum(b.values()) or 1
     segs = ''.join(f'<i style="width:{v / total * 100:.1f}%;background:{BAND_COLORS[k]}"></i>' for k, v in b.items())
     cells = ''.join(f'<div><span class="num num--lg">{v}</span>'
-                    f'<span class="blbl" style="color:{BAND_COLORS[k]}">{k.replace("+", "+").replace("double+", "dbl+").title()}</span>'
+                    f'<span class="blbl" style="color:{BAND_COLORS[k]}">{k.replace("double+", "dbl+").title()}</span>'
                     f'<small>{v / total:.0%}</small></div>' for k, v in b.items())
-    inner = (statpair('Rounds', stats['rounds_n'], 'Holes', stats['holes'])
-             + f'\n    <div class="bandbar">{segs}</div>\n    <div class="bands">{cells}</div>'
-             + '\n    <p class="vs-note">Arccos-tracked rounds only</p>')
-    return card('Scoring bands', inner)
+    inner = (f'    <p class="card-sub">{stats["holes"]} holes over {stats["rounds_n"]} tracked rounds; '
+             f'raw average {stats["scoring"]["avg18"]:.1f} on complete 18s</p>\n'
+             f'    <div class="bandbar">{segs}</div>\n    <div class="bands">{cells}</div>\n')
+    rows = par_rows(g)
+    if rows:
+        inner += (f'    <p class="lbl" style="margin-top:1.4rem">Over par a round, by hole type</p>\n'
+                  f'    <ul class="drows">{rows}</ul>\n'
+                  '    <p class="vs-note" style="text-align:left">Bands: Arccos-tracked holes. By hole type: GHIN '
+                  'hole scores scaled to a card of four par 3s, ten par 4s and four par 5s.</p>')
+    return card('How my holes go', inner)
 
 
 def sg_card(stats):
@@ -567,7 +578,7 @@ def sg_card(stats):
              f'<span class="num num--lg">{sg(stats["sg"]["total"])}</span></div>\n'
              f'    <div class="sg-tiles">{"".join(tiles)}</div>\n'
              f'    <p class="sg-line"><b>{worst_name}</b> is my biggest opportunity.</p>')
-    return card('Strokes gained breakdown', inner, explain=('sg', 'range'))
+    return card('Strokes gained breakdown', inner, cls='gcard--sg', explain=('sg', 'range'))
 
 
 
@@ -580,26 +591,45 @@ def handicap_card(g):
     best = g.get('best_differential')
     minus = '−'
     best_txt = (f'{minus if best < 0 else ""}{abs(best):.1f}') if best is not None else '–'
-    # Today, the low and the round count now head the Road to scratch card above this
-    # one, so only the figure that is not up there is repeated here.
-    chips = (f'<div class="statpair" style="margin-bottom:1rem">'
-             f'<div><span class="lbl">Best differential</span><span class="num num--lg">{best_txt}</span></div>'
-             f'<div><span class="lbl">Revisions on record</span><span class="num num--lg">{len(revs)}</span></div></div>')
-    return card('Handicap Index, every revision', chips + chart(revs, today))
+    start = num(revs[0]['index'])
+    peak = max(num(r['index']) for r in revs)
+    peak_date = next(r['date'] for r in revs if num(r['index']) == peak)
+    # The current index and the 12-month low head the page in the numbers strip, so this card
+    # carries only what is not up there.
+    facts = [('Started', f'{show(start)} <small>{month(revs[0]["date"])}</small>'),
+             ('Peak', f'{show(peak)} <small>{month(peak_date)}</small>'),
+             ('Best differential', best_txt), ('Revisions', len(revs))]
+    meta = ('    <dl class="chart-meta">' + ''.join(f'<div><dt class="lbl">{k}</dt><dd>{v}</dd></div>'
+                                                   for k, v in facts) + '</dl>\n')
+    moved = start - cur
+    if moved > 0.05:
+        note = (f'{moved:.1f} lower than where this record starts. Progress has not been linear, '
+                'so this is not enough to forecast a date for reaching scratch.')
+    elif moved < -0.05:
+        note = f'{abs(moved):.1f} higher than where this record starts.'
+    else:
+        note = 'Level with where this record starts.'
+    ex('differential')
+    return card('Handicap Index, every revision',
+                meta + chart(revs, today) + f'    <p class="vs-note" style="text-align:left">{note}</p>')
+
+
+def par_rows(g):
+    par = g.get('by_par') or {}
+    return ''.join(f'<li><span class="from">Par {p}s</span>'
+                   + rbar(par[p]['avg_over_par'] * PAR_HOLES[p] / 10)
+                   + f'<span class="n">{par[p]["holes"]} holes</span>'
+                   f'<span class="val neg">+{par[p]["avg_over_par"] * PAR_HOLES[p]:.1f}</span></li>'
+                   for p in ('3', '4', '5') if p in par)
 
 
 def bypar_card(g):
+    """The no-shot-data fallback page's only scoring card."""
     par = g.get('by_par') or {}
     if not par:
         return ''
-    rows, per_round = [], {}
-    for p in ('3', '4', '5'):
-        if p in par:
-            per_round[p] = par[p]['avg_over_par'] * PAR_HOLES[p]
-            rows.append(f'<li><span class="from">Par {p}s</span>'
-                        + rbar(per_round[p] / 10)
-                        + f'<span class="n">{par[p]["holes"]} holes</span>'
-                        f'<span class="val neg">+{per_round[p]:.1f}</span></li>')
+    rows = [par_rows(g)]
+    per_round = {p: par[p]['avg_over_par'] * PAR_HOLES[p] for p in ('3', '4', '5') if p in par}
     worst = max(per_round, key=per_round.get)
     lead = (f'Par {worst}s contribute the most in this illustration. GHIN adjusted hole scores are scaled to '
             'a hypothetical card with four par 3s, ten par 4s and four par 5s; this is not an actual round average.')
@@ -627,9 +657,13 @@ def drow(frm, bar, n, val, thin=False):
 def page_driving(stats, g):
     d = stats['driving']
     fw = d['fairways']
-    left = (card('', statpair('Driver total, median', f'{d["driver_median_yd"]} yd', 'Total, longest', f'{d["driver_longest_yd"]} yd'))
-            + card('', statpair('Tee-shot penalties', d['tee_penalties'], 'Fairways', f'{fw["hit"] / fw["of"]:.0%}'),
-                   explain=('penalty', 'sg')))
+    explainers('penalty', 'sg')
+    measured = f'median of {d["driver_measured"]} drives' if d.get('driver_measured') else 'median'
+    tiles = kpi_row([kpi('Driver total', f'{d["driver_median_yd"]} yd', f'{measured} \u00b7 includes roll'),
+                     kpi('Longest total', f'{d["driver_longest_yd"]} yd', 'driver, on the course'),
+                     kpi('Tee-shot penalties', d['tee_penalties'], f'in {d["tee_shots"]} tee shots'),
+                     kpi('Fairways', f'{fw["hit"] / fw["of"]:.0%}', f'{fw["hit"]} of {fw["of"]}')],
+                    'Driving on the course')
     td = d.get('tee_decision') or {}
     tee_card = ''
     if td.get('clubs'):
@@ -651,8 +685,7 @@ def page_driving(stats, g):
                         '<th>SG per shot</th><th>Penalty rate</th><th>Median total (yd)</th></tr></thead><tbody>'
                         + rows + '</tbody></table></div>\n'
                         f'    <p style="margin:0.8rem 0 0;font-size:0.92rem">{verdict}</p>')
-    right = tee_card
-    return (f'<div class="ggrid"><div class="gcol">{left}</div><div class="gcol">{right}</div></div>')
+    return dash(tiles + tee_card)
 
 
 def page_approach(stats, g):
@@ -668,13 +701,16 @@ def page_approach(stats, g):
                 f'<span class="miss miss--short">Short<b>{m["short"]}</b></span></div>\n'
                 f'    <p class="vs-note" style="text-align:center">Typical spread ±{disp.get("lateral_sd", "?")} yd across, '
                 f'±{disp.get("depth_sd", "?")} yd deep · usual miss: {disp.get("tendency", "?")}</p>')
-    left = (card('', statpair('Greens in regulation', f'{a["gir_pct"]}%', 'Shots', sum(v['shots'] for v in a['buckets'].values())))
-            + card('', statpair('Proximity, greens hit', f'{a["prox_gir_ft"]} ft', 'Proximity, all', f'{a["prox_all_ft"]} ft')))
+    tiles = kpi_row([kpi('Greens in regulation', f'{a["gir_pct"]}%', 'on in par minus two strokes'),
+                     kpi('Approach shots', sum(v['shots'] for v in a['buckets'].values()), 'from more than 50 yd'),
+                     kpi('Proximity, greens hit', f'{a["prox_gir_ft"]} ft', 'median distance to the hole'),
+                     kpi('Proximity, all', f'{a["prox_all_ft"]} ft', 'counting the misses')],
+                    'Approach numbers')
     mid = card('Strokes gained by starting distance (yd)', f'    <ul class="drows">{rows}</ul>'
                '<p class="vs-note">Contribution per 18 holes, not per shot. Negative means strokes lost; '
                'small samples are marked. Miss-direction counts use eligible approach finishes; GIR is a percentage of holes.</p>', explain=('sg', 'thin'))
-    right = card('Where approach shots finish', missgrid, explain=('gir', 'prox', 'dispersion'))
-    return (f'<div class="ggrid3"><div class="gcol">{left}</div><div class="gcol">{mid}</div><div class="gcol">{right}</div></div>')
+    right = card('Where approach shots finish', missgrid, cls='gcard--center', explain=('gir', 'prox', 'dispersion'))
+    return dash(tiles + pair(mid, right))
 
 
 def page_short(stats, g):
@@ -683,12 +719,18 @@ def page_short(stats, g):
     disp = s.get('dispersion') or {}
     rows = ''.join(drow(f'{b}', rbar(abs(v['sg_round']) / 2.5, 'ok' if v['sg_round'] > 0 else ''),
                         f'{v["shots"]} shots', sg(v['sg_round']), v.get('thin')) for b, v in s['buckets'].items())
-    left = (card('', statpair('Up and down, inside 30 yd',
-                                f'{(s.get("updown_greenside") or ud)["made"]}/{(s.get("updown_greenside") or ud)["of"]}',
-                                'Usual miss', (disp.get('tendency') or '?').title())))
+    pitch = s.get('updown_pitch') or {}
+    tiles = [kpi('Strokes gained', sg(stats['sg']['per_round']['short']), 'a round against scratch')]
+    if ud.get('of'):
+        tiles.append(kpi('Up and down, inside 30 yd', f'{round(ud["made"] / ud["of"] * 100)}%',
+                         f'{ud["made"]} of {ud["of"]} chances'))
+    if pitch.get('of'):
+        tiles.append(kpi('Up and down, 30 to 50 yd', f'{round(pitch["made"] / pitch["of"] * 100)}%',
+                         f'{pitch["made"]} of {pitch["of"]} chances'))
+    tiles.append(kpi('Usual miss', (disp.get('tendency') or '?').title(), 'where chips finish', text=True))
     right = card('Strokes gained by starting distance (yd)', f'    <ul class="drows">{rows}</ul>'
                  '<p class="vs-note">Contribution per 18 holes, not per chip. Negative means strokes lost.</p>', explain=('updown', 'thin', 'sg'))
-    return (f'<div class="ggrid"><div class="gcol">{left}</div><div class="gcol">{right}</div></div>')
+    return dash(kpi_row(tiles, 'Short game numbers') + right)
 
 
 def page_putting(stats, g):
@@ -705,20 +747,22 @@ def page_putting(stats, g):
         make_rows.append(drow(f"{b}'", rbar(v['made_pct'] / 100, 'ok' if delta >= 0 else '', tick=v['scratch_pct']),
                               f'{v["n"]} first putts', f'<span class="{cls}">{v["made_pct"]}% ({delta:+d} pp)</span>',
                               v.get('thin')))
-    left = (focus_card(f'{focus} ft first putts' if focus else 'keep measuring',
-                       'This band shows a loss under the model; treat it as a practice hypothesis.' if focus else
-                       'No distance band has both enough first putts and a loss range entirely below zero. '
-                       'The lowest estimate is not yet a proven weakness.',
-                       sg(p['sg_round']), 'Strokes/rnd')
-            + card('', statpair('Putts per round', p['putts_round'], '3-putts/rnd', round(p['three_putts'] / (stats['holes'] / 18), 1))))
-    mid = (card('First-putt strokes gained by distance', f'<ul class="drows">{sg_rows}</ul>'
+    tiles = kpi_row([
+        kpi('Strokes gained', sg(p['sg_round']), 'a round against scratch'),
+        kpi('Putts a round', p['putts_round'], 'depends on greens hit, too'),
+        kpi('Three-putts a round', round(p['three_putts'] / (stats['holes'] / 18), 1),
+            f'{p["three_putts"]} in {stats["rounds_n"]} rounds'),
+        kpi('Focus', f'{focus} ft' if focus else 'Keep measuring',
+            'first putts lose here; a practice hypothesis' if focus else
+            'no distance band is a proven weakness yet', text=not focus)], 'Putting numbers')
+    mid = pair(card('First-putt strokes gained by distance', f'<ul class="drows">{sg_rows}</ul>'
                 '<p class="vs-note">Contributions per 18 holes from first putts only. Later putts remain in '
-                'the overall putting total, so these rows need not add up to it.</p>', explain=('sg', 'range'))
-           + card('First-putt make rate by distance', f'    <ul class="drows">{"".join(make_rows)}</ul>\n'
+                'the overall putting total, so these rows need not add up to it.</p>', explain=('sg', 'range')),
+                card('First-putt make rate by distance', f'    <ul class="drows">{"".join(make_rows)}</ul>\n'
                   '    <p class="vs-note">▏ marks the saved scratch reference. pp = percentage points. '
                   'These are first putts, not every putt played. The saved benchmark lacks a traceable distance-matched source, so treat its differences as provisional.</p>',
                   explain=('makerate', 'thin')))
-    return (f'<div class="ggrid"><div class="gcol">{left}</div><div class="gcol">{mid}</div></div>')
+    return dash(tiles + mid)
 
 
 def band_for(over):
@@ -877,9 +921,21 @@ def page_rounds(stats, g):
                     for b, v in sorted(stats['scoring']['par4_by_length'].items()))
     # Labelled with its sample: the overview's by-par card is GHIN's 21 rounds, this one Arccos's.
     bypar_title = 'Average over par, by hole \u00b7 %d Arccos rounds' % stats['rounds_n']
-    small = (f'<div class="ggrid">{card(bypar_title, f"    <ul class=_drows_>{bypar}</ul>".replace("_", chr(34)))}'
-             f'{card("Par 4s by length (yd)", f"    <ul class=_drows_>{bylen}</ul>".replace("_", chr(34)))}</div>')
-    return ghin_table + table + small
+    small = pair(card(bypar_title, f'    <ul class="drows">{bypar}</ul>'),
+                 card('Par 4s by length (yd)', f'    <ul class="drows">{bylen}</ul>'))
+    r18 = [r for r in (g.get('recent_rounds') or []) if r.get('holes') == 18 and r.get('score')]
+    best = g.get('best_differential')
+    tiles = [kpi('Posted, 12 months', g.get('rounds_last_12_months', '\u2013'), '18-hole rounds on GHIN')]
+    if r18:
+        tiles.append(kpi('Average score', f'{sum(r["score"] for r in r18) / len(r18):.1f}',
+                         f'adjusted \u00b7 last {len(r18)} 18-hole posts'))
+    if best is not None:
+        minus = '\u2212' if best < 0 else ''   # 3.9: no backslash inside an f-string {}
+        tiles.append(kpi('Best differential', f'{minus}{abs(best):.1f}', 'my best round on record'))
+    raw18 = [r['score'] for r in stats['rounds'] if r['holes'] == 18]
+    tiles.append(kpi('Shot-tracked rounds', stats['rounds_n'],
+                     f'raw {min(raw18)} to {max(raw18)} on 18s' if raw18 else f'{stats["holes"]} holes'))
+    return dash(kpi_row(tiles, 'Rounds numbers') + ghin_table + table + small)
 
 
 def trackman_data(include_history=False):
@@ -1054,11 +1110,8 @@ def tm_figures(tm, clubs_by):
         figs.append(('Last 30 days', '{:,} balls'.format(tm['balls_30d']), bits, False))
     if not figs:
         return ''
-    mod = {3: ' figures--3', 4: ' figures--4'}.get(len(figs), '')
-    cells = ''.join('<div><dt>%s</dt><dd%s>%s<small>%s</small></dd></div>'
-                    % (lbl, ' class="is-signal"' if flag else '', val, ' · '.join(bits))
-                    for lbl, val, bits, flag in figs)
-    return f'<dl class="figures{mod} tm-figs">{cells}</dl>\n'
+    return kpi_row([kpi(lbl, val, ' \u00b7 '.join(bits), flag=flag) for lbl, val, bits, flag in figs],
+                   'TrackMan numbers')
 
 
 def moved_notes(tm):
@@ -1156,7 +1209,7 @@ def club_table(tm):
     marks = [tour_mark('Carry', c['club']) for c in rows_src]
     longest = max([c['carry'] for c in rows_src] + [m[0] for m in marks if m] or [1])
     dash = '–'
-    rows = ''
+    rows = more = ''
     for i, (c, pga) in enumerate(zip(rows_src, marks)):
         nxt = rows_src[i + 1] if i + 1 < len(rows_src) else None
         gap = round(c['carry'] - nxt['carry']) if nxt else None
@@ -1168,19 +1221,29 @@ def club_table(tm):
             name += ' <small>too few to read</small>'
         side = c.get('side_spread')
         bias = c.get('side_bias')
-        rows += ('<tr%s><td>%s</td><td class="tm-barcol">%s</td><td class="r num">%s</td><td class="r">%s</td>'
-                 '<td class="r">%s</td><td class="r">%s</td><td class="r">%s</td><td class="r%s">%s</td><td>%s</td></tr>'
-                 % (' class="tm-sample"' if c.get('sample') else '', name,
-                    rbar(c['carry'] / longest, 'neu', tick), c['carry'],
-                    c['total'] if c.get('total') else dash, pga[0] if pga else dash, gap if gap is not None else dash,
+        # The table shows what picks a club: carry, total, gap to the next one. Tour carry and the
+        # spreads open on tap underneath (Jack, 2026-11-09: "shrink the club table to the most
+        # important columns ... and put the rest behind a tap").
+        tr = '<tr%s>' % (' class="tm-sample"' if c.get('sample') else '')
+        rows += ('%s<td>%s</td><td class="tm-barcol">%s</td><td class="r num">%s</td><td class="r">%s</td>'
+                 '<td class="r">%s</td></tr>'
+                 % (tr, name, rbar(c['carry'] / longest, 'neu', tick), c['carry'],
+                    c['total'] if c.get('total') else dash, gap if gap is not None else dash))
+        more += ('%s<td>%s</td><td class="r">%s</td><td class="r">%s</td><td class="r%s">%s</td><td>%s</td></tr>'
+                 % (tr, name, pga[0] if pga else dash,
                     c['carry_spread'] if c.get('carry_spread') is not None else dash,
                     ' tm-flag' if side is not None and side > CORRIDOR_HALF else '',
                     side if side is not None else dash,
                     bias if bias in ('left', 'right') else dash))
     table = ('    <div class="table-wrap"><table class="gtable tm-clubs"><thead><tr><th>Club</th>'
-             '<th class="tm-barcol">Carry</th><th class="r">Carry</th><th class="r">Total</th><th class="r">PGA</th>'
-             '<th class="r">Gap to next</th><th class="r">Carry ±</th><th class="r">Left/right ±</th>'
-             '<th>Miss</th></tr></thead><tbody>%s</tbody></table></div>\n' % rows)
+             '<th class="tm-barcol">Carry</th><th class="r">Carry</th><th class="r">Total</th>'
+             '<th class="r">Gap to next</th></tr></thead><tbody>%s</tbody></table></div>\n' % rows)
+    table += ('    <details class="tm-more"><summary>Spread and tour comparison</summary>\n'
+              '    <div class="table-wrap"><table class="gtable tm-clubs tm-clubs--more"><thead><tr><th>Club</th>'
+              '<th class="r">PGA carry</th><th class="r">Carry ±</th><th class="r">Left/right ±</th>'
+              '<th>Miss</th></tr></thead><tbody>%s</tbody></table></div>\n'
+              '    <p class="vs-note tm-note">PGA carry is the Tour average, published only through pitching '
+              'wedge. Gold: wider than the ±%d yd practice corridor.</p></details>\n' % (more, CORRIDOR_HALF))
     lasts = sorted({str(c['last']) for c in real if c.get('last')})
     shots = sorted({c['n'] for c in real if c.get('n')})
     note = ['Yards. Median of each club’s latest swings on measuring days'
@@ -1190,7 +1253,6 @@ def club_table(tm):
             'Total adds TrackMan\u2019s estimate of roll on its default fairway; on the course roll depends on '
             'how firm the ground is.',
             'The tick on each bar is the PGA Tour average carry, published only through pitching wedge.',
-            'Gold: wider than the ±%d yd practice corridor.' % CORRIDOR_HALF,
             golf_story.gap_line(real)]
     if tm.get('wedges') and not any(w.get('inferred') for w in tm['wedges']):
         note.append('Half- and three-quarter wedge distances are not measured yet.')
@@ -1232,9 +1294,10 @@ def page_trackman_real(tm, stats):
     days = session_days(plans, limit=7)
     ran = [d for d in days if d['ran']]
     older = [d for d in days if d is not (ran[0] if ran else None)]
-    out = '<section class="tm-top">\n' + tm_figures(tm, clubs_by) + moved_notes(tm) + '</section>\n'
-    out += latest_session(stats, days, plans)
-    out += club_table(tm)
+    moved = moved_notes(tm)
+    out = dash(tm_figures(tm, clubs_by)
+               + pair(f'<section class="tm-moved-col"><h2 class="gsect">What moved</h2>{moved}</section>' if moved else '', latest_session(stats, days, plans))
+               + club_table(tm))
     if older:
         balls = sum(x.get('balls') or 0 for d in older for x in d['ran'])
         sub = '%d earlier day%s' % (len(older), '' if len(older) == 1 else 's') + (
@@ -1422,8 +1485,12 @@ def story_where(stats, g):
     avg = sum(r['score'] for r in r18) / len(r18) if r18 else None
     sc = stats['scoring']
     gap = abs(stats['sg']['total'])
-    out = (f'    <div class="hero-score"><span class="num num--xl">{idx}</span>'
-           f'<span class="vs">Handicap Index</span></div>\n')
+    strip = kpi_row([kpi('Handicap Index', idx, 'official, from GHIN')]
+                    + ([kpi('Average score', f'{avg:.1f}', f'adjusted \u00b7 last {len(r18)} 18-hole posts')] if avg else [])
+                    + [kpi('Raw average', f'{sc["avg18"]:.1f}', 'complete 18s with every shot tracked'),
+                       kpi('Strokes from scratch', f'{gap:.1f}', f'per 18 holes \u00b7 {stats["holes"]} tracked holes')],
+                    'Where I stand')
+    out = ''
     bits = [f'My index is {idx}']
     if avg:
         bits.append(f'my recent 18-hole GHIN adjusted scores average {avg:.1f}')
@@ -1441,7 +1508,7 @@ def story_where(stats, g):
                 f'across {holes} holes. The doubles are {b["double+"] / holes:.0%} of my holes and they '
                 'are where the round actually goes. Nothing on this page matters as much as how those '
                 'holes start and end.')
-    return card('Where I stand', out, cls='gcard--hero')
+    return dash(strip + pair(card('Where I stand', out), story_leaks(stats)))
 
 
 def story_chain(stats, g):
@@ -1669,7 +1736,7 @@ def story_tour(stats, g):
 
 def page_story(stats, g):
     return (story_where(stats, g) + story_chain(stats, g) + story_parts(stats, g)
-            + story_leaks(stats) + story_tour(stats, g) + story_plan(stats, g)
+            + story_tour(stats, g) + story_plan(stats, g)
             + story_limits(stats, g))
 
 
@@ -1768,13 +1835,11 @@ def page_courses(stats, g):
     cs = d['courses']
     states = sorted({c['state'] for c in cs if c.get('state')})
     ranked = [c for c in cs if c.get('rank') or c.get('state_rank')]
-    figs = ('    <div class="statpair" style="grid-template-columns:repeat(3,minmax(0,1fr))">'
-            '<div><span class="lbl">Listed courses</span><span class="num num--lg">%d</span></div>'
-            '<div><span class="lbl">States</span><span class="num num--lg">%d</span></div>'
-            '<div><span class="lbl">Ranked by Golf Digest</span><span class="num num--lg">%d</span></div>'
-            '</div>' % (len(cs), len(states), len(ranked)))
+    figs = kpi_row([kpi('Courses played', len(cs), 'my recorded life list'),
+                    kpi('States', len(states), ', '.join(states)),
+                    kpi('Ranked by Golf Digest', len(ranked), 'national or state lists')], 'Course numbers')
     mp = us_map(cs)
-    top = card('The life list', figs + '\n' + mp + '    <p class="vs-note" style="text-align:left">'
+    top = figs + card('The life list', mp + '    <p class="vs-note" style="text-align:left">'
                'My recorded list of courses played. Pins sit on the town, not the '
                'clubhouse, and a bigger pin is more courses in one place. Gold means Golf Digest '
                'ranks it. Dates exist only where I recorded them at the time.</p>')
@@ -1894,15 +1959,17 @@ def main():
     goals = golf_goals.load_goals(ROOT)
     tm = trackman_data(include_history=True)
     if stats:
-        hub = (f'<section class="span2" style="margin-bottom:1.3rem">{briefing(stats, g)}</section>'
-               + golf_goals.index(goals, tm)
-               + f'<div class="ggrid">'
-               f'<div class="gcol">{hero_card(stats, g)}{bypar_card(g)}</div>'
-               f'<div class="gcol">{sg_card(stats)}{scoring_card(stats)}</div>'
-               f'<section class="span2">{road_card(stats, g)}</section>'
-               f'<section class="span2">{handicap_card(g)}</section>'
-               f'<section class="span2">{trend_card(stats)}</section>'
-               f'</div>')
+        goal_cards, story = golf_goals.index(goals, tm, intro=False), story_lines(stats, g)
+        last_row = ''.join(x for x in (goal_cards, story) if x)
+        last_cls = 'dash-row' if goal_cards and story else 'dash-row dash-row--one'
+        hub = ('<div class="dash">'
+               + kpi_strip(stats, g)
+               + handicap_card(g)
+               + f'<div class="dash-row">{sg_card(stats)}{work_card(stats)}</div>'
+               + f'<div class="dash-row">{rounds_card(stats, g)}{holes_card(stats, g)}</div>'
+               + stat_strip(stats)
+               + (f'<div class="{last_cls}">{last_row}</div>' if last_row else '')
+               + '</div>' + trend_card(stats))
     else:
         hub = f'<div class="ggrid"><section class="span2">{handicap_card(g)}</section><div class="gcol">{bypar_card(g)}</div></div>'
     write_page('golf.html', 'Road to scratch · Jack Raney', 'Road to scratch',
@@ -1923,8 +1990,8 @@ def main():
             goal_content = golf_goals.for_page(fname, goals, tm)
             if goal_content:
                 content = goal_content + '<h2 class="gsect">On the course · Arccos</h2>' + content
-            if fname in stories:
-                content = story_card(stories[fname]()) + content
+            if fname in stories:   # numbers first, the story below them (Jack, 2026-11-09)
+                content = content + story_card(stories[fname]())
             if fname == 'golf-trackman.html':
                 content = golf_goals.related(goals) + content
             write_page(fname, f'{title} · Road to scratch · Jack Raney', title, desc, content, g, stats,

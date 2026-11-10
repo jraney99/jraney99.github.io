@@ -34,7 +34,10 @@ class GolfAudit(unittest.TestCase):
         for bucket in stats['putting']['buckets'].values():
             bucket.update(thin=True, ci=[-2, -1])
         html = golf.page_putting(stats, self.ghin)
-        self.assertIn('keep measuring', html)
+        # Was assertIn('keep measuring', html): the line is now the Focus tile's value, capitalised
+        # (dashboard layout, 2026-11-09). Same guard: no thin bucket is named as the focus.
+        self.assertIn('Keep measuring', html)
+        self.assertNotIn('first putts lose here', html)
         self.assertIn('first putts', html)
         self.assertIn('percentage points', html)
         self.assertIn('Later putts remain', html)
