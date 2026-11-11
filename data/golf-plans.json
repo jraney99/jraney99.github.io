@@ -1,5 +1,48 @@
 [
  {
+  "date": "2026-11-10",
+  "time": "19:30",
+  "type": "sim",
+  "location": "The Reserve Indoor Golf Club",
+  "benchmark": false,
+  "focus": "0-50 yd short game, Approach 75-150 yd, Driving penalties",
+  "blocks": [
+   {
+    "balls": 5,
+    "title": "Warmup",
+    "detail": "9-iron, loose. No targets.",
+    "target": null
+   },
+   {
+    "balls": 35,
+    "title": "Technical: Pause at the top (Harmon)",
+    "club": "8i",
+    "detail": "8-iron only. Swing to the top, stop, then hit the shot. Every ball.",
+    "target": null
+   },
+   {
+    "balls": 10,
+    "title": "Driver corridor (leak 1)",
+    "detail": "36 yd fairway on screen. Full routine every ball. This is the shot that costs you most.",
+    "target": "75% inside the corridor"
+   },
+   {
+    "balls": 10,
+    "title": "Pitches 5 to 50 yd (leak 2)",
+    "detail": "Rotate 5, 27 and 50 yd, three balls at each number, then move on. Land number first, run second. Don't move the green: read the carry against your number.",
+    "target": "carry within ±4 yd on 70%"
+   },
+   {
+    "balls": 15,
+    "title": "Pressure test",
+    "detail": "One ball per number, full routine, changing club in your hand and on TrackMan: 130 (Pw) · 155 (8i) · 115 (54°) · 100 (58°) · 80 (58°) · 85 (58°) · 60 (58°) · 110 (54°) · 140 (Pw) · 180 (7i) · 135 (Pw) · 105 (54°) · 65 (58°) · 175 (7i) · 165 (8i). Don't move the green: read the carry. Off by more than 10% of the number is a miss, and the last three repeat.",
+    "target": "graded on proximity"
+   }
+  ],
+  "note": "Synced TrackMan sessions import within the hour after you finish. Keep a bay CSV only as a fallback if the session does not sync. Don’t count or judge anything mid-session.",
+  "status": "planned"
+ },
+ {
   "date": "2026-11-09",
   "time": "18:30",
   "type": "sim",
