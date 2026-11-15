@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-14",
+ "updated": "2026-11-15",
  "revisions": [
   {
    "date": "2025-12-27",
@@ -100,13 +100,192 @@
   {
    "date": "2026-10-25",
    "index": "4.1"
+  },
+  {
+   "date": "2026-11-15",
+   "index": "4.0"
   }
  ],
- "rounds_posted": 27,
- "rounds_last_12_months": 24,
+ "rounds_posted": 28,
+ "rounds_last_12_months": 25,
  "best_differential": -2.0,
- "scoring_rounds": 21,
+ "scoring_rounds": 22,
  "recent_rounds": [
+  {
+   "date": "2026-11-14",
+   "holes": 18,
+   "course": "Twin Creeks Golf Club",
+   "score": 82,
+   "raw": 82,
+   "differential": 6.8,
+   "card": [
+    {
+     "h": 1,
+     "par": 5,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 2,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 3,
+     "par": 3,
+     "adj": 3,
+     "raw": 3,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 4,
+     "par": 4,
+     "adj": 6,
+     "raw": 6,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 5,
+     "par": 4,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 6,
+     "par": 5,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 7,
+     "par": 3,
+     "adj": 3,
+     "raw": 3,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 8,
+     "par": 4,
+     "adj": 6,
+     "raw": 6,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 9,
+     "par": 4,
+     "adj": 6,
+     "raw": 6,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 10,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 11,
+     "par": 3,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 12,
+     "par": 4,
+     "adj": 3,
+     "raw": 3,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 13,
+     "par": 5,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 14,
+     "par": 4,
+     "adj": 6,
+     "raw": 6,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 15,
+     "par": 3,
+     "adj": 3,
+     "raw": 3,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 16,
+     "par": 5,
+     "adj": 4,
+     "raw": 4,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 17,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    },
+    {
+     "h": 18,
+     "par": 4,
+     "adj": 5,
+     "raw": 5,
+     "putts": null,
+     "fw": null,
+     "gir": null
+    }
+   ],
+   "tee": "Gold",
+   "rating": 73.1,
+   "slope": 131
+  },
   {
    "date": "2026-10-24",
    "holes": 18,
@@ -1275,181 +1454,6 @@
    "tee": "Black",
    "rating": 73.7,
    "slope": 132
-  },
-  {
-   "date": "2026-04-11",
-   "holes": 18,
-   "course": "Private course",
-   "score": 82,
-   "raw": 82,
-   "differential": 6.0,
-   "card": [
-    {
-     "h": 1,
-     "par": 5,
-     "adj": 6,
-     "raw": 6,
-     "putts": 2,
-     "fw": false,
-     "gir": false
-    },
-    {
-     "h": 2,
-     "par": 4,
-     "adj": 5,
-     "raw": 5,
-     "putts": 3,
-     "fw": false,
-     "gir": true
-    },
-    {
-     "h": 3,
-     "par": 4,
-     "adj": 5,
-     "raw": 5,
-     "putts": 2,
-     "fw": false,
-     "gir": false
-    },
-    {
-     "h": 4,
-     "par": 3,
-     "adj": 5,
-     "raw": 5,
-     "putts": 3,
-     "fw": null,
-     "gir": false
-    },
-    {
-     "h": 5,
-     "par": 4,
-     "adj": 4,
-     "raw": 4,
-     "putts": 2,
-     "fw": false,
-     "gir": true
-    },
-    {
-     "h": 6,
-     "par": 4,
-     "adj": 4,
-     "raw": 4,
-     "putts": 2,
-     "fw": true,
-     "gir": false
-    },
-    {
-     "h": 7,
-     "par": 3,
-     "adj": 4,
-     "raw": 4,
-     "putts": 2,
-     "fw": null,
-     "gir": false
-    },
-    {
-     "h": 8,
-     "par": 5,
-     "adj": 4,
-     "raw": 4,
-     "putts": 2,
-     "fw": true,
-     "gir": true
-    },
-    {
-     "h": 9,
-     "par": 3,
-     "adj": 4,
-     "raw": 4,
-     "putts": 2,
-     "fw": null,
-     "gir": false
-    },
-    {
-     "h": 10,
-     "par": 4,
-     "adj": 4,
-     "raw": 4,
-     "putts": 2,
-     "fw": false,
-     "gir": true
-    },
-    {
-     "h": 11,
-     "par": 3,
-     "adj": 5,
-     "raw": 5,
-     "putts": 2,
-     "fw": null,
-     "gir": false
-    },
-    {
-     "h": 12,
-     "par": 4,
-     "adj": 6,
-     "raw": 6,
-     "putts": 2,
-     "fw": true,
-     "gir": false
-    },
-    {
-     "h": 13,
-     "par": 4,
-     "adj": 5,
-     "raw": 5,
-     "putts": 2,
-     "fw": false,
-     "gir": false
-    },
-    {
-     "h": 14,
-     "par": 5,
-     "adj": 5,
-     "raw": 5,
-     "putts": 2,
-     "fw": true,
-     "gir": true
-    },
-    {
-     "h": 15,
-     "par": 3,
-     "adj": 3,
-     "raw": 3,
-     "putts": 2,
-     "fw": null,
-     "gir": true
-    },
-    {
-     "h": 16,
-     "par": 4,
-     "adj": 4,
-     "raw": 4,
-     "putts": 2,
-     "fw": true,
-     "gir": true
-    },
-    {
-     "h": 17,
-     "par": 4,
-     "adj": 5,
-     "raw": 5,
-     "putts": 2,
-     "fw": false,
-     "gir": false
-    },
-    {
-     "h": 18,
-     "par": 4,
-     "adj": 4,
-     "raw": 4,
-     "putts": 2,
-     "fw": true,
-     "gir": true
-    }
-   ],
-   "tee": "Black",
-   "rating": 74.6,
-   "slope": 139
   }
  ],
  "course_history": [
@@ -1572,20 +1576,26 @@
    "rounds": 1,
    "first": "2026-10-24",
    "last": "2026-10-24"
+  },
+  {
+   "course": "Twin Creeks Golf Club",
+   "rounds": 1,
+   "first": "2026-11-14",
+   "last": "2026-11-14"
   }
  ],
  "by_par": {
   "3": {
-   "holes": 89,
-   "avg_over_par": 0.82
+   "holes": 93,
+   "avg_over_par": 0.8
   },
   "4": {
-   "holes": 215,
-   "avg_over_par": 0.93
+   "holes": 225,
+   "avg_over_par": 0.94
   },
   "5": {
-   "holes": 74,
-   "avg_over_par": 0.51
+   "holes": 78,
+   "avg_over_par": 0.47
   }
  },
  "tracked": {
@@ -1604,8 +1614,8 @@
  },
  "courses_played": 82,
  "arccos": {
-  "rounds": 5,
-  "last_round": "2026-06-04",
+  "rounds": 6,
+  "last_round": "2026-11-14",
   "overall": null,
   "categories": {}
  }

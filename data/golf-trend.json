@@ -28,5 +28,20 @@
   "scoring": 85.8,
   "gir": 33,
   "putts": 32.0
+ },
+ {
+  "date": "2026-11-15",
+  "rounds": 6,
+  "holes": 99,
+  "sg": {
+   "driving": -1.6,
+   "approach": -2.9,
+   "short": -4.1,
+   "putting": -1.2
+  },
+  "total": -9.8,
+  "scoring": 85.0,
+  "gir": 36,
+  "putts": 32.4
  }
 ]

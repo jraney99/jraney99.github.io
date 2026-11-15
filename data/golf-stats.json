@@ -1,103 +1,103 @@
 {
- "updated": "2026-11-02",
- "source": "5 Arccos rounds, Apr 2026 to Jun 2026, 81 holes; strokes gained against a locally calibrated scratch baseline, not an independent Arccos calculation. Tee and green positions are identified; the first shot after a par-4/5 tee shot uses the fairway flag to infer fairway or rough. Other non-putting lies are assumed fairway. These assumptions affect category estimates.",
- "rounds_n": 5,
- "holes": 81,
+ "updated": "2026-11-15",
+ "source": "6 Arccos rounds, Apr 2026 to Nov 2026, 99 holes; strokes gained against a locally calibrated scratch baseline, not an independent Arccos calculation. Tee and green positions are identified; the first shot after a par-4/5 tee shot uses the fairway flag to infer fairway or rough. Other non-putting lies are assumed fairway. These assumptions affect category estimates.",
+ "rounds_n": 6,
+ "holes": 99,
  "scoring": {
-  "avg18": 85.8,
-  "vs_par": 14.8,
+  "avg18": 85.0,
+  "vs_par": 13.8,
   "bands": {
    "eagle": 1,
-   "birdie": 4,
-   "par": 29,
-   "bogey": 30,
-   "double+": 17
+   "birdie": 6,
+   "par": 37,
+   "bogey": 34,
+   "double+": 21
   },
   "by_par": {
-   "3": 0.7,
+   "3": 0.6,
    "4": 1.0,
-   "5": 0.2
+   "5": 0.1
   },
   "par4_by_length": {
-   "350-420": 1.0,
-   "<350": 0.4,
+   "350-420": 0.9,
+   "<350": 0.6,
    ">420": 1.7
   }
  },
  "sg": {
   "per_round": {
-   "driving": -1.5,
-   "approach": -3.1,
-   "short": -4.2,
+   "driving": -1.6,
+   "approach": -2.9,
+   "short": -4.1,
    "putting": -1.2
   },
-  "total": -10.0,
+  "total": -9.8,
   "focus": "short",
   "ci": {
    "driving": [
     -3.2,
-    0.3
+    0.1
    ],
    "approach": [
-    -5.3,
+    -4.8,
     -0.9
    ],
    "short": [
-    -6.2,
-    -2.1
+    -5.9,
+    -2.3
    ],
    "putting": [
-    -3.3,
-    0.8
+    -3.1,
+    0.7
    ]
   }
  },
  "leaks": [
   {
    "name": "0-50 yd short game",
-   "per_round": -4.2,
-   "share": 46,
-   "basis": "67 shots"
+   "per_round": -4.1,
+   "share": 47,
+   "basis": "80 shots"
   },
   {
    "name": "Approach 75-150 yd",
-   "per_round": -2.8,
-   "share": 31,
-   "basis": "41 shots"
+   "per_round": -2.5,
+   "share": 29,
+   "basis": "49 shots"
   },
   {
    "name": "Driving penalties",
-   "per_round": -2.2,
-   "share": 24,
-   "basis": "10 penalty tee shots; each costs about 1.0 strokes against my clean ones"
+   "per_round": -2.0,
+   "share": 23,
+   "basis": "11 penalty tee shots; each costs about 1.0 strokes against my clean ones"
   }
  ],
  "driving": {
-  "penalties_total": 14,
-  "tee_penalties": 10,
-  "sg_round": -1.5,
-  "tee_shots": 63,
-  "driver_shots": 27,
-  "driver_median_yd": 303,
+  "penalties_total": 17,
+  "tee_penalties": 11,
+  "sg_round": -1.6,
+  "tee_shots": 77,
+  "driver_shots": 41,
+  "driver_median_yd": 298,
   "driver_longest_yd": 372,
-  "driver_measured": 23,
+  "driver_measured": 36,
   "fairways": {
-   "hit": 26,
-   "of": 63
+   "hit": 34,
+   "of": 77
   },
   "tee_decision": {
    "clubs": [
     {
      "club": "Driver",
-     "shots": 27,
-     "sg_per_shot": 0.04,
+     "shots": 41,
+     "sg_per_shot": -0.02,
      "ci": [
-      -0.124,
-      0.214
+      -0.174,
+      0.137
      ],
-     "penalty_rate": 15,
-     "median_yd": 303,
-     "measured": 23
+     "penalty_rate": 12,
+     "median_yd": 298,
+     "measured": 36
     },
     {
      "club": "3 wood",
@@ -115,245 +115,248 @@
    "verdict": {
     "better": "Driver",
     "worse": "3 wood",
-    "gap_per_shot": 0.13,
-    "yards": 48,
+    "gap_per_shot": 0.07,
+    "yards": 43,
     "callable": false
    }
   }
  },
  "approach": {
-  "sg_round": -3.1,
+  "sg_round": -2.9,
   "buckets": {
    "50-75": {
-    "shots": 7,
-    "sg_round": -0.4,
+    "shots": 8,
+    "sg_round": -0.6,
     "ci": [
-     -0.8,
+     -1.1,
      -0.1
     ],
-    "thin": true
+    "thin": false
    },
    "75-100": {
-    "shots": 12,
-    "sg_round": -1.0,
+    "shots": 13,
+    "sg_round": -0.8,
     "ci": [
-     -2.0,
-     -0.1
+     -1.7,
+     -0.0
     ],
     "thin": false
    },
    "100-125": {
-    "shots": 10,
-    "sg_round": -0.7,
+    "shots": 14,
+    "sg_round": -0.6,
     "ci": [
      -1.2,
-     -0.1
+     -0.0
     ],
     "thin": false
    },
    "125-150": {
-    "shots": 19,
+    "shots": 22,
     "sg_round": -1.1,
     "ci": [
-     -1.8,
-     -0.4
+     -1.6,
+     -0.5
     ],
     "thin": false
    },
    "150-175": {
-    "shots": 14,
-    "sg_round": 0.0,
+    "shots": 17,
+    "sg_round": -0.1,
     "ci": [
      -0.8,
-     0.8
+     0.6
     ],
     "thin": false
    },
    "175-200": {
-    "shots": 13,
-    "sg_round": -0.6,
+    "shots": 15,
+    "sg_round": -0.4,
     "ci": [
-     -1.5,
+     -1.2,
      0.4
     ],
     "thin": false
    },
    "200+": {
-    "shots": 16,
-    "sg_round": 0.7,
+    "shots": 20,
+    "sg_round": 0.8,
     "ci": [
-     -0.9,
-     2.3
+     -0.6,
+     2.1
     ],
     "thin": false
    }
   },
-  "gir_pct": 33,
+  "gir_pct": 36,
   "miss_dir": {
    "long": 6,
-   "left": 11,
-   "right": 7,
-   "short": 25
+   "left": 13,
+   "right": 9,
+   "short": 28
   },
   "prox_gir_ft": 26,
   "prox_all_ft": 46,
   "dispersion": {
-   "lateral_sd": 15.5,
-   "depth_sd": 16.7,
+   "lateral_sd": 15.2,
+   "depth_sd": 15.7,
    "tendency": "left, short"
   }
  },
  "short": {
-  "sg_round": -4.2,
+  "sg_round": -4.1,
   "buckets": {
    "0-20": {
-    "shots": 34,
-    "sg_round": -1.9,
+    "shots": 40,
+    "sg_round": -1.8,
     "ci": [
-     -3.1,
+     -2.9,
      -0.6
     ],
     "thin": false
    },
    "20-35": {
-    "shots": 21,
-    "sg_round": -1.2,
+    "shots": 25,
+    "sg_round": -1.1,
     "ci": [
-     -2.2,
-     -0.3
+     -1.9,
+     -0.2
     ],
     "thin": false
    },
    "35-50": {
-    "shots": 12,
-    "sg_round": -1.1,
+    "shots": 15,
+    "sg_round": -1.2,
     "ci": [
-     -1.7,
-     -0.5
+     -1.8,
+     -0.7
     ],
     "thin": false
    }
   },
   "updown": {
-   "made": 9,
-   "of": 47
+   "made": 11,
+   "of": 55
   },
   "updown_greenside": {
-   "made": 9,
-   "of": 31
+   "made": 11,
+   "of": 37
   },
   "updown_pitch": {
    "made": 0,
-   "of": 16
+   "of": 18
   },
   "dispersion": {
-   "lateral_sd": 8.2,
-   "depth_sd": 13.2,
+   "lateral_sd": 7.6,
+   "depth_sd": 13.1,
    "tendency": "center, pin high"
   }
  },
  "putting": {
   "sg_round": -1.2,
-  "putts_round": 32.0,
+  "putts_round": 32.4,
   "buckets": {
    "0-3": {
-    "n": 10,
-    "made_pct": 90,
-    "sg_round": -0.1,
+    "n": 12,
+    "made_pct": 83,
+    "sg_round": -0.3,
     "made_ci": [
-     60,
-     98
+     55,
+     95
     ],
     "ci": [
-     -0.6,
-     0.4
+     -0.8,
+     0.3
     ],
     "scratch_pct": 96,
     "thin": false
    },
    "3-5": {
-    "n": 3,
-    "made_pct": 33,
-    "sg_round": -0.3,
+    "n": 4,
+    "made_pct": 25,
+    "sg_round": -0.4,
     "made_ci": [
-     6,
-     79
+     5,
+     70
     ],
-    "ci": null,
+    "ci": [
+     -0.8,
+     0.0
+    ],
     "scratch_pct": 76,
     "thin": true
    },
    "5-10": {
-    "n": 15,
-    "made_pct": 33,
-    "sg_round": -0.6,
+    "n": 16,
+    "made_pct": 38,
+    "sg_round": -0.4,
     "made_ci": [
-     15,
-     58
+     18,
+     61
     ],
     "ci": [
-     -1.5,
-     0.3
+     -1.1,
+     0.4
     ],
     "scratch_pct": 48,
     "thin": false
    },
    "10-15": {
-    "n": 14,
-    "made_pct": 14,
-    "sg_round": -0.5,
+    "n": 16,
+    "made_pct": 19,
+    "sg_round": -0.3,
     "made_ci": [
-     4,
-     40
+     7,
+     43
     ],
     "ci": [
-     -1.1,
-     0.2
+     -0.9,
+     0.3
     ],
     "scratch_pct": 23,
     "thin": false
    },
    "15-25": {
-    "n": 17,
-    "made_pct": 24,
-    "sg_round": 0.5,
+    "n": 24,
+    "made_pct": 21,
+    "sg_round": 0.3,
     "made_ci": [
-     10,
-     47
+     9,
+     40
     ],
     "ci": [
-     -0.4,
-     1.3
+     -0.5,
+     1.1
     ],
     "scratch_pct": 12,
     "thin": false
    },
    "25-40": {
-    "n": 13,
-    "made_pct": 15,
-    "sg_round": 0.3,
+    "n": 16,
+    "made_pct": 19,
+    "sg_round": 0.4,
     "made_ci": [
-     4,
-     42
+     7,
+     43
     ],
     "ci": [
-     -0.5,
-     1.0
+     -0.3,
+     1.2
     ],
     "scratch_pct": 6,
     "thin": false
    },
    "40+": {
-    "n": 8,
+    "n": 10,
     "made_pct": 0,
-    "sg_round": -0.4,
+    "sg_round": -0.3,
     "made_ci": [
      0,
-     32
+     28
     ],
     "ci": [
-     -0.9,
-     0.2
+     -0.8,
+     0.1
     ],
     "scratch_pct": 3,
     "thin": false
@@ -361,35 +364,230 @@
   },
   "lag": {
    "10-20": {
-    "n": 23,
+    "n": 30,
     "avg_leave_ft": 1.6,
-    "inside3_pct": 96,
+    "inside3_pct": 97,
     "thin": false
    },
    "20-30": {
-    "n": 17,
-    "avg_leave_ft": 2.0,
-    "inside3_pct": 88,
+    "n": 21,
+    "avg_leave_ft": 2.1,
+    "inside3_pct": 86,
     "thin": false
    },
    "30-40": {
-    "n": 4,
-    "avg_leave_ft": 4.5,
-    "inside3_pct": 50,
+    "n": 5,
+    "avg_leave_ft": 4.0,
+    "inside3_pct": 60,
     "thin": true
    },
    "40+": {
-    "n": 8,
-    "avg_leave_ft": 14.6,
-    "inside3_pct": 38,
+    "n": 10,
+    "avg_leave_ft": 13.1,
+    "inside3_pct": 30,
     "thin": false
    }
   },
-  "three_putts": 8,
-  "three_putt_first_ft": 39,
+  "three_putts": 11,
+  "three_putt_first_ft": 44,
   "two_putt_first_ft": 19
  },
  "rounds": [
+  {
+   "date": "2026-11-14",
+   "course": "Twin Creeks GC",
+   "score": 82,
+   "par": 72,
+   "holes": 18,
+   "sg": {
+    "driving": -2.0,
+    "approach": -1.8,
+    "short": -3.5,
+    "putting": -0.9
+   },
+   "card": [
+    {
+     "h": 1,
+     "par": 5,
+     "yds": 515,
+     "score": 5,
+     "putts": 2,
+     "pen": 0,
+     "gir": true,
+     "sg": -0.2
+    },
+    {
+     "h": 2,
+     "par": 4,
+     "yds": 303,
+     "score": 4,
+     "putts": 2,
+     "pen": 0,
+     "gir": true,
+     "sg": 0.1
+    },
+    {
+     "h": 3,
+     "par": 3,
+     "yds": 169,
+     "score": 3,
+     "putts": 1,
+     "pen": 0,
+     "gir": false,
+     "sg": 0.4
+    },
+    {
+     "h": 4,
+     "par": 4,
+     "yds": 430,
+     "score": 6,
+     "putts": 3,
+     "pen": 1,
+     "gir": false,
+     "sg": -1.5
+    },
+    {
+     "h": 5,
+     "par": 4,
+     "yds": 285,
+     "score": 4,
+     "putts": 2,
+     "pen": 0,
+     "gir": true,
+     "sg": 0.0
+    },
+    {
+     "h": 6,
+     "par": 5,
+     "yds": 471,
+     "score": 5,
+     "putts": 1,
+     "pen": 0,
+     "gir": false,
+     "sg": -0.4
+    },
+    {
+     "h": 7,
+     "par": 3,
+     "yds": 171,
+     "score": 3,
+     "putts": 1,
+     "pen": 0,
+     "gir": false,
+     "sg": 0.4
+    },
+    {
+     "h": 8,
+     "par": 4,
+     "yds": 356,
+     "score": 6,
+     "putts": 2,
+     "pen": 1,
+     "gir": false,
+     "sg": -1.8
+    },
+    {
+     "h": 9,
+     "par": 4,
+     "yds": 332,
+     "score": 6,
+     "putts": 2,
+     "pen": 0,
+     "gir": false,
+     "sg": -1.8
+    },
+    {
+     "h": 10,
+     "par": 4,
+     "yds": 324,
+     "score": 5,
+     "putts": 1,
+     "pen": 0,
+     "gir": false,
+     "sg": -0.9
+    },
+    {
+     "h": 11,
+     "par": 3,
+     "yds": 146,
+     "score": 4,
+     "putts": 3,
+     "pen": 0,
+     "gir": true,
+     "sg": -0.7
+    },
+    {
+     "h": 12,
+     "par": 4,
+     "yds": 393,
+     "score": 3,
+     "putts": 1,
+     "pen": 0,
+     "gir": true,
+     "sg": 1.3
+    },
+    {
+     "h": 13,
+     "par": 5,
+     "yds": 454,
+     "score": 5,
+     "putts": 2,
+     "pen": 0,
+     "gir": true,
+     "sg": -0.5
+    },
+    {
+     "h": 14,
+     "par": 4,
+     "yds": 331,
+     "score": 6,
+     "putts": 2,
+     "pen": 1,
+     "gir": false,
+     "sg": -1.8
+    },
+    {
+     "h": 15,
+     "par": 3,
+     "yds": 123,
+     "score": 3,
+     "putts": 2,
+     "pen": 0,
+     "gir": true,
+     "sg": 0.2
+    },
+    {
+     "h": 16,
+     "par": 5,
+     "yds": 502,
+     "score": 4,
+     "putts": 2,
+     "pen": 0,
+     "gir": true,
+     "sg": 0.7
+    },
+    {
+     "h": 17,
+     "par": 4,
+     "yds": 373,
+     "score": 5,
+     "putts": 3,
+     "pen": 0,
+     "gir": true,
+     "sg": -0.7
+    },
+    {
+     "h": 18,
+     "par": 4,
+     "yds": 346,
+     "score": 5,
+     "putts": 2,
+     "pen": 0,
+     "gir": false,
+     "sg": -0.8
+    }
+   ]
+  },
   {
    "date": "2026-06-04",
    "course": "Castlewood CC - Hill",
@@ -1281,7 +1479,10 @@
   "thin_below": 8,
   "checked": true,
   "problems": [],
-  "warnings": [],
+  "warnings": [
+   "2026-11-14 hole 10: a driver recorded at 31 yd (expected 120 to 400) - probably the wrong club tag",
+   "1 round(s) could not be checked against a GHIN scorecard (2026-11-14): no hole-by-hole card was posted, so their shot data is taken on trust."
+  ],
   "excluded_rounds": []
  }
 }
