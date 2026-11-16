@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-15",
+ "updated": "2026-11-16",
  "source": "6 Arccos rounds, Apr 2026 to Nov 2026, 99 holes; strokes gained against a locally calibrated scratch baseline, not an independent Arccos calculation. Tee and green positions are identified; the first shot after a par-4/5 tee shot uses the fairway flag to infer fairway or rough. Other non-putting lies are assumed fairway. These assumptions affect category estimates.",
  "rounds_n": 6,
  "holes": 99,
@@ -1480,8 +1480,7 @@
   "checked": true,
   "problems": [],
   "warnings": [
-   "2026-11-14 hole 10: a driver recorded at 31 yd (expected 120 to 400) - probably the wrong club tag",
-   "1 round(s) could not be checked against a GHIN scorecard (2026-11-14): no hole-by-hole card was posted, so their shot data is taken on trust."
+   "2026-11-14 hole 10: a driver recorded at 31 yd (expected 120 to 400) - probably the wrong club tag"
   ],
   "excluded_rounds": []
  }
