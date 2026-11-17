@@ -181,10 +181,20 @@ def write_if_changed(path, text):
         print('wrote', os.path.relpath(path, ROOT))
 
 
+NOINDEX = re.compile(r'<meta\s+name="robots"\s+content="[^"]*\bnoindex\b', re.I)
+
+
+def indexable(path):
+    """A page marked noindex stays out of the sitemap, as check_site expects (2026-11-17: the
+    unlisted privacy.html was put in the sitemap and the publish check refused the deploy)."""
+    return not NOINDEX.search(open(path, encoding='utf-8').read())
+
+
 def sitemap():
     pages = sorted(os.path.relpath(p, ROOT) for p in glob.glob(os.path.join(ROOT, '*.html')) + glob.glob(os.path.join(ROOT, 'notes', '*.html'))
                    if os.path.basename(p) != '404.html'
-                   and not os.path.basename(p).startswith('golf-'))  # golf deep pages stay unlisted by Jack's choice
+                   and not os.path.basename(p).startswith('golf-')  # golf deep pages stay unlisted by Jack's choice
+                   and indexable(p))
     pages.sort(key=lambda p: p != 'index.html')
     urls = ''.join(f'  <url><loc>{canonical(p)}</loc></url>\n' for p in pages)
     return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n'

@@ -17,6 +17,20 @@ class SiteChecks(unittest.TestCase):
         (self.root / 'index.html').write_text(content)
         return check(self.root)[1]
 
+    def test_the_sitemap_leaves_out_noindex_pages_as_the_check_expects(self):
+        # 2026-11-17: an unlisted (noindex) page went into the sitemap and the check blocked publishing.
+        import build_writing
+        (self.root / 'index.html').write_text('<html lang="en"><h1>Home</h1>')
+        (self.root / 'privacy.html').write_text(self.page)
+        (self.root / 'about.html').write_text('<html lang="en"><h1>About</h1>')
+        root, build_writing.ROOT = build_writing.ROOT, str(self.root)
+        try:
+            text = build_writing.sitemap()
+        finally:
+            build_writing.ROOT = root
+        self.assertNotIn('privacy', text)
+        self.assertIn('/about</loc>', text)
+
     def test_valid_page(self):
         self.assertEqual(self.run_page(self.page + '<a href="#main">Content</a>'), [])
 
