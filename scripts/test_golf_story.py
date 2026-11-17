@@ -48,10 +48,15 @@ class EveryPage(unittest.TestCase):
 
 
 class CleanTeeShots(unittest.TestCase):
+    # The numbers below are the 2026-11-02 data, so this reads that snapshot, not the live file.
+    # Reading the live file, the next round (Arccos, 2026-11-14) changed the figure and the check
+    # stopped every publish from 2026-11-15 to 2026-11-17. Assertion unchanged.
+    SNAPSHOT = json.loads((Path(__file__).resolve().parent / 'fixtures' / 'golf-stats-2026-11-02.json').read_text())
+
     def test_the_clean_shots_are_their_share_not_the_whole_difference(self):
         # −1.5 a round off the tee, penalties −2.2 against clean shots, 10 penalties in 63: the
         # clean 53 gained 0.7 x 53/63 = 0.59. The story said 0.7 (audit 2026-11-03).
-        self.assertIn('The clean ones gained about 0.6 a round', text(story.driving(STATS)))
+        self.assertIn('The clean ones gained about 0.6 a round', text(story.driving(self.SNAPSHOT)))
 
 
 class Ranges(unittest.TestCase):

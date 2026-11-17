@@ -12,6 +12,8 @@ class GolfAudit(unittest.TestCase):
     def setUpClass(cls):
         cls.stats = json.loads((ROOT / 'data/golf-stats.json').read_text())
         cls.ghin = json.loads((ROOT / 'data/golf.json').read_text())
+        dates = sorted(r['date'] for r in cls.stats['rounds'])
+        cls.span = f'{dates[0]} to {dates[-1]}'
 
     def test_score_and_strokes_gained_have_opposite_good_signs(self):
         self.assertIn('class="neg">+2.0', golf.over_par(2))
@@ -63,7 +65,10 @@ class GolfAudit(unittest.TestCase):
             text = (ROOT / filename).read_text()
             self.assertEqual(text.count('<h1>'), 1, filename)
             self.assertIn('How to read these pages', text)
-            self.assertIn('2026-04-15 to 2026-06-04', text)
+            # Was assertIn('2026-04-15 to 2026-06-04', text): the range on the day it was written, so
+            # the next Arccos round (2026-11-14) stopped every publish from 2026-11-15 to 2026-11-17.
+            # Same guard (each page states the sample's dates), read from the data the page is built from.
+            self.assertIn(self.span, text, filename)
             for private in ('/Users/jack/', '.openclaw', '66d756124ee3', 'Trackman Data 10-29-26.csv'):
                 self.assertNotIn(private, text)
 
