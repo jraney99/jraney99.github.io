@@ -1,6 +1,6 @@
 {
-  "balls_30d": 617,
-  "balls_total": 617,
+  "balls_30d": 672,
+  "balls_total": 672,
   "clubs": [
     {
       "attack": 5.0,
@@ -278,51 +278,51 @@
   ],
   "driver": {
     "ball_speed": 171.9,
-    "carry": 294,
-    "club_speed": 116.2,
-    "corridor_pct": 55,
+    "carry": 293,
+    "club_speed": 115.3,
+    "corridor_pct": 70,
     "n": 20,
-    "side_spread": 29.1,
-    "smash": 1.48
+    "side_spread": 22.7,
+    "smash": 1.49
   },
   "explain": {
     "clubs": [],
     "driver": {
       "club": "Driver",
-      "now_label": "Nov 10",
+      "now_label": "Nov 17",
       "rows": [
         {
           "label": "Carry",
-          "now": 297.8,
+          "now": 288.8,
           "then": 297.9,
           "unit": "yd"
         },
         {
           "label": "Ball speed",
-          "now": 172.1,
+          "now": 168.8,
           "then": 171.1,
           "unit": "mph"
         },
         {
           "label": "Launch",
-          "now": 13.2,
+          "now": 11.1,
           "then": 13.5,
           "unit": "\u00b0"
         },
         {
           "label": "Spin",
-          "now": 2131.5,
+          "now": 2106.1,
           "then": 2247.8,
           "unit": "rpm"
         }
       ],
-      "sentence": "Same 172 mph ball speed as your measuring day (Oct 29), and carried about the same.",
+      "sentence": "2 mph less ball speed than your measuring day (Oct 29); launched 2.4\u00b0 lower, and carried 9 yd less.",
       "short": null,
       "then_label": "your measuring day (Oct 29)",
-      "title": "Driver: Nov 10 against your measuring day (Oct 29)"
+      "title": "Driver: Nov 17 against your measuring day (Oct 29)"
     }
   },
-  "generated": "2026-11-10",
+  "generated": "2026-11-17",
   "problems": [],
   "session_stats": [
     {
@@ -1069,9 +1069,102 @@
         "name": "Pause at the top (Harmon)"
       },
       "id": "8558e4491873"
+    },
+    {
+      "clubs": [
+        {
+          "attack": 3.5,
+          "ball_speed": 168.8,
+          "carry": 289,
+          "carry_best": 296.5,
+          "carry_spread": 9.9,
+          "club": "Dr",
+          "club_speed": 114.8,
+          "corridor_pct": 70,
+          "last": "2026-11-17",
+          "launch": 11.1,
+          "n": 10,
+          "order": 0,
+          "path": -2.3,
+          "side_bias": "left",
+          "side_spread": 21.6,
+          "smash": 1.49,
+          "spin": 2106,
+          "thin": false,
+          "total": 313
+        },
+        {
+          "attack": -7.1,
+          "ball_speed": 82.8,
+          "carry": 98,
+          "carry_best": 110.0,
+          "carry_spread": 10.6,
+          "club": "58\u00b0",
+          "club_speed": 82.9,
+          "corridor_pct": 100,
+          "last": "2026-11-17",
+          "launch": 27.4,
+          "n": 9,
+          "order": 62,
+          "path": 1.5,
+          "side_bias": "straight",
+          "side_spread": 2.5,
+          "smash": 1.0,
+          "spin": 10713,
+          "thin": false,
+          "total": 97
+        }
+      ],
+      "date": "2026-11-17",
+      "drill": {
+        "balls": 35,
+        "club": "8i",
+        "name": "Pause at the top (Harmon)"
+      },
+      "id": "a7a9064ddfeb"
     }
   ],
   "sessions": [
+    {
+      "balls": 55,
+      "date": "2026-11-17",
+      "drill": {
+        "balls": 35,
+        "club": "8i",
+        "name": "Pause at the top (Harmon)"
+      },
+      "grade": {
+        "grader": 2,
+        "plan_date": "2026-11-17",
+        "plan_type": "sim",
+        "results": [
+          {
+            "measured": "70% inside \u00b118 yd",
+            "n": 10,
+            "pass": false,
+            "target": "75%",
+            "what": "Driver corridor"
+          },
+          {
+            "measured": "median 289 yd, best 296, 114.8 mph club",
+            "n": 10,
+            "pass": false,
+            "target": "315 yd",
+            "what": "Driver carry"
+          }
+        ],
+        "summary": "missed all 2",
+        "ungraded": [
+          "Warmup: warm-up, no target",
+          "Technical: Pause at the top (Harmon): a drill: its balls count as hit, and nothing about them is graded",
+          "Approach 75 to 150 yd (leak 2): several distances, and the export does not say which ball was aimed at which",
+          "Pitches 20 to 60 yd: several distances, and the export does not say which ball was aimed at which",
+          "carry accuracy against the prescribed number: the export records no intended target, so only consistency can be measured, not accuracy"
+        ]
+      },
+      "id": "a7a9064ddfeb",
+      "label": "8i block"
+    },
     {
       "balls": 73,
       "date": "2026-11-10",
@@ -1391,69 +1484,10 @@
       },
       "id": "3212e5c1be09",
       "label": "Gapping 10-30"
-    },
-    {
-      "balls": 81,
-      "date": "2026-10-29",
-      "grade": {
-        "grader": 2,
-        "plan_date": "2026-10-29",
-        "plan_type": "gapping",
-        "results": [
-          {
-            "measured": "60% inside \u00b118 yd",
-            "n": 10,
-            "pass": false,
-            "target": "65%",
-            "what": "Driver corridor"
-          },
-          {
-            "measured": "median 298 yd, best 303, 116.1 mph club",
-            "n": 10,
-            "pass": false,
-            "target": "315 yd",
-            "what": "Driver carry"
-          },
-          {
-            "measured": "\u00b14 yd carry spread",
-            "n": 10,
-            "pass": true,
-            "target": "\u00b14 yd",
-            "what": "50\u00b0 consistency"
-          },
-          {
-            "measured": "\u00b14 yd carry spread",
-            "n": 10,
-            "pass": true,
-            "target": "\u00b14 yd",
-            "what": "54\u00b0 consistency"
-          },
-          {
-            "measured": "\u00b14.8 yd carry spread",
-            "n": 10,
-            "pass": false,
-            "target": "\u00b14 yd",
-            "what": "58\u00b0 consistency"
-          },
-          {
-            "measured": "\u00b17 yd carry spread",
-            "n": 10,
-            "pass": false,
-            "target": "\u00b14 yd",
-            "what": "Pw consistency"
-          }
-        ],
-        "summary": "met 2 of 6",
-        "ungraded": [
-          "carry accuracy against the prescribed number: the export records no intended target, so only consistency can be measured, not accuracy"
-        ]
-      },
-      "id": "4d21f33bd5f6",
-      "label": "Partial-bag baseline"
     }
   ],
-  "sessions_30d": 10,
-  "sessions_n": 10,
+  "sessions_30d": 11,
+  "sessions_n": 11,
   "unit_evidence": [
     "Stored shots normalized by trackman_parse to yards and mph; source units retained separately."
   ],
