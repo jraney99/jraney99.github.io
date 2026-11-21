@@ -1,6 +1,6 @@
 {
-  "balls_30d": 733,
-  "balls_total": 733,
+  "balls_30d": 772,
+  "balls_total": 772,
   "clubs": [
     {
       "attack": 5.0,
@@ -286,7 +286,76 @@
     "smash": 1.49
   },
   "explain": {
-    "clubs": [],
+    "clubs": [
+      {
+        "club": "58\u00b0",
+        "now_label": "measured Nov 20",
+        "rows": [
+          {
+            "label": "Carry",
+            "now": 92.3,
+            "then": 100.0,
+            "unit": "yd"
+          },
+          {
+            "label": "Ball speed",
+            "now": 79.4,
+            "then": 85.5,
+            "unit": "mph"
+          },
+          {
+            "label": "Launch",
+            "now": 27.6,
+            "then": 27.3,
+            "unit": "\u00b0"
+          },
+          {
+            "label": "Spin",
+            "now": 10782.5,
+            "then": 11301.6,
+            "unit": "rpm"
+          }
+        ],
+        "sentence": "6 mph less ball speed than when measured Oct 29; spun 520 rpm less, and carried 8 yd less.",
+        "short": "Your 3 shortest shots (78, 89, 90 yd) all left at 70 to 77mph, against 79mph for the session.",
+        "then_label": "when measured Oct 29",
+        "title": "58\u00b0: measured Nov 20 against when measured Oct 29"
+      },
+      {
+        "club": "8i",
+        "now_label": "measured Nov 20",
+        "rows": [
+          {
+            "label": "Carry",
+            "now": 153.4,
+            "then": 166.7,
+            "unit": "yd"
+          },
+          {
+            "label": "Ball speed",
+            "now": 110.9,
+            "then": 122.3,
+            "unit": "mph"
+          },
+          {
+            "label": "Launch",
+            "now": 16.3,
+            "then": 17.2,
+            "unit": "\u00b0"
+          },
+          {
+            "label": "Spin",
+            "now": 5979.9,
+            "then": 7029.5,
+            "unit": "rpm"
+          }
+        ],
+        "sentence": "11 mph less ball speed than when measured Oct 29; launched 0.9\u00b0 lower with 1,050 rpm less spin, and carried 13 yd less.",
+        "short": "Your 3 shortest shots (105, 113, 118 yd) all left at 93 to 106mph, against 111mph for the session.",
+        "then_label": "when measured Oct 29",
+        "title": "8i: measured Nov 20 against when measured Oct 29"
+      }
+    ],
     "driver": {
       "club": "Driver",
       "now_label": "Nov 19",
@@ -322,7 +391,7 @@
       "title": "Driver: Nov 19 against your measuring day (Oct 29)"
     }
   },
-  "generated": "2026-11-19",
+  "generated": "2026-11-20",
   "problems": [],
   "session_stats": [
     {
@@ -1175,9 +1244,64 @@
         "name": "Pause at the top (Harmon)"
       },
       "id": "fb9315260000"
+    },
+    {
+      "clubs": [
+        {
+          "attack": -6.8,
+          "ball_speed": 110.9,
+          "carry": 153,
+          "carry_best": 174.9,
+          "carry_spread": 23.8,
+          "club": "8i",
+          "club_speed": 83.3,
+          "corridor_pct": 83,
+          "last": "2026-11-20",
+          "launch": 16.3,
+          "n": 29,
+          "order": 38,
+          "path": 0.1,
+          "side_bias": "straight",
+          "side_spread": 12.8,
+          "smash": 1.33,
+          "spin": 5980,
+          "thin": false,
+          "total": 164
+        },
+        {
+          "attack": -7.6,
+          "ball_speed": 79.4,
+          "carry": 92,
+          "carry_best": 106.2,
+          "carry_spread": 5.2,
+          "club": "58\u00b0",
+          "club_speed": 79.3,
+          "corridor_pct": 100,
+          "last": "2026-11-20",
+          "launch": 27.6,
+          "n": 10,
+          "order": 62,
+          "path": 1.7,
+          "side_bias": "straight",
+          "side_spread": 3.3,
+          "smash": 1.01,
+          "spin": 10782,
+          "thin": false,
+          "total": 93
+        }
+      ],
+      "date": "2026-11-20",
+      "id": "49232c94f7b6"
     }
   ],
   "sessions": [
+    {
+      "balls": 39,
+      "date": "2026-11-20",
+      "grade": null,
+      "id": "49232c94f7b6",
+      "label": "8i block"
+    },
     {
       "balls": 61,
       "date": "2026-11-19",
@@ -1520,50 +1644,10 @@
       },
       "id": "ecd29bfad02e",
       "label": "Wedge block"
-    },
-    {
-      "balls": 73,
-      "date": "2026-10-31",
-      "drill": {
-        "balls": 36,
-        "club": "8i",
-        "name": "Pause at the top (Harmon)"
-      },
-      "grade": {
-        "grader": 2,
-        "plan_date": "2026-10-31",
-        "plan_type": "sim",
-        "results": [
-          {
-            "measured": "56% inside \u00b118 yd",
-            "n": 9,
-            "pass": false,
-            "target": "65%",
-            "what": "Driver corridor"
-          },
-          {
-            "measured": "median 287 yd, best 297, 116.6 mph club",
-            "n": 9,
-            "pass": false,
-            "target": "315 yd",
-            "what": "Driver carry"
-          }
-        ],
-        "summary": "missed all 2",
-        "ungraded": [
-          "Warmup: warm-up, no target",
-          "Pitches 5 to 20 yd (leak 2): several distances, and the export does not say which ball was aimed at which",
-          "Pitches 20 to 35 yd (leak 3): several distances, and the export does not say which ball was aimed at which",
-          "Pressure test: graded on proximity, which the export does not record",
-          "carry accuracy against the prescribed number: the export records no intended target, so only consistency can be measured, not accuracy"
-        ]
-      },
-      "id": "ca4ba2869245",
-      "label": "Mixed session"
     }
   ],
-  "sessions_30d": 12,
-  "sessions_n": 12,
+  "sessions_30d": 13,
+  "sessions_n": 13,
   "unit_evidence": [
     "Stored shots normalized by trackman_parse to yards and mph; source units retained separately."
   ],
