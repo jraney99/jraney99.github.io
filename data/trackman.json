@@ -1,6 +1,6 @@
 {
-  "balls_30d": 772,
-  "balls_total": 772,
+  "balls_30d": 802,
+  "balls_total": 802,
   "clubs": [
     {
       "attack": 5.0,
@@ -289,37 +289,43 @@
     "clubs": [
       {
         "club": "58\u00b0",
-        "now_label": "measured Nov 20",
+        "now_label": "measured Nov 24",
         "rows": [
           {
             "label": "Carry",
-            "now": 92.3,
-            "then": 100.0,
+            "now": 38.2,
+            "then": 92.3,
             "unit": "yd"
           },
           {
             "label": "Ball speed",
-            "now": 79.4,
-            "then": 85.5,
+            "now": 46.5,
+            "then": 79.4,
             "unit": "mph"
           },
           {
             "label": "Launch",
-            "now": 27.6,
-            "then": 27.3,
+            "now": 27.0,
+            "then": 27.6,
             "unit": "\u00b0"
           },
           {
             "label": "Spin",
-            "now": 10782.5,
-            "then": 11301.6,
+            "now": 7493.9,
+            "then": 10782.5,
             "unit": "rpm"
+          },
+          {
+            "label": "Curve, either way",
+            "now": 0.3,
+            "then": 1.1,
+            "unit": "yd"
           }
         ],
-        "sentence": "6 mph less ball speed than when measured Oct 29; spun 520 rpm less, and carried 8 yd less.",
-        "short": "Your 3 shortest shots (78, 89, 90 yd) all left at 70 to 77mph, against 79mph for the session.",
-        "then_label": "when measured Oct 29",
-        "title": "58\u00b0: measured Nov 20 against when measured Oct 29"
+        "sentence": "33 mph less ball speed than when measured Nov 20; spun 3,290 rpm less, and carried 54 yd less.",
+        "short": null,
+        "then_label": "when measured Nov 20",
+        "title": "58\u00b0: measured Nov 24 against when measured Nov 20"
       },
       {
         "club": "8i",
@@ -391,7 +397,7 @@
       "title": "Driver: Nov 19 against your measuring day (Oct 29)"
     }
   },
-  "generated": "2026-11-20",
+  "generated": "2026-11-24",
   "problems": [],
   "session_stats": [
     {
@@ -1292,9 +1298,43 @@
       ],
       "date": "2026-11-20",
       "id": "49232c94f7b6"
+    },
+    {
+      "clubs": [
+        {
+          "attack": -5.3,
+          "ball_speed": 46.5,
+          "carry": 38,
+          "carry_best": 58.9,
+          "carry_spread": 9.7,
+          "club": "58\u00b0",
+          "club_speed": 51.3,
+          "corridor_pct": 100,
+          "last": "2026-11-24",
+          "launch": 27.0,
+          "n": 30,
+          "order": 62,
+          "path": -1.5,
+          "side_bias": "straight",
+          "side_spread": 1.1,
+          "smash": 0.94,
+          "spin": 7494,
+          "thin": false,
+          "total": 52
+        }
+      ],
+      "date": "2026-11-24",
+      "id": "1b69bb452b86"
     }
   ],
   "sessions": [
+    {
+      "balls": 30,
+      "date": "2026-11-24",
+      "grade": null,
+      "id": "1b69bb452b86",
+      "label": "58\u00b0 block"
+    },
     {
       "balls": 39,
       "date": "2026-11-20",
@@ -1608,46 +1648,10 @@
       },
       "id": "29b913831228",
       "label": "8i block"
-    },
-    {
-      "balls": 36,
-      "date": "2026-11-02",
-      "grade": {
-        "grader": 2,
-        "plan_date": "2026-11-02",
-        "plan_type": "sim",
-        "results": [
-          {
-            "measured": "55% inside \u00b118 yd",
-            "n": 11,
-            "pass": false,
-            "target": "65%",
-            "what": "Driver corridor"
-          },
-          {
-            "measured": "median 293 yd, best 299, 116.9 mph club",
-            "n": 11,
-            "pass": false,
-            "target": "315 yd",
-            "what": "Driver carry"
-          }
-        ],
-        "summary": "missed all 2",
-        "ungraded": [
-          "Warmup: warm-up, no target",
-          "Technical: Pause at the top (Harmon): a drill: its balls count as hit, and nothing about them is graded",
-          "Benchmark: wedges: several distances, and the export does not say which ball was aimed at which",
-          "Benchmark: random test: graded on proximity, which the export does not record",
-          "Benchmark: long clubs: a carry record for four clubs, not a pass or fail",
-          "carry accuracy against the prescribed number: the export records no intended target, so only consistency can be measured, not accuracy"
-        ]
-      },
-      "id": "ecd29bfad02e",
-      "label": "Wedge block"
     }
   ],
-  "sessions_30d": 13,
-  "sessions_n": 13,
+  "sessions_30d": 14,
+  "sessions_n": 14,
   "unit_evidence": [
     "Stored shots normalized by trackman_parse to yards and mph; source units retained separately."
   ],
